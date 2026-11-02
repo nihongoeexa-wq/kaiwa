@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neexa Kaiwa - AI Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0f766e; /* Teal theme untuk Kaiwa */
+            --primary-hover: #115e59;
+            --bg-color: #f0fdfa;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: var(--surface);
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(15, 118, 110, 0.1);
+            position: relative;
+        }
+        .text-center { text-align: center; }
+        .hidden { display: none !important; }
+        
+        /* Logo & Header */
+        .logo-box {
+            background: #ccfbf1;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .logo-box h1 { margin: 0; color: var(--primary); font-size: 24px; letter-spacing: 1px; }
+        .logo-box p { margin: 0; color: #0d9488; font-size: 12px; font-weight: 600; }
+        
+        /* Forms */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
+        .form-control {
+            width: 100%; padding: 12px 15px;
+            border: 1.5px solid #e2e8f0; border-radius: 10px;
+            font-size: 15px; box-sizing: border-box; transition: 0.3s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15); }
+        
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 14px;
+            background: var(--primary); color: white;
+            border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-outline {
+            background: transparent; color: var(--primary);
+            border: 2px solid var(--primary); margin-top: 10px;
+        }
+        .btn-outline:hover:not(:disabled) { background: #f0fdfa; }
+        
+        /* Messages */
+        .msg { font-size: 13px; font-weight: 600; margin-top: 10px; padding: 10px; border-radius: 8px; display: none; }
+        .msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
+        .msg.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
+        .msg.loading { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; display: block; }
+
+        /* Kaiwa Room (Preview) */
+        .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
+        .mic-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+<div class="container text-center">
+    
+    <!-- HEADER -->
+    <div class="logo-box">
+        <h1>NEEXA KAIWA</h1>
+        <p>AI Japanese Conversation Tutor</p>
+    </div>
+
+    <!-- ================= VIEW 1: LOGIN ================= -->
+    <div id="viewLogin">
+        <h2 style="font-size: 20px; margin-bottom: 5px;">Selamat Datang!</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 20px;">Silakan login untuk memulai sesi Kaiwa.</p>
+        
+        <div class="form-group">
+            <label>Email atau Nama Lengkap</label>
+            <input type="text" id="loginId" class="form-control" placeholder="Masukkan Email / Nama">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPass" class="form-control" placeholder="Password (Default: No. WA)">
+        </div>
+        
+        <div id="loginMsg" class="msg"></div>
+        <button id="btnLogin" class="btn" style="margin-top: 20px;"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+    </div>
+
+    <!-- ================= VIEW 2: DASHBOARD (PILIH PRODUK) ================= -->
+    <div id="viewDashboard" class="hidden">
+        <h2 style="font-size: 18px; text-align: left; margin-bottom: 20px;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+        
+        <div class="form-group">
+            <label>Pilih Modul Percakapan</label>
+            <select id="produkSelect" class="form-control">
+                <option value="" disabled selected>Memuat produk Anda...</option>
+            </select>
+        </div>
+
+        <div id="dashMsg" class="msg"></div>
+        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Percakapan</button>
+        <button id="btnTampilGantiPass" class="btn btn-outline"><i class="fas fa-key"></i> Ganti Password</button>
+    </div>
+
+    <!-- ================= VIEW 3: GANTI PASSWORD ================= -->
+    <div id="viewGantiPass" class="hidden">
+        <h2 style="font-size: 18px;">Ganti Password</h2>
+        <p style="font-size: 13px; color: var(--text-muted);">Buat password baru yang mudah diingat.</p>
+        
+        <div class="form-group">
+            <label>Password Baru</label>
+            <input type="password" id="newPass" class="form-control" placeholder="Minimal 4 karakter">
+        </div>
+
+        <div id="passMsg" class="msg"></div>
+        <button id="btnSimpanPass" class="btn" style="margin-top: 15px;"><i class="fas fa-save"></i> Simpan Password</button>
+        <button id="btnBatalPass" class="btn btn-outline">Batal</button>
+    </div>
+
+    <!-- ================= VIEW 4: KAIWA ROOM ================= -->
+    <div id="viewKaiwaRoom" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <div style="text-align: left;">
+                <h3 style="margin: 0; font-size: 16px; color: var(--primary);">Sesi Aktif</h3>
+                <p id="activeProductDisplay" style="margin: 0; font-size: 12px; color: var(--text-muted);">Modul</p>
+            </div>
+            <button id="btnSelesaiKaiwa" style="background: #f1f5f9; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #ef4444;"><i class="fas fa-times"></i> Akhiri</button>
+        </div>
+
+        <div class="kaiwa-box">
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Fitur AI akan segera terhubung ke Cloudflare...</p>
+            <button class="mic-btn"><i class="fas fa-microphone"></i></button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">Tekan tombol merah untuk berbicara</p>
+    </div>
+
+</div>
+
+<script>
+    // ==========================================
+    // KONFIGURASI API
+    // ==========================================
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyytWL8LucfyNlEa6cJa5nQGE5OfCnWAAVRYKYjVlr3xvPo2sll4wR7piXUpi_RxbbTpg/exec";
+    const WORKER_URL = "https://hanasu.nihongoeexa.workers.dev/";
+    
+    // Variabel Global
+    let KAIWA_USER = {};
+    let deviceId = localStorage.getItem('KAIWA_DEVICE_ID');
+
+    // Hasilkan Device ID jika belum ada
+    if (!deviceId) {
+        deviceId = 'KWD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        localStorage.setItem('KAIWA_DEVICE_ID', deviceId);
+    }
+
+    // Navigasi View
+    const views = {
+        login: document.getElementById('viewLogin'),
+        dashboard: document.getElementById('viewDashboard'),
+        gantiPass: document.getElementById('viewGantiPass'),
+        kaiwaRoom: document.getElementById('viewKaiwaRoom')
+    };
+
+    function showView(viewName) {
+        Object.values(views).forEach(v => v.classList.add('hidden'));
+        views[viewName].classList.remove('hidden');
+    }
+
+    function showMsg(elId, type, text) {
+        const el = document.getElementById(elId);
+        el.className = 'msg ' + type;
+        el.innerHTML = text;
+    }
+
+    // ==========================================
+    // 1. FUNGSI LOGIN
+    // ==========================================
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+        const identifier = document.getElementById('loginId').value;
+        const password = document.getElementById('loginPass').value;
+
+        if (!identifier || !password) return showMsg('loginMsg', 'error', 'Isi semua kolom.');
+
+        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi data...');
+        document.getElementById('btnLogin').disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'loginKaiwa',
+                    payload: { identifier, password, deviceId }
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                KAIWA_USER = data.data; // Simpan data user ke memori
+                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                
+                // Isi Dropdown Produk
+                const select = document.getElementById('produkSelect');
+                select.innerHTML = '<option value="" disabled selected>--- Pilih Modul ---</option>';
+                KAIWA_USER.produkList.forEach(prod => {
+                    select.innerHTML += `<option value="${prod}">${prod}</option>`;
+                });
+
+                showView(KAIWA_USER.isFirstLogin ? 'gantiPass' : 'dashboard');
+                if (KAIWA_USER.isFirstLogin) {
+                    showMsg('passMsg', 'success', 'Login pertama sukses! Silakan buat password baru Anda.');
+                }
+            } else {
+                showMsg('loginMsg', 'error', data.message);
+            }
+        } catch (err) {
+            showMsg('loginMsg', 'error', 'Gagal menghubungi server.');
+        } finally {
+            document.getElementById('btnLogin').disabled = false;
+        }
+    });
+
+    // ==========================================
+    // 2. FUNGSI GANTI PASSWORD
+    // ==========================================
+    document.getElementById('btnTampilGantiPass').addEventListener('click', () => {
+        document.getElementById('newPass').value = '';
+        document.getElementById('passMsg').className = 'msg';
+        showView('gantiPass');
+    });
+
+    document.getElementById('btnBatalPass').addEventListener('click', () => {
+        showView('dashboard');
+    });
+
+    document.getElementById('btnSimpanPass').addEventListener('click', async () => {
+        const newPassword = document.getElementById('newPass').value;
+        if (newPassword.length < 4) return showMsg('passMsg', 'error', 'Password minimal 4 karakter.');
+
+        showMsg('passMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan password...');
+        document.getElementById('btnSimpanPass').disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'gantiPasswordKaiwa',
+                    payload: { email: KAIWA_USER.email, newPassword }
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                showMsg('dashMsg', 'success', data.message);
+                showView('dashboard');
+            } else {
+                showMsg('passMsg', 'error', data.message);
+            }
+        } catch (err) {
+            showMsg('passMsg', 'error', 'Gagal menghubungi server.');
+        } finally {
+            document.getElementById('btnSimpanPass').disabled = false;
+        }
+    });
+
+    // ==========================================
+    // 3. MULAI KAIWA ROOM
+    // ==========================================
+    document.getElementById('btnMulaiKaiwa').addEventListener('click', () => {
+        const selectedProd = document.getElementById('produkSelect').value;
+        if (!selectedProd) return showMsg('dashMsg', 'error', 'Silakan pilih modul terlebih dahulu.');
+        
+        document.getElementById('activeProductDisplay').innerText = selectedProd;
+        showView('kaiwaRoom');
+    });
+
+    document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
+        // Nanti di sini ditambahkan fungsi kirim rapor sebelum keluar
+        showView('dashboard');
+    });
+
+</script>
+</body>
+</html>
