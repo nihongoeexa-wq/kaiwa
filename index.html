@@ -123,9 +123,16 @@
         <div class="form-group">
             <label>Pilih Modul Percakapan</label>
             <select id="produkSelect" class="form-control">
-                <option value="" disabled selected>Memuat produk Anda...</option>
+                <!-- Diisi otomatis dari GAS -->
             </select>
         </div>
+    <div class="form-group" style="margin-top: 15px;">
+        <label>Suara AI Tutor</label>
+        <select id="suaraSelect" class="form-control">
+            <option value="female" selected>Perempuan</option>
+            <option value="male">Laki-laki</option>
+        </select>
+    </div>
 
         <div id="dashMsg" class="msg"></div>
         <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Percakapan</button>
@@ -173,17 +180,21 @@
     const GAS_URL = "https://script.google.com/macros/s/AKfycbyytWL8LucfyNlEa6cJa5nQGE5OfCnWAAVRYKYjVlr3xvPo2sll4wR7piXUpi_RxbbTpg/exec";
     const WORKER_URL = "https://hanasu.nihongoeexa.workers.dev/";
     
-    // Variabel Global
     let KAIWA_USER = {};
-    let deviceId = localStorage.getItem('KAIWA_DEVICE_ID');
+    let activeProduct = "";
+    let putaranSaatIni = 0;
+    
+    // Variabel Rekaman
+    let mediaRecorder;
+    let audioChunks = [];
+    let isRecording = false;
 
-    // Hasilkan Device ID jika belum ada
+    let deviceId = localStorage.getItem('KAIWA_DEVICE_ID');
     if (!deviceId) {
         deviceId = 'KWD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
         localStorage.setItem('KAIWA_DEVICE_ID', deviceId);
     }
 
-    // Navigasi View
     const views = {
         login: document.getElementById('viewLogin'),
         dashboard: document.getElementById('viewDashboard'),
@@ -203,33 +214,28 @@
     }
 
     // ==========================================
-    // 1. FUNGSI LOGIN
+    // 1. FUNGSI LOGIN & GANTI PASSWORD
     // ==========================================
     document.getElementById('btnLogin').addEventListener('click', async () => {
         const identifier = document.getElementById('loginId').value;
         const password = document.getElementById('loginPass').value;
-
         if (!identifier || !password) return showMsg('loginMsg', 'error', 'Isi semua kolom.');
 
-        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi data...');
+        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...');
         document.getElementById('btnLogin').disabled = true;
 
         try {
             const res = await fetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'loginKaiwa',
-                    payload: { identifier, password, deviceId }
-                })
+                body: JSON.stringify({ action: 'loginKaiwa', payload: { identifier, password, deviceId } })
             });
             const data = await res.json();
 
             if (data.success) {
-                KAIWA_USER = data.data; // Simpan data user ke memori
+                KAIWA_USER = data.data; 
                 document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
                 
-                // Isi Dropdown Produk
                 const select = document.getElementById('produkSelect');
                 select.innerHTML = '<option value="" disabled selected>--- Pilih Modul ---</option>';
                 KAIWA_USER.produkList.forEach(prod => {
@@ -237,47 +243,37 @@
                 });
 
                 showView(KAIWA_USER.isFirstLogin ? 'gantiPass' : 'dashboard');
-                if (KAIWA_USER.isFirstLogin) {
-                    showMsg('passMsg', 'success', 'Login pertama sukses! Silakan buat password baru Anda.');
-                }
+                if (KAIWA_USER.isFirstLogin) showMsg('passMsg', 'success', 'Login sukses! Buat password baru.');
             } else {
                 showMsg('loginMsg', 'error', data.message);
             }
         } catch (err) {
-            showMsg('loginMsg', 'error', 'Gagal menghubungi server.');
+            showMsg('loginMsg', 'error', 'Gagal menghubungi server GAS.');
         } finally {
             document.getElementById('btnLogin').disabled = false;
         }
     });
 
-    // ==========================================
-    // 2. FUNGSI GANTI PASSWORD
-    // ==========================================
     document.getElementById('btnTampilGantiPass').addEventListener('click', () => {
         document.getElementById('newPass').value = '';
         document.getElementById('passMsg').className = 'msg';
         showView('gantiPass');
     });
 
-    document.getElementById('btnBatalPass').addEventListener('click', () => {
-        showView('dashboard');
-    });
+    document.getElementById('btnBatalPass').addEventListener('click', () => showView('dashboard'));
 
     document.getElementById('btnSimpanPass').addEventListener('click', async () => {
         const newPassword = document.getElementById('newPass').value;
-        if (newPassword.length < 4) return showMsg('passMsg', 'error', 'Password minimal 4 karakter.');
+        if (newPassword.length < 4) return showMsg('passMsg', 'error', 'Minimal 4 karakter.');
 
-        showMsg('passMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan password...');
+        showMsg('passMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
         document.getElementById('btnSimpanPass').disabled = true;
 
         try {
             const res = await fetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'gantiPasswordKaiwa',
-                    payload: { email: KAIWA_USER.email, newPassword }
-                })
+                body: JSON.stringify({ action: 'gantiPasswordKaiwa', payload: { email: KAIWA_USER.email, newPassword } })
             });
             const data = await res.json();
 
@@ -295,21 +291,139 @@
     });
 
     // ==========================================
-    // 3. MULAI KAIWA ROOM
+    // 2. MASUK KE KAIWA ROOM
     // ==========================================
     document.getElementById('btnMulaiKaiwa').addEventListener('click', () => {
-        const selectedProd = document.getElementById('produkSelect').value;
-        if (!selectedProd) return showMsg('dashMsg', 'error', 'Silakan pilih modul terlebih dahulu.');
+        activeProduct = document.getElementById('produkSelect').value;
+        if (!activeProduct) return showMsg('dashMsg', 'error', 'Silakan pilih modul terlebih dahulu.');
         
-        document.getElementById('activeProductDisplay').innerText = selectedProd;
+        document.getElementById('activeProductDisplay').innerText = activeProduct;
+        putaranSaatIni = 0; 
+        
+        const statusTeks = document.querySelector('.kaiwa-box p');
+        statusTeks.innerText = `Sesi dimulai! Batas: ${KAIWA_USER.maxPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
+        
         showView('kaiwaRoom');
     });
 
-    document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
-        // Nanti di sini ditambahkan fungsi kirim rapor sebelum keluar
-        showView('dashboard');
+    // ==========================================
+    // 3. FUNGSI MIKROFON (KLIK MULAI -> KLIK KIRIM)
+    // ==========================================
+    const micBtn = document.querySelector('.mic-btn');
+    const statusTeks = document.querySelector('.kaiwa-box p');
+
+    micBtn.addEventListener('click', async () => {
+        if (!isRecording) {
+            // KLIK PERTAMA: MULAI MEREKAM
+            if (putaranSaatIni >= KAIWA_USER.maxPutaran) {
+                alert("Batas maksimal percakapan untuk sesi ini telah habis. Silakan Akhiri sesi untuk menyimpan rapor.");
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                
+                mediaRecorder.start();
+                isRecording = true;
+                
+                micBtn.style.backgroundColor = "#b91c1c"; // Warna merah gelap saat merekam
+                micBtn.innerHTML = '<i class="fas fa-stop"></i>'; // Ikon berubah jadi stop
+                statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
+
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+
+                // Ketika rekaman dihentikan, otomatis proses AI
+                mediaRecorder.onstop = async () => {
+                    micBtn.style.backgroundColor = "#94a3b8"; // Abu-abu saat loading
+                    micBtn.disabled = true;
+                    statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
+                    
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    audioChunks = []; 
+                    
+                    await prosesAI(audioBlob);
+                };
+            } catch (err) {
+                alert("Gagal mengakses mikrofon. Pastikan Anda memberikan izin akses mikrofon di browser.");
+            }
+        } else {
+            // KLIK KEDUA: BERHENTI MEREKAM & OTOMATIS KIRIM
+            mediaRecorder.stop();
+            isRecording = false;
+            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        }
     });
 
+    async function prosesAI(audioBlob) {
+        try {
+            // 1. Telinga (STT)
+            const resSTT = await fetch(WORKER_URL + 'api/stt', { method: 'POST', body: audioBlob });
+            const dataSTT = await resSTT.json();
+            const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
+
+            if (!teksSiswa) {
+                statusTeks.innerText = "Suara tidak terdengar jelas, silakan coba tekan dan bicara lagi.";
+                resetMic();
+                return;
+            }
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
+
+            // 2. Otak (LLM) - Meneruskan nama produk untuk dicocokkan dengan Tema
+            const resChat = await fetch(WORKER_URL + 'api/chat', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: teksSiswa, produk: activeProduct }) 
+            });
+            const dataChat = await resChat.json();
+            const teksAI = dataChat.choices[0].message.content;
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
+
+            // 3. Mulut (TTS) - Meneruskan gender pilihan siswa
+            const pilihanSuara = document.getElementById('suaraSelect').value;
+            const resTTS = await fetch(WORKER_URL + 'api/tts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
+            });
+            const dataTTS = await resTTS.json();
+
+            // Putar Suara Balasan AI
+            const audio = new Audio("data:audio/mp3;base64," + dataTTS.audioContent);
+            audio.play();
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"`;
+            putaranSaatIni++; 
+
+            // Tombol mic menyala kembali setelah suara AI selesai bicara
+            audio.onended = () => {
+                resetMic();
+                statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
+            };
+
+        } catch (err) {
+            statusTeks.innerText = "Terjadi gangguan server. Silakan coba lagi.";
+            resetMic();
+        }
+    }
+
+    function resetMic() {
+        micBtn.style.backgroundColor = "#0d9488"; // Warna teal Neexa
+        micBtn.disabled = false;
+        micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+    }
+
+    // ==========================================
+    // 4. KELUAR & SIMPAN RAPOR (Evaluasi menyusul)
+    // ==========================================
+    document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
+        const yakin = confirm("Akhiri sesi ini?");
+        if(yakin) {
+            showView('dashboard');
+        }
+    });
 </script>
 </body>
 </html>
