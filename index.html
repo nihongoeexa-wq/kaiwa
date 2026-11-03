@@ -247,6 +247,10 @@
     let mediaRecorder;
     let audioChunks = [];
     let isRecording = false;
+    
+    // --- TAMBAHAN BARU UNTUK IPHONE ---
+    let audioPlayer = new Audio();
+    let isAudioUnlocked = false;
 
     let deviceId = localStorage.getItem('KAIWA_DEVICE_ID');
     if (!deviceId) {
@@ -375,6 +379,15 @@
     let localStream = null; // Deklarasi untuk mematikan perangkat keras mikrofon
 
     micBtn.addEventListener('click', async () => {
+        // --- TRIK UNLOCKER IPHONE (PEMANASAN SPEAKER) ---
+        if (!isAudioUnlocked) {
+            // Putar audio kosong (silent wav) sangat pendek agar iOS memberi izin
+            audioPlayer.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+            audioPlayer.play().catch(e => console.log("Unlocker aman"));
+            isAudioUnlocked = true;
+        }
+        // ------------------------------------------------
+
         if (!isRecording) {
             if (putaranSaatIni >= KAIWA_USER.maxPutaran) {
                 alert("Batas maksimal percakapan untuk sesi ini telah habis. Silakan Akhiri sesi untuk menyimpan rapor.");
@@ -483,13 +496,14 @@
             
             const dataTTS = await resTTS.json();
 
-            const audio = new Audio("data:audio/mp3;base64," + dataTTS.audioContent);
-            audio.play();
+            // --- GUNAKAN SPEAKER GLOBAL YANG SUDAH DIIZINKAN IPHONE ---
+            audioPlayer.src = "data:audio/mp3;base64," + dataTTS.audioContent;
+            audioPlayer.play();
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"`;
             putaranSaatIni++; 
 
-            audio.onended = () => {
+            audioPlayer.onended = () => {
                 if(statusLastTurn) {
                     statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
                     micBtn.style.backgroundColor = "#94a3b8"; 
