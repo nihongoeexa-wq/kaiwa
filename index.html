@@ -82,6 +82,25 @@
         .msg.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
         .msg.loading { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; display: block; }
 
+        /* Rapor & Circular Progress */
+        .rapor-grid { display: flex; justify-content: space-around; margin: 20px 0; }
+        .rapor-item { display: flex; flex-direction: column; align-items: center; }
+        .circular-chart { 
+            width: 70px; height: 70px; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            font-weight: 700; font-size: 16px; color: var(--primary);
+            background: #e2e8f0; /* Default abu-abu sebelum animasi */
+            transition: background 1s ease-out;
+        }
+        .circular-inner { 
+            width: 54px; height: 54px; border-radius: 50%; 
+            background: var(--surface); 
+            display: flex; justify-content: center; align-items: center; 
+        }
+        .rapor-title { font-size: 12px; font-weight: 600; margin-top: 8px; color: var(--text-main); }
+        .rapor-feedback { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 10px; font-size: 13px; }
+        .rapor-feedback strong { color: var(--primary); display: block; margin-bottom: 5px; }
+
         /* Kaiwa Room (Preview) */
         .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
         .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
@@ -171,8 +190,52 @@
         <p style="font-size: 13px; color: var(--text-muted);">Tekan tombol merah untuk berbicara</p>
     </div>
 
+    <!-- ================= VIEW 5: RAPOR ================= -->
+    <div id="viewRapor" class="hidden">
+        <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 5px;">Rapor Sesi Selesai</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Evaluasi otomatis oleh AI Sensei</p>
+        
+        <div id="loadingRapor" style="margin: 30px 0;">
+            <i class="fas fa-circle-notch fa-spin" style="font-size: 30px; color: var(--primary);"></i>
+            <p style="font-size: 14px; margin-top: 10px;">Menganalisis Kosa Kata, Bunpou, dan Hatsuon...</p>
+        </div>
+
+        <div id="hasilRapor" class="hidden">
+            <div class="rapor-grid">
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartKosaKata"><div class="circular-inner" id="valKosaKata">0</div></div>
+                    <div class="rapor-title">Kosa Kata</div>
+                </div>
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartBunpou"><div class="circular-inner" id="valBunpou">0</div></div>
+                    <div class="rapor-title">Bunpou</div>
+                </div>
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartKelancaran"><div class="circular-inner" id="valKelancaran">0</div></div>
+                    <div class="rapor-title">Kelancaran</div>
+                </div>
+            </div>
+
+            <div class="rapor-feedback">
+                <strong><i class="fas fa-exclamation-triangle"></i> Koreksi & Hatsuon:</strong>
+                <span id="teksPerbaikan">-</span>
+            </div>
+            <div class="rapor-feedback">
+                <strong><i class="fas fa-lightbulb"></i> Rekomendasi Belajar:</strong>
+                <span id="teksRekomendasi">-</span>
+            </div>
+
+            <button id="btnKembaliDash" class="btn" style="margin-top: 20px;"><i class="fas fa-home"></i> Kembali ke Beranda</button>
+        </div>
+    </div>
+
 </div>
 
+Blok seluruh kode mulai dari `<script>` hingga `</script>` di bagian bawah file HTML Anda, lalu timpa (paste) dengan kode utuh di bawah ini.
+
+Semua pembaruan logika—mulai dari penambahan variabel `historyPercakapan`, pendaftaran `viewRapor`, pengiriman status `isLastTurn`, hingga fungsi animasi diagram rapor—sudah dirangkai dengan rapi agar terhindar dari *error* penempatan.
+
+```html
 <script>
     // ==========================================
     // KONFIGURASI API
@@ -183,6 +246,7 @@
     let KAIWA_USER = {};
     let activeProduct = "";
     let putaranSaatIni = 0;
+    let historyPercakapan = ""; // Menampung riwayat obrolan untuk rapor
     
     // Variabel Rekaman
     let mediaRecorder;
@@ -199,7 +263,8 @@
         login: document.getElementById('viewLogin'),
         dashboard: document.getElementById('viewDashboard'),
         gantiPass: document.getElementById('viewGantiPass'),
-        kaiwaRoom: document.getElementById('viewKaiwaRoom')
+        kaiwaRoom: document.getElementById('viewKaiwaRoom'),
+        rapor: document.getElementById('viewRapor') // Terhubung ke View 5
     };
 
     function showView(viewName) {
@@ -299,6 +364,7 @@
         
         document.getElementById('activeProductDisplay').innerText = activeProduct;
         putaranSaatIni = 0; 
+        historyPercakapan = ""; // Mereset riwayat setiap kali sesi baru dimulai
         
         const statusTeks = document.querySelector('.kaiwa-box p');
         statusTeks.innerText = `Sesi dimulai! Batas: ${KAIWA_USER.maxPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
@@ -314,7 +380,6 @@
 
     micBtn.addEventListener('click', async () => {
         if (!isRecording) {
-            // KLIK PERTAMA: MULAI MEREKAM
             if (putaranSaatIni >= KAIWA_USER.maxPutaran) {
                 alert("Batas maksimal percakapan untuk sesi ini telah habis. Silakan Akhiri sesi untuk menyimpan rapor.");
                 return;
@@ -327,15 +392,14 @@
                 mediaRecorder.start();
                 isRecording = true;
                 
-                micBtn.style.backgroundColor = "#b91c1c"; // Warna merah gelap saat merekam
-                micBtn.innerHTML = '<i class="fas fa-stop"></i>'; // Ikon berubah jadi stop
+                micBtn.style.backgroundColor = "#b91c1c";
+                micBtn.innerHTML = '<i class="fas fa-stop"></i>';
                 statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
 
                 mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
 
-                // Ketika rekaman dihentikan, otomatis proses AI
                 mediaRecorder.onstop = async () => {
-                    micBtn.style.backgroundColor = "#94a3b8"; // Abu-abu saat loading
+                    micBtn.style.backgroundColor = "#94a3b8"; 
                     micBtn.disabled = true;
                     statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
                     
@@ -348,7 +412,6 @@
                 alert("Gagal mengakses mikrofon. Pastikan Anda memberikan izin akses mikrofon di browser.");
             }
         } else {
-            // KLIK KEDUA: BERHENTI MEREKAM & OTOMATIS KIRIM
             mediaRecorder.stop();
             isRecording = false;
             micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
@@ -370,18 +433,24 @@
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
 
-            // 2. Otak (LLM) - Meneruskan nama produk untuk dicocokkan dengan Tema
+            // Hitung status putaran terakhir
+            const statusLastTurn = (putaranSaatIni + 1 >= KAIWA_USER.maxPutaran);
+
+            // 2. Otak (LLM) - Meneruskan isLastTurn
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ message: teksSiswa, produk: activeProduct }) 
+                body: JSON.stringify({ message: teksSiswa, produk: activeProduct, isLastTurn: statusLastTurn }) 
             });
             const dataChat = await resChat.json();
             const teksAI = dataChat.choices[0].message.content;
 
+            // Simpan percakapan ke dalam riwayat
+            historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
+
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
 
-            // 3. Mulut (TTS) - Meneruskan gender pilihan siswa
+            // 3. Mulut (TTS)
             const pilihanSuara = document.getElementById('suaraSelect').value;
             const resTTS = await fetch(WORKER_URL + 'api/tts', {
                 method: 'POST',
@@ -390,17 +459,21 @@
             });
             const dataTTS = await resTTS.json();
 
-            // Putar Suara Balasan AI
             const audio = new Audio("data:audio/mp3;base64," + dataTTS.audioContent);
             audio.play();
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"`;
             putaranSaatIni++; 
 
-            // Tombol mic menyala kembali setelah suara AI selesai bicara
             audio.onended = () => {
-                resetMic();
-                statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
+                if(statusLastTurn) {
+                    statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
+                    micBtn.style.backgroundColor = "#94a3b8"; 
+                    micBtn.disabled = true; // Nonaktifkan mikrofon di akhir sesi
+                } else {
+                    resetMic();
+                    statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
+                }
             };
 
         } catch (err) {
@@ -410,19 +483,79 @@
     }
 
     function resetMic() {
-        micBtn.style.backgroundColor = "#0d9488"; // Warna teal Neexa
+        micBtn.style.backgroundColor = "#0d9488";
         micBtn.disabled = false;
         micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
     }
 
     // ==========================================
-    // 4. KELUAR & SIMPAN RAPOR (Evaluasi menyusul)
+    // 4. KELUAR & SIMPAN RAPOR KE GOOGLE SHEETS
     // ==========================================
-    document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
-        const yakin = confirm("Akhiri sesi ini?");
-        if(yakin) {
+    document.getElementById('btnSelesaiKaiwa').addEventListener('click', async () => {
+        if(historyPercakapan.trim() === "") {
             showView('dashboard');
+            return;
         }
+
+        const yakin = confirm("Selesaikan sesi dan lihat rapor evaluasi?");
+        if(yakin) {
+            showView('rapor');
+            document.getElementById('loadingRapor').classList.remove('hidden');
+            document.getElementById('hasilRapor').classList.add('hidden');
+
+            try {
+                // 1. Minta Evaluasi ke Cloudflare
+                const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ history: historyPercakapan })
+                });
+                const raporData = await resEval.json();
+
+                // Animasi Nilai Rapor di Layar
+                setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
+                setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
+                setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
+                document.getElementById('teksPerbaikan').innerText = raporData.perbaikan;
+                document.getElementById('teksRekomendasi').innerText = raporData.rekomendasi;
+
+                document.getElementById('loadingRapor').classList.add('hidden');
+                document.getElementById('hasilRapor').classList.remove('hidden');
+
+                // 2. Kirim Data Rapor ke Google Apps Script (Background Process)
+                fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'simpanRaporKaiwa',
+                        payload: {
+                            nama: KAIWA_USER.nama,
+                            email: KAIWA_USER.email,
+                            produk: activeProduct,
+                            kosaKata: raporData.kosaKata,
+                            polaKalimat: raporData.polaKalimat,
+                            kelancaran: raporData.kelancaran,
+                            perbaikan: raporData.perbaikan,
+                            rekomendasi: raporData.rekomendasi,
+                            history: historyPercakapan
+                        }
+                    })
+                });
+
+            } catch(e) {
+                alert("Gagal mengambil evaluasi. Server sedang sibuk.");
+                showView('dashboard');
+            }
+        }
+    });
+
+    function setLingkaran(chartId, textId, nilai) {
+        document.getElementById(textId).innerText = nilai;
+        document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
+    }
+
+    document.getElementById('btnKembaliDash').addEventListener('click', () => {
+        showView('dashboard');
     });
 </script>
 </body>
