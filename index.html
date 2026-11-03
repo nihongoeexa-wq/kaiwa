@@ -479,6 +479,16 @@
             if (!resChat.ok) throw new Error("Server LLM lambat.");
             
             const dataChat = await resChat.json();
+
+            // --- TAMBAHAN PENGAMAN & DETEKTIF DEEPSEEK ---
+            if (dataChat.error) {
+                throw new Error("Penolakan DeepSeek: " + dataChat.error.message);
+            }
+            if (!dataChat.choices || !dataChat.choices[0]) {
+                throw new Error("DeepSeek membalas dengan format kosong.");
+            }
+            // ----------------------------------------------
+
             const teksAI = dataChat.choices[0].message.content;
 
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
