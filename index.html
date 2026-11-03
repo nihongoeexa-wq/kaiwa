@@ -372,6 +372,7 @@
     // ==========================================
     const micBtn = document.querySelector('.mic-btn');
     const statusTeks = document.querySelector('.kaiwa-box p');
+    let localStream = null; // Deklarasi untuk mematikan perangkat keras mikrofon
 
     micBtn.addEventListener('click', async () => {
         if (!isRecording) {
@@ -381,8 +382,24 @@
             }
 
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                // Konfigurasi agar TWS diutamakan
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { 
+                        echoCancellation: true, 
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    } 
+                });
+
+                // Fallback untuk iOS Safari
+                let options = {};
+                if (MediaRecorder.isTypeSupported('audio/webm')) {
+                    options = { mimeType: 'audio/webm' };
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    options = { mimeType: 'audio/mp4' };
+                }
+
+                mediaRecorder = new MediaRecorder(localStream, options);
                 
                 mediaRecorder.start();
                 isRecording = true;
@@ -391,14 +408,21 @@
                 micBtn.innerHTML = '<i class="fas fa-stop"></i>';
                 statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
 
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
 
                 mediaRecorder.onstop = async () => {
                     micBtn.style.backgroundColor = "#94a3b8"; 
                     micBtn.disabled = true;
                     statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
                     
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    // Matikan mikrofon paksa agar audio beralih ke Loudspeaker/TWS
+                    if (localStream) {
+                        localStream.getTracks().forEach(track => track.stop());
+                    }
+
+                    const audioBlob = new Blob(audioChunks, { type: options.mimeType || 'audio/webm' });
                     audioChunks = []; 
                     
                     await prosesAI(audioBlob);
@@ -414,9 +438,14 @@
     });
 
     async function prosesAI(audioBlob) {
+        // Deklarasi status putaran di awal
+        const statusLastTurn = (putaranSaatIni + 1 >= KAIWA_USER.maxPutaran);
+
         try {
             // 1. Telinga (STT)
             const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
+            if (!resSTT.ok) throw new Error("Server STT sibuk.");
+            
             const dataSTT = await resSTT.json();
             const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
 
@@ -428,19 +457,17 @@
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
 
-            // Hitung status putaran terakhir
-            const statusLastTurn = (putaranSaatIni + 1 >= KAIWA_USER.maxPutaran);
-
-            // 2. Otak (LLM) - Meneruskan isLastTurn
+            // 2. Otak (LLM)
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: teksSiswa, produk: activeProduct, isLastTurn: statusLastTurn }) 
             });
+            if (!resChat.ok) throw new Error("Server LLM lambat.");
+            
             const dataChat = await resChat.json();
             const teksAI = dataChat.choices[0].message.content;
 
-            // Simpan percakapan ke dalam riwayat
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
@@ -452,6 +479,8 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
             });
+            if (!resTTS.ok) throw new Error("Server TTS sibuk.");
+            
             const dataTTS = await resTTS.json();
 
             const audio = new Audio("data:audio/mp3;base64," + dataTTS.audioContent);
@@ -464,7 +493,7 @@
                 if(statusLastTurn) {
                     statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
                     micBtn.style.backgroundColor = "#94a3b8"; 
-                    micBtn.disabled = true; // Nonaktifkan mikrofon di akhir sesi
+                    micBtn.disabled = true; 
                 } else {
                     resetMic();
                     statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
@@ -472,8 +501,9 @@
             };
 
         } catch (err) {
-            statusTeks.innerText = "Terjadi gangguan server. Silakan coba lagi.";
-            resetMic();
+            console.error("Terjadi Gangguan:", err);
+            statusTeks.innerText = "Terjadi gangguan server. Silakan tekan mikrofon untuk mengulang.";
+            resetMic(); // Memaksa tombol terbuka kembali jika terjadi error
         }
     }
 
