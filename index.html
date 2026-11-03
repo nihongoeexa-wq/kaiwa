@@ -230,7 +230,7 @@
     </div>
 
 </div>
-    
+
 <script>
     // ==========================================
     // KONFIGURASI API
@@ -416,7 +416,7 @@
     async function prosesAI(audioBlob) {
         try {
             // 1. Telinga (STT)
-            const resSTT = await fetch(WORKER_URL + 'api/stt', { method: 'POST', body: audioBlob });
+            const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
             const dataSTT = await resSTT.json();
             const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
 
@@ -503,9 +503,13 @@
                 const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ history: historyPercakapan })
+                    body: JSON.stringify({ history: historyPercakapan, produk: activeProduct })
                 });
-                const raporData = await resEval.json();
+                
+                // BONGKAR BUNGKUS PESAN DARI DEEPSEEK
+                const rawData = await resEval.json();
+                const jsonContent = rawData.choices[0].message.content; // Ambil teks murni
+                const raporData = JSON.parse(jsonContent); // Jadikan format data
 
                 // Animasi Nilai Rapor di Layar
                 setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
