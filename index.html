@@ -516,8 +516,9 @@
 
         } catch (err) {
             console.error("Terjadi Gangguan:", err);
-            statusTeks.innerText = "Terjadi gangguan server. Silakan tekan mikrofon untuk mengulang.";
-            resetMic(); // Memaksa tombol terbuka kembali jika terjadi error
+            // Ini akan memunculkan error aslinya (misal: "Server STT sibuk", "Server TTS sibuk", atau error sistem)
+            statusTeks.innerText = "SYSTEM HALTED: " + err.message; 
+            resetMic(); 
         }
     }
 
