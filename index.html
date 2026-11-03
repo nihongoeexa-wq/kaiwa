@@ -561,10 +561,21 @@
                     body: JSON.stringify({ history: historyPercakapan, produk: activeProduct })
                 });
                 
-                // BONGKAR BUNGKUS PESAN DARI DEEPSEEK
+                if (!resEval.ok) throw new Error("Server evaluasi lambat/sibuk.");
+
                 const rawData = await resEval.json();
-                const jsonContent = rawData.choices[0].message.content; // Ambil teks murni
-                const raporData = JSON.parse(jsonContent); // Jadikan format data
+                
+                if (rawData.error) throw new Error(rawData.error.message);
+                if (!rawData.choices || !rawData.choices[0]) throw new Error("Format jawaban AI kosong.");
+
+                let jsonContent = rawData.choices[0].message.content; 
+                
+                // --- PEMBERSIH MARKDOWN (SOLUSI LOADING MACET) ---
+                // DeepSeek sering iseng menyelipkan ```json di awal dan ``` di akhir
+                jsonContent = jsonContent.replace(/```json/gi, '').replace(/```/g, '').trim();
+                // --------------------------------------------------
+                
+                const raporData = JSON.parse(jsonContent); 
 
                 // Animasi Nilai Rapor di Layar
                 setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
@@ -594,11 +605,17 @@
                             history: historyPercakapan
                         }
                     })
-                });
+                }).catch(err => console.log("Gagal simpan ke Sheet:", err));
 
             } catch(e) {
-                alert("Gagal mengambil evaluasi. Server sedang sibuk.");
-                showView('dashboard');
+                console.error("Error Rapor:", e);
+                // Jika masih gagal, tulisan loading akan langsung berubah menjadi pesan error aslinya
+                const loadingDiv = document.getElementById('loadingRapor');
+                loadingDiv.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="font-size: 30px; color: #ef4444;"></i>
+                    <p style="font-size: 14px; margin-top: 10px; color: #ef4444;"><b>Gagal memuat rapor:</b> ${e.message}</p>
+                    <button onclick="showView('dashboard')" class="btn" style="margin-top: 15px;">Kembali ke Beranda</button>
+                `;
             }
         }
     });
