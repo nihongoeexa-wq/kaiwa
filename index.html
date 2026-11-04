@@ -156,6 +156,8 @@
         <div id="dashMsg" class="msg"></div>
         <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Percakapan</button>
         <button id="btnTampilGantiPass" class="btn btn-outline"><i class="fas fa-key"></i> Ganti Password</button>
+        <!-- TAMBAHAN TOMBOL RIWAYAT -->
+        <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
     </div>
 
     <!-- ================= VIEW 3: GANTI PASSWORD ================= -->
@@ -229,6 +231,18 @@
         </div>
     </div>
 
+    <!-- ================= VIEW 6: RIWAYAT NILAI ================= -->
+    <div id="viewRiwayat" class="hidden">
+        <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 5px;">Riwayat Nilai</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Rekap evaluasi sesi sebelumnya</p>
+        
+        <div class="rapor-feedback" style="min-height: 120px; max-height: 250px; overflow-y: auto; margin-bottom: 20px; white-space: pre-line;">
+            <span id="teksRiwayat">Mengambil data...</span>
+        </div>
+
+        <button id="btnKembaliRiwayat" class="btn"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
+    </div>
+
 </div>
 
 <script>
@@ -261,7 +275,8 @@
         dashboard: document.getElementById('viewDashboard'),
         gantiPass: document.getElementById('viewGantiPass'),
         kaiwaRoom: document.getElementById('viewKaiwaRoom'),
-        rapor: document.getElementById('viewRapor') 
+        rapor: document.getElementById('viewRapor'),
+        riwayat: document.getElementById('viewRiwayat') // <-- INI TAMBAHAN BARU
     };
 
     function showView(viewName) {
@@ -504,6 +519,9 @@
             
             const teksAI = dataChat.choices[0].message.content;
 
+            // ---> 1. RADAR PER PUTARAN CHAT <---
+            kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
+
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
 
@@ -537,8 +555,13 @@
 
         } catch (err) {
             console.error("Terjadi Gangguan:", err);
-            statusTeks.innerText = "SYSTEM HALTED: " + err.message; 
-            kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); // Lapor ke BlackBox jika gagal saat chat
+            
+            // 1. Tampilan untuk Siswa (Menyembunyikan error teknis)
+            statusTeks.innerText = "⚠️ SISTEM PADAT: Mohon maaf, server Neexa sedang melayani antrean pengguna yang tinggi. Silakan coba bicara lagi ya."; 
+            
+            // 2. Laporan rahasia ke Spreadsheet Bos
+            kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); 
+            
             resetMic(); 
         }
     }
@@ -596,8 +619,8 @@
                 document.getElementById('loadingRapor').classList.add('hidden');
                 document.getElementById('hasilRapor').classList.remove('hidden');
 
-                // Lapor Aktivitas Sukses ke Sheets
-                kirimAktivitas(activeEngineEvaluator);
+                // ---> 2. RADAR SAAT RAPOR TERCETAK <---
+                kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
 
                 // Kirim Rapor ke GAS
                 fetch(GAS_URL, {
@@ -621,12 +644,15 @@
 
             } catch(e) {
                 console.error("Error Rapor:", e);
-                kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); // Lapor BlackBox jika gagal bikin rapor
                 
+                // 1. Laporan rahasia ke Spreadsheet Bos
+                kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); 
+                
+                // 2. Tampilan untuk Siswa (Menyembunyikan e.message)
                 const loadingDiv = document.getElementById('loadingRapor');
                 loadingDiv.innerHTML = `
-                    <i class="fas fa-exclamation-triangle" style="font-size: 30px; color: #ef4444;"></i>
-                    <p style="font-size: 14px; margin-top: 10px; color: #ef4444;"><b>Gagal memuat rapor:</b> ${e.message}</p>
+                    <i class="fas fa-users" style="font-size: 30px; color: #f59e0b;"></i>
+                    <p style="font-size: 14px; margin-top: 10px; color: #b45309;"><b>Antrean Penuh:</b> Mohon maaf, Sensei AI sedang menilai banyak siswa saat ini. Rapor sesi Anda gagal dimuat.</p>
                     <button onclick="showView('dashboard')" class="btn" style="margin-top: 15px;">Kembali ke Beranda</button>
                 `;
             }
@@ -637,6 +663,18 @@
         document.getElementById(textId).innerText = nilai;
         document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
     }
+
+    // --- FUNGSI KLIK TOMBOL RIWAYAT ---
+    document.getElementById('btnRiwayat').addEventListener('click', () => {
+        // Ambil data riwayat dari KAIWA_USER yang didapat saat login
+        const histori = KAIWA_USER.riwayat ? KAIWA_USER.riwayat : "Belum ada riwayat nilai yang tersimpan.";
+        document.getElementById('teksRiwayat').innerText = histori;
+        showView('riwayat');
+    });
+
+    document.getElementById('btnKembaliRiwayat').addEventListener('click', () => {
+        showView('dashboard');
+    });
 
     document.getElementById('btnKembaliDash').addEventListener('click', () => {
         showView('dashboard');
