@@ -256,6 +256,7 @@
     let activeProduct = "";
     let putaranSaatIni = 0;
     let historyPercakapan = ""; 
+    let chatHistory = []; // <-- TAMBAHKAN BARIS INI: Wadah memori Sliding Window
     
     let mediaRecorder;
     let audioChunks = [];
@@ -395,12 +396,26 @@
         activeProduct = document.getElementById('produkSelect').value;
         if (!activeProduct) return showMsg('dashMsg', 'error', 'Silakan pilih modul terlebih dahulu.');
         
+        // --- LOGIKA BARU: Tentukan batas berdasarkan produk yang SEDANG DIPILIH ---
+        let batasPutaran = 7; // Default untuk BSC
+        const namaProduk = activeProduct.toUpperCase();
+        if (namaProduk.includes("PRO")) {
+            batasPutaran = 30;
+        } else if (namaProduk.includes("MID")) {
+            batasPutaran = 15;
+        }
+        
+        // Timpa maxPutaran akun dengan maxPutaran sesi ini
+        KAIWA_USER.maxPutaran = batasPutaran;
+        // -------------------------------------------------------------------------
+
         document.getElementById('activeProductDisplay').innerText = activeProduct;
         putaranSaatIni = 0; 
         historyPercakapan = ""; 
+        chatHistory = []; // Kosongkan memori setiap mulai sesi baru
         
         const statusTeks = document.querySelector('.kaiwa-box p');
-        statusTeks.innerText = `Sesi dimulai! Batas: ${KAIWA_USER.maxPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
+        statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
         
         showView('kaiwaRoom');
     });
@@ -505,7 +520,7 @@
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ message: teksSiswa, produk: activeProduct, isLastTurn: statusLastTurn }) 
+                body: JSON.stringify({ message: teksSiswa, history: chatHistory, produk: activeProduct, isLastTurn: statusLastTurn })
             });
             if (!resChat.ok) throw new Error("Server LLM (Otak) lambat.");
             
@@ -523,6 +538,16 @@
             kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
 
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
+            
+            // --- MULAI PENAMBAHAN SLIDING WINDOW ---
+            chatHistory.push({ role: "user", parts: [{ text: teksSiswa }] });
+            chatHistory.push({ role: "model", parts: [{ text: teksAI }] });
+
+            if (chatHistory.length > 8) {
+                chatHistory.splice(0, 2); 
+            }
+            // --- AKHIR PENAMBAHAN SLIDING WINDOW ---
+
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
 
             // Mulut (TTS)
@@ -621,6 +646,12 @@
 
                 // ---> 2. RADAR SAAT RAPOR TERCETAK <---
                 kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
+
+                // Update tampilan riwayat secara lokal tanpa perlu login ulang
+                const skorRata = Math.round((Number(raporData.kosaKata) + Number(raporData.polaKalimat) + Number(raporData.kelancaran)) / 3);
+                const waktuSekarang = new Date().toLocaleString('id-ID');
+                const entriBaru = `[${waktuSekarang}] (${activeProduct}) Nilai Total: ${skorRata}`;
+                KAIWA_USER.riwayat = entriBaru + (KAIWA_USER.riwayat ? "\n" + KAIWA_USER.riwayat : "");
 
                 // Kirim Rapor ke GAS
                 fetch(GAS_URL, {
