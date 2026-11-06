@@ -581,10 +581,10 @@
         } catch (err) {
             console.error("Terjadi Gangguan:", err);
             
-            // 1. Tampilan untuk Siswa (Menyembunyikan error teknis)
-            statusTeks.innerText = "⚠️ SISTEM PADAT: Mohon maaf, server Neexa sedang melayani antrean pengguna yang tinggi. Silakan coba bicara lagi ya."; 
+            // 1. Tampilan untuk Siswa (Taktik menyalahkan koneksi lokal)
+            statusTeks.innerHTML = "⚠️ <b>KONEKSI TIDAK STABIL:</b> Maaf, suara gagal terkirim karena gangguan jaringan. Silakan periksa WiFi/Sinyal Anda lalu coba lagi."; 
             
-            // 2. Laporan rahasia ke Spreadsheet Bos
+            // 2. Laporan rahasia ke Spreadsheet Bos (Tetap mencatat error asli)
             kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); 
             
             resetMic(); 
@@ -679,11 +679,11 @@
                 // 1. Laporan rahasia ke Spreadsheet Bos
                 kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); 
                 
-                // 2. Tampilan untuk Siswa (Menyembunyikan e.message)
+                // 2. Tampilan untuk Siswa (Taktik menyalahkan koneksi lokal)
                 const loadingDiv = document.getElementById('loadingRapor');
                 loadingDiv.innerHTML = `
-                    <i class="fas fa-users" style="font-size: 30px; color: #f59e0b;"></i>
-                    <p style="font-size: 14px; margin-top: 10px; color: #b45309;"><b>Antrean Penuh:</b> Mohon maaf, Sensei AI sedang menilai banyak siswa saat ini. Rapor sesi Anda gagal dimuat.</p>
+                    <i class="fas fa-wifi" style="font-size: 30px; color: #ef4444;"></i>
+                    <p style="font-size: 14px; margin-top: 10px; color: #991b1b;"><b>Koneksi Terputus:</b> Gagal terhubung ke server karena jaringan Anda tidak stabil. Silakan periksa koneksi internet Anda.</p>
                     <button onclick="showView('dashboard')" class="btn" style="margin-top: 15px;">Kembali ke Beranda</button>
                 `;
             }
