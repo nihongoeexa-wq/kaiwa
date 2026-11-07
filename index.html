@@ -503,7 +503,10 @@
         try {
             // Telinga (STT)
             const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
-            if (!resSTT.ok) throw new Error("Server STT (Telinga) sibuk.");
+            if (!resSTT.ok) {
+                const errTextSTT = await resSTT.text(); // Tangkap pesan error detail dari worker
+                throw new Error("Server STT (Telinga) gagal: " + errTextSTT); 
+            }
             
             const dataSTT = await resSTT.json();
             const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
@@ -522,7 +525,10 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: teksSiswa, history: chatHistory, produk: activeProduct, isLastTurn: statusLastTurn })
             });
-            if (!resChat.ok) throw new Error("Server LLM (Otak) lambat.");
+            if (!resChat.ok) {
+                const errTextChat = await resChat.text(); // Tangkap pesan error detail
+                throw new Error("Server LLM (Otak) gagal: " + errTextChat); 
+            }
             
             const dataChat = await resChat.json();
             
@@ -557,7 +563,10 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
             });
-            if (!resTTS.ok) throw new Error("Server TTS (Mulut) sibuk.");
+            if (!resTTS.ok) {
+                const errTextTTS = await resTTS.text();
+                throw new Error("Server TTS (Mulut) gagal: " + errTextTTS); 
+            }
             
             const dataTTS = await resTTS.json();
 
