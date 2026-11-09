@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neexa Kaiwa - AI Tutor</title>
+    
+    <!-- Pustaka Font & Ikon Asli -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- PUSTAKA BARU: Google OAuth & FingerprintJS -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+
     <style>
         :root {
-            --primary: #0f766e; /* Teal theme untuk Kaiwa */
+            --primary: #0f766e;
             --primary-hover: #115e59;
             --bg-color: #f0fdfa;
             --surface: #ffffff;
@@ -48,7 +55,59 @@
         .logo-box h1 { margin: 0; color: var(--primary); font-size: 24px; letter-spacing: 1px; }
         .logo-box p { margin: 0; color: #0d9488; font-size: 12px; font-weight: 600; }
         
-        /* Forms */
+        /* --- CSS BARU: Indikator Saldo Tiket --- */
+        .ticket-badge {
+            background: #fef08a; 
+            color: #854d0e;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+        
+        /* --- CSS BARU: Kotak Input Voucher --- */
+        .voucher-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+        }
+        .voucher-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .voucher-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .voucher-box button:hover { background: var(--primary-hover); }
+
+        /* --- CSS BARU: Wadah Tombol Google OAuth --- */
+        .google-btn-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            min-height: 44px; /* Menjaga layout tidak melompat saat Google loading */
+        }
+
+        /* Forms Asli */
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
         .form-control {
@@ -59,7 +118,7 @@
         }
         .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15); }
         
-        /* Buttons */
+        /* Buttons Asli */
         .btn {
             width: 100%; padding: 14px;
             background: var(--primary); color: white;
@@ -76,20 +135,20 @@
         }
         .btn-outline:hover:not(:disabled) { background: #f0fdfa; }
         
-        /* Messages */
+        /* Messages Asli */
         .msg { font-size: 13px; font-weight: 600; margin-top: 10px; padding: 10px; border-radius: 8px; display: none; }
         .msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
         .msg.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
         .msg.loading { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; display: block; }
 
-        /* Rapor & Circular Progress */
+        /* Rapor & Circular Progress Asli */
         .rapor-grid { display: flex; justify-content: space-around; margin: 20px 0; }
         .rapor-item { display: flex; flex-direction: column; align-items: center; }
         .circular-chart { 
             width: 70px; height: 70px; border-radius: 50%; 
             display: flex; justify-content: center; align-items: center; 
             font-weight: 700; font-size: 16px; color: var(--primary);
-            background: #e2e8f0; /* Default abu-abu sebelum animasi */
+            background: #e2e8f0; 
             transition: background 1s ease-out;
         }
         .circular-inner { 
@@ -101,7 +160,7 @@
         .rapor-feedback { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 10px; font-size: 13px; }
         .rapor-feedback strong { color: var(--primary); display: block; margin-bottom: 5px; }
 
-        /* Kaiwa Room (Preview) */
+        /* Kaiwa Room Asli */
         .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
         .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
         .mic-btn:hover { transform: scale(1.05); }
@@ -117,62 +176,67 @@
         <p>AI Japanese Conversation Tutor</p>
     </div>
 
-    <!-- ================= VIEW 1: LOGIN ================= -->
+    <!-- ================= VIEW 1: LOGIN & DAFTAR ================= -->
     <div id="viewLogin">
         <h2 style="font-size: 20px; margin-bottom: 5px;">Selamat Datang!</h2>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 20px;">Silakan login untuk memulai sesi Kaiwa.</p>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 20px;">Silakan masuk atau daftar menggunakan Akun Google Anda.</p>
         
-        <div class="form-group">
-            <label>Email atau Nama Lengkap</label>
-            <input type="text" id="loginId" class="form-control" placeholder="Masukkan Email / Nama">
+        <!-- Pilihan Mode: Masuk atau Daftar -->
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; justify-content: center;">
+            <label style="cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                <input type="radio" name="authMode" value="login" checked> Masuk
+            </label>
+            <label style="cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                <input type="radio" name="authMode" value="daftar"> Daftar Baru
+            </label>
         </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="loginPass" class="form-control" placeholder="Password (Default: No. WA)">
+
+        <!-- Wadah Tombol Google Asli -->
+        <div class="google-btn-wrapper">
+            <div id="googleButtonDiv"></div>
         </div>
         
         <div id="loginMsg" class="msg"></div>
-        <button id="btnLogin" class="btn" style="margin-top: 20px;"><i class="fas fa-sign-in-alt"></i> Masuk</button>
     </div>
 
     <!-- ================= VIEW 2: DASHBOARD (PILIH PRODUK) ================= -->
     <div id="viewDashboard" class="hidden">
-        <h2 style="font-size: 18px; text-align: left; margin-bottom: 20px;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+            <!-- Indikator Saldo Tiket -->
+            <div class="ticket-badge" title="Saldo Tiket">
+                <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+            </div>
+        </div>
         
         <div class="form-group">
             <label>Pilih Modul Percakapan</label>
             <select id="produkSelect" class="form-control">
-                <!-- Diisi otomatis dari GAS -->
+                <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
+                <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
+                <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
             </select>
         </div>
-    <div class="form-group" style="margin-top: 15px;">
-        <label>Suara AI Tutor</label>
-        <select id="suaraSelect" class="form-control">
-            <option value="female" selected>Perempuan</option>
-            <option value="male">Laki-laki</option>
-        </select>
-    </div>
-
-        <div id="dashMsg" class="msg"></div>
-        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Percakapan</button>
-        <button id="btnTampilGantiPass" class="btn btn-outline"><i class="fas fa-key"></i> Ganti Password</button>
-        <!-- TAMBAHAN TOMBOL RIWAYAT -->
-        <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
-    </div>
-
-    <!-- ================= VIEW 3: GANTI PASSWORD ================= -->
-    <div id="viewGantiPass" class="hidden">
-        <h2 style="font-size: 18px;">Ganti Password</h2>
-        <p style="font-size: 13px; color: var(--text-muted);">Buat password baru yang mudah diingat.</p>
-        
-        <div class="form-group">
-            <label>Password Baru</label>
-            <input type="password" id="newPass" class="form-control" placeholder="Minimal 4 karakter">
+        <div class="form-group" style="margin-top: 15px;">
+            <label>Suara AI Tutor</label>
+            <select id="suaraSelect" class="form-control">
+                <option value="female" selected>Perempuan</option>
+                <option value="male">Laki-laki</option>
+            </select>
         </div>
 
-        <div id="passMsg" class="msg"></div>
-        <button id="btnSimpanPass" class="btn" style="margin-top: 15px;"><i class="fas fa-save"></i> Simpan Password</button>
-        <button id="btnBatalPass" class="btn btn-outline">Batal</button>
+        <!-- Kotak Klaim Voucher -->
+        <div class="voucher-box">
+            <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+            <button id="btnKlaimVoucher">Klaim</button>
+        </div>
+        <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
+
+        <div id="dashMsg" class="msg"></div>
+        
+        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+        
+        <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
     </div>
 
     <!-- ================= VIEW 4: KAIWA ROOM ================= -->
@@ -247,37 +311,33 @@
 
 <script>
     // ==========================================
-    // KONFIGURASI API
+    // KONFIGURASI API & VARIABEL GLOBAL
     // ==========================================
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyytWL8LucfyNlEa6cJa5nQGE5OfCnWAAVRYKYjVlr3xvPo2sll4wR7piXUpi_RxbbTpg/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzIB9C4kDz4p9RYoruLaMjWoS39J2h0vA44vFAcddn5hd4kax3FNXdHW02qGkmbBtGHqA/exec"; // Pastikan ini URL GAS yang BARU di-deploy
     const WORKER_URL = "https://hanasu.nihongoeexa.workers.dev/";
     
+    // GANTI DENGAN CLIENT ID GOOGLE ANDA (Dari Google Cloud Console)
+    const GOOGLE_CLIENT_ID = "MASUKKAN_CLIENT_ID_GOOGLE_ANDA_DI_SINI.apps.googleusercontent.com"; 
+
     let KAIWA_USER = {};
     let activeProduct = "";
     let putaranSaatIni = 0;
     let historyPercakapan = ""; 
-    let chatHistory = []; // <-- TAMBAHKAN BARIS INI: Wadah memori Sliding Window
+    let chatHistory = []; 
+    let deviceId = ""; // Akan diisi oleh FingerprintJS
     
     let mediaRecorder;
     let audioChunks = [];
     let isRecording = false;
-    
     let audioPlayer = new Audio();
     let isAudioUnlocked = false;
-
-    let deviceId = localStorage.getItem('KAIWA_DEVICE_ID');
-    if (!deviceId) {
-        deviceId = 'KWD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        localStorage.setItem('KAIWA_DEVICE_ID', deviceId);
-    }
 
     const views = {
         login: document.getElementById('viewLogin'),
         dashboard: document.getElementById('viewDashboard'),
-        gantiPass: document.getElementById('viewGantiPass'),
         kaiwaRoom: document.getElementById('viewKaiwaRoom'),
         rapor: document.getElementById('viewRapor'),
-        riwayat: document.getElementById('viewRiwayat') // <-- INI TAMBAHAN BARU
+        riwayat: document.getElementById('viewRiwayat')
     };
 
     function showView(viewName) {
@@ -292,10 +352,197 @@
     }
 
     // =========================================================
-    // PILAR 3: SENSOR RADAR BLACK BOX & LOG AKTIVITAS (Tembus Pandang)
+    // AWAL: INISIALISASI FINGERPRINTJS & GOOGLE OAUTH
+    // =========================================================
+    
+    // 1. Dapatkan Sidik Jari Perangkat (FingerprintJS)
+    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+        .then(FingerprintJS => FingerprintJS.load());
+
+    fpPromise
+        .then(fp => fp.get())
+        .then(result => {
+            deviceId = "FP-" + result.visitorId;
+            console.log("Device ID siap:", deviceId);
+        })
+        .catch(err => console.error("Gagal memuat FingerprintJS:", err));
+
+    // 2. Konfigurasi Google OAuth (Lebih aman, dijamin library sudah load)
+    window.onload = function () {
+        // Cek dulu apakah object google sudah siap
+        if (typeof google !== 'undefined' && google.accounts) {
+            initGoogleOAuth();
+        } else {
+            // Jika belum, tunggu beberapa detik (fallback)
+            setTimeout(initGoogleOAuth, 1500);
+        }
+    };
+
+    function initGoogleOAuth() {
+        if (typeof google === 'undefined') {
+            showMsg('loginMsg', 'error', 'Gagal memuat tombol Google. Coba refresh halaman.');
+            return;
+        }
+        
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleCredentialResponse
+        });
+        
+        google.accounts.id.renderButton(
+            document.getElementById("googleButtonDiv"),
+            { theme: "outline", size: "large", width: 250, shape: "rectangular" }
+        );
+    }
+
+    // 3. Menangani Respon Sukses dari Google
+    async function handleCredentialResponse(response) {
+        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akun...');
+        
+        // Decode Token JWT dari Google untuk mendapat Email dan Nama
+        const responsePayload = decodeJwtResponse(response.credential);
+        const emailGoogle = responsePayload.email;
+        const namaGoogle = responsePayload.name;
+        
+        // Ambil Mode (Masuk atau Daftar)
+        const authMode = document.querySelector('input[name="authMode"]:checked').value;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ 
+                    action: 'loginOAuth', 
+                    payload: { email: emailGoogle, nama: namaGoogle, deviceId: deviceId, mode: authMode } 
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                KAIWA_USER = {
+                    nama: data.data.nama,
+                    email: data.data.email,
+                    saldo: Number(data.data.saldo),
+                    riwayat: data.data.riwayat || ""
+                };
+                
+                // Update UI Dashboard
+                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                
+                showView('dashboard');
+                showMsg('dashMsg', 'success', data.message); // Menampilkan pesan selamat atau penolakan promo
+            } else {
+                showMsg('loginMsg', 'error', data.message);
+                kirimBlackBox("Proses Login/Daftar OAuth", data.message);
+            }
+        } catch (err) {
+            showMsg('loginMsg', 'error', 'Gagal menghubungi server database.');
+            kirimBlackBox("Koneksi GAS (OAuth)", err.message);
+        }
+    }
+
+    // Fungsi pembantu untuk membaca data dari Google
+    function decodeJwtResponse(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    // =========================================================
+    // FITUR BARU: KLAIM VOUCHER
+    // =========================================================
+    document.getElementById('btnKlaimVoucher').addEventListener('click', async () => {
+        const kodeIn = document.getElementById('inputVoucher').value.trim();
+        if (!kodeIn) return showMsg('voucherMsg', 'error', 'Masukkan kode voucher.');
+
+        showMsg('voucherMsg', 'loading', 'Memeriksa kode...');
+        document.getElementById('btnKlaimVoucher').disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'klaimVoucher', payload: { email: KAIWA_USER.email, kode: kodeIn, nama: KAIWA_USER.nama } })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                KAIWA_USER.saldo = Number(data.data.saldo);
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                showMsg('voucherMsg', 'success', data.message);
+                document.getElementById('inputVoucher').value = ""; // Bersihkan input
+            } else {
+                showMsg('voucherMsg', 'error', data.message);
+            }
+        } catch (err) {
+            showMsg('voucherMsg', 'error', 'Gagal menghubungi server.');
+        } finally {
+            document.getElementById('btnKlaimVoucher').disabled = false;
+        }
+    });
+
+    // =========================================================
+    // MASUK KE KAIWA ROOM (DENGAN PEMOTONGAN TIKET)
+    // =========================================================
+    document.getElementById('btnMulaiKaiwa').addEventListener('click', async () => {
+        if (KAIWA_USER.saldo < 1) {
+            return showMsg('dashMsg', 'error', 'Saldo tiket tidak cukup. Silakan isi ulang atau klaim voucher.');
+        }
+
+        activeProduct = document.getElementById('produkSelect').value;
+        let batasPutaran = 7; 
+        if (activeProduct.includes("PRO")) batasPutaran = 30;
+        else if (activeProduct.includes("MID")) batasPutaran = 15;
+        
+        KAIWA_USER.maxPutaran = batasPutaran;
+
+        // Potong Tiket di Database sebelum membuka ruangan
+        showMsg('dashMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Membuka ruangan...');
+        document.getElementById('btnMulaiKaiwa').disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'pakaiTiket', payload: { email: KAIWA_USER.email, jumlah: 1 } })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Update saldo lokal
+                KAIWA_USER.saldo = Number(data.data.saldo);
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                
+                // Bersihkan histori dan buka ruangan
+                document.getElementById('activeProductDisplay').innerText = activeProduct;
+                putaranSaatIni = 0; 
+                historyPercakapan = ""; 
+                chatHistory = []; 
+                showMsg('dashMsg', '', ''); // Bersihkan pesan loading
+                
+                const statusTeks = document.querySelector('.kaiwa-box p');
+                statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
+                
+                showView('kaiwaRoom');
+            } else {
+                showMsg('dashMsg', 'error', data.message);
+            }
+        } catch (err) {
+            showMsg('dashMsg', 'error', 'Gagal memotong tiket. Server sibuk.');
+        } finally {
+            document.getElementById('btnMulaiKaiwa').disabled = false;
+        }
+    });
+
+    // =========================================================
+    // PILAR RADAR & LOG AKTIVITAS (Tembus Pandang)
     // =========================================================
     function kirimBlackBox(lokasiError, pesanError, mesinAI = "Belum terdeteksi") {
-        const identitas = KAIWA_USER.nama || localStorage.getItem('loginId') || 'Siswa_Tanpa_Nama'; 
+        const identitas = KAIWA_USER.email || 'Siswa_Belum_Login'; 
         fetch(GAS_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ action: 'log_error', siswa: identitas, lokasi: lokasiError, pesan: pesanError, mesin: mesinAI, waktu: new Date().toLocaleString('id-ID') })
@@ -303,124 +550,16 @@
     }
 
     function kirimAktivitas(mesinAI) {
-        const identitas = KAIWA_USER.nama || 'Siswa_Tanpa_Nama'; 
+        const identitas = KAIWA_USER.email || 'Siswa_Tanpa_Email'; 
         fetch(GAS_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ action: 'log_aktivitas', siswa: identitas, mesin: mesinAI, waktu: new Date().toLocaleString('id-ID') })
         }).catch(e => console.log("Sensor log_aktivitas gagal"));
     }
+
     // =========================================================
-
-    // 1. FUNGSI LOGIN & GANTI PASSWORD
-    document.getElementById('btnLogin').addEventListener('click', async () => {
-        const identifier = document.getElementById('loginId').value;
-        const password = document.getElementById('loginPass').value;
-        if (!identifier || !password) return showMsg('loginMsg', 'error', 'Isi semua kolom.');
-        
-        localStorage.setItem('loginId', identifier); // Simpan sementara untuk BlackBox jika gagal login
-
-        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...');
-        document.getElementById('btnLogin').disabled = true;
-
-        try {
-            const res = await fetch(GAS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'loginKaiwa', payload: { identifier, password, deviceId } })
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                KAIWA_USER = data.data; 
-                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
-                
-                const select = document.getElementById('produkSelect');
-                select.innerHTML = '<option value="" disabled selected>--- Pilih Modul ---</option>';
-                KAIWA_USER.produkList.forEach(prod => {
-                    select.innerHTML += `<option value="${prod}">${prod}</option>`;
-                });
-
-                showView(KAIWA_USER.isFirstLogin ? 'gantiPass' : 'dashboard');
-                if (KAIWA_USER.isFirstLogin) showMsg('passMsg', 'success', 'Login sukses! Buat password baru.');
-            } else {
-                showMsg('loginMsg', 'error', data.message);
-                kirimBlackBox("Proses Login", data.message); // Lapor ke BlackBox jika login gagal
-            }
-        } catch (err) {
-            showMsg('loginMsg', 'error', 'Gagal menghubungi server GAS.');
-            kirimBlackBox("Koneksi GAS (Login)", err.message);
-        } finally {
-            document.getElementById('btnLogin').disabled = false;
-        }
-    });
-
-    document.getElementById('btnTampilGantiPass').addEventListener('click', () => {
-        document.getElementById('newPass').value = '';
-        document.getElementById('passMsg').className = 'msg';
-        showView('gantiPass');
-    });
-
-    document.getElementById('btnBatalPass').addEventListener('click', () => showView('dashboard'));
-
-    document.getElementById('btnSimpanPass').addEventListener('click', async () => {
-        const newPassword = document.getElementById('newPass').value;
-        if (newPassword.length < 4) return showMsg('passMsg', 'error', 'Minimal 4 karakter.');
-
-        showMsg('passMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
-        document.getElementById('btnSimpanPass').disabled = true;
-
-        try {
-            const res = await fetch(GAS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'gantiPasswordKaiwa', payload: { email: KAIWA_USER.email, newPassword } })
-            });
-            const data = await res.json();
-
-            if (data.success) {
-                showMsg('dashMsg', 'success', data.message);
-                showView('dashboard');
-            } else {
-                showMsg('passMsg', 'error', data.message);
-            }
-        } catch (err) {
-            showMsg('passMsg', 'error', 'Gagal menghubungi server.');
-            kirimBlackBox("Koneksi GAS (Ganti Pass)", err.message);
-        } finally {
-            document.getElementById('btnSimpanPass').disabled = false;
-        }
-    });
-
-    // 2. MASUK KE KAIWA ROOM
-    document.getElementById('btnMulaiKaiwa').addEventListener('click', () => {
-        activeProduct = document.getElementById('produkSelect').value;
-        if (!activeProduct) return showMsg('dashMsg', 'error', 'Silakan pilih modul terlebih dahulu.');
-        
-        // --- LOGIKA BARU: Tentukan batas berdasarkan produk yang SEDANG DIPILIH ---
-        let batasPutaran = 7; // Default untuk BSC
-        const namaProduk = activeProduct.toUpperCase();
-        if (namaProduk.includes("PRO")) {
-            batasPutaran = 30;
-        } else if (namaProduk.includes("MID")) {
-            batasPutaran = 15;
-        }
-        
-        // Timpa maxPutaran akun dengan maxPutaran sesi ini
-        KAIWA_USER.maxPutaran = batasPutaran;
-        // -------------------------------------------------------------------------
-
-        document.getElementById('activeProductDisplay').innerText = activeProduct;
-        putaranSaatIni = 0; 
-        historyPercakapan = ""; 
-        chatHistory = []; // Kosongkan memori setiap mulai sesi baru
-        
-        const statusTeks = document.querySelector('.kaiwa-box p');
-        statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
-        
-        showView('kaiwaRoom');
-    });
-
-    // 3. FUNGSI MIKROFON & PROSES AI
+    // FUNGSI MIKROFON & PROSES AI (Tetap Sama Seperti Aslinya)
+    // =========================================================
     const micBtn = document.querySelector('.mic-btn');
     const statusTeks = document.querySelector('.kaiwa-box p');
     let localStream = null; 
@@ -439,27 +578,15 @@
             }
 
             try {
-                // =========================================================
-                // PILAR 4: OPTIMALISASI TWS (Mengunci konfigurasi peredam bising)
-                // =========================================================
                 localStream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { 
-                        echoCancellation: true, 
-                        noiseSuppression: true,
-                        autoGainControl: true,
-                        sampleRate: 44100 // Standar kualitas jernih
-                    } 
+                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 } 
                 });
 
                 let options = {};
-                if (MediaRecorder.isTypeSupported('audio/webm')) {
-                    options = { mimeType: 'audio/webm' };
-                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                    options = { mimeType: 'audio/mp4' };
-                }
+                if (MediaRecorder.isTypeSupported('audio/webm')) options = { mimeType: 'audio/webm' };
+                else if (MediaRecorder.isTypeSupported('audio/mp4')) options = { mimeType: 'audio/mp4' };
 
                 mediaRecorder = new MediaRecorder(localStream, options);
-                
                 mediaRecorder.start();
                 isRecording = true;
                 
@@ -467,18 +594,14 @@
                 micBtn.innerHTML = '<i class="fas fa-stop"></i>';
                 statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
 
-                mediaRecorder.ondataavailable = e => {
-                    if (e.data.size > 0) audioChunks.push(e.data);
-                };
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
 
                 mediaRecorder.onstop = async () => {
                     micBtn.style.backgroundColor = "#94a3b8"; 
                     micBtn.disabled = true;
                     statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
                     
-                    if (localStream) {
-                        localStream.getTracks().forEach(track => track.stop());
-                    }
+                    if (localStream) localStream.getTracks().forEach(track => track.stop());
 
                     const audioBlob = new Blob(audioChunks, { type: options.mimeType || 'audio/webm' });
                     audioChunks = []; 
@@ -487,7 +610,7 @@
                 };
             } catch (err) {
                 alert("Gagal mengakses mikrofon. Pastikan Anda memberikan izin akses mikrofon di browser.");
-                kirimBlackBox("Izin Mikrofon / TWS", err.message); // Lapor ke BlackBox jika mic diblokir
+                kirimBlackBox("Izin Mikrofon / TWS", err.message); 
             }
         } else {
             mediaRecorder.stop();
@@ -498,78 +621,52 @@
 
     async function prosesAI(audioBlob) {
         const statusLastTurn = (putaranSaatIni + 1 >= KAIWA_USER.maxPutaran);
-        let activeEngineTracker = "Belum Diketahui"; // Pelacak mesin
+        let activeEngineTracker = "Belum Diketahui"; 
 
         try {
-            // Telinga (STT)
             const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
-            if (!resSTT.ok) {
-                const errTextSTT = await resSTT.text(); // Tangkap pesan error detail dari worker
-                throw new Error("Server STT (Telinga) gagal: " + errTextSTT); 
-            }
+            if (!resSTT.ok) throw new Error("Server STT (Telinga) gagal: " + await resSTT.text()); 
             
             const dataSTT = await resSTT.json();
             const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
 
             if (!teksSiswa) {
                 statusTeks.innerText = "Suara tidak terdengar jelas, silakan coba tekan dan bicara lagi.";
-                resetMic();
-                return;
+                resetMic(); return;
             }
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
 
-            // Otak (LLM) - Tembak ke Cloudflare yang sudah ada Gemini + DeepSeek
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: teksSiswa, history: chatHistory, produk: activeProduct, isLastTurn: statusLastTurn })
             });
-            if (!resChat.ok) {
-                const errTextChat = await resChat.text(); // Tangkap pesan error detail
-                throw new Error("Server LLM (Otak) gagal: " + errTextChat); 
-            }
+            if (!resChat.ok) throw new Error("Server LLM (Otak) gagal: " + await resChat.text()); 
             
             const dataChat = await resChat.json();
-            
-            // Tangkap mesin apa yang dipakai dari respons Cloudflare
             if(dataChat.engine) activeEngineTracker = dataChat.engine;
-
             if (dataChat.error) throw new Error("Penolakan Mesin Otak: " + dataChat.error.message);
             if (!dataChat.choices || !dataChat.choices[0]) throw new Error("Mesin Otak membalas kosong.");
             
             const teksAI = dataChat.choices[0].message.content;
-
-            // ---> 1. RADAR PER PUTARAN CHAT <---
             kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
 
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
             
-            // --- MULAI PENAMBAHAN SLIDING WINDOW ---
             chatHistory.push({ role: "user", parts: [{ text: teksSiswa }] });
             chatHistory.push({ role: "model", parts: [{ text: teksAI }] });
-
-            if (chatHistory.length > 8) {
-                chatHistory.splice(0, 2); 
-            }
-            // --- AKHIR PENAMBAHAN SLIDING WINDOW ---
+            if (chatHistory.length > 8) chatHistory.splice(0, 2); 
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
 
-            // Mulut (TTS)
             const pilihanSuara = document.getElementById('suaraSelect').value;
             const resTTS = await fetch(WORKER_URL + 'api/tts', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
             });
-            if (!resTTS.ok) {
-                const errTextTTS = await resTTS.text();
-                throw new Error("Server TTS (Mulut) gagal: " + errTextTTS); 
-            }
+            if (!resTTS.ok) throw new Error("Server TTS (Mulut) gagal: " + await resTTS.text()); 
             
             const dataTTS = await resTTS.json();
-
             audioPlayer.src = "data:audio/mp3;base64," + dataTTS.audioContent;
             audioPlayer.play();
 
@@ -579,8 +676,7 @@
             audioPlayer.onended = () => {
                 if(statusLastTurn) {
                     statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
-                    micBtn.style.backgroundColor = "#94a3b8"; 
-                    micBtn.disabled = true; 
+                    micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true; 
                 } else {
                     resetMic();
                     statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
@@ -589,29 +685,21 @@
 
         } catch (err) {
             console.error("Terjadi Gangguan:", err);
-            
-            // 1. Tampilan untuk Siswa (Taktik menyalahkan koneksi lokal)
             statusTeks.innerHTML = "⚠️ <b>KONEKSI TIDAK STABIL:</b> Maaf, suara gagal terkirim karena gangguan jaringan. Silakan periksa WiFi/Sinyal Anda lalu coba lagi."; 
-            
-            // 2. Laporan rahasia ke Spreadsheet Bos (Tetap mencatat error asli)
             kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); 
-            
             resetMic(); 
         }
     }
 
     function resetMic() {
-        micBtn.style.backgroundColor = "#0d9488";
-        micBtn.disabled = false;
-        micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        micBtn.style.backgroundColor = "#0d9488"; micBtn.disabled = false; micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
     }
 
-    // 4. KELUAR & EVALUASI RAPOR
+    // =========================================================
+    // KELUAR & EVALUASI RAPOR (Tetap Sama Seperti Aslinya)
+    // =========================================================
     document.getElementById('btnSelesaiKaiwa').addEventListener('click', async () => {
-        if(historyPercakapan.trim() === "") {
-            showView('dashboard');
-            return;
-        }
+        if(historyPercakapan.trim() === "") return showView('dashboard');
 
         const yakin = confirm("Selesaikan sesi dan lihat rapor evaluasi?");
         if(yakin) {
@@ -623,27 +711,20 @@
 
             try {
                 const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ history: historyPercakapan, produk: activeProduct })
                 });
                 
                 if (!resEval.ok) throw new Error(`Server evaluasi lambat/sibuk (Status: ${resEval.status}).`);
-
                 const rawData = await resEval.json();
                 
                 if(rawData.engine) activeEngineEvaluator = rawData.engine;
-                
                 if (rawData.error) throw new Error("Penolakan Evaluator: " + rawData.error.message);
                 if (!rawData.choices || !rawData.choices[0]) throw new Error("Format rapor AI kosong.");
                 
-                let jsonContent = rawData.choices[0].message.content; 
-                jsonContent = jsonContent.replace(/```json/gi, '').replace(/```/g, '');
-                jsonContent = jsonContent.replace(/[\r\n\t]+/g, ' ').trim();
-                
+                let jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').replace(/[\r\n\t]+/g, ' ').trim();
                 const raporData = JSON.parse(jsonContent); 
 
-                // Tampil Rapor
                 setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
                 setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
                 setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
@@ -653,46 +734,30 @@
                 document.getElementById('loadingRapor').classList.add('hidden');
                 document.getElementById('hasilRapor').classList.remove('hidden');
 
-                // ---> 2. RADAR SAAT RAPOR TERCETAK <---
                 kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
 
-                // Update tampilan riwayat secara lokal tanpa perlu login ulang
                 const skorRata = Math.round((Number(raporData.kosaKata) + Number(raporData.polaKalimat) + Number(raporData.kelancaran)) / 3);
                 const waktuSekarang = new Date().toLocaleString('id-ID');
                 const entriBaru = `[${waktuSekarang}] (${activeProduct}) Nilai Total: ${skorRata}`;
                 KAIWA_USER.riwayat = entriBaru + (KAIWA_USER.riwayat ? "\n" + KAIWA_USER.riwayat : "");
 
-                // Kirim Rapor ke GAS
                 fetch(GAS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'simpanRaporKaiwa',
                         payload: {
-                            nama: KAIWA_USER.nama,
-                            email: KAIWA_USER.email,
-                            produk: activeProduct,
-                            kosaKata: raporData.kosaKata,
-                            polaKalimat: raporData.polaKalimat,
-                            kelancaran: raporData.kelancaran,
-                            perbaikan: raporData.perbaikan,
-                            rekomendasi: raporData.rekomendasi,
-                            history: historyPercakapan
+                            nama: KAIWA_USER.nama, email: KAIWA_USER.email, produk: activeProduct,
+                            kosaKata: raporData.kosaKata, polaKalimat: raporData.polaKalimat, kelancaran: raporData.kelancaran,
+                            perbaikan: raporData.perbaikan, rekomendasi: raporData.rekomendasi, history: historyPercakapan
                         }
                     })
-                }).catch(err => console.log("Gagal simpan rapor ke Sheet:", err));
+                }).catch(err => console.log("Gagal simpan rapor:", err));
 
             } catch(e) {
-                console.error("Error Rapor:", e);
-                
-                // 1. Laporan rahasia ke Spreadsheet Bos
                 kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); 
-                
-                // 2. Tampilan untuk Siswa (Taktik menyalahkan koneksi lokal)
-                const loadingDiv = document.getElementById('loadingRapor');
-                loadingDiv.innerHTML = `
+                document.getElementById('loadingRapor').innerHTML = `
                     <i class="fas fa-wifi" style="font-size: 30px; color: #ef4444;"></i>
-                    <p style="font-size: 14px; margin-top: 10px; color: #991b1b;"><b>Koneksi Terputus:</b> Gagal terhubung ke server karena jaringan Anda tidak stabil. Silakan periksa koneksi internet Anda.</p>
+                    <p style="font-size: 14px; margin-top: 10px; color: #991b1b;"><b>Koneksi Terputus:</b> Gagal terhubung ke server. Silakan periksa koneksi internet Anda.</p>
                     <button onclick="showView('dashboard')" class="btn" style="margin-top: 15px;">Kembali ke Beranda</button>
                 `;
             }
@@ -704,21 +769,13 @@
         document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
     }
 
-    // --- FUNGSI KLIK TOMBOL RIWAYAT ---
     document.getElementById('btnRiwayat').addEventListener('click', () => {
-        // Ambil data riwayat dari KAIWA_USER yang didapat saat login
-        const histori = KAIWA_USER.riwayat ? KAIWA_USER.riwayat : "Belum ada riwayat nilai yang tersimpan.";
-        document.getElementById('teksRiwayat').innerText = histori;
+        document.getElementById('teksRiwayat').innerText = KAIWA_USER.riwayat || "Belum ada riwayat nilai yang tersimpan.";
         showView('riwayat');
     });
 
-    document.getElementById('btnKembaliRiwayat').addEventListener('click', () => {
-        showView('dashboard');
-    });
-
-    document.getElementById('btnKembaliDash').addEventListener('click', () => {
-        showView('dashboard');
-    });
+    document.getElementById('btnKembaliRiwayat').addEventListener('click', () => showView('dashboard'));
+    document.getElementById('btnKembaliDash').addEventListener('click', () => showView('dashboard'));
 </script>
 </body>
 </html>
