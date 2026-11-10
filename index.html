@@ -14,153 +14,221 @@
     <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
     <style>
+        /* =========================================
+           WARNA TEMA UTAMA (DIEKSTRAK DARI LOGO)
+        ========================================= */
         :root {
-            --primary: #0f766e;
-            --primary-hover: #115e59;
-            --bg-color: #f0fdfa;
+            --primary: #2B3B70; /* Biru Indigo Neexa */
+            --primary-hover: #1A2548; /* Bayangan Biru Gelap */
+            --bg-color: #F4F7FA; /* Latar belakang abu-abu kebiruan halus */
             --surface: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --text-main: #0F3540; /* Teal/Hijau Tua Neexa */
+            --text-muted: #83A0C0; /* Biru Baja Muda Neexa */
         }
+        
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0;
+            /* Keterangan: display flex (penengah layar) dihapus agar 
+               Landing Page baru bisa membentang penuh (full-screen) */
         }
+
+        /* Container Asli (Untuk Dashboard, Ruang Kaiwa, Rapor nanti) */
         .container {
             background: var(--surface);
-            width: 100%;
+            width: 90%;
             max-width: 450px;
+            margin: 50px auto; /* Ini yang membuat kotak login/dashboard tetap ke tengah */
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(15, 118, 110, 0.1);
+            box-shadow: 0 10px 25px rgba(43, 59, 112, 0.1);
             position: relative;
         }
+        
         .text-center { text-align: center; }
         .hidden { display: none !important; }
+
+        /* =========================================
+           CSS BARU: LAYER 1 (LANDING PAGE NEEXA-LINGO)
+           (Versi Clean & Responsive Lock)
+        ========================================= */
         
-        /* Logo & Header */
-        .logo-box {
-            background: #ccfbf1;
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        .logo-box h1 { margin: 0; color: var(--primary); font-size: 24px; letter-spacing: 1px; }
-        .logo-box p { margin: 0; color: #0d9488; font-size: 12px; font-weight: 600; }
-        
-        /* --- CSS BARU: Indikator Saldo Tiket --- */
-        .ticket-badge {
-            background: #fef08a; 
-            color: #854d0e;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
-        }
-        
-        /* --- CSS BARU: Kotak Input Voucher --- */
-        .voucher-box {
-            background: #f8fafc;
-            border: 1px dashed #cbd5e1;
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
+        /* --- 1. AREA LOGO & TEKS SAMPING --- */
+        .landing-header { 
+            text-align: center; 
+            /* Bantalan diperkecil agar header lebih rapat ke atas tanpa butuh joystick */
+            padding: 20px 0 10px 0; 
+            margin-bottom: 0px; 
+            
+            /* Menahan agar kelompok logo & teks PASTI tepat di tengah layar */
             display: flex;
-            gap: 8px;
+            justify-content: center; 
         }
-        .voucher-box input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            text-transform: uppercase;
+
+        .header-content {
+            display: flex;
+            align-items: center; 
+            gap: 15px; 
+            
+            /* Fitur Joystick dinolkan agar fungsi 'Center' di atas bekerja sempurna */
+            position: relative;
+            left: 0px; 
+            top: 0px; 
         }
-        .voucher-box button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+
+        .header-content img { 
+            /* Ukuran terkunci sesuai pilihan Anda */
+            max-width: 80px; 
+            height: auto; 
         }
+
+        .header-text {
+            text-align: left; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-text h2 {
+            margin: 0; color: var(--text-main); font-weight: 800; line-height: 1.1; 
+            font-size: 24px; /* Ukuran terkunci */
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0; color: var(--text-muted); font-weight: 600; 
+            font-size: 13px; /* Ukuran terkunci */
+        }
+
+        /* --- 2. BUNGKUSAN UTAMA (KIRI & KANAN) --- */
+        .landing-container {
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; margin: 0 auto; padding: 20px; 
+            max-width: 1100px; gap: 40px; 
+        }
+
+        /* Aturan KHUSUS layar Laptop/Desktop (Mobile Lock) */
+        @media (min-width: 768px) {
+            .landing-container { flex-direction: row; padding: 20px 40px; gap: 60px; }
+            .hero-image-box, .hero-text-box { flex: 1; }
+            
+            .hero-text-box {
+                text-align: left; 
+                align-items: flex-start;
+            }
+            
+            /* Posisi geser Anda dipindah ke sini agar tidak merusak tampilan HP */
+            .hero-image-box img { left: -30px; }
+            .hero-text-box { left: -20px; }
+        }
+
+        /* --- 3. AREA ILUSTRASI (KOTAK KUNING) --- */
+        .hero-image-box { text-align: center; }
+        .hero-image-box img {
+            width: 100%; 
+            /* Ukuran terkunci sesuai pilihan Anda */
+            max-width: 520px; 
+            
+            position: relative;
+            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
+            top: 0px; 
+            /* Left dikendalikan oleh @media di atas agar aman di HP */
+            left: 0px; 
+            
+            animation: float-anim 4s ease-in-out infinite; 
+        }
+
+        @keyframes float-anim {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); } 
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- 4. AREA TEKS & TOMBOL (KOTAK HIJAU) --- */
+        .hero-text-box {
+            text-align: center; display: flex; flex-direction: column; 
+            margin: 0 auto; gap: 18px; max-width: 420px; 
+            
+            position: relative;
+            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
+            top: 0px; 
+            /* Left dikendalikan oleh @media di atas agar aman di HP */
+            left: 0px; 
+        }
+
+        .hero-text-box h1 {
+            color: var(--text-main); font-weight: 800; line-height: 1.3; margin-bottom: 10px; 
+            font-size: 32px; 
+            position: relative; left: 0px; top: 0px; 
+        }
+
+        /* --- 5. TOMBOL 3D --- */
+        .btn-3d {
+            display: block; width: 100%; padding: 16px; font-size: 15px; 
+            font-weight: 800; text-align: center; text-decoration: none; 
+            border-radius: 16px; cursor: pointer; text-transform: uppercase; 
+            letter-spacing: 1px; transition: all 0.1s; border: none; box-sizing: border-box;
+        }
+        .btn-mulai { background-color: var(--primary); color: #FFFFFF; box-shadow: 0 6px 0 var(--primary-hover); }
+        .btn-mulai:active { transform: translateY(6px); box-shadow: 0 0px 0 var(--primary-hover); }
+        
+        .btn-belum-akun { background-color: #FFFFFF; color: var(--primary); border: 2px solid #E5E5E5; box-shadow: 0 4px 0 #E5E5E5; }
+        .btn-belum-akun:active { transform: translateY(4px); box-shadow: 0 0px 0 #E5E5E5; }
+
+        /* --- 6. FOOTER --- */
+        .support-footer {
+            /* Margin ekstrem dihapus, menggunakan jarak normal yang rapi ke atas */
+            margin-top: 40px; 
+            padding: 10px 20px; border-top: 2px solid #E5E5E5; 
+            text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600;
+
+            position: relative;
+            left: 0px; 
+            top: 0px; 
+        }
+        .support-footer p { margin: 5px 0; }
+
+        /* =========================================
+           CSS ASLI ANDA (DIPERTAHANKAN UNTUK BAGIAN DALAM)
+        ========================================= */
+        .ticket-badge {
+            background: #fef08a; color: #854d0e; padding: 6px 15px; border-radius: 20px; 
+            font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; 
+            gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px;
+        }
+        
+        .voucher-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px; border-radius: 10px; margin-top: 15px; display: flex; gap: 8px; }
+        .voucher-box input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; text-transform: uppercase; }
+        .voucher-box button { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
         .voucher-box button:hover { background: var(--primary-hover); }
 
-        /* --- CSS BARU: Wadah Tombol Google OAuth --- */
-        .google-btn-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            min-height: 44px; /* Menjaga layout tidak melompat saat Google loading */
-        }
+        .google-btn-wrapper { display: flex; justify-content: center; margin-top: 15px; min-height: 44px; }
 
-        /* Forms Asli */
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
-        .form-control {
-            width: 100%; padding: 12px 15px;
-            border: 1.5px solid #e2e8f0; border-radius: 10px;
-            font-size: 15px; box-sizing: border-box; transition: 0.3s;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15); }
+        .form-control { width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 15px; box-sizing: border-box; transition: 0.3s; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(43, 59, 112, 0.15); }
         
-        /* Buttons Asli */
-        .btn {
-            width: 100%; padding: 14px;
-            background: var(--primary); color: white;
-            border: none; border-radius: 10px;
-            font-size: 16px; font-weight: 600;
-            cursor: pointer; transition: 0.2s;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
+        .btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
         .btn:disabled { background: #94a3b8; cursor: not-allowed; }
-        .btn-outline {
-            background: transparent; color: var(--primary);
-            border: 2px solid var(--primary); margin-top: 10px;
-        }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
         .btn-outline:hover:not(:disabled) { background: #f0fdfa; }
         
-        /* Messages Asli */
         .msg { font-size: 13px; font-weight: 600; margin-top: 10px; padding: 10px; border-radius: 8px; display: none; }
         .msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
         .msg.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
         .msg.loading { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; display: block; }
 
-        /* Rapor & Circular Progress Asli */
         .rapor-grid { display: flex; justify-content: space-around; margin: 20px 0; }
         .rapor-item { display: flex; flex-direction: column; align-items: center; }
-        .circular-chart { 
-            width: 70px; height: 70px; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; 
-            font-weight: 700; font-size: 16px; color: var(--primary);
-            background: #e2e8f0; 
-            transition: background 1s ease-out;
-        }
-        .circular-inner { 
-            width: 54px; height: 54px; border-radius: 50%; 
-            background: var(--surface); 
-            display: flex; justify-content: center; align-items: center; 
-        }
+        .circular-chart { width: 70px; height: 70px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; font-size: 16px; color: var(--primary); background: #e2e8f0; transition: background 1s ease-out; }
+        .circular-inner { width: 54px; height: 54px; border-radius: 50%; background: var(--surface); display: flex; justify-content: center; align-items: center; }
         .rapor-title { font-size: 12px; font-weight: 600; margin-top: 8px; color: var(--text-main); }
         .rapor-feedback { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 10px; font-size: 13px; }
         .rapor-feedback strong { color: var(--primary); display: block; margin-bottom: 5px; }
 
-        /* Kaiwa Room Asli */
         .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
         .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
         .mic-btn:hover { transform: scale(1.05); }
@@ -168,46 +236,82 @@
 </head>
 <body>
 
-<div class="container text-center">
-    
-    <!-- HEADER -->
-    <div class="logo-box">
-        <h1>NEEXA KAIWA</h1>
-        <p>AI Japanese Conversation Tutor</p>
-    </div>
+<!-- Mantra Ajaib CSS: Menyembunyikan kotak aplikasi (Dashboard) selama Landing Page masih terbuka -->
+    <style>
+        #viewLogin:not(.hidden) + .container { display: none; }
+    </style>
 
-    <!-- ================= VIEW 1: LOGIN & DAFTAR ================= -->
+    <!-- ================= VIEW 1: LANDING PAGE NEEXA-LINGO ================= -->
+    <!-- (Perhatikan: ID tetap "viewLogin" agar script JS Anda tetap berfungsi normal) -->
     <div id="viewLogin">
-        <h2 style="font-size: 20px; margin-bottom: 5px;">Selamat Datang!</h2>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 0; margin-bottom: 20px;">Silakan masuk atau daftar menggunakan Akun Google Anda.</p>
         
-        <!-- Pilihan Mode: Masuk atau Daftar -->
-        <div style="display: flex; gap: 15px; margin-bottom: 20px; justify-content: center;">
-            <label style="cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px;">
-                <input type="radio" name="authMode" value="login" checked> Masuk
-            </label>
-            <label style="cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 5px;">
-                <input type="radio" name="authMode" value="daftar"> Daftar Baru
-            </label>
-        </div>
+        <!-- KOTAK MERAH: Logo & Judul Samping -->
+        <div class="landing-header">
+            <!-- Pembungkus agar logo dan teks berjejer -->
+            <div class="header-content">
+                
+                <!-- Logo -->
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
+                
+                <!-- Teks di samping Logo -->
+                <div class="header-text">
+                    <h2>Smart AI Conversation</h2>
+                    <p>support by : LPK .....</p>
+                </div>
 
-        <!-- Wadah Tombol Google Asli -->
-        <div class="google-btn-wrapper">
-            <div id="googleButtonDiv"></div>
-        </div>
-        
-        <div id="loginMsg" class="msg"></div>
-    </div>
-
-    <!-- ================= VIEW 2: DASHBOARD (PILIH PRODUK) ================= -->
-    <div id="viewDashboard" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
-            <!-- Indikator Saldo Tiket -->
-            <div class="ticket-badge" title="Saldo Tiket">
-                <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
             </div>
         </div>
+
+        <div class="landing-container">
+            <!-- KOTAK KUNING: Gambar Ilustrasi (Kiri) -->
+            <div class="hero-image-box">
+                <!-- Link sudah diganti dengan URL asli gambar LP IMG1.png di GitHub -->
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
+            </div>
+
+            <!-- KOTAK HIJAU: Teks & Tombol (Kanan) -->
+            <div class="hero-text-box">
+                <h1>Cara paling seru dan cerdas untuk berlatih Kaiwa!</h1>
+                
+                <!-- Tombol 3D bergaya Duolingo -->
+                <button class="btn-3d btn-mulai" onclick="tampilkanAreaLogin()">MULAI</button>
+                <button class="btn-3d btn-belum-akun" onclick="tampilkanAreaDaftar()">AKU BELUM PUNYA AKUN</button>
+                
+                <!-- Area tombol Google (Awalnya tersembunyi, muncul jika tombol di atas diklik) -->
+                <div id="areaAutentikasi" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 16px; border: 2px solid #e5e5e5;">
+                    <p style="margin-top:0; font-size: 14px; color: var(--primary); font-weight: bold;" id="judulAuth">Silakan Masuk</p>
+                    
+                    <div class="google-btn-wrapper">
+                        <div id="googleButtonDiv"></div>
+                    </div>
+                    
+                    <div id="loginMsg" class="msg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KOTAK BIRU: Support System Footer -->
+        <div class="support-footer">
+            <p>SUPPORT SYSTEM BY LPK ... (Isi Nama LPK)</p>
+            <p>📍 Alamat Lengkap LPK atau Perusahaan Anda di sini</p>
+            <p>© 2026 NEEXA System. Hak Cipta Dilindungi.</p>
+        </div>
+    </div>
+
+    <!-- ================= WADAH APLIKASI (DASHBOARD, KAIWA, RAPOR) ================= -->
+    <!-- Tag Container ini kita pindah ke SINI, untuk membungkus halaman di bagian dalam saja -->
+    <div class="container text-center">
+        
+        <!-- ================= VIEW 2: DASHBOARD (PILIH PRODUK) ================= -->
+        <div id="viewDashboard" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+                
+                <!-- Indikator Saldo Tiket -->
+                <div class="ticket-badge" title="Saldo Tiket">
+                    <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+                </div>
+            </div>
         
         <div class="form-group">
             <label>Pilih Modul Percakapan</label>
@@ -859,6 +963,18 @@
 
     document.getElementById('btnKembaliRiwayat').addEventListener('click', () => showView('dashboard'));
     document.getElementById('btnKembaliDash').addEventListener('click', () => showView('dashboard'));
+
+    // Script untuk tombol Landing Page
+        function tampilkanAreaLogin() {
+            document.getElementById('areaAutentikasi').style.display = 'block';
+            document.getElementById('judulAuth').innerText = "Silakan Masuk dengan Akun Google";
+        }
+
+        function tampilkanAreaDaftar() {
+            document.getElementById('areaAutentikasi').style.display = 'block';
+            document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
+        }
+
 </script>
 </body>
 </html>
