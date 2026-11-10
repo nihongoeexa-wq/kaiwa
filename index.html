@@ -326,6 +326,10 @@
     let chatHistory = []; 
     let deviceId = ""; // Akan diisi oleh FingerprintJS
     
+    // --- TAMBAHKAN 2 VARIABEL INI ---
+    let totalTokenSesi = 0; 
+    let depositDimukaSesi = 0;
+    
     let mediaRecorder;
     let audioChunks = [];
     let isRecording = false;
@@ -431,6 +435,7 @@
                 document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
                 
                 showView('dashboard');
+                muatDaftarProduk(); // <-- TAMBAHKAN DI SINI
                 showMsg('dashMsg', 'success', data.message); // Menampilkan pesan selamat atau penolakan promo
             } else {
                 showMsg('loginMsg', 'error', data.message);
@@ -450,6 +455,33 @@
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
+    }
+
+    async function muatDaftarProduk() {
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "getProduk", payload: {} })
+            });
+            const hasil = await response.json();
+        
+            if (hasil.success && hasil.data.length > 0) {
+                const dropdown = document.getElementById("produkSelect");
+                dropdown.innerHTML = ""; // Kosongkan opsi bawaan HTML
+            
+                // Masukkan data dari Spreadsheet ke dropdown
+                hasil.data.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.kode;
+                    // Kita juga bisa menyimpan harga di dataset untuk fitur potong tiket dinamis nanti
+                    option.dataset.harga = item.harga; 
+                    option.textContent = item.nama;
+                    dropdown.appendChild(option);
+                });
+            }
+        } catch (err) {
+            console.error("Gagal memuat produk:", err);
+        }
     }
 
     // =========================================================
@@ -486,40 +518,51 @@
     });
 
     // =========================================================
-    // MASUK KE KAIWA ROOM (DENGAN PEMOTONGAN TIKET)
+    // MASUK KE KAIWA ROOM (DENGAN PEMOTONGAN TIKET ESCROW)
     // =========================================================
     document.getElementById('btnMulaiKaiwa').addEventListener('click', async () => {
-        if (KAIWA_USER.saldo < 1) {
-            return showMsg('dashMsg', 'error', 'Saldo tiket tidak cukup. Silakan isi ulang atau klaim voucher.');
+        activeProduct = document.getElementById('produkSelect').value;
+        
+        // 1. Tentukan Batas Putaran & Harga Deposit di Depan
+        let batasPutaran = 7; 
+        depositDimukaSesi = 26; // Default harga deposit BSC
+
+        if (activeProduct.includes("PRO")) {
+            batasPutaran = 30;
+            depositDimukaSesi = 100;
+        } else if (activeProduct.includes("MID")) {
+            batasPutaran = 15;
+            depositDimukaSesi = 52;
+        }
+        
+        // 2. Cek Saldo Tiket
+        if (KAIWA_USER.saldo < depositDimukaSesi) {
+            return showMsg('dashMsg', 'error', `Saldo tiket tidak cukup. Modul ini butuh deposit awal ${depositDimukaSesi} tiket. Silakan isi ulang.`);
         }
 
-        activeProduct = document.getElementById('produkSelect').value;
-        let batasPutaran = 7; 
-        if (activeProduct.includes("PRO")) batasPutaran = 30;
-        else if (activeProduct.includes("MID")) batasPutaran = 15;
-        
         KAIWA_USER.maxPutaran = batasPutaran;
 
-        // Potong Tiket di Database sebelum membuka ruangan
-        showMsg('dashMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Membuka ruangan...');
+        // 3. Potong Tiket di Database (Sistem Escrow) sebelum membuka ruangan
+        showMsg('dashMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Membuka ruangan (Menahan tiket)...');
         document.getElementById('btnMulaiKaiwa').disabled = true;
 
         try {
             const res = await fetch(GAS_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'pakaiTiket', payload: { email: KAIWA_USER.email, jumlah: 1 } })
+                body: JSON.stringify({ action: 'pakaiTiket', payload: { email: KAIWA_USER.email, jumlah: depositDimukaSesi } })
             });
             const data = await res.json();
 
             if (data.success) {
-                // Update saldo lokal
+                // Update saldo lokal setelah dipotong
                 KAIWA_USER.saldo = Number(data.data.saldo);
                 document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
                 
-                // Bersihkan histori dan buka ruangan
+                // Bersihkan histori, token, dan buka ruangan
                 document.getElementById('activeProductDisplay').innerText = activeProduct;
                 putaranSaatIni = 0; 
+                totalTokenSesi = 0; // RESET TOTAL TOKEN AI
                 historyPercakapan = ""; 
                 chatHistory = []; 
                 showMsg('dashMsg', '', ''); // Bersihkan pesan loading
@@ -648,6 +691,12 @@
             if (dataChat.error) throw new Error("Penolakan Mesin Otak: " + dataChat.error.message);
             if (!dataChat.choices || !dataChat.choices[0]) throw new Error("Mesin Otak membalas kosong.");
             
+            // --- TANGKAP TOKEN DARI CLOUDFLARE ---
+            if (dataChat.tokens) {
+                totalTokenSesi += Number(dataChat.tokens);
+            }
+            // -------------------------------------
+
             const teksAI = dataChat.choices[0].message.content;
             kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
 
@@ -696,7 +745,7 @@
     }
 
     // =========================================================
-    // KELUAR & EVALUASI RAPOR (Tetap Sama Seperti Aslinya)
+    // KELUAR & EVALUASI RAPOR (Sistem Refund & HPP Token Terintegrasi)
     // =========================================================
     document.getElementById('btnSelesaiKaiwa').addEventListener('click', async () => {
         if(historyPercakapan.trim() === "") return showView('dashboard');
@@ -710,6 +759,7 @@
             let activeEngineEvaluator = "Belum Diketahui";
 
             try {
+                // 1. Minta Cloudflare (AI) Menganalisis Rapor
                 const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ history: historyPercakapan, produk: activeProduct })
@@ -722,9 +772,15 @@
                 if (rawData.error) throw new Error("Penolakan Evaluator: " + rawData.error.message);
                 if (!rawData.choices || !rawData.choices[0]) throw new Error("Format rapor AI kosong.");
                 
+                // Tambahkan Token dari proses Evaluasi ke Total Sesi
+                if (rawData.tokens) {
+                    totalTokenSesi += Number(rawData.tokens);
+                }
+
                 let jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').replace(/[\r\n\t]+/g, ' ').trim();
                 const raporData = JSON.parse(jsonContent); 
 
+                // 2. Tampilkan Hasil ke Layar HTML
                 setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
                 setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
                 setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
@@ -741,17 +797,44 @@
                 const entriBaru = `[${waktuSekarang}] (${activeProduct}) Nilai Total: ${skorRata}`;
                 KAIWA_USER.riwayat = entriBaru + (KAIWA_USER.riwayat ? "\n" + KAIWA_USER.riwayat : "");
 
-                fetch(GAS_URL, {
+                // 3. Cek Status Penyelesaian (Selesai Penuh atau Berhenti Tengah Jalan)
+                const statusSelesaiPenuh = (putaranSaatIni >= KAIWA_USER.maxPutaran);
+
+                // 4. Kirim Data Lengkap ke GAS untuk Simpan Rapor & Proses Refund
+                const resGasRapor = await fetch(GAS_URL, {
                     method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'simpanRaporKaiwa',
                         payload: {
-                            nama: KAIWA_USER.nama, email: KAIWA_USER.email, produk: activeProduct,
-                            kosaKata: raporData.kosaKata, polaKalimat: raporData.polaKalimat, kelancaran: raporData.kelancaran,
-                            perbaikan: raporData.perbaikan, rekomendasi: raporData.rekomendasi, history: historyPercakapan
+                            nama: KAIWA_USER.nama, 
+                            email: KAIWA_USER.email, 
+                            produk: activeProduct,
+                            kosaKata: raporData.kosaKata, 
+                            polaKalimat: raporData.polaKalimat, 
+                            kelancaran: raporData.kelancaran,
+                            perbaikan: raporData.perbaikan, 
+                            rekomendasi: raporData.rekomendasi, 
+                            history: historyPercakapan,
+                            // DATA BARU UNTUK AUDIT BIAYA & HPP:
+                            totalToken: totalTokenSesi,
+                            putaranTerpakai: putaranSaatIni,
+                            depositDimuka: depositDimukaSesi,
+                            isSelesaiPenuh: statusSelesaiPenuh
                         }
                     })
-                }).catch(err => console.log("Gagal simpan rapor:", err));
+                });
+                
+                const dataGasRapor = await resGasRapor.json();
+                
+                // 5. Tangkap Notifikasi & Refund dari GAS
+                if (dataGasRapor.success) {
+                    if (dataGasRapor.data && dataGasRapor.data.refund > 0) {
+                        KAIWA_USER.saldo += dataGasRapor.data.refund;
+                        document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo; 
+                    }
+                    // Tampilkan notifikasi (apakah sisa 0 atau ada refund)
+                    alert(dataGasRapor.message);
+                }
 
             } catch(e) {
                 kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); 
