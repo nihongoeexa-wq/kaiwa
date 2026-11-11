@@ -318,7 +318,27 @@
             padding-top: 20px;
             border-top: 2px solid #E5E5E5;
             text-align: center;
-            font-size: 11px;
+        }
+        
+        .sidebar-footer h3 {
+            margin: 0; 
+            font-size: 14px; /* Ukuran agak besar */
+            font-weight: 800; 
+            color: var(--text-main); 
+            letter-spacing: 0.5px;
+        }
+        
+        .sidebar-footer .footer-support {
+            margin: 5px 0 2px 0; 
+            font-size: 11px; /* Ukuran agak kecil */
+            font-weight: 700; 
+            color: var(--text-muted);
+        }
+        
+        .sidebar-footer .footer-address {
+            margin: 0; 
+            font-size: 9px; /* Ukuran paling kecil */
+            font-weight: 600; 
             color: #AFAFAF;
         }
 
@@ -412,7 +432,6 @@
                 <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
                 <div class="sidebar-title">
                     <h2>Smart AI Conversation</h2>
-                    <p>support by : LPK .....</p>
                 </div>
             </div>
 
@@ -429,9 +448,11 @@
                 <button class="menu-item btn-keluar" onclick="prosesLogout()">Keluar</button>
             </nav>
 
-            <!-- 3. Footer Sponsor Neexa -->
+            <!-- 3. Footer Sponsor Neexa (Desain Baru) -->
             <div class="sidebar-footer">
-                <p>Powered by <strong>Neexa System</strong></p>
+                <h3>NEEXA SYSTEM</h3>
+                <p class="footer-support">Support By : LPK .......</p>
+                <p class="footer-address">Alamat lengkap LPK Anda di sini...</p>
             </div>
         </aside>
 
