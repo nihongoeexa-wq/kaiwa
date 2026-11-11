@@ -392,6 +392,50 @@
             }
         }
 
+        /* =========================================
+           CSS TAHAP 4: KARTU PRODUK MODUL
+        ========================================= */
+        .product-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap; /* Agar responsif bertumpuk di HP */
+        }
+        .product-card {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .product-card:hover {
+            border-color: #94a3b8;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        }
+        /* Efek Menyala Saat Kartu Dipilih */
+        .product-card.active {
+            border-color: var(--primary);
+            background-color: #f0f9ff;
+            box-shadow: 0 0 0 4px rgba(43, 59, 112, 0.1);
+        }
+        .card-icon { font-size: 40px; margin-bottom: 10px; }
+        .product-card h3 { margin: 0 0 5px 0; color: var(--text-main); font-size: 18px; font-weight: 800; }
+        .product-card p { font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.4; height: 34px;}
+        .card-features { list-style: none; padding: 0; margin: 0 0 20px 0; text-align: left; font-size: 12px; color: #475569; }
+        .card-features li { margin-bottom: 8px; }
+        .card-features i { color: #10b981; margin-right: 5px; }
+        .card-price { font-weight: 800; font-size: 14px; color: var(--text-main); background: #f1f5f9; padding: 8px; border-radius: 10px; transition: 0.2s;}
+        
+        .product-card.active .card-price {
+            background: var(--primary);
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -526,30 +570,63 @@
                 </div>
             </div>
 
-            <!-- KARDUS 2: MODUL (Area Latihan Kaiwa) -->
-            <!-- (Sementara pakai form lama agar mesin JS tidak rusak, nanti kita sulap jadi 3 Kartu Bos) -->
-            <div id="tab-modul" style="display: none;">
-                <div class="container text-center">
-                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 20px; text-align: left;">Pilih Modul Latihan</h2>
+            <!-- KARDUS 2: MODUL (Area Latihan Kaiwa Premium) -->
+            <div id="tab-modul" style="display: none; padding: 10px;">
+                <div class="container text-center" style="max-width: 900px; margin: auto;">
+                    <h2 style="font-size: 22px; color: var(--text-main); margin-bottom: 5px; font-weight: 800;">Pilih Modul Latihan</h2>
+                    <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">Sesuaikan porsi simulasi Kaiwa dengan target LPK Anda hari ini.</p>
                     
-                    <div class="form-group">
-                        <label>Pilih Modul Percakapan</label>
-                        <select id="produkSelect" class="form-control">
-                            <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
-                            <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
-                            <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label>Suara AI Tutor</label>
-                        <select id="suaraSelect" class="form-control">
-                            <option value="female" selected>Perempuan</option>
-                            <option value="male">Laki-laki</option>
-                        </select>
+                    <!-- Grid 3 Kartu Produk -->
+                    <div class="product-grid">
+                        <!-- Kartu 1: BASIC -->
+                        <div class="product-card" onclick="pilihModul('KAIWA-BASIC', this)">
+                            <div class="card-icon">🐣</div>
+                            <h3>KAIWA BASIC</h3>
+                            <p>Pemanasan ringan untuk melatih insting bahasa.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> 7 Putaran Percakapan</li>
+                                <li><i class="fas fa-check-circle"></i> Topik Keseharian</li>
+                            </ul>
+                            <div class="card-price"><i class="fas fa-gem"></i> 1 Tiket</div>
+                        </div>
+
+                        <!-- Kartu 2: MID -->
+                        <div class="product-card" onclick="pilihModul('KAIWA-MID', this)">
+                            <div class="card-icon">🔥</div>
+                            <h3>KAIWA MID</h3>
+                            <p>Latihan standar setara ujian JFT-Basic.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> 15 Putaran Percakapan</li>
+                                <li><i class="fas fa-check-circle"></i> Simulasi Wawancara</li>
+                            </ul>
+                            <div class="card-price"><i class="fas fa-gem"></i> 2 Tiket</div>
+                        </div>
+
+                        <!-- Kartu 3: PRO -->
+                        <div class="product-card" onclick="pilihModul('KAIWA-PRO', this)">
+                            <div class="card-icon">👑</div>
+                            <h3>KAIWA PRO</h3>
+                            <p>Uji ketahanan mental & kelancaran spontan.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> 30 Putaran Percakapan</li>
+                                <li><i class="fas fa-check-circle"></i> Topik Random & Kompleks</li>
+                            </ul>
+                            <div class="card-price"><i class="fas fa-gem"></i> 3 Tiket</div>
+                        </div>
                     </div>
 
-                    <button id="btnMulaiKaiwa" class="btn" style="margin-top: 30px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                    <!-- Area Pengaturan (Tersembunyi, muncul setelah klik kartu) -->
+                    <div id="areaPengaturanLatihan" style="display: none; margin-top: 30px; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px dashed #cbd5e1; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main); font-size: 15px;">Persiapan Akhir</h4>
+                        <div class="form-group" style="text-align: left;">
+                            <label>Suara AI Tutor</label>
+                            <select id="suaraSelect" class="form-control">
+                                <option value="female" selected>Perempuan</option>
+                                <option value="male">Laki-laki</option>
+                            </select>
+                        </div>
+                        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 15px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih</button>
+                    </div>
                 </div>
             </div>
 
@@ -1228,6 +1305,28 @@
 
         // 4. Nyalakan warna biru pada tombol yang diklik
         document.getElementById('btn-tab-' + namaTab).classList.add('active');
+    }
+
+    // =========================================================
+    // FUNGSI MEMILIH KARTU MODUL (TAHAP 4)
+    // =========================================================
+    let produkPilihan = ""; // Variabel penyimpan pilihan sementara
+
+    function pilihModul(namaModul, elemenKartu) {
+        produkPilihan = namaModul; // Simpan nama modul yang dipilih
+        
+        // 1. Matikan efek aktif di semua kartu
+        let semuaKartu = document.querySelectorAll('.product-card');
+        semuaKartu.forEach(kartu => kartu.classList.remove('active'));
+
+        // 2. Nyalakan efek aktif HANYA di kartu yang diklik
+        elemenKartu.classList.add('active');
+
+        // 3. Munculkan area pengaturan suara dan tombol Mulai Berlatih
+        document.getElementById('areaPengaturanLatihan').style.display = 'block';
+        
+        // Opsional: Gulir layar sedikit ke bawah agar tombol Mulai terlihat di HP
+        document.getElementById('areaPengaturanLatihan').scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
 
 </script>
