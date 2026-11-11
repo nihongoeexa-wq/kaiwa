@@ -566,58 +566,64 @@
             <!-- ========================================== -->
             <!-- KARDUS 2: MODUL (DAFTAR & DETAIL TIER) -->
             <!-- ========================================== -->
-            <div id="tab-modul" style="display: none; padding: 15px;">
+            <div id="tab-modul" style="display: none; padding: 25px;">
                 
                 <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
-                <div id="modul-list-view" style="max-width: 600px; margin: 0 auto;">
-                    <h2 style="font-size: 18px; color: var(--text-main); margin-bottom: 20px; text-align: left;">Pilih Kategori Level</h2>
+                <!-- margin: 0; ditambahkan agar merapat ke kiri (ruang kanan kosong) -->
+                <div id="modul-list-view" style="max-width: 650px; margin: 0; text-align: left;">
+                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Pilih Kategori Level</h2>
 
-                    <!-- Baris 1: SEIKATSU -->
-                    <div class="tier-bar" onclick="bukaDetailTier('detail-seikatsu')">
+                    <!-- Baris 1: SHOKYU -->
+                    <div class="tier-bar" onclick="bukaDetailTier('detail-shokyu')">
                         <div class="tier-icon">🐣</div>
                         <div class="tier-info">
-                            <h3>SEIKATSU TIER - PEMULA</h3>
-                            <p>Latihan percakapan ringan sehari-hari.</p>
+                            <h3>SHOKYU TIER (Basic)</h3>
+                            <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
                         </div>
                         <div class="tier-price"><i class="fas fa-ticket-alt"></i> 1 Tiket</div>
                     </div>
 
-                    <!-- Baris 2: INTERVIEW -->
-                    <div class="tier-bar" onclick="bukaDetailTier('detail-interview')">
-                        <div class="tier-icon">💼</div>
+                    <!-- Baris 2: CHUKYU -->
+                    <div class="tier-bar" onclick="bukaDetailTier('detail-chukyu')">
+                        <div class="tier-icon">🎯</div>
                         <div class="tier-info">
-                            <h3>INTERVIEW TIER - PRO</h3>
-                            <p>Simulasi wawancara kerja & JFT-Basic.</p>
+                            <h3>CHUKYU TIER (Mid)</h3>
+                            <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
                         </div>
                         <div class="tier-price"><i class="fas fa-ticket-alt"></i> 2 Tiket</div>
                     </div>
+
+                    <!-- Baris 3: JOKYU -->
+                    <div class="tier-bar" onclick="bukaDetailTier('detail-jokyu')">
+                        <div class="tier-icon">💼</div>
+                        <div class="tier-info">
+                            <h3>JOKYU TIER (Pro)</h3>
+                            <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
+                        </div>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 3 Tiket</div>
+                    </div>
                 </div>
 
-                <!-- [LAYAR 2A] HALAMAN KHUSUS: SEIKATSU -->
-                <div id="detail-seikatsu" class="modul-detail-view" style="display: none; max-width: 600px; margin: 0 auto; text-align: left;">
+                <!-- [LAYAR 2A] HALAMAN KHUSUS: SHOKYU -->
+                <div id="detail-shokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
                     <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
                     
-                    <!-- Penjelasan Produk (Bisa diedit bebas nanti) -->
                     <div class="detail-header">
-                        <h2>SEIKATSU TIER - PEMULA</h2>
-                        <p><strong>Target:</strong> Calon pekerja yang baru berlatih insting bahasa Jepang dasar.</p>
-                        <p><strong>Fungsi:</strong> Melatih keberanian berbicara dalam kondisi harian.</p>
-                        <p><strong>Aturan:</strong> Sesi berlangsung santai selama 7 putaran.</p>
+                        <h2>SHOKYU TIER (Basic)</h2>
+                        <p><strong>Target:</strong> Pemula yang baru mengenal Kana dan pola kalimat dasar.</p>
+                        <p><strong>Fungsi:</strong> Melatih insting bahasa & keberanian berbicara.</p>
+                        <p><strong>Aturan:</strong> 7 putaran percakapan (Potong 1 Tiket).</p>
                     </div>
 
                     <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
                     
-                    <!-- Tema 1 (Accordion) -->
                     <div class="theme-item">
                         <div class="theme-header" onclick="toggleTema(this)">
                             <span>🛍️ Belanja di Konbini</span>
                             <i class="fas fa-chevron-down chevron-icon"></i>
                         </div>
                         <div class="theme-body">
-                            <!-- Penjelasan Tema -->
                             <p class="theme-desc">Latihan percakapan saat membeli barang, menanyakan letak barang, dan meminta kantong plastik di minimarket Jepang.</p>
-                            
-                            <!-- OPSI A: Pilih Suara & Tombol Mulai -->
                             <div class="theme-action">
                                 <div class="form-group" style="margin-bottom: 10px;">
                                     <label>Suara AI Tutor</label>
@@ -626,54 +632,62 @@
                                         <option value="male">Laki-laki</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SEIKATSU-KONBINI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tema 2 (Accordion) -->
-                    <div class="theme-item">
-                        <div class="theme-header" onclick="toggleTema(this)">
-                            <span>👋 Perkenalan Diri (Jikoshoukai)</span>
-                            <i class="fas fa-chevron-down chevron-icon"></i>
-                        </div>
-                        <div class="theme-body">
-                            <p class="theme-desc">Latihan memperkenalkan diri, menyebutkan nama, asal Indonesia, dan hobi dengan sopan.</p>
-                            <div class="theme-action">
-                                <div class="form-group" style="margin-bottom: 10px;">
-                                    <label>Suara AI Tutor</label>
-                                    <select class="form-control suara-select-dinamis">
-                                        <option value="female" selected>Perempuan</option>
-                                        <option value="male">Laki-laki</option>
-                                    </select>
-                                </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SEIKATSU-JIKOSHOUKAI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SHOKYU-KONBINI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- [LAYAR 2B] HALAMAN KHUSUS: INTERVIEW -->
-                <div id="detail-interview" class="modul-detail-view" style="display: none; max-width: 600px; margin: 0 auto; text-align: left;">
+                <!-- [LAYAR 2B] HALAMAN KHUSUS: CHUKYU -->
+                <div id="detail-chukyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
                     <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
-                    
-                    <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
-                        <h2 style="color: #e11d48;">INTERVIEW TIER - PRO</h2>
-                        <p><strong>Target:</strong> Kandidat yang bersiap menghadapi wawancara kerja.</p>
-                        <p><strong>Fungsi:</strong> Menguji mental dan kesiapan menjawab HRD Jepang.</p>
-                        <p><strong>Aturan:</strong> Sesi tegang selama 15 putaran, butuh 2 tiket.</p>
+                    <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
+                        <h2 style="color: #c026d3;">CHUKYU TIER (Mid)</h2>
+                        <p><strong>Target:</strong> Siswa persiapan ujian JFT-Basic A2.</p>
+                        <p><strong>Fungsi:</strong> Latihan pemahaman konteks sosial dan formalitas ringan.</p>
+                        <p><strong>Aturan:</strong> 15 putaran percakapan (Potong 2 Tiket).</p>
                     </div>
-
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
                     
-                    <!-- Tema Interview -->
+                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                    <div class="theme-item">
+                        <div class="theme-header" onclick="toggleTema(this)">
+                            <span>🏥 Janji Temu dengan Dokter</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="theme-body">
+                            <p class="theme-desc">Latihan mendaftar di klinik, menjelaskan gejala sakit, dan menerima resep obat.</p>
+                            <div class="theme-action">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label>Suara AI Tutor</label>
+                                    <select class="form-control suara-select-dinamis">
+                                        <option value="female" selected>Perempuan</option>
+                                        <option value="male">Laki-laki</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('CHUKYU-BYOUIN', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (2 Tiket)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [LAYAR 2C] HALAMAN KHUSUS: JOKYU -->
+                <div id="detail-jokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                    <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
+                        <h2 style="color: #e11d48;">JOKYU TIER (Pro)</h2>
+                        <p><strong>Target:</strong> Kandidat Tokutei Ginou yang siap berangkat ke Jepang.</p>
+                        <p><strong>Fungsi:</strong> Menguji mental, spontanitas, dan kesiapan wawancara kerja.</p>
+                        <p><strong>Aturan:</strong> 30 putaran percakapan (Potong 3 Tiket).</p>
+                    </div>
+                    
+                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
                     <div class="theme-item">
                         <div class="theme-header" onclick="toggleTema(this)">
                             <span>🏭 Wawancara Pabrik Manufaktur</span>
                             <i class="fas fa-chevron-down chevron-icon"></i>
                         </div>
                         <div class="theme-body">
-                            <p class="theme-desc">Simulasi dengan HRD pabrik. Pertanyaan fokus pada kesiapan kerja fisik, lembur, dan kedisiplinan.</p>
+                            <p class="theme-desc">Simulasi dengan HRD pabrik. Pertanyaan difokuskan pada kesiapan kerja fisik, lembur, dan kedisiplinan.</p>
                             <div class="theme-action">
                                 <div class="form-group" style="margin-bottom: 10px;">
                                     <label>Suara AI Tutor</label>
@@ -682,7 +696,7 @@
                                         <option value="female">Perempuan</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('INTERVIEW-PABRIK', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (2 Tiket)</button>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('JOKYU-PABRIK', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (3 Tiket)</button>
                             </div>
                         </div>
                     </div>
