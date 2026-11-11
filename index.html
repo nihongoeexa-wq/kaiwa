@@ -540,10 +540,14 @@
         <main class="main-content">
             
             <!-- KARDUS 1: DASHBOARD (Sapaan & Top-Up Voucher) -->
-            <div id="tab-dashboard">
-                <div class="container text-center">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+            <div id="tab-dashboard" style="display: none; padding: 25px;">
+                
+                <!-- Format Rata Kiri & Lebar 650px (Sama persis dengan halaman Modul) -->
+                <div style="max-width: 650px; margin: 0; text-align: left;">
+                    
+                    <!-- Sapaan & Saldo -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin: 0;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
                         
                         <!-- Indikator Saldo Tiket -->
                         <div class="ticket-badge" title="Saldo Tiket">
@@ -551,15 +555,19 @@
                         </div>
                     </div>
 
-                    <p style="text-align: left; font-size: 14px; color: #64748b; margin-top: 30px;">Punya kode tiket? Masukkan di sini:</p>
-                    
-                    <!-- Kotak Klaim Voucher -->
-                    <div class="voucher-box" style="margin-top: 5px;">
-                        <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
-                        <button id="btnKlaimVoucher">Klaim</button>
+                    <!-- Kotak Klaim Voucher (Dibungkus card agar lebih rapi) -->
+                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <p style="font-size: 14px; color: #475569; font-weight: 600; margin: 0 0 10px 0;">Punya kode tiket? Masukkan di sini:</p>
+                        
+                        <div class="voucher-box" style="display: flex; gap: 10px;">
+                            <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off" style="flex-grow: 1;">
+                            <button id="btnKlaimVoucher">Klaim</button>
+                        </div>
+                        
+                        <div id="voucherMsg" class="msg" style="margin-top: 10px;"></div>
+                        <div id="dashMsg" class="msg"></div>
                     </div>
-                    <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
-                    <div id="dashMsg" class="msg"></div>
+
                 </div>
             </div>
 
@@ -662,22 +670,43 @@
             </div>
             <!-- ================= AKHIR KARDUS 2 ================= -->
 
+            <!-- ========================================== -->
             <!-- KARDUS 3: RIWAYAT -->
-            <div id="tab-riwayat" style="display: none;">
-                <div class="container text-center">
-                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 15px; text-align: left;">Riwayat Nilai</h2>
-                    <p style="color: #64748b; font-size: 14px;">Tabel performa Anda akan ditampilkan di sini.</p>
+            <!-- ========================================== -->
+            <div id="tab-riwayat" style="display: none; padding: 25px;">
+                <div style="max-width: 650px; margin: 0; text-align: left;">
                     
-                    <!-- Tombol Riwayat lama dipindah ke sini -->
-                    <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569; margin-top: 20px;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
+                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Riwayat Nilai</h2>
+                    
+                    <!-- Dibungkus kotak putih agar senada dengan dashboard -->
+                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <p style="color: #475569; font-size: 14px; margin-top: 0; margin-bottom: 20px;">Tabel performa Anda akan ditampilkan di sini.</p>
+                        
+                        <!-- Tombol Riwayat -->
+                        <button id="btnRiwayat" style="border: 2px solid #cbd5e1; background: transparent; color: #475569; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
+                    </div>
+
                 </div>
             </div>
 
+            <!-- ========================================== -->
             <!-- KARDUS 4: PANDUAN -->
-            <div id="tab-panduan" style="display: none;">
-                <div class="container text-center">
-                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 15px; text-align: left;">Panduan Penggunaan</h2>
-                    <p style="color: #64748b; font-size: 14px; text-align: left;">1. Buka menu Modul untuk memulai latihan.<br>2. Pastikan mikrofon Anda aktif.<br>3. Jawab pertanyaan AI dengan jelas.</p>
+            <!-- ========================================== -->
+            <div id="tab-panduan" style="display: none; padding: 25px;">
+                <div style="max-width: 650px; margin: 0; text-align: left;">
+                    
+                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Panduan Penggunaan</h2>
+                    
+                    <!-- Dibungkus kotak putih dan dibuat format list -->
+                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <ol style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
+                            <li>Buka menu <strong>Modul</strong> untuk memilih level dan tema latihan.</li>
+                            <li>Pastikan memberikan izin akses <strong>mikrofon</strong> pada browser Anda.</li>
+                            <li>Jawab pertanyaan AI dengan jelas dan natural menggunakan bahasa Jepang.</li>
+                            <li>Jangan menutup atau memuat ulang (refresh) halaman saat sesi percakapan berlangsung agar tiket tidak hangus.</li>
+                        </ol>
+                    </div>
+
                 </div>
             </div>
 
