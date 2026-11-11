@@ -480,10 +480,10 @@
 
             <!-- 2. Menu Navigasi -->
             <nav class="sidebar-menu">
-                <button class="menu-item active">Dashboard</button>
-                <button class="menu-item">Modul</button>
-                <button class="menu-item">Riwayat</button>
-                <button class="menu-item">Panduan</button>
+                <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">Dashboard</button>
+                <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul</button>
+                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat')">Riwayat</button>
+                <button class="menu-item" id="btn-tab-panduan" onclick="bukaTab('panduan')">Panduan</button>
                 
                 <!-- Spacer gaib untuk mendorong tombol Keluar & Footer -->
                 <div class="menu-spacer"></div>
@@ -502,49 +502,75 @@
         <!-- --- KOLOM KANAN: KONTEN UTAMA --- -->
         <main class="main-content">
             
-            <!-- KARTU PUTIH (Ini adalah Script Asli Anda yang aman di dalam Kolom Kanan) -->
-            <div class="container text-center">
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
-                    
-                    <!-- Indikator Saldo Tiket -->
-                    <div class="ticket-badge" title="Saldo Tiket">
-                        <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+            <!-- KARDUS 1: DASHBOARD (Sapaan & Top-Up Voucher) -->
+            <div id="tab-dashboard">
+                <div class="container text-center">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+                        
+                        <!-- Indikator Saldo Tiket -->
+                        <div class="ticket-badge" title="Saldo Tiket">
+                            <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+                        </div>
                     </div>
-                </div>
-            
-                <div class="form-group">
-                    <label>Pilih Modul Percakapan</label>
-                    <select id="produkSelect" class="form-control">
-                        <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
-                        <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
-                        <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group" style="margin-top: 15px;">
-                    <label>Suara AI Tutor</label>
-                    <select id="suaraSelect" class="form-control">
-                        <option value="female" selected>Perempuan</option>
-                        <option value="male">Laki-laki</option>
-                    </select>
-                </div>
 
-                <!-- Kotak Klaim Voucher -->
-                <div class="voucher-box">
-                    <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
-                    <button id="btnKlaimVoucher">Klaim</button>
+                    <p style="text-align: left; font-size: 14px; color: #64748b; margin-top: 30px;">Punya kode tiket? Masukkan di sini:</p>
+                    
+                    <!-- Kotak Klaim Voucher -->
+                    <div class="voucher-box" style="margin-top: 5px;">
+                        <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+                        <button id="btnKlaimVoucher">Klaim</button>
+                    </div>
+                    <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
+                    <div id="dashMsg" class="msg"></div>
                 </div>
-                <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
-
-                <div id="dashMsg" class="msg"></div>
-                
-                <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
-                
-                <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
             </div>
-            <!-- AKHIR KARTU PUTIH -->
+
+            <!-- KARDUS 2: MODUL (Area Latihan Kaiwa) -->
+            <!-- (Sementara pakai form lama agar mesin JS tidak rusak, nanti kita sulap jadi 3 Kartu Bos) -->
+            <div id="tab-modul" style="display: none;">
+                <div class="container text-center">
+                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 20px; text-align: left;">Pilih Modul Latihan</h2>
+                    
+                    <div class="form-group">
+                        <label>Pilih Modul Percakapan</label>
+                        <select id="produkSelect" class="form-control">
+                            <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
+                            <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
+                            <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Suara AI Tutor</label>
+                        <select id="suaraSelect" class="form-control">
+                            <option value="female" selected>Perempuan</option>
+                            <option value="male">Laki-laki</option>
+                        </select>
+                    </div>
+
+                    <button id="btnMulaiKaiwa" class="btn" style="margin-top: 30px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                </div>
+            </div>
+
+            <!-- KARDUS 3: RIWAYAT -->
+            <div id="tab-riwayat" style="display: none;">
+                <div class="container text-center">
+                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 15px; text-align: left;">Riwayat Nilai</h2>
+                    <p style="color: #64748b; font-size: 14px;">Tabel performa Anda akan ditampilkan di sini.</p>
+                    
+                    <!-- Tombol Riwayat lama dipindah ke sini -->
+                    <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569; margin-top: 20px;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
+                </div>
+            </div>
+
+            <!-- KARDUS 4: PANDUAN -->
+            <div id="tab-panduan" style="display: none;">
+                <div class="container text-center">
+                    <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 15px; text-align: left;">Panduan Penggunaan</h2>
+                    <p style="color: #64748b; font-size: 14px; text-align: left;">1. Buka menu Modul untuk memulai latihan.<br>2. Pastikan mikrofon Anda aktif.<br>3. Jawab pertanyaan AI dengan jelas.</p>
+                </div>
+            </div>
 
         </main>
     </div>
@@ -1180,6 +1206,29 @@
             document.getElementById('areaAutentikasi').style.display = 'block';
             document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
         }
+
+    // =========================================================
+    // FUNGSI NAVIGASI: PINDAH TAB (TAHAP 2)
+    // =========================================================
+    function bukaTab(namaTab) {
+        // 1. Sembunyikan semua kardus terlebih dahulu
+        document.getElementById('tab-dashboard').style.display = 'none';
+        document.getElementById('tab-modul').style.display = 'none';
+        document.getElementById('tab-riwayat').style.display = 'none';
+        document.getElementById('tab-panduan').style.display = 'none';
+
+        // 2. Matikan warna biru 'active' dari semua tombol menu
+        document.getElementById('btn-tab-dashboard').classList.remove('active');
+        document.getElementById('btn-tab-modul').classList.remove('active');
+        document.getElementById('btn-tab-riwayat').classList.remove('active');
+        document.getElementById('btn-tab-panduan').classList.remove('active');
+
+        // 3. Tampilkan HANYA kardus yang dipilih
+        document.getElementById('tab-' + namaTab).style.display = 'block';
+
+        // 4. Nyalakan warna biru pada tombol yang diklik
+        document.getElementById('btn-tab-' + namaTab).classList.add('active');
+    }
 
 </script>
 </body>
