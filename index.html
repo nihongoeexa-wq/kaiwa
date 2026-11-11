@@ -569,7 +569,6 @@
             <div id="tab-modul" style="display: none; padding: 25px;">
                 
                 <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
-                <!-- margin: 0; ditambahkan agar merapat ke kiri (ruang kanan kosong) -->
                 <div id="modul-list-view" style="max-width: 650px; margin: 0; text-align: left;">
                     <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Pilih Kategori Level</h2>
 
@@ -580,7 +579,7 @@
                             <h3>SHOKYU TIER (Basic)</h3>
                             <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 1 Tiket</div>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 26 Tiket</div>
                     </div>
 
                     <!-- Baris 2: CHUKYU -->
@@ -590,7 +589,7 @@
                             <h3>CHUKYU TIER (Mid)</h3>
                             <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 2 Tiket</div>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 52 Tiket</div>
                     </div>
 
                     <!-- Baris 3: JOKYU -->
@@ -600,7 +599,7 @@
                             <h3>JOKYU TIER (Pro)</h3>
                             <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 3 Tiket</div>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 100 Tiket</div>
                     </div>
                 </div>
 
@@ -612,29 +611,15 @@
                         <h2>SHOKYU TIER (Basic)</h2>
                         <p><strong>Target:</strong> Pemula yang baru mengenal Kana dan pola kalimat dasar.</p>
                         <p><strong>Fungsi:</strong> Melatih insting bahasa & keberanian berbicara.</p>
-                        <p><strong>Aturan:</strong> 7 putaran percakapan (Potong 1 Tiket).</p>
+                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 26 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
                     </div>
 
                     <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
                     
-                    <div class="theme-item">
-                        <div class="theme-header" onclick="toggleTema(this)">
-                            <span>🛍️ Belanja di Konbini</span>
-                            <i class="fas fa-chevron-down chevron-icon"></i>
-                        </div>
-                        <div class="theme-body">
-                            <p class="theme-desc">Latihan percakapan saat membeli barang, menanyakan letak barang, dan meminta kantong plastik di minimarket Jepang.</p>
-                            <div class="theme-action">
-                                <div class="form-group" style="margin-bottom: 10px;">
-                                    <label>Suara AI Tutor</label>
-                                    <select class="form-control suara-select-dinamis">
-                                        <option value="female" selected>Perempuan</option>
-                                        <option value="male">Laki-laki</option>
-                                    </select>
-                                </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SHOKYU-KONBINI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
-                            </div>
-                        </div>
+                    <!-- WADAH KOSONG UNTUK SHOKYU (Akan diisi otomatis oleh JavaScript) -->
+                    <div id="wadah-tema-shokyu">
+                        <!-- Loading text sementara jika internet lambat -->
+                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
                     </div>
                 </div>
 
@@ -645,28 +630,14 @@
                         <h2 style="color: #c026d3;">CHUKYU TIER (Mid)</h2>
                         <p><strong>Target:</strong> Siswa persiapan ujian JFT-Basic A2.</p>
                         <p><strong>Fungsi:</strong> Latihan pemahaman konteks sosial dan formalitas ringan.</p>
-                        <p><strong>Aturan:</strong> 15 putaran percakapan (Potong 2 Tiket).</p>
+                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 52 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
                     </div>
                     
                     <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
-                    <div class="theme-item">
-                        <div class="theme-header" onclick="toggleTema(this)">
-                            <span>🏥 Janji Temu dengan Dokter</span>
-                            <i class="fas fa-chevron-down chevron-icon"></i>
-                        </div>
-                        <div class="theme-body">
-                            <p class="theme-desc">Latihan mendaftar di klinik, menjelaskan gejala sakit, dan menerima resep obat.</p>
-                            <div class="theme-action">
-                                <div class="form-group" style="margin-bottom: 10px;">
-                                    <label>Suara AI Tutor</label>
-                                    <select class="form-control suara-select-dinamis">
-                                        <option value="female" selected>Perempuan</option>
-                                        <option value="male">Laki-laki</option>
-                                    </select>
-                                </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('CHUKYU-BYOUIN', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (2 Tiket)</button>
-                            </div>
-                        </div>
+                    
+                    <!-- WADAH KOSONG UNTUK CHUKYU -->
+                    <div id="wadah-tema-chukyu">
+                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
                     </div>
                 </div>
 
@@ -677,28 +648,14 @@
                         <h2 style="color: #e11d48;">JOKYU TIER (Pro)</h2>
                         <p><strong>Target:</strong> Kandidat Tokutei Ginou yang siap berangkat ke Jepang.</p>
                         <p><strong>Fungsi:</strong> Menguji mental, spontanitas, dan kesiapan wawancara kerja.</p>
-                        <p><strong>Aturan:</strong> 30 putaran percakapan (Potong 3 Tiket).</p>
+                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 100 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
                     </div>
                     
                     <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
-                    <div class="theme-item">
-                        <div class="theme-header" onclick="toggleTema(this)">
-                            <span>🏭 Wawancara Pabrik Manufaktur</span>
-                            <i class="fas fa-chevron-down chevron-icon"></i>
-                        </div>
-                        <div class="theme-body">
-                            <p class="theme-desc">Simulasi dengan HRD pabrik. Pertanyaan difokuskan pada kesiapan kerja fisik, lembur, dan kedisiplinan.</p>
-                            <div class="theme-action">
-                                <div class="form-group" style="margin-bottom: 10px;">
-                                    <label>Suara AI Tutor</label>
-                                    <select class="form-control suara-select-dinamis">
-                                        <option value="male" selected>Laki-laki (Tegas)</option>
-                                        <option value="female">Perempuan</option>
-                                    </select>
-                                </div>
-                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('JOKYU-PABRIK', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (3 Tiket)</button>
-                            </div>
-                        </div>
+                    
+                    <!-- WADAH KOSONG UNTUK JOKYU -->
+                    <div id="wadah-tema-jokyu">
+                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
                     </div>
                 </div>
 
@@ -945,6 +902,9 @@
         return JSON.parse(jsonPayload);
     }
 
+    // =========================================================
+    // MESIN PENCETAK KARTU TEMA DINAMIS (B2B VERSION)
+    // =========================================================
     async function muatDaftarProduk() {
         try {
             const response = await fetch(GAS_URL, {
@@ -954,21 +914,72 @@
             const hasil = await response.json();
         
             if (hasil.success && hasil.data.length > 0) {
-                const dropdown = document.getElementById("produkSelect");
-                dropdown.innerHTML = ""; // Kosongkan opsi bawaan HTML
+                // 1. Siapkan 3 Wadah Kosong
+                const wadahShokyu = document.getElementById("wadah-tema-shokyu");
+                const wadahChukyu = document.getElementById("wadah-tema-chukyu");
+                const wadahJokyu = document.getElementById("wadah-tema-jokyu");
+                
+                // Bersihkan tulisan "Memuat daftar..."
+                if(wadahShokyu) wadahShokyu.innerHTML = "";
+                if(wadahChukyu) wadahChukyu.innerHTML = "";
+                if(wadahJokyu) wadahJokyu.innerHTML = "";
             
-                // Masukkan data dari Spreadsheet ke dropdown
+                // 2. Sortir dan Cetak Data dari Sheet
                 hasil.data.forEach(item => {
-                    const option = document.createElement("option");
-                    option.value = item.kode;
-                    // Kita juga bisa menyimpan harga di dataset untuk fitur potong tiket dinamis nanti
-                    option.dataset.harga = item.harga; 
-                    option.textContent = item.nama;
-                    dropdown.appendChild(option);
+                    // Deteksi Ikon Otomatis Berdasarkan Nama
+                    let namaAtas = item.nama.toUpperCase();
+                    let ikonTema = "💬"; // Ikon default
+                    if(namaAtas.includes("KONBINI") || namaAtas.includes("BELANJA")) ikonTema = "🛍️";
+                    else if(namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
+                    else if(namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK") || namaAtas.includes("BYOUIN")) ikonTema = "🏥";
+                    else if(namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
+
+                    // Rakit HTML Kartu Mekar (Accordion)
+                    let kartuHTML = `
+                        <div class="theme-item">
+                            <div class="theme-header" onclick="toggleTema(this)">
+                                <span>${ikonTema} ${item.nama}</span>
+                                <i class="fas fa-chevron-down chevron-icon"></i>
+                            </div>
+                            <div class="theme-body">
+                                <p class="theme-desc">${item.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.'}</p>
+                                <div class="theme-action">
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label>Suara AI Tutor</label>
+                                        <select class="form-control suara-select-dinamis">
+                                            <option value="female" selected>Perempuan</option>
+                                            <option value="male">Laki-laki</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('${item.kode}', this, ${item.harga})">
+                                        <i class="fas fa-microphone-alt"></i> Mulai Berlatih (${item.harga} Tiket)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // 3. Masukkan ke Ruangan yang Tepat Berdasarkan Kodenya
+                    let kodeAtas = item.kode.toUpperCase();
+                    if (kodeAtas.includes("BSC") && wadahShokyu) {
+                        wadahShokyu.innerHTML += kartuHTML;
+                    } else if (kodeAtas.includes("MID") && wadahChukyu) {
+                        wadahChukyu.innerHTML += kartuHTML;
+                    } else if (kodeAtas.includes("PRO") && wadahJokyu) {
+                        wadahJokyu.innerHTML += kartuHTML;
+                    }
                 });
+
+                // 4. Jika ada wadah yang ternyata kosong (tidak ada data di Sheet)
+                if(wadahShokyu && wadahShokyu.innerHTML === "") wadahShokyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+                if(wadahChukyu && wadahChukyu.innerHTML === "") wadahChukyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+                if(wadahJokyu && wadahJokyu.innerHTML === "") wadahJokyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+
             }
         } catch (err) {
             console.error("Gagal memuat produk:", err);
+            // Tampilkan pesan error di layar jika internet putus
+            document.getElementById("wadah-tema-shokyu").innerHTML = "<p style='color:red;'>Gagal terhubung ke server.</p>";
         }
     }
 
@@ -1007,32 +1018,42 @@
 
     // =========================================================
     // MASUK KE KAIWA ROOM (DENGAN PEMOTONGAN TIKET ESCROW)
+    // Mesin Baru: Merespon klik dari masing-masing kartu tema (Accordion)
     // =========================================================
-    document.getElementById('btnMulaiKaiwa').addEventListener('click', async () => {
-        activeProduct = document.getElementById('produkSelect').value;
+    async function mulaiLatihan(kodeTema, elemenTombol, hargaDeposit) {
         
-        // 1. Tentukan Batas Putaran & Harga Deposit di Depan
+        // 1. Ambil Pilihan Suara & Set Produk Aktif
+        let wrapper = elemenTombol.closest('.theme-action');
+        let suaraSelect = wrapper.querySelector('.suara-select-dinamis').value;
+        
+        activeProduct = kodeTema; 
+        
+        // *PENTING: Pastikan Anda punya variabel global untuk menyimpan gender suara agar TTS tahu!*
+        // Jika Anda memakai variabel 'suaraTutor', aktifkan baris di bawah ini:
+        // suaraTutor = suaraSelect; 
+
+        // 2. Tentukan Batas Putaran & Harga Deposit (Harga diambil langsung dari GS!)
         let batasPutaran = 7; 
-        depositDimukaSesi = 26; // Default harga deposit BSC
+        depositDimukaSesi = hargaDeposit; // Tidak perlu if-else lagi, langsung ambil dari parameter Sheets!
 
         if (activeProduct.includes("PRO")) {
             batasPutaran = 30;
-            depositDimukaSesi = 100;
         } else if (activeProduct.includes("MID")) {
             batasPutaran = 15;
-            depositDimukaSesi = 52;
         }
         
-        // 2. Cek Saldo Tiket
+        // 3. Cek Saldo Tiket
         if (KAIWA_USER.saldo < depositDimukaSesi) {
-            return showMsg('dashMsg', 'error', `Saldo tiket tidak cukup. Modul ini butuh deposit awal ${depositDimukaSesi} tiket. Silakan isi ulang.`);
+            alert(`Saldo tiket tidak cukup. Tema ini butuh deposit awal ${depositDimukaSesi} tiket. Silakan isi ulang.`);
+            return;
         }
 
         KAIWA_USER.maxPutaran = batasPutaran;
 
-        // 3. Potong Tiket di Database (Sistem Escrow) sebelum membuka ruangan
-        showMsg('dashMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Membuka ruangan (Menahan tiket)...');
-        document.getElementById('btnMulaiKaiwa').disabled = true;
+        // 4. Potong Tiket di Database (Sistem Escrow) sebelum membuka ruangan
+        let teksAsliTombol = elemenTombol.innerHTML;
+        elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menahan tiket...';
+        elemenTombol.disabled = true;
 
         try {
             const res = await fetch(GAS_URL, {
@@ -1053,21 +1074,22 @@
                 totalTokenSesi = 0; // RESET TOTAL TOKEN AI
                 historyPercakapan = ""; 
                 chatHistory = []; 
-                showMsg('dashMsg', '', ''); // Bersihkan pesan loading
                 
                 const statusTeks = document.querySelector('.kaiwa-box p');
                 statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
                 
                 showView('kaiwaRoom');
             } else {
-                showMsg('dashMsg', 'error', data.message);
+                alert(data.message);
             }
         } catch (err) {
-            showMsg('dashMsg', 'error', 'Gagal memotong tiket. Server sibuk.');
+            alert('Gagal memotong tiket. Server sibuk atau koneksi terputus.');
         } finally {
-            document.getElementById('btnMulaiKaiwa').disabled = false;
+            // Kembalikan tombol ke bentuk semula jika gagal/selesai loading
+            elemenTombol.innerHTML = teksAsliTombol;
+            elemenTombol.disabled = false;
         }
-    });
+    }
 
     // =========================================================
     // PILAR RADAR & LOG AKTIVITAS (Tembus Pandang)
