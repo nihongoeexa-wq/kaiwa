@@ -349,6 +349,49 @@
             overflow-y: auto; /* Memungkinkan area kanan ini digulir (scroll) jika isinya panjang, sementara kiri statis */
         }
 
+        /* =========================================
+           MANTRA RESPONSIF KHUSUS HP (MOBILE VIEW)
+        ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Mengubah belahan layar dari Kiri-Kanan menjadi Atas-Bawah */
+            .dashboard-wrapper {
+                flex-direction: column; 
+                height: auto; 
+                min-height: 100vh;
+                overflow-y: auto; /* Mengizinkan scroll ke bawah di HP */
+            }
+
+            /* 2. Sidebar menjadi Header Atas yang memenuhi layar */
+            .sidebar {
+                width: 100%; 
+                border-right: none; 
+                border-bottom: 2px solid #E5E5E5; 
+                padding: 15px;
+            }
+
+            /* 3. Menu Navigasi disulap menjadi menyamping & bisa digeser (swipe) */
+            .sidebar-menu {
+                flex-direction: row; 
+                overflow-x: auto; 
+                padding-bottom: 5px;
+                gap: 10px;
+            }
+            .menu-item {
+                white-space: nowrap; /* Mencegah teks menu terpotong ke bawah */
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+            .menu-spacer, .sidebar-footer {
+                display: none; /* Sembunyikan spacer & footer di HP agar ruang lebih lega */
+            }
+
+            /* 4. Kolom Kanan (Kartu) menyesuaikan ukuran HP */
+            .main-content {
+                padding: 20px 15px; 
+                overflow-y: visible;
+            }
+        }
+
     </style>
 </head>
 <body>
