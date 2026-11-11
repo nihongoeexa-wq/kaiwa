@@ -232,6 +232,103 @@
         .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
         .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
         .mic-btn:hover { transform: scale(1.05); }
+
+        /* =========================================
+           CSS BARU: LAYER 2 (DASHBOARD)
+        ========================================= */
+        
+        /* Pembungkus Utama Layar Penuh */
+        .dashboard-wrapper {
+            display: flex; /* Membelah layar jadi Kiri dan Kanan */
+            height: 100vh; /* Memaksa tinggi selalu pas 1 layar penuh */
+            background-color: #F7F9FA; /* Warna abu-abu sangat muda khas area belakang Duolingo */
+            overflow: hidden; /* Mencegah layar bergeser (scroll) keseluruhan */
+        }
+
+        /* --- 1. KOLOM KIRI (SIDEBAR) --- */
+        .sidebar {
+            width: 260px;
+            background-color: #FFFFFF;
+            border-right: 2px solid #E5E5E5; /* Garis pembatas tebal ala Duolingo */
+            display: flex;
+            flex-direction: column; /* Menyusun isi dari atas ke bawah */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Header Sidebar (Logo Mini) */
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px; /* Jarak dari Logo ke Menu Navigasi */
+        }
+        .sidebar-logo {
+            width: 45px; /* Jauh lebih kecil dari Layer 1 */
+            height: auto;
+        }
+        .sidebar-title h2 {
+            margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.1;
+        }
+        .sidebar-title p {
+            margin: 2px 0 0 0; font-size: 10px; font-weight: 700; color: var(--text-muted);
+        }
+
+        /* Menu Navigasi */
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Jarak antar tombol menu */
+            flex-grow: 1; /* Penting: Membuat area menu mengambil sisa ruang untuk menekan footer ke bawah */
+        }
+        .menu-item {
+            padding: 14px 20px;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 800;
+            color: #777777; /* Warna abu-abu saat tidak aktif */
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .menu-item:hover {
+            background-color: #F7F9FA;
+        }
+        
+        /* Desain Menu yang sedang dibuka (Aktif) */
+        .menu-item.active {
+            background-color: #DDF4FF; /* Biru sangat muda */
+            color: var(--primary); /* Teks Biru khas Neexa */
+            border: 2px solid #84D8FF; /* Garis tepi biru */
+        }
+        
+        /* Desain khusus tombol Keluar */
+        .menu-item.btn-keluar { color: #FF4B4B; }
+        .menu-item.btn-keluar:hover { background-color: #FFEEEE; }
+        
+        /* Pendorong Elemen ke Bawah */
+        .menu-spacer { flex-grow: 1; }
+
+        /* Footer Sidebar */
+        .sidebar-footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #E5E5E5;
+            text-align: center;
+            font-size: 11px;
+            color: #AFAFAF;
+        }
+
+        /* --- 2. KOLOM KANAN (KONTEN UTAMA) --- */
+        .main-content {
+            flex: 1; /* Mengambil seluruh sisa ruang layar di sebelah kanan */
+            padding: 40px;
+            overflow-y: auto; /* Memungkinkan area kanan ini digulir (scroll) jika isinya panjang, sementara kiri statis */
+        }
+
     </style>
 </head>
 <body>
@@ -305,49 +402,87 @@
         </div>
     </div>
 
-    <!-- ================= WADAH APLIKASI (DASHBOARD, KAIWA, RAPOR) ================= -->
-    <!-- Tag Container ini kita pindah ke SINI, untuk membungkus halaman di bagian dalam saja -->
-    <div class="container text-center">
+    <!-- ================= WADAH APLIKASI (DASHBOARD) ================= -->
+    <div id="viewDashboard" class="hidden dashboard-wrapper">
         
-        <!-- ================= VIEW 2: DASHBOARD (PILIH PRODUK) ================= -->
-        <div id="viewDashboard" class="hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
-                
-                <!-- Indikator Saldo Tiket -->
-                <div class="ticket-badge" title="Saldo Tiket">
-                    <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+        <!-- --- KOLOM KIRI: SIDEBAR STATIS --- -->
+        <aside class="sidebar">
+            <!-- 1. Header Sidebar (Logo & Teks Mini) -->
+            <div class="sidebar-header">
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
+                <div class="sidebar-title">
+                    <h2>Smart AI Conversation</h2>
+                    <p>support by : LPK .....</p>
                 </div>
             </div>
-        
-        <div class="form-group">
-            <label>Pilih Modul Percakapan</label>
-            <select id="produkSelect" class="form-control">
-                <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
-                <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
-                <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
-            </select>
-        </div>
-        <div class="form-group" style="margin-top: 15px;">
-            <label>Suara AI Tutor</label>
-            <select id="suaraSelect" class="form-control">
-                <option value="female" selected>Perempuan</option>
-                <option value="male">Laki-laki</option>
-            </select>
-        </div>
 
-        <!-- Kotak Klaim Voucher -->
-        <div class="voucher-box">
-            <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
-            <button id="btnKlaimVoucher">Klaim</button>
-        </div>
-        <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
+            <!-- 2. Menu Navigasi -->
+            <nav class="sidebar-menu">
+                <button class="menu-item active">Dashboard</button>
+                <button class="menu-item">Modul</button>
+                <button class="menu-item">Riwayat</button>
+                <button class="menu-item">Panduan</button>
+                
+                <!-- Spacer gaib untuk mendorong tombol Keluar & Footer -->
+                <div class="menu-spacer"></div>
+                
+                <button class="menu-item btn-keluar" onclick="prosesLogout()">Keluar</button>
+            </nav>
 
-        <div id="dashMsg" class="msg"></div>
-        
-        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
-        
-        <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
+            <!-- 3. Footer Sponsor Neexa -->
+            <div class="sidebar-footer">
+                <p>Powered by <strong>Neexa System</strong></p>
+            </div>
+        </aside>
+
+        <!-- --- KOLOM KANAN: KONTEN UTAMA --- -->
+        <main class="main-content">
+            
+            <!-- KARTU PUTIH (Ini adalah Script Asli Anda yang aman di dalam Kolom Kanan) -->
+            <div class="container text-center">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 style="font-size: 18px; margin: 0; text-align: left;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+                    
+                    <!-- Indikator Saldo Tiket -->
+                    <div class="ticket-badge" title="Saldo Tiket">
+                        <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <label>Pilih Modul Percakapan</label>
+                    <select id="produkSelect" class="form-control">
+                        <option value="KAIWA-BASIC" selected>KAIWA-BASIC (7 Putaran)</option>
+                        <option value="KAIWA-MID">KAIWA-MID (15 Putaran)</option>
+                        <option value="KAIWA-PRO">KAIWA-PRO (30 Putaran)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <label>Suara AI Tutor</label>
+                    <select id="suaraSelect" class="form-control">
+                        <option value="female" selected>Perempuan</option>
+                        <option value="male">Laki-laki</option>
+                    </select>
+                </div>
+
+                <!-- Kotak Klaim Voucher -->
+                <div class="voucher-box">
+                    <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+                    <button id="btnKlaimVoucher">Klaim</button>
+                </div>
+                <div id="voucherMsg" class="msg" style="margin-top: 5px;"></div>
+
+                <div id="dashMsg" class="msg"></div>
+                
+                <button id="btnMulaiKaiwa" class="btn" style="margin-top: 20px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                
+                <button id="btnRiwayat" class="btn btn-outline" style="border-color: #94a3b8; color: #475569;"><i class="fas fa-history"></i> Riwayat Nilai</button>
+            </div>
+            <!-- AKHIR KARTU PUTIH -->
+
+        </main>
     </div>
 
     <!-- ================= VIEW 4: KAIWA ROOM ================= -->
