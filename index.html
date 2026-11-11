@@ -392,49 +392,42 @@
             }
         }
 
+
         /* =========================================
-           CSS TAHAP 4: KARTU PRODUK MODUL
+           CSS TAHAP 4: MASTER-DETAIL & ACCORDION
         ========================================= */
-        .product-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap; /* Agar responsif bertumpuk di HP */
+        /* --- DAFTAR TIER BAR (PERSEGI PANJANG) --- */
+        .tier-bar {
+            display: flex; align-items: center; background: #ffffff;
+            border: 2px solid #e2e8f0; border-radius: 12px; padding: 12px 15px;
+            margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .product-card {
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 20px;
-            width: 250px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-        .product-card:hover {
-            border-color: #94a3b8;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-        }
-        /* Efek Menyala Saat Kartu Dipilih */
-        .product-card.active {
-            border-color: var(--primary);
-            background-color: #f0f9ff;
-            box-shadow: 0 0 0 4px rgba(43, 59, 112, 0.1);
-        }
-        .card-icon { font-size: 40px; margin-bottom: 10px; }
-        .product-card h3 { margin: 0 0 5px 0; color: var(--text-main); font-size: 18px; font-weight: 800; }
-        .product-card p { font-size: 12px; color: #64748b; margin-bottom: 15px; line-height: 1.4; height: 34px;}
-        .card-features { list-style: none; padding: 0; margin: 0 0 20px 0; text-align: left; font-size: 12px; color: #475569; }
-        .card-features li { margin-bottom: 8px; }
-        .card-features i { color: #10b981; margin-right: 5px; }
-        .card-price { font-weight: 800; font-size: 14px; color: var(--text-main); background: #f1f5f9; padding: 8px; border-radius: 10px; transition: 0.2s;}
+        .tier-bar:hover { border-color: var(--primary); background: #f8fafc; transform: translateY(-2px); }
+        .tier-icon { font-size: 24px; margin-right: 15px; background: #f1f5f9; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        .tier-info { flex-grow: 1; text-align: left; }
+        .tier-info h3 { margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: var(--text-main); }
+        .tier-info p { margin: 0; font-size: 11px; color: #64748b; }
+        .tier-price { font-size: 12px; font-weight: 800; color: #d97706; background: #fef3c7; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
         
-        .product-card.active .card-price {
-            background: var(--primary);
-            color: white;
-        }
+        /* --- HALAMAN DETAIL & HEADER TIER --- */
+        .btn-back { background: transparent; border: none; color: #64748b; font-weight: 700; font-size: 13px; cursor: pointer; padding: 0; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-back:hover { color: var(--primary); }
+        .detail-header { background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 12px; }
+        .detail-header h2 { margin: 0 0 10px 0; font-size: 16px; color: var(--primary); font-weight: 800;}
+        .detail-header p { margin: 0 0 5px 0; font-size: 12px; color: #475569; line-height: 1.5; }
+        
+        /* --- ACCORDION TEMA (KARTU MEKAR) --- */
+        .theme-item { border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+        .theme-header { padding: 15px; font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #ffffff; transition: 0.2s; }
+        .theme-header:hover { background: #f8fafc; }
+        .theme-header.active { background: #f8fafc; border-bottom: 2px solid #e2e8f0; }
+        .theme-header .chevron-icon { color: #94a3b8; transition: transform 0.3s ease; }
+        .theme-header.active .chevron-icon { transform: rotate(180deg); }
+        
+        .theme-body { display: none; padding: 15px; background: #f8fafc; }
+        .theme-desc { font-size: 12px; color: #475569; margin: 0 0 15px 0; line-height: 1.5; }
+        .theme-action { background: #fff; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1; }
 
     </style>
 </head>
@@ -570,65 +563,133 @@
                 </div>
             </div>
 
-            <!-- KARDUS 2: MODUL (Area Latihan Kaiwa Premium) -->
-            <div id="tab-modul" style="display: none; padding: 10px;">
-                <div class="container text-center" style="max-width: 900px; margin: auto;">
-                    <h2 style="font-size: 22px; color: var(--text-main); margin-bottom: 5px; font-weight: 800;">Pilih Modul Latihan</h2>
-                    <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">Sesuaikan porsi simulasi Kaiwa dengan target LPK Anda hari ini.</p>
-                    
-                    <!-- Grid 3 Kartu Produk -->
-                    <div class="product-grid">
-                        <!-- Kartu 1: BASIC -->
-                        <div class="product-card" onclick="pilihModul('KAIWA-BASIC', this)">
-                            <div class="card-icon">🐣</div>
-                            <h3>KAIWA BASIC</h3>
-                            <p>Pemanasan ringan untuk melatih insting bahasa.</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 7 Putaran Percakapan</li>
-                                <li><i class="fas fa-check-circle"></i> Topik Keseharian</li>
-                            </ul>
-                            <div class="card-price"><i class="fas fa-gem"></i> 1 Tiket</div>
-                        </div>
+            <!-- ========================================== -->
+            <!-- KARDUS 2: MODUL (DAFTAR & DETAIL TIER) -->
+            <!-- ========================================== -->
+            <div id="tab-modul" style="display: none; padding: 15px;">
+                
+                <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
+                <div id="modul-list-view" style="max-width: 600px; margin: 0 auto;">
+                    <h2 style="font-size: 18px; color: var(--text-main); margin-bottom: 20px; text-align: left;">Pilih Kategori Level</h2>
 
-                        <!-- Kartu 2: MID -->
-                        <div class="product-card" onclick="pilihModul('KAIWA-MID', this)">
-                            <div class="card-icon">🔥</div>
-                            <h3>KAIWA MID</h3>
-                            <p>Latihan standar setara ujian JFT-Basic.</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 15 Putaran Percakapan</li>
-                                <li><i class="fas fa-check-circle"></i> Simulasi Wawancara</li>
-                            </ul>
-                            <div class="card-price"><i class="fas fa-gem"></i> 2 Tiket</div>
+                    <!-- Baris 1: SEIKATSU -->
+                    <div class="tier-bar" onclick="bukaDetailTier('detail-seikatsu')">
+                        <div class="tier-icon">🐣</div>
+                        <div class="tier-info">
+                            <h3>SEIKATSU TIER - PEMULA</h3>
+                            <p>Latihan percakapan ringan sehari-hari.</p>
                         </div>
-
-                        <!-- Kartu 3: PRO -->
-                        <div class="product-card" onclick="pilihModul('KAIWA-PRO', this)">
-                            <div class="card-icon">👑</div>
-                            <h3>KAIWA PRO</h3>
-                            <p>Uji ketahanan mental & kelancaran spontan.</p>
-                            <ul class="card-features">
-                                <li><i class="fas fa-check-circle"></i> 30 Putaran Percakapan</li>
-                                <li><i class="fas fa-check-circle"></i> Topik Random & Kompleks</li>
-                            </ul>
-                            <div class="card-price"><i class="fas fa-gem"></i> 3 Tiket</div>
-                        </div>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 1 Tiket</div>
                     </div>
 
-                    <!-- Area Pengaturan (Tersembunyi, muncul setelah klik kartu) -->
-                    <div id="areaPengaturanLatihan" style="display: none; margin-top: 30px; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px dashed #cbd5e1; max-width: 400px; margin-left: auto; margin-right: auto;">
-                        <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main); font-size: 15px;">Persiapan Akhir</h4>
-                        <div class="form-group" style="text-align: left;">
-                            <label>Suara AI Tutor</label>
-                            <select id="suaraSelect" class="form-control">
-                                <option value="female" selected>Perempuan</option>
-                                <option value="male">Laki-laki</option>
-                            </select>
+                    <!-- Baris 2: INTERVIEW -->
+                    <div class="tier-bar" onclick="bukaDetailTier('detail-interview')">
+                        <div class="tier-icon">💼</div>
+                        <div class="tier-info">
+                            <h3>INTERVIEW TIER - PRO</h3>
+                            <p>Simulasi wawancara kerja & JFT-Basic.</p>
                         </div>
-                        <button id="btnMulaiKaiwa" class="btn" style="margin-top: 15px;"><i class="fas fa-microphone-alt"></i> Mulai Berlatih</button>
+                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 2 Tiket</div>
                     </div>
                 </div>
+
+                <!-- [LAYAR 2A] HALAMAN KHUSUS: SEIKATSU -->
+                <div id="detail-seikatsu" class="modul-detail-view" style="display: none; max-width: 600px; margin: 0 auto; text-align: left;">
+                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                    
+                    <!-- Penjelasan Produk (Bisa diedit bebas nanti) -->
+                    <div class="detail-header">
+                        <h2>SEIKATSU TIER - PEMULA</h2>
+                        <p><strong>Target:</strong> Calon pekerja yang baru berlatih insting bahasa Jepang dasar.</p>
+                        <p><strong>Fungsi:</strong> Melatih keberanian berbicara dalam kondisi harian.</p>
+                        <p><strong>Aturan:</strong> Sesi berlangsung santai selama 7 putaran.</p>
+                    </div>
+
+                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                    
+                    <!-- Tema 1 (Accordion) -->
+                    <div class="theme-item">
+                        <div class="theme-header" onclick="toggleTema(this)">
+                            <span>🛍️ Belanja di Konbini</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="theme-body">
+                            <!-- Penjelasan Tema -->
+                            <p class="theme-desc">Latihan percakapan saat membeli barang, menanyakan letak barang, dan meminta kantong plastik di minimarket Jepang.</p>
+                            
+                            <!-- OPSI A: Pilih Suara & Tombol Mulai -->
+                            <div class="theme-action">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label>Suara AI Tutor</label>
+                                    <select class="form-control suara-select-dinamis">
+                                        <option value="female" selected>Perempuan</option>
+                                        <option value="male">Laki-laki</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SEIKATSU-KONBINI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tema 2 (Accordion) -->
+                    <div class="theme-item">
+                        <div class="theme-header" onclick="toggleTema(this)">
+                            <span>👋 Perkenalan Diri (Jikoshoukai)</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="theme-body">
+                            <p class="theme-desc">Latihan memperkenalkan diri, menyebutkan nama, asal Indonesia, dan hobi dengan sopan.</p>
+                            <div class="theme-action">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label>Suara AI Tutor</label>
+                                    <select class="form-control suara-select-dinamis">
+                                        <option value="female" selected>Perempuan</option>
+                                        <option value="male">Laki-laki</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('SEIKATSU-JIKOSHOUKAI', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (1 Tiket)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [LAYAR 2B] HALAMAN KHUSUS: INTERVIEW -->
+                <div id="detail-interview" class="modul-detail-view" style="display: none; max-width: 600px; margin: 0 auto; text-align: left;">
+                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                    
+                    <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
+                        <h2 style="color: #e11d48;">INTERVIEW TIER - PRO</h2>
+                        <p><strong>Target:</strong> Kandidat yang bersiap menghadapi wawancara kerja.</p>
+                        <p><strong>Fungsi:</strong> Menguji mental dan kesiapan menjawab HRD Jepang.</p>
+                        <p><strong>Aturan:</strong> Sesi tegang selama 15 putaran, butuh 2 tiket.</p>
+                    </div>
+
+                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                    
+                    <!-- Tema Interview -->
+                    <div class="theme-item">
+                        <div class="theme-header" onclick="toggleTema(this)">
+                            <span>🏭 Wawancara Pabrik Manufaktur</span>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        <div class="theme-body">
+                            <p class="theme-desc">Simulasi dengan HRD pabrik. Pertanyaan fokus pada kesiapan kerja fisik, lembur, dan kedisiplinan.</p>
+                            <div class="theme-action">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label>Suara AI Tutor</label>
+                                    <select class="form-control suara-select-dinamis">
+                                        <option value="male" selected>Laki-laki (Tegas)</option>
+                                        <option value="female">Perempuan</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('INTERVIEW-PABRIK', this)"><i class="fas fa-microphone-alt"></i> Mulai Berlatih (2 Tiket)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+            <!-- ================= AKHIR KARDUS 2 ================= -->
 
             <!-- KARDUS 3: RIWAYAT -->
             <div id="tab-riwayat" style="display: none;">
@@ -1307,27 +1368,50 @@
         document.getElementById('btn-tab-' + namaTab).classList.add('active');
     }
 
-    // =========================================================
-    // FUNGSI MEMILIH KARTU MODUL (TAHAP 4)
-    // =========================================================
-    let produkPilihan = ""; // Variabel penyimpan pilihan sementara
 
-    function pilihModul(namaModul, elemenKartu) {
-        produkPilihan = namaModul; // Simpan nama modul yang dipilih
+        // =========================================================
+        // MESIN TAHAP 4: MASTER-DETAIL & ACCORDION TEMA
+        // =========================================================
         
-        // 1. Matikan efek aktif di semua kartu
-        let semuaKartu = document.querySelectorAll('.product-card');
-        semuaKartu.forEach(kartu => kartu.classList.remove('active'));
+        // 1. Fungsi Pindah dari Daftar Tier ke Halaman Khusus Tier
+        function bukaDetailTier(idDetail) {
+            document.getElementById('modul-list-view').style.display = 'none';
+            document.getElementById(idDetail).style.display = 'block';
+        }
 
-        // 2. Nyalakan efek aktif HANYA di kartu yang diklik
-        elemenKartu.classList.add('active');
+        // 2. Fungsi Tombol "Kembali"
+        function kembaliKeDaftarTier() {
+            let semuaDetail = document.querySelectorAll('.modul-detail-view');
+            semuaDetail.forEach(el => el.style.display = 'none');
+            document.getElementById('modul-list-view').style.display = 'block';
+        }
 
-        // 3. Munculkan area pengaturan suara dan tombol Mulai Berlatih
-        document.getElementById('areaPengaturanLatihan').style.display = 'block';
-        
-        // Opsional: Gulir layar sedikit ke bawah agar tombol Mulai terlihat di HP
-        document.getElementById('areaPengaturanLatihan').scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
+        // 3. Fungsi Kartu Mekar (Accordion) untuk Opsi A
+        function toggleTema(elemenHeader) {
+            let elemenBody = elemenHeader.nextElementSibling;
+            let isTerbuka = elemenHeader.classList.contains('active');
+            
+            // Tutup semua tema lain yang sedang terbuka agar rapi
+            let semuaHeader = document.querySelectorAll('.theme-header');
+            let semuaBody = document.querySelectorAll('.theme-body');
+            semuaHeader.forEach(h => h.classList.remove('active'));
+            semuaBody.forEach(b => b.style.display = 'none');
+
+            // Jika tadi ditutup, maka mekarkan!
+            if (!isTerbuka) {
+                elemenHeader.classList.add('active');
+                elemenBody.style.display = 'block';
+            }
+        }
+
+        // 4. Pengganti Tombol "Mulai Kaiwa" Lama
+        function mulaiLatihan(kodeTema, elemenTombol) {
+            let wrapper = elemenTombol.closest('.theme-action');
+            let suaraSelect = wrapper.querySelector('.suara-select-dinamis').value;
+            
+            // Ini alert sementara, nanti kita sambungkan ke GAS untuk potong tiket
+            alert("Memulai Latihan!\nTema: " + kodeTema + "\nSuara: " + suaraSelect);
+        }
 
 </script>
 </body>
