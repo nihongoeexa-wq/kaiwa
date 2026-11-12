@@ -478,25 +478,9 @@
                     </div>
                     <!-- ============================================== -->
 
-                    <!-- TOMBOL GOOGLE (BYPASS COOP) -->
-                    <div class="google-btn-wrapper" style="display: flex; flex-direction: column; align-items: center;">
-                        <div id="g_id_onload"
-                             data-client_id="1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"
-                             data-context="signin"
-                             data-ux_mode="popup"
-                             data-callback="handleCredentialResponse"
-                             data-auto_prompt="false"
-                             data-use_fedcm_for_prompt="true">
-                        </div>
-                        <div class="g_id_signin"
-                             data-type="standard"
-                             data-shape="rectangular"
-                             data-theme="outline"
-                             data-text="signin_with"
-                             data-size="large"
-                             data-logo_alignment="center"
-                             data-width="250">
-                        </div>
+                    <!-- TOMBOL GOOGLE (TUNGGAL & BERSIH) -->
+                    <div class="google-btn-wrapper" style="display: flex; justify-content: center; margin-top: 15px; min-height: 44px;">
+                        <div id="googleButtonDiv"></div>
                     </div>
                     
                     <div id="loginMsg" class="msg"></div>
@@ -951,39 +935,38 @@
         .catch(err => console.error("Gagal memuat FingerprintJS:", err));
 
     // =========================================================
-    // 2. KONFIGURASI GOOGLE OAUTH (ANTI-BENTROK SCRIPT)
+    // 2. KONFIGURASI GOOGLE OAUTH (TUNGGAL & AMAN)
     // =========================================================
     let isGoogleAuthLoaded = false;
 
-    // KUNCI UTAMA: Gunakan addEventListener agar tidak menimpa script lain!
     window.addEventListener('load', function () {
         initGoogleOAuthSafe();
     });
 
     function initGoogleOAuthSafe() {
-        if (isGoogleAuthLoaded) return; // Cegah eksekusi ganda
+        if (isGoogleAuthLoaded) return;
 
-        // Jika library Google belum siap, antre 0.5 detik lagi
         if (typeof google === 'undefined' || !google.accounts) {
             setTimeout(initGoogleOAuthSafe, 500);
             return;
         }
         
+        const btnContainer = document.getElementById("googleButtonDiv");
+        if (!btnContainer) return;
+
         try {
             google.accounts.id.initialize({
                 client_id: GOOGLE_CLIENT_ID,
                 callback: handleCredentialResponse,
-                use_fedcm_for_prompt: true,
-                auto_select: true // Membantu memperlancar login ulang
+                use_fedcm_for_prompt: false // Matikan FedCM agar tidak bentrok dengan COOP popup standar
             });
             
             google.accounts.id.renderButton(
-                document.getElementById("googleButtonDiv"),
+                btnContainer,
                 { theme: "outline", size: "large", width: 250, shape: "rectangular" }
             );
 
-            isGoogleAuthLoaded = true; // Kunci rapat!
-            
+            isGoogleAuthLoaded = true;
         } catch (error) {
             console.error("Gagal merender tombol Google:", error);
             showMsg('loginMsg', 'error', 'Sistem login gagal dimuat. Silakan refresh halaman.');
@@ -994,12 +977,9 @@
     async function handleCredentialResponse(response) {
         showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akun...');
         
-        // Decode Token JWT dari Google untuk mendapat Email dan Nama
         const responsePayload = decodeJwtResponse(response.credential);
         const emailGoogle = responsePayload.email;
         const namaGoogle = responsePayload.name;
-        
-        // Ambil Mode (Masuk atau Daftar)
         const authMode = document.querySelector('input[name="authMode"]:checked').value;
 
         try {
@@ -1019,49 +999,40 @@
                     email: data.data.email,
                     saldo: Number(data.data.saldo),
                     riwayat: data.data.riwayat || "",
-                    koin: Number(data.data.koin) || 0, // <-- TAMBAHKAN INI
-                    sesi: Number(data.data.sesi) || 0  // <-- TAMBAHKAN INI
+                    koin: Number(data.data.koin) || 0,
+                    sesi: Number(data.data.sesi) || 0
                 };
                 
-                // Update Data ke UI Dashboard V2
-                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
-                document.getElementById('userEmailDisplay').innerText = KAIWA_USER.email;
-                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
-                document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin; // <-- TAMBAHKAN INI
-                document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi; // <-- TAMBAHKAN INI
-                // ==========================================
                 // Tarik profil custom dari penyimpanan HP Siswa
                 const savedAvatar = localStorage.getItem('neexa_avatar');
                 const savedNama = localStorage.getItem('neexa_nama');
                 
                 if (savedNama) KAIWA_USER.nama = savedNama;
-                
-                // Gunakan avatar dari HP, atau gunakan avatar GitHub laki-laki sebagai Default
                 KAIWA_USER.avatar = savedAvatar || "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png"; 
                 
-                // Update ke Layar Header Dashboard
+                // Update Data ke UI Dashboard V2 (Dengan Pengaman Elemen)
                 document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                const elEmail = document.getElementById('userEmailDisplay');
+                if (elEmail) elEmail.innerText = KAIWA_USER.email; // Aman meskipun elemen dihapus!
+                
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+                document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
                 document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
-                // ==========================================
-
-                // ...
                 
                 showView('dashboard');
-                
-                // ================================================
-                // MANTRA AJAIB PENYEMBUH LAYAR KOSONG SAAT LOGIN:
                 bukaTab('dashboard'); 
-                // ================================================
                 
                 muatDaftarProduk(); 
                 showMsg('dashMsg', 'success', data.message);
                 
-            } else { // <--- SEKARANG SUDAH BENAR (Hanya 1 kurung tutup sebelumnya)
+            } else {
                 showMsg('loginMsg', 'error', data.message);
                 kirimBlackBox("Proses Login/Daftar OAuth", data.message);
             }
         } catch (err) {
-            showMsg('loginMsg', 'error', 'Gagal menghubungi server database.');
+            console.error("Detail Error Login:", err);
+            showMsg('loginMsg', 'error', 'Gagal memproses login: ' + err.message);
             kirimBlackBox("Koneksi GAS (OAuth)", err.message);
         }
     }
@@ -1596,14 +1567,16 @@
 
     // Script untuk tombol Landing Page
         function tampilkanAreaLogin() {
-            document.getElementById('areaAutentikasi').style.display = 'block';
-            document.getElementById('judulAuth').innerText = "Silakan Masuk dengan Akun Google";
-        }
+        document.getElementById('modeMasuk').checked = true;
+        document.getElementById('areaAutentikasi').style.display = 'block';
+        document.getElementById('judulAuth').innerText = "Silakan Masuk dengan Akun Google";
+    }
 
-        function tampilkanAreaDaftar() {
-            document.getElementById('areaAutentikasi').style.display = 'block';
-            document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
-        }
+    function tampilkanAreaDaftar() {
+        document.getElementById('modeDaftar').checked = true;
+        document.getElementById('areaAutentikasi').style.display = 'block';
+        document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
+    }
 
     // =========================================================
     // FUNGSI POPUP PROFIL (HEADER ATAS)
