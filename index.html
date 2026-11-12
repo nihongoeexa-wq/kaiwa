@@ -1,463 +1,1598 @@
-/****************************************************
- * NEEXA KAIWA - DEDICATED BACKEND (LAYER 1 - B2C)
- * Terhubung ke Spreadsheet: DATA BASE KAIWA Neexa
- ****************************************************/
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neexa Kaiwa - AI Tutor</title>
+    
+    <!-- Pustaka Font & Ikon Asli -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- PUSTAKA BARU: Google OAuth & FingerprintJS -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
-const CONFIG = {
-  SS_ID: '1E9vi1wIwlB5decVJUgk1ojfyOxVYNWQDIV0ndN4t1SU',
-  SHEET_USERS: 'USERS',
-  SHEET_RAPOR: 'RAPOR', 
-  SHEET_KEUANGAN: 'CATATAN_KEUANGAN',
-  SHEET_VOUCHER: 'KODE_VOUCHER',
-  SHEET_PROMO: 'PENGATURAN_PROMO',
-  SHEET_PRODUK: 'PRODUK', // <-- TAMBAHAN BARU agar lebih rapi
-  COL_USERS: {
-    NO: 0, TIMESTAMP: 1, EMAIL: 2, NAMA: 3, TIKET: 4, STATUS: 5, DEVICE: 6, RAPOR: 7, KOIN: 8, SESI: 9
-  }
-};
+    <style>
+        /* =========================================
+           WARNA TEMA UTAMA (DIEKSTRAK DARI LOGO)
+        ========================================= */
+        :root {
+            --primary: #2B3B70; /* Biru Indigo Neexa */
+            --primary-hover: #1A2548; /* Bayangan Biru Gelap */
+            --bg-color: #F4F7FA; /* Latar belakang abu-abu kebiruan halus */
+            --surface: #ffffff;
+            --text-main: #0F3540; /* Teal/Hijau Tua Neexa */
+            --text-muted: #83A0C0; /* Biru Baja Muda Neexa */
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            /* Keterangan: display flex (penengah layar) dihapus agar 
+               Landing Page baru bisa membentang penuh (full-screen) */
+        }
 
-function doPost(e) {
-  try {
-    // 1. BLOK RADAR & LOGGING OTOMATIS (Menangkap parameter URL / no-cors)
-    if (e && e.parameter && (e.parameter.action === 'log_error' || e.parameter.action === 'log_aktivitas' || e.parameter.action === 'log_penolakan')) {
-      const ss = SpreadsheetApp.openById(CONFIG.SS_ID); 
-      const act = e.parameter.action;
-      
-      if (act === 'log_error') {
-        catatLogOtomatis(ss, 'Log_Error', [e.parameter.waktu, e.parameter.siswa, e.parameter.lokasi, e.parameter.pesan, e.parameter.mesin]);
-        return ContentService.createTextOutput("Log Error diamankan");
-      }
-      if (act === 'log_aktivitas') {
-        catatLogOtomatis(ss, 'Log_Aktivitas', [e.parameter.waktu, e.parameter.siswa, "Sukses Dibalas", e.parameter.mesin]);
-        return ContentService.createTextOutput("Log Aktivitas diamankan");
-      }
-      if (act === 'log_penolakan') {
-        catatLogOtomatis(ss, 'Log_Penolakan', [e.parameter.waktu, e.parameter.siswa, e.parameter.pesan]);
-        return ContentService.createTextOutput("Log Penolakan diamankan");
-      }
+        /* Container Asli (Untuk Dashboard, Ruang Kaiwa, Rapor nanti) */
+        .container {
+            background: var(--surface);
+            width: 90%;
+            max-width: 450px;
+            margin: 50px auto; /* Ini yang membuat kotak login/dashboard tetap ke tengah */
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(43, 59, 112, 0.1);
+            position: relative;
+        }
+        
+        .text-center { text-align: center; }
+        .hidden { display: none !important; }
+
+        /* =========================================
+           CSS BARU: LAYER 1 (LANDING PAGE NEEXA-LINGO)
+           (Versi Clean & Responsive Lock)
+        ========================================= */
+        
+        /* --- 1. AREA LOGO & TEKS SAMPING --- */
+        .landing-header { 
+            text-align: center; 
+            /* Bantalan diperkecil agar header lebih rapat ke atas tanpa butuh joystick */
+            padding: 20px 0 10px 0; 
+            margin-bottom: 0px; 
+            
+            /* Menahan agar kelompok logo & teks PASTI tepat di tengah layar */
+            display: flex;
+            justify-content: center; 
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center; 
+            gap: 15px; 
+            
+            /* Fitur Joystick dinolkan agar fungsi 'Center' di atas bekerja sempurna */
+            position: relative;
+            left: 0px; 
+            top: 0px; 
+        }
+
+        .header-content img { 
+            /* Ukuran terkunci sesuai pilihan Anda */
+            max-width: 80px; 
+            height: auto; 
+        }
+
+        .header-text {
+            text-align: left; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-text h2 {
+            margin: 0; color: var(--text-main); font-weight: 800; line-height: 1.1; 
+            font-size: 24px; /* Ukuran terkunci */
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0; color: var(--text-muted); font-weight: 600; 
+            font-size: 13px; /* Ukuran terkunci */
+        }
+
+        /* --- 2. BUNGKUSAN UTAMA (KIRI & KANAN) --- */
+        .landing-container {
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; margin: 0 auto; padding: 20px; 
+            max-width: 1100px; gap: 40px; 
+        }
+
+        /* Aturan KHUSUS layar Laptop/Desktop (Mobile Lock) */
+        @media (min-width: 768px) {
+            .landing-container { flex-direction: row; padding: 20px 40px; gap: 60px; }
+            .hero-image-box, .hero-text-box { flex: 1; }
+            
+            .hero-text-box {
+                text-align: left; 
+                align-items: flex-start;
+            }
+            
+            /* Posisi geser Anda dipindah ke sini agar tidak merusak tampilan HP */
+            .hero-image-box img { left: -30px; }
+            .hero-text-box { left: -20px; }
+        }
+
+        /* --- 3. AREA ILUSTRASI (KOTAK KUNING) --- */
+        .hero-image-box { text-align: center; }
+        .hero-image-box img {
+            width: 100%; 
+            /* Ukuran terkunci sesuai pilihan Anda */
+            max-width: 520px; 
+            
+            position: relative;
+            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
+            top: 0px; 
+            /* Left dikendalikan oleh @media di atas agar aman di HP */
+            left: 0px; 
+            
+            animation: float-anim 4s ease-in-out infinite; 
+        }
+
+        @keyframes float-anim {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); } 
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- 4. AREA TEKS & TOMBOL (KOTAK HIJAU) --- */
+        .hero-text-box {
+            text-align: center; display: flex; flex-direction: column; 
+            margin: 0 auto; gap: 18px; max-width: 420px; 
+            
+            position: relative;
+            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
+            top: 0px; 
+            /* Left dikendalikan oleh @media di atas agar aman di HP */
+            left: 0px; 
+        }
+
+        .hero-text-box h1 {
+            color: var(--text-main); font-weight: 800; line-height: 1.3; margin-bottom: 10px; 
+            font-size: 32px; 
+            position: relative; left: 0px; top: 0px; 
+        }
+
+        /* --- 5. TOMBOL 3D --- */
+        .btn-3d {
+            display: block; width: 100%; padding: 16px; font-size: 15px; 
+            font-weight: 800; text-align: center; text-decoration: none; 
+            border-radius: 16px; cursor: pointer; text-transform: uppercase; 
+            letter-spacing: 1px; transition: all 0.1s; border: none; box-sizing: border-box;
+        }
+        .btn-mulai { background-color: var(--primary); color: #FFFFFF; box-shadow: 0 6px 0 var(--primary-hover); }
+        .btn-mulai:active { transform: translateY(6px); box-shadow: 0 0px 0 var(--primary-hover); }
+        
+        .btn-belum-akun { background-color: #FFFFFF; color: var(--primary); border: 2px solid #E5E5E5; box-shadow: 0 4px 0 #E5E5E5; }
+        .btn-belum-akun:active { transform: translateY(4px); box-shadow: 0 0px 0 #E5E5E5; }
+
+        /* --- 6. FOOTER --- */
+        .support-footer {
+            /* Margin ekstrem dihapus, menggunakan jarak normal yang rapi ke atas */
+            margin-top: 40px; 
+            padding: 10px 20px; border-top: 2px solid #E5E5E5; 
+            text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600;
+
+            position: relative;
+            left: 0px; 
+            top: 0px; 
+        }
+        .support-footer p { margin: 5px 0; }
+
+        /* =========================================
+           CSS ASLI ANDA (DIPERTAHANKAN UNTUK BAGIAN DALAM)
+        ========================================= */
+        .ticket-badge {
+            background: #fef08a; color: #854d0e; padding: 6px 15px; border-radius: 20px; 
+            font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; 
+            gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px;
+        }
+        
+        .voucher-box { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px; border-radius: 10px; margin-top: 15px; display: flex; gap: 8px; }
+        .voucher-box input { flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; text-transform: uppercase; }
+        .voucher-box button { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .voucher-box button:hover { background: var(--primary-hover); }
+
+        .google-btn-wrapper { display: flex; justify-content: center; margin-top: 15px; min-height: 44px; }
+
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
+        .form-control { width: 100%; padding: 12px 15px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 15px; box-sizing: border-box; transition: 0.3s; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(43, 59, 112, 0.15); }
+        
+        .btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
+        .btn-outline:hover:not(:disabled) { background: #f0fdfa; }
+        
+        .msg { font-size: 13px; font-weight: 600; margin-top: 10px; padding: 10px; border-radius: 8px; display: none; }
+        .msg.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; display: block; }
+        .msg.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
+        .msg.loading { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; display: block; }
+
+        .rapor-grid { display: flex; justify-content: space-around; margin: 20px 0; }
+        .rapor-item { display: flex; flex-direction: column; align-items: center; }
+        .circular-chart { width: 70px; height: 70px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; font-size: 16px; color: var(--primary); background: #e2e8f0; transition: background 1s ease-out; }
+        .circular-inner { width: 54px; height: 54px; border-radius: 50%; background: var(--surface); display: flex; justify-content: center; align-items: center; }
+        .rapor-title { font-size: 12px; font-weight: 600; margin-top: 8px; color: var(--text-main); }
+        .rapor-feedback { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 10px; font-size: 13px; }
+        .rapor-feedback strong { color: var(--primary); display: block; margin-bottom: 5px; }
+
+        .kaiwa-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .mic-btn { width: 80px; height: 80px; border-radius: 50%; background: #ef4444; color: white; font-size: 30px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); transition: 0.2s; }
+        .mic-btn:hover { transform: scale(1.05); }
+
+        /* =========================================
+           CSS TAHAP 3: DASHBOARD V2 & FREEZE HEADER
+        ========================================= */
+        
+        .dashboard-wrapper {
+            display: flex; height: 100vh; background-color: #F7F9FA; overflow: hidden;
+        }
+
+        /* --- KOLOM KIRI (SIDEBAR) --- */
+        .sidebar {
+            width: 260px; background-color: #FFFFFF; border-right: 2px solid #E5E5E5;
+            display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; z-index: 10;
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+        .sidebar-logo { width: 45px; height: auto; }
+        .sidebar-title h2 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.1; }
+
+        .sidebar-menu { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .menu-item {
+            padding: 14px 20px; background: transparent; border: 2px solid transparent;
+            border-radius: 12px; text-align: left; font-size: 14px; font-weight: 800;
+            color: #777777; cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+        }
+        .menu-item:hover { background-color: #F7F9FA; }
+        .menu-item.active { background-color: #DDF4FF; color: var(--primary); border: 2px solid #84D8FF; }
+        .menu-spacer { flex-grow: 1; }
+
+        .sidebar-footer { margin-top: 20px; padding-top: 20px; border-top: 2px solid #E5E5E5; text-align: center; }
+        .sidebar-footer h3 { margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px; }
+        .footer-support { margin: 5px 0 2px 0; font-size: 11px; font-weight: 700; color: var(--text-muted); }
+
+        /* --- AREA KANAN (HEADER + KONTEN) --- */
+        .main-area {
+            flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+        }
+
+        /* HEADER ATAS (FREEZE) */
+        .top-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background: #FFFFFF; border-bottom: 2px solid #E5E5E5; z-index: 5;
+        }
+        .welcome-text { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 700; }
+        .highlight-text { color: var(--primary); }
+
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .stat-group { display: flex; gap: 10px; }
+        .stat-badge {
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; font-weight: 800;
+            display: flex; align-items: center; gap: 8px; border: 2px solid transparent; cursor: default;
+        }
+        .stat-sesi { color: #ea580c; background: #ffedd5; border-color: #fed7aa; }
+        .stat-koin { color: #b45309; background: #fef08a; border-color: #fde047; }
+        .stat-tiket { color: #0284c7; background: #e0f2fe; border-color: #bae6fd; }
+
+        /* PROFIL POPUP */
+        .profile-menu { position: relative; cursor: pointer; }
+        .profile-avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white;
+            display: flex; justify-content: center; align-items: center; font-size: 18px;
+            border: 2px solid #E5E5E5; transition: 0.2s;
+        }
+        .profile-avatar:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .profile-popup {
+            position: absolute; top: 50px; right: 0; background: white; padding: 15px;
+            border-radius: 12px; border: 2px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            min-width: 200px; text-align: center; z-index: 100;
+        }
+        .profile-email { margin: 0 0 15px 0; font-size: 13px; font-weight: 700; color: #475569; word-break: break-all; }
+        .btn-logout-popup {
+            width: 100%; padding: 10px; background: #fee2e2; color: #ef4444; border: none;
+            border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-logout-popup:hover { background: #fecaca; }
+
+        /* KONTEN UTAMA SCROLLABLE */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+
+        /* GRID DASHBOARD */
+        .dashboard-grid { display: flex; gap: 30px; }
+        .dash-left { flex: 7; display: flex; flex-direction: column; gap: 25px; }
+        .dash-right { flex: 3; display: flex; flex-direction: column; gap: 20px; }
+
+        /* BANNER DASHBOARD */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), #3b5098); border-radius: 20px;
+            padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(43,59,112,0.15);
+        }
+        .banner-text { position: relative; z-index: 2; max-width: 70%; }
+        .banner-text h2 { margin: 0 0 10px 0; font-size: 24px; font-weight: 800; }
+        .banner-text p { margin: 0 0 20px 0; font-size: 14px; line-height: 1.5; opacity: 0.9; }
+        .btn-banner {
+            background: #fef08a; color: #854d0e; border: none; padding: 12px 24px; border-radius: 12px;
+            font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-banner:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .banner-img { position: absolute; right: 20px; bottom: -20px; z-index: 1; }
+
+        /* STATISTIK KARTU */
+        .stats-cards-container { display: flex; gap: 20px; }
+        .stat-card {
+            flex: 1; background: white; border: 2px solid #e2e8f0; border-radius: 16px;
+            padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .stat-card .stat-icon {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center;
+            align-items: center; font-size: 24px;
+        }
+        .stat-card .stat-info h4 { margin: 0 0 5px 0; font-size: 12px; color: #64748b; text-transform: uppercase; }
+        .stat-card .stat-info p { margin: 0; font-size: 16px; font-weight: 800; color: var(--text-main); }
+
+        /* WIDGET KANAN */
+        .widget-box { background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .widget-box h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--text-main); }
+        .widget-box p { margin: 0 0 15px 0; font-size: 13px; color: #64748b; line-height: 1.5; }
+        .voucher-widget input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; box-sizing: border-box; }
+        .voucher-widget button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .voucher-widget button:hover { background: var(--primary-hover); }
+
+        /* MANTRA HP (RESPONSIVE) */
+        @media (max-width: 768px) {
+            .dashboard-wrapper { flex-direction: column; overflow-y: auto; height: auto; min-height: 100vh;}
+            .sidebar { width: 100%; border-right: none; border-bottom: 2px solid #E5E5E5; padding: 15px; }
+            .sidebar-header { margin-bottom: 15px; }
+            .sidebar-menu { flex-direction: row; overflow-x: auto; padding-bottom: 5px; gap: 10px; }
+            .menu-item { padding: 10px 15px; font-size: 12px; white-space: nowrap; }
+            .sidebar-footer { display: none; }
+            
+            .main-area { height: auto; overflow: visible; }
+            .top-header { padding: 15px; flex-direction: column; gap: 15px; align-items: flex-start; }
+            .header-right { width: 100%; justify-content: space-between; overflow-x: auto;}
+            
+            .main-content { padding: 20px 15px; }
+            .dashboard-grid { flex-direction: column; }
+            .stats-cards-container { flex-direction: column; }
+            .banner-text { max-width: 100%; }
+            .banner-img { display: none; }
+        }
+
+
+        /* =========================================
+           CSS TAHAP 4: MASTER-DETAIL & ACCORDION
+        ========================================= */
+        /* --- DAFTAR TIER BAR (PERSEGI PANJANG) --- */
+        .tier-bar {
+            display: flex; align-items: center; background: #ffffff;
+            border: 2px solid #e2e8f0; border-radius: 12px; padding: 12px 15px;
+            margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .tier-bar:hover { border-color: var(--primary); background: #f8fafc; transform: translateY(-2px); }
+        .tier-icon { font-size: 24px; margin-right: 15px; background: #f1f5f9; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        .tier-info { flex-grow: 1; text-align: left; }
+        .tier-info h3 { margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: var(--text-main); }
+        .tier-info p { margin: 0; font-size: 11px; color: #64748b; }
+        .tier-price { font-size: 12px; font-weight: 800; color: #d97706; background: #fef3c7; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+        
+        /* --- HALAMAN DETAIL & HEADER TIER --- */
+        .btn-back { background: transparent; border: none; color: #64748b; font-weight: 700; font-size: 13px; cursor: pointer; padding: 0; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-back:hover { color: var(--primary); }
+        .detail-header { background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 12px; }
+        .detail-header h2 { margin: 0 0 10px 0; font-size: 16px; color: var(--primary); font-weight: 800;}
+        .detail-header p { margin: 0 0 5px 0; font-size: 12px; color: #475569; line-height: 1.5; }
+        
+        /* --- ACCORDION TEMA (KARTU MEKAR) --- */
+        .theme-item { border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+        .theme-header { padding: 15px; font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #ffffff; transition: 0.2s; }
+        .theme-header:hover { background: #f8fafc; }
+        .theme-header.active { background: #f8fafc; border-bottom: 2px solid #e2e8f0; }
+        .theme-header .chevron-icon { color: #94a3b8; transition: transform 0.3s ease; }
+        .theme-header.active .chevron-icon { transform: rotate(180deg); }
+        
+        .theme-body { display: none; padding: 15px; background: #f8fafc; }
+        .theme-desc { font-size: 12px; color: #475569; margin: 0 0 15px 0; line-height: 1.5; }
+        .theme-action { background: #fff; padding: 15px; border-radius: 8px; border: 1px dashed #cbd5e1; }
+
+    </style>
+</head>
+<body>
+
+<!-- Mantra Ajaib CSS: Menyembunyikan kotak aplikasi (Dashboard) selama Landing Page masih terbuka -->
+    <style>
+        #viewLogin:not(.hidden) + .container { display: none; }
+    </style>
+
+    <!-- ================= VIEW 1: LANDING PAGE NEEXA-LINGO ================= -->
+    <!-- (Perhatikan: ID tetap "viewLogin" agar script JS Anda tetap berfungsi normal) -->
+    <div id="viewLogin">
+        
+        <!-- KOTAK MERAH: Logo & Judul Samping -->
+        <div class="landing-header">
+            <!-- Pembungkus agar logo dan teks berjejer -->
+            <div class="header-content">
+                
+                <!-- Logo -->
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
+                
+                <!-- Teks di samping Logo -->
+                <div class="header-text">
+                    <h2>Smart AI Conversation</h2>
+                    <p>support by : LPK .....</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="landing-container">
+            <!-- KOTAK KUNING: Gambar Ilustrasi (Kiri) -->
+            <div class="hero-image-box">
+                <!-- Link sudah diganti dengan URL asli gambar LP IMG1.png di GitHub -->
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
+            </div>
+
+            <!-- KOTAK HIJAU: Teks & Tombol (Kanan) -->
+            <div class="hero-text-box">
+                <h1>Cara paling seru dan cerdas untuk berlatih Kaiwa!</h1>
+                
+                <!-- Tombol 3D bergaya Duolingo -->
+                <button class="btn-3d btn-mulai" onclick="tampilkanAreaLogin()">MULAI</button>
+                <button class="btn-3d btn-belum-akun" onclick="tampilkanAreaDaftar()">AKU BELUM PUNYA AKUN</button>
+                
+                <!-- Area tombol Google (Awalnya tersembunyi, muncul jika tombol di atas diklik) -->
+                <div id="areaAutentikasi" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 16px; border: 2px solid #e5e5e5;">
+                    <p style="margin-top:0; font-size: 14px; color: var(--primary); font-weight: bold;" id="judulAuth">Silakan Masuk</p>
+                    
+                    <!-- INI ELEMEN YANG HILANG (Radio Button Tersembunyi) -->
+                    <div style="display: none;">
+                        <input type="radio" name="authMode" id="modeMasuk" value="masuk" checked>
+                        <input type="radio" name="authMode" id="modeDaftar" value="daftar">
+                    </div>
+                    <!-- ============================================== -->
+
+                    <div class="google-btn-wrapper">
+                        <div id="googleButtonDiv"></div>
+                    </div>
+                    
+                    <div id="loginMsg" class="msg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KOTAK BIRU: Support System Footer -->
+        <div class="support-footer">
+            <p>SUPPORT SYSTEM BY LPK ... (Isi Nama LPK)</p>
+            <p>📍 Alamat Lengkap LPK atau Perusahaan Anda di sini</p>
+            <p>© 2026 NEEXA System. Hak Cipta Dilindungi.</p>
+        </div>
+    </div>
+
+    <!-- ================= WADAH APLIKASI (DASHBOARD V2) ================= -->
+    <div id="viewDashboard" class="hidden dashboard-wrapper">
+        
+        <!-- --- 1. KOLOM KIRI (SIDEBAR STATIS) --- -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
+                <div class="sidebar-title">
+                    <h2>Smart AI</h2>
+                    <h2>Conversation</h2>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">Dashboard</button>
+                <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul Latihan</button>
+                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat')">Riwayat Nilai</button>
+                <!-- Menu Baru -->
+                <button class="menu-item" id="btn-tab-toko" onclick="bukaTab('toko')">Toko Voucher</button>
+                <button class="menu-item" id="btn-tab-tukar" onclick="bukaTab('tukar')">Tukar Koin</button>
+                
+                <button class="menu-item" id="btn-tab-panduan" onclick="bukaTab('panduan')">Panduan</button>
+                
+                <div class="menu-spacer"></div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <h3>NEEXA SYSTEM</h3>
+                <p class="footer-support">Support By : LPK .......</p>
+            </div>
+        </aside>
+
+        <!-- --- AREA KANAN (HEADER + KONTEN) --- -->
+        <div class="main-area">
+            
+            <!-- --- 2. HEADER ATAS (FREEZE BAR) --- -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
+                </div>
+                <div class="header-right">
+                    <!-- Stat Bar -->
+                    <div class="stat-group">
+                        <div class="stat-badge stat-sesi" title="Total Sesi">
+                            <i class="fas fa-fire"></i> <span id="totalSesiDisplay">0</span>
+                        </div>
+                        <div class="stat-badge stat-koin" title="Saldo Koin">
+                            <i class="fas fa-coins"></i> <span id="saldoKoinDisplay">0</span>
+                        </div>
+                        <div class="stat-badge stat-tiket" title="Saldo Tiket">
+                            <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
+                        </div>
+                    </div>
+                    <!-- Profil -->
+                    <div class="profile-menu" onclick="toggleProfilePopup()">
+                        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                        <div id="profilePopup" class="profile-popup hidden">
+                            <p class="profile-email" id="userEmailDisplay">user@email.com</p>
+                            <button class="btn-logout-popup" onclick="prosesLogout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- --- 3. AREA KONTEN SCROLLABLE --- -->
+            <main class="main-content">
+                
+                <!-- KARDUS 1: DASHBOARD (Layout Kiri Kanan) -->
+                <div id="tab-dashboard" style="display: none;">
+                    <div class="dashboard-grid">
+                        
+                        <!-- Area Kiri Dashboard (70%) -->
+                        <div class="dash-left">
+                            <!-- Banner Utama -->
+                            <div class="welcome-banner">
+                                <div class="banner-text">
+                                    <h2>Siap berlatih Kaiwa hari ini?</h2>
+                                    <p>Tingkatkan insting bahasa Jepangmu agar siap menghadapi ujian JFT-Basic dan wawancara kerja.</p>
+                                    <button class="btn-banner" onclick="bukaTab('modul')">Pilih Modul <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="banner-img">
+                                    <!-- Tempatkan ilustrasi lucu di sini jika ada -->
+                                    <i class="fas fa-rocket" style="font-size: 80px; opacity: 0.2; transform: rotate(15deg);"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Ringkasan Statistik -->
+                            <div class="stats-cards-container">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#fef08a; color:#b45309;"><i class="fas fa-star"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Rata-rata Nilai</h4>
+                                        <p>Belum ada data</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#bae6fd; color:#0284c7;"><i class="fas fa-bullseye"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Target Level</h4>
+                                        <p>JFT-Basic A2</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Kanan Dashboard (30%) -->
+                        <div class="dash-right">
+                            <!-- Kotak Klaim Voucher -->
+                            <div class="widget-box voucher-widget">
+                                <h3><i class="fas fa-gift"></i> Punya Kode Tiket?</h3>
+                                <p>Masukkan kode voucher untuk menambah tiket.</p>
+                                <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+                                <button id="btnKlaimVoucher">Klaim</button>
+                                <div id="voucherMsg" class="msg" style="margin-top: 10px;"></div>
+                                <div id="dashMsg" class="msg"></div>
+                            </div>
+                            
+                            <!-- Kotak Info/Pengumuman (Opsional) -->
+                            <div class="widget-box info-widget">
+                                <h3><i class="fas fa-bullhorn"></i> Info LPK</h3>
+                                <p>Tetap semangat belajar! Jangan lupa gunakan WiFi yang stabil saat berlatih Kaiwa.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS 2: MODUL (DAFTAR & DETAIL TIER) -->
+                <!-- ========================================== -->
+                <div id="tab-modul" style="display: none; padding: 25px;">
+                    <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
+                    <div id="modul-list-view" style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Pilih Kategori Level</h2>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-shokyu')">
+                            <div class="tier-icon">🐣</div>
+                            <div class="tier-info">
+                                <h3>SHOKYU TIER (Basic)</h3>
+                                <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 3 Tiket</div>
+                        </div>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-chukyu')">
+                            <div class="tier-icon">🔥</div>
+                            <div class="tier-info">
+                                <h3>CHUKYU TIER (Mid)</h3>
+                                <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 5 Tiket</div>
+                        </div>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-jokyu')">
+                            <div class="tier-icon">👑</div>
+                            <div class="tier-info">
+                                <h3>JOKYU TIER (Pro)</h3>
+                                <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 8 Tiket</div>
+                        </div>
+                    </div>
+
+                    <!-- [LAYAR 2A] HALAMAN KHUSUS: SHOKYU -->
+                    <div id="detail-shokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header">
+                            <h2>SHOKYU TIER (Basic)</h2>
+                            <p><strong>Target:</strong> Pemula yang baru mengenal Kana dan pola kalimat dasar.</p>
+                            <p><strong>Fungsi:</strong> Melatih insting bahasa & keberanian berbicara.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 26 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
+                        </div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-shokyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
+                    </div>
+
+                    <!-- [LAYAR 2B] HALAMAN KHUSUS: CHUKYU -->
+                    <div id="detail-chukyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
+                            <h2 style="color: #c026d3;">CHUKYU TIER (Mid)</h2>
+                            <p><strong>Target:</strong> Siswa persiapan ujian JFT-Basic A2.</p>
+                            <p><strong>Fungsi:</strong> Latihan pemahaman konteks sosial dan formalitas ringan.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 52 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
+                        </div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-chukyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
+                    </div>
+
+                    <!-- [LAYAR 2C] HALAMAN KHUSUS: JOKYU -->
+                    <div id="detail-jokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
+                            <h2 style="color: #e11d48;">JOKYU TIER (Pro)</h2>
+                            <p><strong>Target:</strong> Kandidat Tokutei Ginou yang siap berangkat ke Jepang.</p>
+                            <p><strong>Fungsi:</strong> Menguji mental, spontanitas, dan kesiapan wawancara kerja.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 100 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
+                        </div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-jokyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS 3: RIWAYAT -->
+                <!-- ========================================== -->
+                <div id="tab-riwayat" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Riwayat Nilai</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                            <p style="color: #475569; font-size: 14px; margin-top: 0; margin-bottom: 20px;">Tabel performa Anda akan ditampilkan di sini.</p>
+                            <button id="btnRiwayat" style="border: 2px solid #cbd5e1; background: transparent; color: #475569; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS BARU: TOKO VOUCHER -->
+                <!-- ========================================== -->
+                <div id="tab-toko" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Toko Tiket</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
+                            <i class="fas fa-store" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Beli Paket Tiket</h3>
+                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Dapatkan tiket latihan dengan harga spesial via Admin atau Lynk.id.</p>
+                            <button onclick="window.open('https://lynk.id', '_blank')" class="btn" style="width: auto; padding: 10px 20px; margin:0 auto;"><i class="fas fa-shopping-cart"></i> Menuju Toko</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS BARU: TUKAR KOIN -->
+                <!-- ========================================== -->
+                <div id="tab-tukar" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Tukar Koin</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
+                            <i class="fas fa-coins" style="font-size: 40px; color: #fbbf24; margin-bottom: 15px;"></i>
+                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Tukar Koin Emas</h3>
+                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Kumpulkan koin dari hasil belajar untuk ditukar dengan tiket gratis.</p>
+                            <!-- Fitur dummy sementara -->
+                            <button class="btn btn-outline" style="width: auto; padding: 10px 20px; margin:0 auto; cursor:not-allowed;" disabled>Segera Hadir</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS 4: PANDUAN -->
+                <!-- ========================================== -->
+                <div id="tab-panduan" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Panduan Penggunaan</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                            <ol style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
+                                <li>Buka menu <strong>Modul Latihan</strong> untuk memilih tema.</li>
+                                <li>Pastikan memberikan izin akses <strong>mikrofon</strong> pada browser.</li>
+                                <li>Jawab pertanyaan AI dengan jelas dan natural.</li>
+                                <li>Jangan menutup halaman saat sesi berlangsung agar tiket tidak hangus.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ================= VIEW 4: KAIWA ROOM ================= -->
+    <div id="viewKaiwaRoom" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <div style="text-align: left;">
+                <h3 style="margin: 0; font-size: 16px; color: var(--primary);">Sesi Aktif</h3>
+                <p id="activeProductDisplay" style="margin: 0; font-size: 12px; color: var(--text-muted);">Modul</p>
+            </div>
+            <button id="btnSelesaiKaiwa" style="background: #f1f5f9; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #ef4444;"><i class="fas fa-times"></i> Akhiri</button>
+        </div>
+
+        <div class="kaiwa-box">
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Fitur AI akan segera terhubung ke Cloudflare...</p>
+            <button class="mic-btn"><i class="fas fa-microphone"></i></button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);">Tekan tombol merah untuk berbicara</p>
+    </div>
+
+    <!-- ================= VIEW 5: RAPOR ================= -->
+    <div id="viewRapor" class="hidden">
+        <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 5px;">Rapor Sesi Selesai</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Evaluasi otomatis oleh AI Sensei</p>
+        
+        <div id="loadingRapor" style="margin: 30px 0;">
+            <i class="fas fa-circle-notch fa-spin" style="font-size: 30px; color: var(--primary);"></i>
+            <p style="font-size: 14px; margin-top: 10px;">Menganalisis Kosa Kata, Bunpou, dan Hatsuon...</p>
+        </div>
+
+        <div id="hasilRapor" class="hidden">
+            <div class="rapor-grid">
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartKosaKata"><div class="circular-inner" id="valKosaKata">0</div></div>
+                    <div class="rapor-title">Kosa Kata</div>
+                </div>
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartBunpou"><div class="circular-inner" id="valBunpou">0</div></div>
+                    <div class="rapor-title">Bunpou</div>
+                </div>
+                <div class="rapor-item">
+                    <div class="circular-chart" id="chartKelancaran"><div class="circular-inner" id="valKelancaran">0</div></div>
+                    <div class="rapor-title">Kelancaran</div>
+                </div>
+            </div>
+
+            <div class="rapor-feedback">
+                <strong><i class="fas fa-exclamation-triangle"></i> Koreksi & Hatsuon:</strong>
+                <span id="teksPerbaikan">-</span>
+            </div>
+            <div class="rapor-feedback">
+                <strong><i class="fas fa-lightbulb"></i> Rekomendasi Belajar:</strong>
+                <span id="teksRekomendasi">-</span>
+            </div>
+
+            <button id="btnKembaliDash" class="btn" style="margin-top: 20px;"><i class="fas fa-home"></i> Kembali ke Beranda</button>
+        </div>
+    </div>
+
+    <!-- ================= VIEW 6: RIWAYAT NILAI ================= -->
+    <div id="viewRiwayat" class="hidden">
+        <h2 style="font-size: 18px; color: var(--primary); margin-bottom: 5px;">Riwayat Nilai</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">Rekap evaluasi sesi sebelumnya</p>
+        
+        <div class="rapor-feedback" style="min-height: 120px; max-height: 250px; overflow-y: auto; margin-bottom: 20px; white-space: pre-line;">
+            <span id="teksRiwayat">Mengambil data...</span>
+        </div>
+
+        <button id="btnKembaliRiwayat" class="btn"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
+    </div>
+
+</div>
+
+<script>
+    // ==========================================
+    // KONFIGURASI API & VARIABEL GLOBAL
+    // ==========================================
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzIB9C4kDz4p9RYoruLaMjWoS39J2h0vA44vFAcddn5hd4kax3FNXdHW02qGkmbBtGHqA/exec"; // Pastikan ini URL GAS yang BARU di-deploy
+    const WORKER_URL = "https://hanasu.nihongoeexa.workers.dev/";
+    
+    // GANTI DENGAN CLIENT ID GOOGLE ANDA (Dari Google Cloud Console)
+    const GOOGLE_CLIENT_ID = "1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"; 
+
+    let KAIWA_USER = {};
+    let activeProduct = "";
+    let putaranSaatIni = 0;
+    let historyPercakapan = ""; 
+    let chatHistory = []; 
+    let deviceId = ""; // Akan diisi oleh FingerprintJS
+    
+    // --- TAMBAHKAN 2 VARIABEL INI ---
+    let totalTokenSesi = 0; 
+    let depositDimukaSesi = 0;
+    
+    let mediaRecorder;
+    let audioChunks = [];
+    let isRecording = false;
+    let audioPlayer = new Audio();
+    let isAudioUnlocked = false;
+
+    const views = {
+        login: document.getElementById('viewLogin'),
+        dashboard: document.getElementById('viewDashboard'),
+        kaiwaRoom: document.getElementById('viewKaiwaRoom'),
+        rapor: document.getElementById('viewRapor'),
+        riwayat: document.getElementById('viewRiwayat')
+    };
+
+    function showView(viewName) {
+        Object.values(views).forEach(v => v.classList.add('hidden'));
+        views[viewName].classList.remove('hidden');
     }
 
-    // 2. JALUR DATA JSON DARI FRONTEND
-    if (!e || !e.postData || !e.postData.contents) return kirimRespon(false, "Payload kosong.");
-    const req = JSON.parse(e.postData.contents);
-    const action = req.action;
-    const p = req.payload || {};
+    function showMsg(elId, type, text) {
+        const el = document.getElementById(elId);
+        el.className = 'msg ' + type;
+        el.innerHTML = text;
+    }
 
-    if (action === 'loginOAuth') return prosesLoginOAuth(p);
-    else if (action === 'pakaiTiket') return pakaiTiket(p);
-    else if (action === 'getProduk') return getDaftarProduk(); // TAMBAHKAN BARIS INI
-    else if (action === 'simpanRaporKaiwa') return simpanRaporKaiwa(p);
-    else if (action === 'klaimVoucher') return klaimVoucher(p);
-    else return kirimRespon(false, "Aksi tidak dikenali: " + action);
-
-  } catch (err) {
-    return kirimRespon(false, "Server Error: " + err.toString());
-  }
-}
-
-function getDaftarProduk() {
-  try {
-    const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-    const sheetProduk = ss.getSheetByName(CONFIG.SHEET_PRODUK); // <-- Memanggil dari CONFIG
-    if (!sheetProduk) return kirimRespon(false, "Sheet PRODUK belum dibuat.");
-
-    const data = sheetProduk.getDataRange().getValues();
-    let listProduk = [];
+    // =========================================================
+    // AWAL: INISIALISASI FINGERPRINTJS & GOOGLE OAUTH
+    // =========================================================
     
-    // Mulai dari baris ke-2 (indeks 1) untuk melewati header
-    for (let i = 1; i < data.length; i++) {
-      if (data[i][0]) { // Jika KODE_PRODUK tidak kosong
-        listProduk.push({
-          kode: String(data[i][0]).trim(),
-          nama: String(data[i][1]).trim(),
-          harga: Number(data[i][2]) || 1,
-          deskripsi: String(data[i][3] || '').trim() // <-- JARING BARU UNTUK MENANGKAP DESKRIPSI (Kolom ke-4)
+    // 1. Dapatkan Sidik Jari Perangkat (FingerprintJS)
+    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+        .then(FingerprintJS => FingerprintJS.load());
+
+    fpPromise
+        .then(fp => fp.get())
+        .then(result => {
+            deviceId = "FP-" + result.visitorId;
+            console.log("Device ID siap:", deviceId);
+        })
+        .catch(err => console.error("Gagal memuat FingerprintJS:", err));
+
+    // 2. Konfigurasi Google OAuth (Lebih aman, dijamin library sudah load)
+    window.onload = function () {
+        // Cek dulu apakah object google sudah siap
+        if (typeof google !== 'undefined' && google.accounts) {
+            initGoogleOAuth();
+        } else {
+            // Jika belum, tunggu beberapa detik (fallback)
+            setTimeout(initGoogleOAuth, 1500);
+        }
+    };
+
+    function initGoogleOAuth() {
+        if (typeof google === 'undefined') {
+            showMsg('loginMsg', 'error', 'Gagal memuat tombol Google. Coba refresh halaman.');
+            return;
+        }
+        
+        google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleCredentialResponse
         });
-      }
+        
+        google.accounts.id.renderButton(
+            document.getElementById("googleButtonDiv"),
+            { theme: "outline", size: "large", width: 250, shape: "rectangular" }
+        );
     }
-    return kirimRespon(true, "Daftar produk berhasil dimuat", listProduk);
-  } catch (err) {
-    return kirimRespon(false, "Error getProduk: " + err.message);
-  }
-}
 
-function prosesLoginOAuth(p) {
-  const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-  const sheetUsers = ss.getSheetByName(CONFIG.SHEET_USERS);
-  if (!sheetUsers) return kirimRespon(false, "Sheet USERS tidak ditemukan.");
+    // 3. Menangani Respon Sukses dari Google
+    async function handleCredentialResponse(response) {
+        showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akun...');
+        
+        // Decode Token JWT dari Google untuk mendapat Email dan Nama
+        const responsePayload = decodeJwtResponse(response.credential);
+        const emailGoogle = responsePayload.email;
+        const namaGoogle = responsePayload.name;
+        
+        // Ambil Mode (Masuk atau Daftar)
+        const authMode = document.querySelector('input[name="authMode"]:checked').value;
 
-  const emailIn = normalizeEmail(p.email);
-  const namaIn = String(p.nama || 'Siswa Neexa').trim();
-  const deviceIdIn = String(p.deviceId || '').trim();
-  const mode = String(p.mode || 'auto').toLowerCase(); // 'login', 'daftar', atau 'auto'
-  const waktu = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss');
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ 
+                    action: 'loginOAuth', 
+                    payload: { email: emailGoogle, nama: namaGoogle, deviceId: deviceId, mode: authMode } 
+                })
+            });
+            const data = await res.json();
 
-  if (!emailIn) return kirimRespon(false, "Email wajib diisi oleh sistem Google OAuth.");
-
-  const dataUsers = sheetUsers.getDataRange().getValues();
-  let userArrayIdx = -1; // Indeks baris di dalam array dataUsers (0-based)
-  let existingDevice = false;
-
-  // Cek database USERS (mulai dari baris ke-2 / indeks 1)
-  for (let i = 1; i < dataUsers.length; i++) {
-    if (normalizeEmail(dataUsers[i][CONFIG.COL_USERS.EMAIL]) === emailIn) {
-      userArrayIdx = i;
+            if (data.success) {
+                KAIWA_USER = {
+                    nama: data.data.nama,
+                    email: data.data.email,
+                    saldo: Number(data.data.saldo),
+                    riwayat: data.data.riwayat || "",
+                    koin: Number(data.data.koin) || 0, // <-- TAMBAHKAN INI
+                    sesi: Number(data.data.sesi) || 0  // <-- TAMBAHKAN INI
+                };
+                
+                // Update Data ke UI Dashboard V2
+                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                document.getElementById('userEmailDisplay').innerText = KAIWA_USER.email;
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin; // <-- TAMBAHKAN INI
+                document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi; // <-- TAMBAHKAN INI
+                
+                // ...
+                
+                showView('dashboard');
+                
+                // ================================================
+                // MANTRA AJAIB PENYEMBUH LAYAR KOSONG SAAT LOGIN:
+                bukaTab('dashboard'); 
+                // ================================================
+                
+                muatDaftarProduk(); 
+                showMsg('dashMsg', 'success', data.message);
+                
+            } else { // <--- SEKARANG SUDAH BENAR (Hanya 1 kurung tutup sebelumnya)
+                showMsg('loginMsg', 'error', data.message);
+                kirimBlackBox("Proses Login/Daftar OAuth", data.message);
+            }
+        } catch (err) {
+            showMsg('loginMsg', 'error', 'Gagal menghubungi server database.');
+            kirimBlackBox("Koneksi GAS (OAuth)", err.message);
+        }
     }
-    // Lacak apakah device fingerprint ini sudah pernah dipakai mendaftar (Anti-Farming)
-    const savedDevices = String(dataUsers[i][CONFIG.COL_USERS.DEVICE] || '').split(',').map(d => d.trim());
-    if (deviceIdIn && savedDevices.includes(deviceIdIn)) {
-      existingDevice = true; 
-    }
-  }
 
-  // --- KONDISI 1: EMAIL SUDAH TERDAFTAR DI DATABASE ---
-  if (userArrayIdx !== -1) {
-    const userRow = dataUsers[userArrayIdx];
-    const status = String(userRow[CONFIG.COL_USERS.STATUS] || '').trim().toUpperCase();
-    const saldo = Number(userRow[CONFIG.COL_USERS.TIKET]) || 0;
-    const namaTersimpan = String(userRow[CONFIG.COL_USERS.NAMA] || namaIn).trim();
-    const riwayatRapor = String(userRow[CONFIG.COL_USERS.RAPOR] || '').trim();
-    
-    // Tarik data Gamifikasi
-    const koinTersimpan = Number(userRow[CONFIG.COL_USERS.KOIN]) || 0;
-    const sesiTersimpan = Number(userRow[CONFIG.COL_USERS.SESI]) || 0;
-    
-    if (status === 'BANNED') {
-      catatLogOtomatis(ss, "Log_Penolakan", [waktu, emailIn, "Percobaan login akun BANNED"]);
-      return kirimRespon(false, "Maaf, akun Anda sedang diblokir oleh Admin.");
+    // Fungsi pembantu untuk membaca data dari Google
+    function decodeJwtResponse(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
     }
-    
-    return kirimRespon(true, "Login Berhasil", { 
-      nama: namaTersimpan, 
-      email: emailIn, 
-      saldo: saldo,
-      riwayat: riwayatRapor,
-      koin: koinTersimpan,
-      sesi: sesiTersimpan,
-      isNewUser: false
+
+    // =========================================================
+    // MESIN PENCETAK KARTU TEMA DINAMIS (B2B VERSION)
+    // =========================================================
+    async function muatDaftarProduk() {
+        try {
+            const response = await fetch(GAS_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "getProduk", payload: {} })
+            });
+            const hasil = await response.json();
+        
+            if (hasil.success && hasil.data.length > 0) {
+                // 1. Siapkan 3 Wadah Kosong
+                const wadahShokyu = document.getElementById("wadah-tema-shokyu");
+                const wadahChukyu = document.getElementById("wadah-tema-chukyu");
+                const wadahJokyu = document.getElementById("wadah-tema-jokyu");
+                
+                // Bersihkan tulisan "Memuat daftar..."
+                if(wadahShokyu) wadahShokyu.innerHTML = "";
+                if(wadahChukyu) wadahChukyu.innerHTML = "";
+                if(wadahJokyu) wadahJokyu.innerHTML = "";
+            
+                // 2. Sortir dan Cetak Data dari Sheet
+                hasil.data.forEach(item => {
+                    // Deteksi Ikon Otomatis Berdasarkan Nama
+                    let namaAtas = item.nama.toUpperCase();
+                    let ikonTema = "💬"; // Ikon default
+                    if(namaAtas.includes("KONBINI") || namaAtas.includes("BELANJA")) ikonTema = "🛍️";
+                    else if(namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
+                    else if(namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK") || namaAtas.includes("BYOUIN")) ikonTema = "🏥";
+                    else if(namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
+
+                    // Rakit HTML Kartu Mekar (Accordion)
+                    let kartuHTML = `
+                        <div class="theme-item">
+                            <div class="theme-header" onclick="toggleTema(this)">
+                                <span>${ikonTema} ${item.nama}</span>
+                                <i class="fas fa-chevron-down chevron-icon"></i>
+                            </div>
+                            <div class="theme-body">
+                                <p class="theme-desc">${item.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.'}</p>
+                                <div class="theme-action">
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label>Suara AI Tutor</label>
+                                        <select class="form-control suara-select-dinamis">
+                                            <option value="female" selected>Perempuan</option>
+                                            <option value="male">Laki-laki</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('${item.kode}', this, ${item.harga})">
+                                        <i class="fas fa-microphone-alt"></i> Mulai Berlatih (${item.harga} Tiket)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // 3. Masukkan ke Ruangan yang Tepat Berdasarkan Kodenya
+                    let kodeAtas = item.kode.toUpperCase();
+                    if (kodeAtas.includes("BSC") && wadahShokyu) {
+                        wadahShokyu.innerHTML += kartuHTML;
+                    } else if (kodeAtas.includes("MID") && wadahChukyu) {
+                        wadahChukyu.innerHTML += kartuHTML;
+                    } else if (kodeAtas.includes("PRO") && wadahJokyu) {
+                        wadahJokyu.innerHTML += kartuHTML;
+                    }
+                });
+
+                // 4. Jika ada wadah yang ternyata kosong (tidak ada data di Sheet)
+                if(wadahShokyu && wadahShokyu.innerHTML === "") wadahShokyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+                if(wadahChukyu && wadahChukyu.innerHTML === "") wadahChukyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+                if(wadahJokyu && wadahJokyu.innerHTML === "") wadahJokyu.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Belum ada tema di level ini.</p>";
+
+            }
+        } catch (err) {
+            console.error("Gagal memuat produk:", err);
+            // Tampilkan pesan error di layar jika internet putus
+            document.getElementById("wadah-tema-shokyu").innerHTML = "<p style='color:red;'>Gagal terhubung ke server.</p>";
+        }
+    }
+
+    // =========================================================
+    // FITUR BARU: KLAIM VOUCHER
+    // =========================================================
+    document.getElementById('btnKlaimVoucher').addEventListener('click', async () => {
+        const kodeIn = document.getElementById('inputVoucher').value.trim();
+        if (!kodeIn) return showMsg('voucherMsg', 'error', 'Masukkan kode voucher.');
+
+        showMsg('voucherMsg', 'loading', 'Memeriksa kode...');
+        document.getElementById('btnKlaimVoucher').disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'klaimVoucher', payload: { email: KAIWA_USER.email, kode: kodeIn, nama: KAIWA_USER.nama } })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                KAIWA_USER.saldo = Number(data.data.saldo);
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                showMsg('voucherMsg', 'success', data.message);
+                document.getElementById('inputVoucher').value = ""; // Bersihkan input
+            } else {
+                showMsg('voucherMsg', 'error', data.message);
+            }
+        } catch (err) {
+            showMsg('voucherMsg', 'error', 'Gagal menghubungi server.');
+        } finally {
+            document.getElementById('btnKlaimVoucher').disabled = false;
+        }
     });
-  }
 
-  // --- KONDISI 2: EMAIL BELUM TERDAFTAR ---
-  // Jika user menekan tombol "LOGIN" tapi emailnya belum pernah didaftarkan
-  if (mode === 'login') {
-    return kirimRespon(false, "Email belum terdaftar. Silakan klik tombol MENDAFTAR terlebih dahulu.");
-  }
+    // =========================================================
+    // MASUK KE KAIWA ROOM (DENGAN PEMOTONGAN TIKET ESCROW)
+    // Mesin Baru: Merespon klik dari masing-masing kartu tema (Accordion)
+    // =========================================================
+    async function mulaiLatihan(kodeTema, elemenTombol, hargaDeposit) {
+        
+        // 1. Ambil Pilihan Suara & Set Produk Aktif
+        let wrapper = elemenTombol.closest('.theme-action');
+        let suaraSelect = wrapper.querySelector('.suara-select-dinamis').value;
+        
+        activeProduct = kodeTema; 
+        
+        // *PENTING: Pastikan Anda punya variabel global untuk menyimpan gender suara agar TTS tahu!*
+        // Menyimpan pilihan suara ke memori global agar bisa dibaca mesin Mulut (TTS)
+        window.suaraTutor = suaraSelect;
 
-  // Proses Pendaftaran Baru
-  let tiketDidapat = 0;
-  let pesan = "Pendaftaran berhasil.";
-  let jenisTransaksi = "";
+        // 2. Tentukan Batas Putaran & Harga Deposit (Harga diambil langsung dari GS!)
+        let batasPutaran = 7; 
+        depositDimukaSesi = hargaDeposit; // Tidak perlu if-else lagi, langsung ambil dari parameter Sheets!
 
-  if (existingDevice) {
-    // BLOKIR HALUS: Device sudah pernah daftar pakai email lain
-    tiketDidapat = 0;
-    pesan = "Pendaftaran berhasil. Namun, promo tiket gratis hanya berlaku 1x untuk setiap perangkat fisik. Silakan Top Up untuk mulai berlatih.";
-    catatLogOtomatis(ss, "Log_Penolakan", [waktu, emailIn, "Blokir Halus: Device terdeteksi farming promo (" + deviceIdIn + ")"]);
-  } else {
-    // AMAN: Cek Panel Kendali Promo (jumlah pendaftar saat ini = dataUsers.length - 1)
-    const promo = cekPromoAktif(ss, dataUsers.length - 1); 
-    if (promo.aktif) {
-      tiketDidapat = promo.tiket;
-      jenisTransaksi = "Promo Pendaftar Awal";
-      pesan = `Pendaftaran berhasil! Selamat, Anda mendapatkan ${tiketDidapat} tiket gratis.`;
+        if (activeProduct.includes("PRO")) {
+            batasPutaran = 30;
+        } else if (activeProduct.includes("MID")) {
+            batasPutaran = 15;
+        }
+        
+        // 3. Cek Saldo Tiket
+        if (KAIWA_USER.saldo < depositDimukaSesi) {
+            alert(`Saldo tiket tidak cukup. Tema ini butuh deposit awal ${depositDimukaSesi} tiket. Silakan isi ulang.`);
+            return;
+        }
+
+        KAIWA_USER.maxPutaran = batasPutaran;
+
+        // 4. Potong Tiket di Database (Sistem Escrow) sebelum membuka ruangan
+        let teksAsliTombol = elemenTombol.innerHTML;
+        elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menahan tiket...';
+        elemenTombol.disabled = true;
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'pakaiTiket', payload: { email: KAIWA_USER.email, jumlah: depositDimukaSesi } })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Update saldo lokal setelah dipotong
+                KAIWA_USER.saldo = Number(data.data.saldo);
+                document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                
+                // Bersihkan histori, token, dan buka ruangan
+                document.getElementById('activeProductDisplay').innerText = activeProduct;
+                putaranSaatIni = 0; 
+                totalTokenSesi = 0; // RESET TOTAL TOKEN AI
+                historyPercakapan = ""; 
+                chatHistory = []; 
+                
+                // ==========================================
+                // RESET PERINGATAN KELUAR LAYAR
+                jumlahPeringatanLayar = 0; 
+                // ==========================================
+                
+                const statusTeks = document.querySelector('.kaiwa-box p');
+                statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
+                
+                showView('kaiwaRoom');
+            } else {
+                alert(data.message);
+            }
+        } catch (err) {
+            alert('Gagal memotong tiket. Server sibuk atau koneksi terputus.');
+        } finally {
+            // Kembalikan tombol ke bentuk semula jika gagal/selesai loading
+            elemenTombol.innerHTML = teksAsliTombol;
+            elemenTombol.disabled = false;
+        }
     }
-  }
 
-  // Masukkan data ke sheet USERS (User Baru, Koin 0, Sesi 0)
-  const noUrut = dataUsers.length; 
-  sheetUsers.appendRow([noUrut, waktu, emailIn, namaIn, tiketDidapat, 'AKTIF', deviceIdIn, '', 0, 0]);
-
-  // Catat ke CATATAN_KEUANGAN jika dapat tiket gratis
-  if (tiketDidapat > 0) {
-    const sheetKeuangan = ss.getSheetByName(CONFIG.SHEET_KEUANGAN);
-    if (sheetKeuangan) {
-      const noKeu = sheetKeuangan.getLastRow();
-      sheetKeuangan.appendRow([noKeu, waktu, emailIn, namaIn, 0, tiketDidapat, jenisTransaksi]);
+    // =========================================================
+    // PILAR RADAR & LOG AKTIVITAS (Tembus Pandang)
+    // =========================================================
+    function kirimBlackBox(lokasiError, pesanError, mesinAI = "Belum terdeteksi") {
+        const identitas = KAIWA_USER.email || 'Siswa_Belum_Login'; 
+        fetch(GAS_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'log_error', siswa: identitas, lokasi: lokasiError, pesan: pesanError, mesin: mesinAI, waktu: new Date().toLocaleString('id-ID') })
+        }).catch(e => console.log("Sensor log_error gagal"));
     }
-  }
 
-  return kirimRespon(true, pesan, { 
-    nama: namaIn, 
-    email: emailIn, 
-    saldo: tiketDidapat,
-    riwayat: '',
-    koin: 0,
-    sesi: 0,
-    isNewUser: true
-  });
-}
-
-// Fungsi memotong Tiket Masuk (Harga Dasar)
-function pakaiTiket(p) {
-  const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-  const sheetUsers = ss.getSheetByName(CONFIG.SHEET_USERS);
-  const emailIn = normalizeEmail(p.email);
-  
-  // HTML (Front-end) mengirimkan parameter harga tiket masuk ke variabel 'jumlah'
-  const jumlahPotong = Number(p.jumlah) || 1;
-
-  if (!emailIn) return kirimRespon(false, "Email tidak valid.");
-
-  const dataUsers = sheetUsers.getDataRange().getValues();
-  for (let i = 1; i < dataUsers.length; i++) {
-    if (normalizeEmail(dataUsers[i][CONFIG.COL_USERS.EMAIL]) === emailIn) {
-      const saldoSekarang = Number(dataUsers[i][CONFIG.COL_USERS.TIKET]) || 0;
-      
-      // Jika tiket kurang dari harga masuk
-      if (saldoSekarang < jumlahPotong) {
-        return kirimRespon(false, `Saldo tidak mencukupi (${saldoSekarang} tiket). Butuh ${jumlahPotong} tiket untuk masuk ruangan ini. Silakan Top Up.`, { saldo: saldoSekarang });
-      }
-      
-      // Potong Tiket Masuk di awal
-      const saldoBaru = saldoSekarang - jumlahPotong;
-      sheetUsers.getRange(i + 1, CONFIG.COL_USERS.TIKET + 1).setValue(saldoBaru);
-      
-      const pesan = `${jumlahPotong} tiket digunakan untuk masuk ruangan. Selamat berlatih!`;
-      return kirimRespon(true, pesan, { saldo: saldoBaru });
+    function kirimAktivitas(mesinAI) {
+        const identitas = KAIWA_USER.email || 'Siswa_Tanpa_Email'; 
+        fetch(GAS_URL, {
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'log_aktivitas', siswa: identitas, mesin: mesinAI, waktu: new Date().toLocaleString('id-ID') })
+        }).catch(e => console.log("Sensor log_aktivitas gagal"));
     }
-  }
-  return kirimRespon(false, "Akun tidak ditemukan.");
-}
 
-// Fungsi menyimpan hasil Rapor, Menagih Sisa Biaya, dan Menambah Koin
-function simpanRaporKaiwa(p) {
-  const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-  const sheetRapor = ss.getSheetByName(CONFIG.SHEET_RAPOR);
-  const sheetUsers = ss.getSheetByName(CONFIG.SHEET_USERS);
+    // =========================================================
+    // FUNGSI MIKROFON & PROSES AI (Tetap Sama Seperti Aslinya)
+    // =========================================================
+    const micBtn = document.querySelector('.mic-btn');
+    const statusTeks = document.querySelector('.kaiwa-box p');
+    let localStream = null; 
 
-  if (!sheetRapor) return kirimRespon(false, "Sheet RAPOR belum ditemukan di Spreadsheet.");
+    micBtn.addEventListener('click', async () => {
+        if (!isAudioUnlocked) {
+            audioPlayer.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+            audioPlayer.play().catch(e => console.log("Unlocker aman"));
+            isAudioUnlocked = true;
+        }
 
-  const waktu = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss');
-  const email = normalizeEmail(p.email);
-  const nama = String(p.nama || '');
-  const rekaman = String(p.rekaman || p.history || '');
-  const kosaKata = Number(p.kosaKata) || 0;
-  const bunpo = Number(p.polaKalimat) || 0;
-  const kelancaran = Number(p.kelancaran) || 0;
-  const perbaikan = String(p.perbaikan || '');
-  const rekomendasi = String(p.rekomendasi || '');
-  
-  const totalToken = Number(p.totalToken) || 0; 
-  const skorTotal = Math.round((kosaKata + bunpo + kelancaran) / 3);
+        if (!isRecording) {
+            if (putaranSaatIni >= KAIWA_USER.maxPutaran) {
+                alert("Batas maksimal percakapan untuk sesi ini telah habis. Silakan Akhiri sesi untuk menyimpan rapor.");
+                return;
+            }
 
-  // =============================================================
-  // LOGIKA TAGIHAN BIAYA & KOIN EMAS
-  // =============================================================
-  const produk = String(p.produk || '').toUpperCase();
-  const putaranTerpakai = Number(p.putaranTerpakai) || 0;
-  const isSelesaiPenuh = p.isSelesaiPenuh === true; 
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 } 
+                });
 
-  // A. Hitung Biaya Akhir (Tagihan)
-  const hargaRapor = isSelesaiPenuh ? 2 : 5;
-  // Yang ditagih di akhir hanya: (Jumlah Putaran x 3 tiket) + Harga Pembuatan Rapor
-  const tagihanAkhir = (putaranTerpakai * 3) + hargaRapor; 
+                let options = {};
+                if (MediaRecorder.isTypeSupported('audio/webm')) options = { mimeType: 'audio/webm' };
+                else if (MediaRecorder.isTypeSupported('audio/mp4')) options = { mimeType: 'audio/mp4' };
 
-  // B. Hitung Hadiah Koin (Gamifikasi)
-  let pengaliKoin = 10; 
-  if (produk.includes("MID")) pengaliKoin = 15;
-  else if (produk.includes("PRO")) pengaliKoin = 25;
-  
-  // Gunakan 'let' agar nilainya bisa diubah menjadi 0 jika kena pinalti
-  let koinDariNilai = skorTotal * pengaliKoin;
+                mediaRecorder = new MediaRecorder(localStream, options);
+                mediaRecorder.start();
+                isRecording = true;
+                
+                micBtn.style.backgroundColor = "#b91c1c";
+                micBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
 
-  // ==========================================
-  // PINALTI KOIN: KELUAR DI TENGAH JALAN = HANGUS
-  // ==========================================
-  if (!isSelesaiPenuh) {
-      koinDariNilai = 0; // Koin dari nilai hangus total
-  }
+                mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
 
-  // Jika selesai penuh, dapat Koin Nilai + Putaran. 
-  // Jika tidak selesai, HANYA dapat koin receh dari jumlah putaran saja.
-  const totalKoinDidapat = koinDariNilai + putaranTerpakai;
+                mediaRecorder.onstop = async () => {
+                    micBtn.style.backgroundColor = "#94a3b8"; 
+                    micBtn.disabled = true;
+                    statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
+                    
+                    if (localStream) localStream.getTracks().forEach(track => track.stop());
 
-  // =============================================================
-  // 1. Simpan Penuh ke Sheet RAPOR
-  // =============================================================
-  const noRapor = sheetRapor.getLastRow();
-  sheetRapor.appendRow([noRapor, waktu, email, nama, rekaman, kosaKata, bunpo, kelancaran, perbaikan, rekomendasi, skorTotal, totalToken]);
+                    const audioBlob = new Blob(audioChunks, { type: options.mimeType || 'audio/webm' });
+                    audioChunks = []; 
+                    
+                    await prosesAI(audioBlob);
+                };
+            } catch (err) {
+                alert("Gagal mengakses mikrofon. Pastikan Anda memberikan izin akses mikrofon di browser.");
+                kirimBlackBox("Izin Mikrofon / TWS", err.message); 
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        }
+    });
 
-  // =============================================================
-  // 2. Tulis Riwayat, Tagih Tiket (Potong), Tambah Sesi & Koin
-  // =============================================================
-  let pesanAkhir = `Rapor selesai! Anda mendapatkan +${totalKoinDidapat} Koin. Biaya sesi ini: ${tagihanAkhir} tiket.`;
-  let saldoKoinBaru = 0;
-  
-  if (sheetUsers && email) {
-    const dataUsers = sheetUsers.getDataRange().getValues();
-    for (let i = 1; i < dataUsers.length; i++) {
-      if (normalizeEmail(dataUsers[i][CONFIG.COL_USERS.EMAIL]) === email) {
-        
-        // --- Update History Rapor ---
-        const historyLama = String(dataUsers[i][CONFIG.COL_USERS.RAPOR] || '').trim();
-        const riwayatBaru = `[${waktu}] Nilai: ${skorTotal} (+${totalKoinDidapat} Koin)`;
-        sheetUsers.getRange(i + 1, CONFIG.COL_USERS.RAPOR + 1).setValue(riwayatBaru + (historyLama ? "\n" + historyLama : ""));
-        
-        // --- Update Sesi (Tambah 1) ---
-        const sesiSekarang = Number(dataUsers[i][CONFIG.COL_USERS.SESI]) || 0;
-        sheetUsers.getRange(i + 1, CONFIG.COL_USERS.SESI + 1).setValue(sesiSekarang + 1);
-        
-        // --- Update Koin (Nabun) ---
-        const koinSekarang = Number(dataUsers[i][CONFIG.COL_USERS.KOIN]) || 0;
-        saldoKoinBaru = koinSekarang + totalKoinDidapat;
-        sheetUsers.getRange(i + 1, CONFIG.COL_USERS.KOIN + 1).setValue(saldoKoinBaru);
-        
-        // --- Update Saldo (Pemotongan Tagihan Akhir) ---
-        const saldoSekarang = Number(dataUsers[i][CONFIG.COL_USERS.TIKET]) || 0;
-        let sisaSaldo = saldoSekarang - tagihanAkhir;
-        
-        // Mencegah saldo menjadi minus (jika tiketnya kurang dari tagihan)
-        if (sisaSaldo < 0) sisaSaldo = 0; 
-        
-        sheetUsers.getRange(i + 1, CONFIG.COL_USERS.TIKET + 1).setValue(sisaSaldo);
-        
-        break; 
-      }
+    async function prosesAI(audioBlob) {
+        const statusLastTurn = (putaranSaatIni + 1 >= KAIWA_USER.maxPutaran);
+        let activeEngineTracker = "Belum Diketahui"; 
+
+        try {
+            const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
+            if (!resSTT.ok) throw new Error("Server STT (Telinga) gagal: " + await resSTT.text()); 
+            
+            const dataSTT = await resSTT.json();
+            const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
+
+            if (!teksSiswa) {
+                statusTeks.innerText = "Suara tidak terdengar jelas, silakan coba tekan dan bicara lagi.";
+                resetMic(); return;
+            }
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
+
+            const resChat = await fetch(WORKER_URL + 'api/chat', { 
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ message: teksSiswa, history: chatHistory, produk: activeProduct, isLastTurn: statusLastTurn })
+            });
+            if (!resChat.ok) throw new Error("Server LLM (Otak) gagal: " + await resChat.text()); 
+            
+            const dataChat = await resChat.json();
+            if(dataChat.engine) activeEngineTracker = dataChat.engine;
+            if (dataChat.error) throw new Error("Penolakan Mesin Otak: " + dataChat.error.message);
+            if (!dataChat.choices || !dataChat.choices[0]) throw new Error("Mesin Otak membalas kosong.");
+            
+            // --- TANGKAP TOKEN DARI CLOUDFLARE ---
+            if (dataChat.tokens) {
+                totalTokenSesi += Number(dataChat.tokens);
+            }
+            // -------------------------------------
+
+            const teksAI = dataChat.choices[0].message.content;
+            kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
+
+            historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
+            
+            chatHistory.push({ role: "user", parts: [{ text: teksSiswa }] });
+            chatHistory.push({ role: "model", parts: [{ text: teksAI }] });
+            if (chatHistory.length > 8) chatHistory.splice(0, 2); 
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
+
+            const pilihanSuara = window.suaraTutor || "female";
+            const resTTS = await fetch(WORKER_URL + 'api/tts', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
+            });
+            if (!resTTS.ok) throw new Error("Server TTS (Mulut) gagal: " + await resTTS.text()); 
+            
+            const dataTTS = await resTTS.json();
+            audioPlayer.src = "data:audio/mp3;base64," + dataTTS.audioContent;
+            audioPlayer.play();
+
+            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"`;
+            putaranSaatIni++; 
+
+            audioPlayer.onended = () => {
+                if(statusLastTurn) {
+                    statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
+                    micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true; 
+                } else {
+                    resetMic();
+                    statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
+                }
+            };
+
+        } catch (err) {
+            console.error("Terjadi Gangguan:", err);
+            statusTeks.innerHTML = "⚠️ <b>KONEKSI TIDAK STABIL:</b> Maaf, suara gagal terkirim karena gangguan jaringan. Silakan periksa WiFi/Sinyal Anda lalu coba lagi."; 
+            kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); 
+            resetMic(); 
+        }
     }
-  }
-  
-  // Mengembalikan data ke HTML (menggunakan key 'refund' dengan nilai 0 agar script HTML lama tidak error, dan 'tagihan' untuk informasi)
-  return kirimRespon(true, pesanAkhir, { nilaiTotal: skorTotal, refund: 0, tagihan: tagihanAkhir, koin: saldoKoinBaru });
-}
 
-// ==========================================
-// MESIN KENDALI PROMO & VOUCHER KAIWA B2C
-// ==========================================
-
-function cekPromoAktif(ss, jumlahPendaftar) {
-  const sheetPromo = ss.getSheetByName(CONFIG.SHEET_PROMO);
-  if (!sheetPromo) return { aktif: false, tiket: 0 };
-  
-  const allData = sheetPromo.getDataRange().getValues();
-  if (allData.length < 2) return { aktif: false, tiket: 0 };
-
-  let status, rawMulai, rawSelesai, kuota, tiket;
-
-  // Mendukung format Horizontal (Header di Baris 1 A-E, Isi di Baris 2 A-E)
-  // maupun format Vertikal (Label di Kolom A1-A5, Isi di Kolom B1-B5)
-  const headerA1 = String(allData[0][0] || '').trim().toUpperCase();
-  if (headerA1 === 'STATUS_PROMO_PENDAFTAR' && allData[0].length >= 5 && String(allData[0][1] || '').toUpperCase() === 'TANGGAL_MULAI') {
-    // Format Horizontal (Baris 2: A2 sampai E2)
-    status = String(allData[1][0] || '').trim().toUpperCase();
-    rawMulai = allData[1][1];
-    rawSelesai = allData[1][2];
-    kuota = Number(allData[1][3]) || 0;
-    tiket = Number(allData[1][4]) || 0;
-  } else if (allData.length >= 5) {
-    // Format Vertikal (Kolom B1 sampai B5)
-    status = String(allData[0][1] || '').trim().toUpperCase();
-    rawMulai = allData[1][1];
-    rawSelesai = allData[2][1];
-    kuota = Number(allData[3][1]) || 0;
-    tiket = Number(allData[4][1]) || 0;
-  } else {
-    return { aktif: false, tiket: 0 };
-  }
-
-  if (status !== 'AKTIF') return { aktif: false, tiket: 0 };
-
-  const tglMulai = new Date(rawMulai).getTime();
-  // Tambahkan waktu hingga akhir hari (23:59:59) jika tanggal selesai hanya berupa tanggal
-  let tglSelesai = new Date(rawSelesai).getTime();
-  if (!isNaN(tglSelesai)) tglSelesai += (23 * 60 * 60 * 1000) + (59 * 60 * 1000) + (59 * 1000);
-
-  const now = new Date().getTime();
-
-  // Jika tanggal dikosongkan, anggap promo berlaku tanpa batas tanggal (hanya mengandalkan kuota)
-  const validTanggal = (isNaN(tglMulai) || now >= tglMulai) && (isNaN(tglSelesai) || now <= tglSelesai);
-
-  if (validTanggal && jumlahPendaftar < kuota) {
-    return { aktif: true, tiket: tiket };
-  }
-  return { aktif: false, tiket: 0 };
-}
-
-function klaimVoucher(p) {
-  const ss = SpreadsheetApp.openById(CONFIG.SS_ID);
-  const sheetVoucher = ss.getSheetByName(CONFIG.SHEET_VOUCHER);
-  const sheetUsers = ss.getSheetByName(CONFIG.SHEET_USERS);
-  if (!sheetVoucher || !sheetUsers) return kirimRespon(false, "Sheet Voucher/Users tidak ditemukan.");
-
-  const emailIn = normalizeEmail(p.email);
-  const kodeIn = String(p.kode || '').trim().toUpperCase();
-  
-  if (!kodeIn) return kirimRespon(false, "Kode voucher kosong.");
-  
-  const dataVoucher = sheetVoucher.getDataRange().getValues();
-  let rowVoucher = -1;
-  
-  for (let i = 1; i < dataVoucher.length; i++) {
-    if (String(dataVoucher[i][0] || '').trim().toUpperCase() === kodeIn) {
-      rowVoucher = i + 1;
-      break;
+    function resetMic() {
+        micBtn.style.backgroundColor = "#0d9488"; micBtn.disabled = false; micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
     }
-  }
-  
-  if (rowVoucher === -1) return kirimRespon(false, "Kode voucher tidak ditemukan.");
-  
-  const nilaiTiket = Number(dataVoucher[rowVoucher - 1][1]) || 0;
-  const kuota = Number(dataVoucher[rowVoucher - 1][2]) || 0;
-  const terpakai = Number(dataVoucher[rowVoucher - 1][3]) || 0;
-  const status = String(dataVoucher[rowVoucher - 1][4] || '').trim().toUpperCase();
-  
-  if (status !== 'AKTIF') return kirimRespon(false, "Voucher sudah ditutup atau tidak aktif.");
-  if (terpakai >= kuota) return kirimRespon(false, "Maaf, kuota voucher ini sudah habis.");
-  
-  const dataUsers = sheetUsers.getDataRange().getValues();
-  let userFound = false;
-  let saldoBaru = 0;
 
-  for (let i = 1; i < dataUsers.length; i++) {
-    if (normalizeEmail(dataUsers[i][CONFIG.COL_USERS.EMAIL]) === emailIn) {
-      userFound = true;
-      const saldoLama = Number(dataUsers[i][CONFIG.COL_USERS.TIKET]) || 0;
-      saldoBaru = saldoLama + nilaiTiket;
-      sheetUsers.getRange(i + 1, CONFIG.COL_USERS.TIKET + 1).setValue(saldoBaru);
-      break;
+    // =========================================================
+    // KELUAR & EVALUASI RAPOR (Sistem Refund & HPP Token Terintegrasi)
+    // =========================================================
+    document.getElementById('btnSelesaiKaiwa').addEventListener('click', async () => {
+        if(historyPercakapan.trim() === "") return showView('dashboard');
+
+        const yakin = confirm("Selesaikan sesi dan lihat rapor evaluasi?");
+        if(yakin) {
+            showView('rapor');
+            document.getElementById('loadingRapor').classList.remove('hidden');
+            document.getElementById('hasilRapor').classList.add('hidden');
+            
+            let activeEngineEvaluator = "Belum Diketahui";
+
+            try {
+                // 1. Minta Cloudflare (AI) Menganalisis Rapor
+                const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ history: historyPercakapan, produk: activeProduct })
+                });
+                
+                if (!resEval.ok) throw new Error(`Server evaluasi lambat/sibuk (Status: ${resEval.status}).`);
+                const rawData = await resEval.json();
+                
+                if(rawData.engine) activeEngineEvaluator = rawData.engine;
+                if (rawData.error) throw new Error("Penolakan Evaluator: " + rawData.error.message);
+                if (!rawData.choices || !rawData.choices[0]) throw new Error("Format rapor AI kosong.");
+                
+                // Tambahkan Token dari proses Evaluasi ke Total Sesi
+                if (rawData.tokens) {
+                    totalTokenSesi += Number(rawData.tokens);
+                }
+
+                let jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').replace(/[\r\n\t]+/g, ' ').trim();
+                const raporData = JSON.parse(jsonContent); 
+
+                // 2. Tampilkan Hasil ke Layar HTML
+                setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
+                setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
+                setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
+                document.getElementById('teksPerbaikan').innerText = raporData.perbaikan;
+                document.getElementById('teksRekomendasi').innerText = raporData.rekomendasi;
+
+                document.getElementById('loadingRapor').classList.add('hidden');
+                document.getElementById('hasilRapor').classList.remove('hidden');
+
+                kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
+
+                const skorRata = Math.round((Number(raporData.kosaKata) + Number(raporData.polaKalimat) + Number(raporData.kelancaran)) / 3);
+                const waktuSekarang = new Date().toLocaleString('id-ID');
+                const entriBaru = `[${waktuSekarang}] (${activeProduct}) Nilai Total: ${skorRata}`;
+                KAIWA_USER.riwayat = entriBaru + (KAIWA_USER.riwayat ? "\n" + KAIWA_USER.riwayat : "");
+
+                // 3. Cek Status Penyelesaian (Selesai Penuh atau Berhenti Tengah Jalan)
+                const statusSelesaiPenuh = (putaranSaatIni >= KAIWA_USER.maxPutaran);
+
+                // 4. Kirim Data Lengkap ke GAS untuk Simpan Rapor & Proses Refund
+                const resGasRapor = await fetch(GAS_URL, {
+                    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'simpanRaporKaiwa',
+                        payload: {
+                            nama: KAIWA_USER.nama, 
+                            email: KAIWA_USER.email, 
+                            produk: activeProduct,
+                            kosaKata: raporData.kosaKata, 
+                            polaKalimat: raporData.polaKalimat, 
+                            kelancaran: raporData.kelancaran,
+                            perbaikan: raporData.perbaikan, 
+                            rekomendasi: raporData.rekomendasi, 
+                            history: historyPercakapan,
+                            // DATA BARU UNTUK AUDIT BIAYA & HPP:
+                            totalToken: totalTokenSesi,
+                            putaranTerpakai: putaranSaatIni,
+                            depositDimuka: depositDimukaSesi,
+                            isSelesaiPenuh: statusSelesaiPenuh
+                        }
+                    })
+                });
+                
+                const dataGasRapor = await resGasRapor.json();
+                
+                // 5. Tangkap Notifikasi, Tagihan & Koin dari GAS
+                if (dataGasRapor.success) {
+                    // Update saldo koin dan tiket
+                    if (dataGasRapor.data) {
+                        if (dataGasRapor.data.koin !== undefined) {
+                            KAIWA_USER.koin = dataGasRapor.data.koin;
+                            document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+                        }
+                        // Karena tiket ditagih (dikurangi), kita asumsikan saldo lokal harus dikurangi tagihan
+                        // Namun lebih aman memanggil nilai saldo riil dari GAS jika Anda mengirimkannya, 
+                        // tapi karena di GAS Anda tidak mengirim saldo akhir di objek return simpanRaporKaiwa, 
+                        // kita kurangi manual di frontend berdasarkan tagihan yang diterima.
+                        if (dataGasRapor.data.tagihan !== undefined) {
+                            KAIWA_USER.saldo -= dataGasRapor.data.tagihan;
+                            if (KAIWA_USER.saldo < 0) KAIWA_USER.saldo = 0;
+                            document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                        }
+                    }
+                    
+                    alert(dataGasRapor.message);
+                }
+
+            } catch(e) {
+                kirimBlackBox("Proses Evaluasi Rapor", e.message, activeEngineEvaluator); 
+                document.getElementById('loadingRapor').innerHTML = `
+                    <i class="fas fa-wifi" style="font-size: 30px; color: #ef4444;"></i>
+                    <p style="font-size: 14px; margin-top: 10px; color: #991b1b;"><b>Koneksi Terputus:</b> Gagal terhubung ke server. Silakan periksa koneksi internet Anda.</p>
+                    <button onclick="showView('dashboard')" class="btn" style="margin-top: 15px;">Kembali ke Beranda</button>
+                `;
+            }
+        }
+    });
+
+    function setLingkaran(chartId, textId, nilai) {
+        document.getElementById(textId).innerText = nilai;
+        document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
     }
-  }
-  
-  if (!userFound) return kirimRespon(false, "Akun email tidak ditemukan.");
-  
-  // Update jumlah klaim di sheet KODE_VOUCHER (Kolom D = kolom ke-4)
-  sheetVoucher.getRange(rowVoucher, 4).setValue(terpakai + 1);
-  
-  // Catat transaksi ke CATATAN_KEUANGAN
-  const waktu = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss');
-  const sheetKeuangan = ss.getSheetByName(CONFIG.SHEET_KEUANGAN);
-  if (sheetKeuangan) {
-    const noKeu = sheetKeuangan.getLastRow();
-    sheetKeuangan.appendRow([noKeu, waktu, emailIn, p.nama || "User", 0, nilaiTiket, "Klaim Voucher (" + kodeIn + ")"]);
-  }
-  
-  return kirimRespon(true, `Voucher berhasil diklaim! Saldo Anda bertambah ${nilaiTiket} tiket.`, { saldo: saldoBaru });
-}
 
-function catatLogOtomatis(ss, namaSheet, rowData) {
-  let sheet = ss.getSheetByName(namaSheet);
-  if (!sheet) {
-    sheet = ss.insertSheet(namaSheet);
-    if (namaSheet === 'Log_Error') sheet.appendRow(["Waktu", "Email Siswa", "Titik Kegagalan", "Pesan Teknis", "Mesin AI"]);
-    else if (namaSheet === 'Log_Aktivitas') sheet.appendRow(["Waktu", "Email Siswa", "Status Evaluasi", "Mesin AI Penjawab"]);
-    else if (namaSheet === 'Log_Penolakan') sheet.appendRow(["Waktu", "Email Siswa", "Alasan Penolakan"]);
-    sheet.getRange("A1:E1").setFontWeight("bold");
-  }
-  sheet.appendRow(rowData);
-}
+    document.getElementById('btnRiwayat').addEventListener('click', () => {
+        document.getElementById('teksRiwayat').innerText = KAIWA_USER.riwayat || "Belum ada riwayat nilai yang tersimpan.";
+        showView('riwayat');
+    });
 
-// ==========================================
-// FUNGSI HELPER (WAJIB ADA)
-// ==========================================
+    document.getElementById('btnKembaliRiwayat').addEventListener('click', () => showView('dashboard'));
+    document.getElementById('btnKembaliDash').addEventListener('click', () => showView('dashboard'));
 
-function normalizeEmail(email) {
-  return email ? String(email).trim().toLowerCase() : '';
-}
+    // Script untuk tombol Landing Page
+        function tampilkanAreaLogin() {
+            document.getElementById('areaAutentikasi').style.display = 'block';
+            document.getElementById('judulAuth').innerText = "Silakan Masuk dengan Akun Google";
+        }
 
-function kirimRespon(success, message, data = null) {
-  return ContentService.createTextOutput(JSON.stringify({
-    success: success,
-    message: message,
-    data: data
-  })).setMimeType(ContentService.MimeType.JSON);
-}
+        function tampilkanAreaDaftar() {
+            document.getElementById('areaAutentikasi').style.display = 'block';
+            document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
+        }
+
+    // =========================================================
+    // FUNGSI POPUP PROFIL (HEADER ATAS)
+    // =========================================================
+    function toggleProfilePopup() {
+        const popup = document.getElementById('profilePopup');
+        popup.classList.toggle('hidden');
+    }
+
+    // Menutup popup jika user asal klik di luar area profil
+    window.addEventListener('click', function(e) {
+        const profileMenu = document.querySelector('.profile-menu');
+        const popup = document.getElementById('profilePopup');
+        if (profileMenu && popup && !profileMenu.contains(e.target)) {
+            popup.classList.add('hidden');
+        }
+    });
+
+    // =========================================================
+    // FUNGSI NAVIGASI: PINDAH TAB (TAHAP 2)
+    // =========================================================
+    function bukaTab(namaTab) {
+        // 1. Sembunyikan semua kardus terlebih dahulu (Ditambah Toko & Tukar)
+        document.getElementById('tab-dashboard').style.display = 'none';
+        document.getElementById('tab-modul').style.display = 'none';
+        document.getElementById('tab-riwayat').style.display = 'none';
+        document.getElementById('tab-panduan').style.display = 'none';
+        document.getElementById('tab-toko').style.display = 'none';
+        document.getElementById('tab-tukar').style.display = 'none';
+
+        // 2. Matikan warna biru 'active' dari semua tombol menu
+        document.getElementById('btn-tab-dashboard').classList.remove('active');
+        document.getElementById('btn-tab-modul').classList.remove('active');
+        document.getElementById('btn-tab-riwayat').classList.remove('active');
+        document.getElementById('btn-tab-panduan').classList.remove('active');
+        document.getElementById('btn-tab-toko').classList.remove('active');
+        document.getElementById('btn-tab-tukar').classList.remove('active');
+
+        // 3. Tampilkan HANYA kardus yang dipilih
+        document.getElementById('tab-' + namaTab).style.display = 'block';
+
+        // 4. Nyalakan warna biru pada tombol yang diklik
+        document.getElementById('btn-tab-' + namaTab).classList.add('active');
+    }
+
+
+        // =========================================================
+        // MESIN TAHAP 4: MASTER-DETAIL & ACCORDION TEMA
+        // =========================================================
+        
+        // 1. Fungsi Pindah dari Daftar Tier ke Halaman Khusus Tier
+        function bukaDetailTier(idDetail) {
+            document.getElementById('modul-list-view').style.display = 'none';
+            document.getElementById(idDetail).style.display = 'block';
+        }
+
+        // 2. Fungsi Tombol "Kembali"
+        function kembaliKeDaftarTier() {
+            let semuaDetail = document.querySelectorAll('.modul-detail-view');
+            semuaDetail.forEach(el => el.style.display = 'none');
+            document.getElementById('modul-list-view').style.display = 'block';
+        }
+
+        // 3. Fungsi Kartu Mekar (Accordion) untuk Opsi A
+        function toggleTema(elemenHeader) {
+            let elemenBody = elemenHeader.nextElementSibling;
+            let isTerbuka = elemenHeader.classList.contains('active');
+            
+            // Tutup semua tema lain yang sedang terbuka agar rapi
+            let semuaHeader = document.querySelectorAll('.theme-header');
+            let semuaBody = document.querySelectorAll('.theme-body');
+            semuaHeader.forEach(h => h.classList.remove('active'));
+            semuaBody.forEach(b => b.style.display = 'none');
+
+            // Jika tadi ditutup, maka mekarkan!
+            if (!isTerbuka) {
+                elemenHeader.classList.add('active');
+                elemenBody.style.display = 'block';
+            }
+        }
+
+    // =========================================================
+    // FITUR PENGAWAS UJIAN (ANTI-NYONTEK / ANTI-MINIMIZE)
+    // =========================================================
+    let timerKeluarLayar;
+    let jumlahPeringatanLayar = 0;
+
+    document.addEventListener('visibilitychange', () => {
+        // Sensor HANYA AKTIF jika siswa sedang berada di dalam Ruang Kaiwa (Focus Mode)
+        if (!document.getElementById('viewKaiwaRoom').classList.contains('hidden')) {
+            
+            if (document.hidden) {
+                // 1. Jika layar tertutup/minimize/pindah tab -> Mulai hitung mundur 3 detik
+                timerKeluarLayar = setTimeout(() => {
+                    tindakPelanggaranLayar();
+                }, 3000); 
+            } else {
+                // 2. Jika siswa kembali ke layar SEBELUM 3 detik -> Batalkan hitungan (Aman)
+                clearTimeout(timerKeluarLayar);
+            }
+        }
+    });
+
+    function tindakPelanggaranLayar() {
+        jumlahPeringatanLayar++;
+        
+        if (jumlahPeringatanLayar === 1) {
+            // Pelanggaran Pertama: Beri Peringatan Keras
+            alert("⚠️ PERINGATAN (1/2): Anda terdeteksi keluar dari layar aplikasi lebih dari 3 detik.\n\nMohon tetap fokus pada percakapan. Jika Anda keluar layar satu kali lagi, sesi ini akan otomatis diakhiri dan Anda akan dikenakan tiket pinalti!");
+        } 
+        else if (jumlahPeringatanLayar >= 2) {
+            // Pelanggaran Kedua: Tendang dari ruangan dan paksa cetak rapor pinalti
+            alert("🚨 PELANGGARAN: Anda keluar dari layar aplikasi untuk kedua kalinya.\n\nSesi ini diakhiri secara otomatis dan tiket pinalti telah dikenakan.");
+            
+            // Perintah ini sama seperti mesin mengklik tombol "Akhiri Sesi" secara paksa
+            document.getElementById('btnSelesaiKaiwa').click(); 
+        }
+    }
+
+</script>
+</body>
+</html>
