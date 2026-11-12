@@ -951,30 +951,30 @@
         .catch(err => console.error("Gagal memuat FingerprintJS:", err));
 
     // =========================================================
-    // 2. KONFIGURASI GOOGLE OAUTH (DENGAN PENGAMAN GANDA)
+    // 2. KONFIGURASI GOOGLE OAUTH (ANTI-BENTROK SCRIPT)
     // =========================================================
-    let isGoogleAuthLoaded = false; // Kunci gembok status
+    let isGoogleAuthLoaded = false;
 
-    window.onload = function () {
+    // KUNCI UTAMA: Gunakan addEventListener agar tidak menimpa script lain!
+    window.addEventListener('load', function () {
         initGoogleOAuthSafe();
-    };
+    });
 
     function initGoogleOAuthSafe() {
-        // 1. Jika sudah pernah sukses diinisialisasi, batalkan agar tidak tumpang tindih!
-        if (isGoogleAuthLoaded) return;
+        if (isGoogleAuthLoaded) return; // Cegah eksekusi ganda
 
-        // 2. Jika library Google belum selesai dimuat, tunggu 0.5 detik lalu coba lagi
+        // Jika library Google belum siap, antre 0.5 detik lagi
         if (typeof google === 'undefined' || !google.accounts) {
             setTimeout(initGoogleOAuthSafe, 500);
             return;
         }
         
         try {
-            // 3. Render tombol dengan aman
             google.accounts.id.initialize({
                 client_id: GOOGLE_CLIENT_ID,
                 callback: handleCredentialResponse,
-                use_fedcm_for_prompt: true
+                use_fedcm_for_prompt: true,
+                auto_select: true // Membantu memperlancar login ulang
             });
             
             google.accounts.id.renderButton(
@@ -982,8 +982,7 @@
                 { theme: "outline", size: "large", width: 250, shape: "rectangular" }
             );
 
-            // 4. Kunci gemboknya! Sistem sudah aman berjalan 1 kali.
-            isGoogleAuthLoaded = true; 
+            isGoogleAuthLoaded = true; // Kunci rapat!
             
         } catch (error) {
             console.error("Gagal merender tombol Google:", error);
