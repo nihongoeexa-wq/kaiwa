@@ -234,162 +234,142 @@
         .mic-btn:hover { transform: scale(1.05); }
 
         /* =========================================
-           CSS BARU: LAYER 2 (DASHBOARD)
+           CSS TAHAP 3: DASHBOARD V2 & FREEZE HEADER
         ========================================= */
         
-        /* Pembungkus Utama Layar Penuh */
         .dashboard-wrapper {
-            display: flex; /* Membelah layar jadi Kiri dan Kanan */
-            height: 100vh; /* Memaksa tinggi selalu pas 1 layar penuh */
-            background-color: #F7F9FA; /* Warna abu-abu sangat muda khas area belakang Duolingo */
-            overflow: hidden; /* Mencegah layar bergeser (scroll) keseluruhan */
+            display: flex; height: 100vh; background-color: #F7F9FA; overflow: hidden;
         }
 
-        /* --- 1. KOLOM KIRI (SIDEBAR) --- */
+        /* --- KOLOM KIRI (SIDEBAR) --- */
         .sidebar {
-            width: 260px;
-            background-color: #FFFFFF;
-            border-right: 2px solid #E5E5E5; /* Garis pembatas tebal ala Duolingo */
-            display: flex;
-            flex-direction: column; /* Menyusun isi dari atas ke bawah */
-            padding: 20px;
-            box-sizing: border-box;
+            width: 260px; background-color: #FFFFFF; border-right: 2px solid #E5E5E5;
+            display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; z-index: 10;
         }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+        .sidebar-logo { width: 45px; height: auto; }
+        .sidebar-title h2 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.1; }
 
-        /* Header Sidebar (Logo Mini) */
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 40px; /* Jarak dari Logo ke Menu Navigasi */
-        }
-        .sidebar-logo {
-            width: 45px; /* Jauh lebih kecil dari Layer 1 */
-            height: auto;
-        }
-        .sidebar-title h2 {
-            margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.1;
-        }
-        .sidebar-title p {
-            margin: 2px 0 0 0; font-size: 10px; font-weight: 700; color: var(--text-muted);
-        }
-
-        /* Menu Navigasi */
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px; /* Jarak antar tombol menu */
-            flex-grow: 1; /* Penting: Membuat area menu mengambil sisa ruang untuk menekan footer ke bawah */
-        }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
         .menu-item {
-            padding: 14px 20px;
-            background: transparent;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            text-align: left;
-            font-size: 14px;
-            font-weight: 800;
-            color: #777777; /* Warna abu-abu saat tidak aktif */
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.2s;
+            padding: 14px 20px; background: transparent; border: 2px solid transparent;
+            border-radius: 12px; text-align: left; font-size: 14px; font-weight: 800;
+            color: #777777; cursor: pointer; text-transform: uppercase; transition: all 0.2s;
         }
-        .menu-item:hover {
-            background-color: #F7F9FA;
-        }
-        
-        /* Desain Menu yang sedang dibuka (Aktif) */
-        .menu-item.active {
-            background-color: #DDF4FF; /* Biru sangat muda */
-            color: var(--primary); /* Teks Biru khas Neexa */
-            border: 2px solid #84D8FF; /* Garis tepi biru */
-        }
-        
-        /* Desain khusus tombol Keluar */
-        .menu-item.btn-keluar { color: #FF4B4B; }
-        .menu-item.btn-keluar:hover { background-color: #FFEEEE; }
-        
-        /* Pendorong Elemen ke Bawah */
+        .menu-item:hover { background-color: #F7F9FA; }
+        .menu-item.active { background-color: #DDF4FF; color: var(--primary); border: 2px solid #84D8FF; }
         .menu-spacer { flex-grow: 1; }
 
-        /* Footer Sidebar */
-        .sidebar-footer {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #E5E5E5;
-            text-align: center;
-        }
-        
-        .sidebar-footer h3 {
-            margin: 0; 
-            font-size: 14px; /* Ukuran agak besar */
-            font-weight: 800; 
-            color: var(--text-main); 
-            letter-spacing: 0.5px;
-        }
-        
-        .sidebar-footer .footer-support {
-            margin: 5px 0 2px 0; 
-            font-size: 11px; /* Ukuran agak kecil */
-            font-weight: 700; 
-            color: var(--text-muted);
-        }
-        
-        .sidebar-footer .footer-address {
-            margin: 0; 
-            font-size: 9px; /* Ukuran paling kecil */
-            font-weight: 600; 
-            color: #AFAFAF;
+        .sidebar-footer { margin-top: 20px; padding-top: 20px; border-top: 2px solid #E5E5E5; text-align: center; }
+        .sidebar-footer h3 { margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px; }
+        .footer-support { margin: 5px 0 2px 0; font-size: 11px; font-weight: 700; color: var(--text-muted); }
+
+        /* --- AREA KANAN (HEADER + KONTEN) --- */
+        .main-area {
+            flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden;
         }
 
-        /* --- 2. KOLOM KANAN (KONTEN UTAMA) --- */
-        .main-content {
-            flex: 1; /* Mengambil seluruh sisa ruang layar di sebelah kanan */
-            padding: 40px;
-            overflow-y: auto; /* Memungkinkan area kanan ini digulir (scroll) jika isinya panjang, sementara kiri statis */
+        /* HEADER ATAS (FREEZE) */
+        .top-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background: #FFFFFF; border-bottom: 2px solid #E5E5E5; z-index: 5;
         }
+        .welcome-text { margin: 0; font-size: 18px; color: var(--text-main); font-weight: 700; }
+        .highlight-text { color: var(--primary); }
 
-        /* =========================================
-           MANTRA RESPONSIF KHUSUS HP (MOBILE VIEW)
-        ========================================= */
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .stat-group { display: flex; gap: 10px; }
+        .stat-badge {
+            padding: 8px 15px; border-radius: 12px; font-size: 14px; font-weight: 800;
+            display: flex; align-items: center; gap: 8px; border: 2px solid transparent; cursor: default;
+        }
+        .stat-sesi { color: #ea580c; background: #ffedd5; border-color: #fed7aa; }
+        .stat-koin { color: #b45309; background: #fef08a; border-color: #fde047; }
+        .stat-tiket { color: #0284c7; background: #e0f2fe; border-color: #bae6fd; }
+
+        /* PROFIL POPUP */
+        .profile-menu { position: relative; cursor: pointer; }
+        .profile-avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white;
+            display: flex; justify-content: center; align-items: center; font-size: 18px;
+            border: 2px solid #E5E5E5; transition: 0.2s;
+        }
+        .profile-avatar:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .profile-popup {
+            position: absolute; top: 50px; right: 0; background: white; padding: 15px;
+            border-radius: 12px; border: 2px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            min-width: 200px; text-align: center; z-index: 100;
+        }
+        .profile-email { margin: 0 0 15px 0; font-size: 13px; font-weight: 700; color: #475569; word-break: break-all; }
+        .btn-logout-popup {
+            width: 100%; padding: 10px; background: #fee2e2; color: #ef4444; border: none;
+            border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-logout-popup:hover { background: #fecaca; }
+
+        /* KONTEN UTAMA SCROLLABLE */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+
+        /* GRID DASHBOARD */
+        .dashboard-grid { display: flex; gap: 30px; }
+        .dash-left { flex: 7; display: flex; flex-direction: column; gap: 25px; }
+        .dash-right { flex: 3; display: flex; flex-direction: column; gap: 20px; }
+
+        /* BANNER DASHBOARD */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), #3b5098); border-radius: 20px;
+            padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(43,59,112,0.15);
+        }
+        .banner-text { position: relative; z-index: 2; max-width: 70%; }
+        .banner-text h2 { margin: 0 0 10px 0; font-size: 24px; font-weight: 800; }
+        .banner-text p { margin: 0 0 20px 0; font-size: 14px; line-height: 1.5; opacity: 0.9; }
+        .btn-banner {
+            background: #fef08a; color: #854d0e; border: none; padding: 12px 24px; border-radius: 12px;
+            font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-banner:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .banner-img { position: absolute; right: 20px; bottom: -20px; z-index: 1; }
+
+        /* STATISTIK KARTU */
+        .stats-cards-container { display: flex; gap: 20px; }
+        .stat-card {
+            flex: 1; background: white; border: 2px solid #e2e8f0; border-radius: 16px;
+            padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .stat-card .stat-icon {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; justify-content: center;
+            align-items: center; font-size: 24px;
+        }
+        .stat-card .stat-info h4 { margin: 0 0 5px 0; font-size: 12px; color: #64748b; text-transform: uppercase; }
+        .stat-card .stat-info p { margin: 0; font-size: 16px; font-weight: 800; color: var(--text-main); }
+
+        /* WIDGET KANAN */
+        .widget-box { background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .widget-box h3 { margin: 0 0 10px 0; font-size: 16px; color: var(--text-main); }
+        .widget-box p { margin: 0 0 15px 0; font-size: 13px; color: #64748b; line-height: 1.5; }
+        .voucher-widget input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; font-weight: 700; text-transform: uppercase; box-sizing: border-box; }
+        .voucher-widget button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .voucher-widget button:hover { background: var(--primary-hover); }
+
+        /* MANTRA HP (RESPONSIVE) */
         @media (max-width: 768px) {
-            /* 1. Mengubah belahan layar dari Kiri-Kanan menjadi Atas-Bawah */
-            .dashboard-wrapper {
-                flex-direction: column; 
-                height: auto; 
-                min-height: 100vh;
-                overflow-y: auto; /* Mengizinkan scroll ke bawah di HP */
-            }
-
-            /* 2. Sidebar menjadi Header Atas yang memenuhi layar */
-            .sidebar {
-                width: 100%; 
-                border-right: none; 
-                border-bottom: 2px solid #E5E5E5; 
-                padding: 15px;
-            }
-
-            /* 3. Menu Navigasi disulap menjadi menyamping & bisa digeser (swipe) */
-            .sidebar-menu {
-                flex-direction: row; 
-                overflow-x: auto; 
-                padding-bottom: 5px;
-                gap: 10px;
-            }
-            .menu-item {
-                white-space: nowrap; /* Mencegah teks menu terpotong ke bawah */
-                padding: 10px 15px;
-                font-size: 12px;
-            }
-            .menu-spacer, .sidebar-footer {
-                display: none; /* Sembunyikan spacer & footer di HP agar ruang lebih lega */
-            }
-
-            /* 4. Kolom Kanan (Kartu) menyesuaikan ukuran HP */
-            .main-content {
-                padding: 20px 15px; 
-                overflow-y: visible;
-            }
+            .dashboard-wrapper { flex-direction: column; overflow-y: auto; height: auto; min-height: 100vh;}
+            .sidebar { width: 100%; border-right: none; border-bottom: 2px solid #E5E5E5; padding: 15px; }
+            .sidebar-header { margin-bottom: 15px; }
+            .sidebar-menu { flex-direction: row; overflow-x: auto; padding-bottom: 5px; gap: 10px; }
+            .menu-item { padding: 10px 15px; font-size: 12px; white-space: nowrap; }
+            .sidebar-footer { display: none; }
+            
+            .main-area { height: auto; overflow: visible; }
+            .top-header { padding: 15px; flex-direction: column; gap: 15px; align-items: flex-start; }
+            .header-right { width: 100%; justify-content: space-between; overflow-x: auto;}
+            
+            .main-content { padding: 20px 15px; }
+            .dashboard-grid { flex-direction: column; }
+            .stats-cards-container { flex-direction: column; }
+            .banner-text { max-width: 100%; }
+            .banner-img { display: none; }
         }
 
 
@@ -502,215 +482,269 @@
         </div>
     </div>
 
-    <!-- ================= WADAH APLIKASI (DASHBOARD) ================= -->
+    <!-- ================= WADAH APLIKASI (DASHBOARD V2) ================= -->
     <div id="viewDashboard" class="hidden dashboard-wrapper">
         
-        <!-- --- KOLOM KIRI: SIDEBAR STATIS --- -->
+        <!-- --- 1. KOLOM KIRI (SIDEBAR STATIS) --- -->
         <aside class="sidebar">
-            <!-- 1. Header Sidebar (Logo & Teks Mini) -->
             <div class="sidebar-header">
                 <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
                 <div class="sidebar-title">
-                    <h2>Smart AI Conversation</h2>
+                    <h2>Smart AI</h2>
+                    <h2>Conversation</h2>
                 </div>
             </div>
 
-            <!-- 2. Menu Navigasi -->
             <nav class="sidebar-menu">
                 <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">Dashboard</button>
-                <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul</button>
-                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat')">Riwayat</button>
+                <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul Latihan</button>
+                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat')">Riwayat Nilai</button>
+                <!-- Menu Baru -->
+                <button class="menu-item" id="btn-tab-toko" onclick="bukaTab('toko')">Toko Voucher</button>
+                <button class="menu-item" id="btn-tab-tukar" onclick="bukaTab('tukar')">Tukar Koin</button>
+                
                 <button class="menu-item" id="btn-tab-panduan" onclick="bukaTab('panduan')">Panduan</button>
                 
-                <!-- Spacer gaib untuk mendorong tombol Keluar & Footer -->
                 <div class="menu-spacer"></div>
-                
-                <button class="menu-item btn-keluar" onclick="prosesLogout()">Keluar</button>
             </nav>
 
-            <!-- 3. Footer Sponsor Neexa (Desain Baru) -->
             <div class="sidebar-footer">
                 <h3>NEEXA SYSTEM</h3>
                 <p class="footer-support">Support By : LPK .......</p>
-                <p class="footer-address">Alamat lengkap LPK Anda di sini...</p>
             </div>
         </aside>
 
-        <!-- --- KOLOM KANAN: KONTEN UTAMA --- -->
-        <main class="main-content">
+        <!-- --- AREA KANAN (HEADER + KONTEN) --- -->
+        <div class="main-area">
             
-            <!-- KARDUS 1: DASHBOARD (Sapaan & Top-Up Voucher) -->
-            <div id="tab-dashboard" style="display: none; padding: 25px;">
+            <!-- --- 2. HEADER ATAS (FREEZE BAR) --- -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
+                </div>
+                <div class="header-right">
+                    <!-- Stat Bar -->
+                    <div class="stat-group">
+                        <div class="stat-badge stat-sesi" title="Total Sesi">
+                            <i class="fas fa-fire"></i> <span id="totalSesiDisplay">0</span>
+                        </div>
+                        <div class="stat-badge stat-koin" title="Saldo Koin">
+                            <i class="fas fa-coins"></i> <span id="saldoKoinDisplay">0</span>
+                        </div>
+                        <div class="stat-badge stat-tiket" title="Saldo Tiket">
+                            <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
+                        </div>
+                    </div>
+                    <!-- Profil -->
+                    <div class="profile-menu" onclick="toggleProfilePopup()">
+                        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                        <div id="profilePopup" class="profile-popup hidden">
+                            <p class="profile-email" id="userEmailDisplay">user@email.com</p>
+                            <button class="btn-logout-popup" onclick="prosesLogout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- --- 3. AREA KONTEN SCROLLABLE --- -->
+            <main class="main-content">
                 
-                <!-- Format Rata Kiri & Lebar 650px (Sama persis dengan halaman Modul) -->
-                <div style="max-width: 650px; margin: 0; text-align: left;">
-                    
-                    <!-- Sapaan & Saldo -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <h2 style="font-size: 20px; color: var(--text-main); margin: 0;">Halo, <span id="userNamaDisplay" style="color: var(--primary);">User</span>!</h2>
+                <!-- KARDUS 1: DASHBOARD (Layout Kiri Kanan) -->
+                <div id="tab-dashboard" style="display: none;">
+                    <div class="dashboard-grid">
                         
-                        <!-- Indikator Saldo Tiket -->
-                        <div class="ticket-badge" title="Saldo Tiket">
-                            <i class="fas fa-gem"></i> <span id="saldoTiketDisplay">0</span>
+                        <!-- Area Kiri Dashboard (70%) -->
+                        <div class="dash-left">
+                            <!-- Banner Utama -->
+                            <div class="welcome-banner">
+                                <div class="banner-text">
+                                    <h2>Siap berlatih Kaiwa hari ini?</h2>
+                                    <p>Tingkatkan insting bahasa Jepangmu agar siap menghadapi ujian JFT-Basic dan wawancara kerja.</p>
+                                    <button class="btn-banner" onclick="bukaTab('modul')">Pilih Modul <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <div class="banner-img">
+                                    <!-- Tempatkan ilustrasi lucu di sini jika ada -->
+                                    <i class="fas fa-rocket" style="font-size: 80px; opacity: 0.2; transform: rotate(15deg);"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Ringkasan Statistik -->
+                            <div class="stats-cards-container">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#fef08a; color:#b45309;"><i class="fas fa-star"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Rata-rata Nilai</h4>
+                                        <p>Belum ada data</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#bae6fd; color:#0284c7;"><i class="fas fa-bullseye"></i></div>
+                                    <div class="stat-info">
+                                        <h4>Target Level</h4>
+                                        <p>JFT-Basic A2</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Kanan Dashboard (30%) -->
+                        <div class="dash-right">
+                            <!-- Kotak Klaim Voucher -->
+                            <div class="widget-box voucher-widget">
+                                <h3><i class="fas fa-gift"></i> Punya Kode Tiket?</h3>
+                                <p>Masukkan kode voucher untuk menambah tiket.</p>
+                                <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+                                <button id="btnKlaimVoucher">Klaim</button>
+                                <div id="voucherMsg" class="msg" style="margin-top: 10px;"></div>
+                                <div id="dashMsg" class="msg"></div>
+                            </div>
+                            
+                            <!-- Kotak Info/Pengumuman (Opsional) -->
+                            <div class="widget-box info-widget">
+                                <h3><i class="fas fa-bullhorn"></i> Info LPK</h3>
+                                <p>Tetap semangat belajar! Jangan lupa gunakan WiFi yang stabil saat berlatih Kaiwa.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- KARDUS 2: MODUL (DAFTAR & DETAIL TIER) -->
+                <!-- ========================================== -->
+                <div id="tab-modul" style="display: none; padding: 25px;">
+                    <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
+                    <div id="modul-list-view" style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Pilih Kategori Level</h2>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-shokyu')">
+                            <div class="tier-icon">🐣</div>
+                            <div class="tier-info">
+                                <h3>SHOKYU TIER (Basic)</h3>
+                                <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 26 Tiket</div>
+                        </div>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-chukyu')">
+                            <div class="tier-icon">🔥</div>
+                            <div class="tier-info">
+                                <h3>CHUKYU TIER (Mid)</h3>
+                                <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 52 Tiket</div>
+                        </div>
+                        <div class="tier-bar" onclick="bukaDetailTier('detail-jokyu')">
+                            <div class="tier-icon">👑</div>
+                            <div class="tier-info">
+                                <h3>JOKYU TIER (Pro)</h3>
+                                <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
+                            </div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 100 Tiket</div>
                         </div>
                     </div>
 
-                    <!-- Kotak Klaim Voucher (Dibungkus card agar lebih rapi) -->
-                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <p style="font-size: 14px; color: #475569; font-weight: 600; margin: 0 0 10px 0;">Punya kode tiket? Masukkan di sini:</p>
-                        
-                        <div class="voucher-box" style="display: flex; gap: 10px;">
-                            <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off" style="flex-grow: 1;">
-                            <button id="btnKlaimVoucher">Klaim</button>
+                    <!-- [LAYAR 2A] HALAMAN KHUSUS: SHOKYU -->
+                    <div id="detail-shokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header">
+                            <h2>SHOKYU TIER (Basic)</h2>
+                            <p><strong>Target:</strong> Pemula yang baru mengenal Kana dan pola kalimat dasar.</p>
+                            <p><strong>Fungsi:</strong> Melatih insting bahasa & keberanian berbicara.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 26 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
                         </div>
-                        
-                        <div id="voucherMsg" class="msg" style="margin-top: 10px;"></div>
-                        <div id="dashMsg" class="msg"></div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-shokyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
                     </div>
 
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- KARDUS 2: MODUL (DAFTAR & DETAIL TIER) -->
-            <!-- ========================================== -->
-            <div id="tab-modul" style="display: none; padding: 25px;">
-                
-                <!-- [LAYAR 1] DAFTAR TIER (LIST VIEW) -->
-                <div id="modul-list-view" style="max-width: 650px; margin: 0; text-align: left;">
-                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Pilih Kategori Level</h2>
-
-                    <!-- Baris 1: SHOKYU -->
-                    <div class="tier-bar" onclick="bukaDetailTier('detail-shokyu')">
-                        <div class="tier-icon">🐣</div>
-                        <div class="tier-info">
-                            <h3>SHOKYU TIER (Basic)</h3>
-                            <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
+                    <!-- [LAYAR 2B] HALAMAN KHUSUS: CHUKYU -->
+                    <div id="detail-chukyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
+                            <h2 style="color: #c026d3;">CHUKYU TIER (Mid)</h2>
+                            <p><strong>Target:</strong> Siswa persiapan ujian JFT-Basic A2.</p>
+                            <p><strong>Fungsi:</strong> Latihan pemahaman konteks sosial dan formalitas ringan.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 52 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 26 Tiket</div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-chukyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
                     </div>
 
-                    <!-- Baris 2: CHUKYU -->
-                    <div class="tier-bar" onclick="bukaDetailTier('detail-chukyu')">
-                        <div class="tier-icon">🔥</div>
-                        <div class="tier-info">
-                            <h3>CHUKYU TIER (Mid)</h3>
-                            <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
+                    <!-- [LAYAR 2C] HALAMAN KHUSUS: JOKYU -->
+                    <div id="detail-jokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
+                        <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
+                        <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
+                            <h2 style="color: #e11d48;">JOKYU TIER (Pro)</h2>
+                            <p><strong>Target:</strong> Kandidat Tokutei Ginou yang siap berangkat ke Jepang.</p>
+                            <p><strong>Fungsi:</strong> Menguji mental, spontanitas, dan kesiapan wawancara kerja.</p>
+                            <p><strong>Aturan:</strong> Dibutuhkan Deposit 100 Tiket di awal. Sisa tiket dikembalikan di akhir sesi.</p>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 52 Tiket</div>
+                        <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
+                        <div id="wadah-tema-jokyu"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p></div>
                     </div>
+                </div>
 
-                    <!-- Baris 3: JOKYU -->
-                    <div class="tier-bar" onclick="bukaDetailTier('detail-jokyu')">
-                        <div class="tier-icon">👑</div>
-                        <div class="tier-info">
-                            <h3>JOKYU TIER (Pro)</h3>
-                            <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
+                <!-- ========================================== -->
+                <!-- KARDUS 3: RIWAYAT -->
+                <!-- ========================================== -->
+                <div id="tab-riwayat" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Riwayat Nilai</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                            <p style="color: #475569; font-size: 14px; margin-top: 0; margin-bottom: 20px;">Tabel performa Anda akan ditampilkan di sini.</p>
+                            <button id="btnRiwayat" style="border: 2px solid #cbd5e1; background: transparent; color: #475569; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
                         </div>
-                        <div class="tier-price"><i class="fas fa-ticket-alt"></i> 100 Tiket</div>
                     </div>
                 </div>
 
-                <!-- [LAYAR 2A] HALAMAN KHUSUS: SHOKYU -->
-                <div id="detail-shokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
-                    
-                    <div class="detail-header">
-                        <h2>SHOKYU TIER (Basic)</h2>
-                        <p><strong>Target:</strong> Pemula yang baru mengenal Kana dan pola kalimat dasar.</p>
-                        <p><strong>Fungsi:</strong> Melatih insting bahasa & keberanian berbicara.</p>
-                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 26 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
-                    </div>
-
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
-                    
-                    <!-- WADAH KOSONG UNTUK SHOKYU (Akan diisi otomatis oleh JavaScript) -->
-                    <div id="wadah-tema-shokyu">
-                        <!-- Loading text sementara jika internet lambat -->
-                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
+                <!-- ========================================== -->
+                <!-- KARDUS BARU: TOKO VOUCHER -->
+                <!-- ========================================== -->
+                <div id="tab-toko" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Toko Tiket</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
+                            <i class="fas fa-store" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Beli Paket Tiket</h3>
+                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Dapatkan tiket latihan dengan harga spesial via Admin atau Lynk.id.</p>
+                            <button onclick="window.open('https://lynk.id', '_blank')" class="btn" style="width: auto; padding: 10px 20px; margin:0 auto;"><i class="fas fa-shopping-cart"></i> Menuju Toko</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- [LAYAR 2B] HALAMAN KHUSUS: CHUKYU -->
-                <div id="detail-chukyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
-                    <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
-                        <h2 style="color: #c026d3;">CHUKYU TIER (Mid)</h2>
-                        <p><strong>Target:</strong> Siswa persiapan ujian JFT-Basic A2.</p>
-                        <p><strong>Fungsi:</strong> Latihan pemahaman konteks sosial dan formalitas ringan.</p>
-                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 52 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
-                    </div>
-                    
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
-                    
-                    <!-- WADAH KOSONG UNTUK CHUKYU -->
-                    <div id="wadah-tema-chukyu">
-                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
+                <!-- ========================================== -->
+                <!-- KARDUS BARU: TUKAR KOIN -->
+                <!-- ========================================== -->
+                <div id="tab-tukar" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Tukar Koin</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
+                            <i class="fas fa-coins" style="font-size: 40px; color: #fbbf24; margin-bottom: 15px;"></i>
+                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Tukar Koin Emas</h3>
+                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Kumpulkan koin dari hasil belajar untuk ditukar dengan tiket gratis.</p>
+                            <!-- Fitur dummy sementara -->
+                            <button class="btn btn-outline" style="width: auto; padding: 10px 20px; margin:0 auto; cursor:not-allowed;" disabled>Segera Hadir</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- [LAYAR 2C] HALAMAN KHUSUS: JOKYU -->
-                <div id="detail-jokyu" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeDaftarTier()"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</button>
-                    <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
-                        <h2 style="color: #e11d48;">JOKYU TIER (Pro)</h2>
-                        <p><strong>Target:</strong> Kandidat Tokutei Ginou yang siap berangkat ke Jepang.</p>
-                        <p><strong>Fungsi:</strong> Menguji mental, spontanitas, dan kesiapan wawancara kerja.</p>
-                        <p><strong>Aturan:</strong> Dibutuhkan Deposit 100 Tiket di awal. Sisa tiket akan otomatis dikembalikan (Refund) di akhir sesi sesuai jumlah putaran yang dipakai.</p>
-                    </div>
-                    
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Katalog Tema:</h3>
-                    
-                    <!-- WADAH KOSONG UNTUK JOKYU -->
-                    <div id="wadah-tema-jokyu">
-                        <p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema dari server...</p>
+                <!-- ========================================== -->
+                <!-- KARDUS 4: PANDUAN -->
+                <!-- ========================================== -->
+                <div id="tab-panduan" style="display: none; padding: 25px;">
+                    <div style="max-width: 650px; margin: 0; text-align: left;">
+                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Panduan Penggunaan</h2>
+                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                            <ol style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
+                                <li>Buka menu <strong>Modul Latihan</strong> untuk memilih tema.</li>
+                                <li>Pastikan memberikan izin akses <strong>mikrofon</strong> pada browser.</li>
+                                <li>Jawab pertanyaan AI dengan jelas dan natural.</li>
+                                <li>Jangan menutup halaman saat sesi berlangsung agar tiket tidak hangus.</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
 
-            </div>
-            <!-- ================= AKHIR KARDUS 2 ================= -->
-
-            <!-- ========================================== -->
-            <!-- KARDUS 3: RIWAYAT -->
-            <!-- ========================================== -->
-            <div id="tab-riwayat" style="display: none; padding: 25px;">
-                <div style="max-width: 650px; margin: 0; text-align: left;">
-                    
-                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Riwayat Nilai</h2>
-                    
-                    <!-- Dibungkus kotak putih agar senada dengan dashboard -->
-                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <p style="color: #475569; font-size: 14px; margin-top: 0; margin-bottom: 20px;">Tabel performa Anda akan ditampilkan di sini.</p>
-                        
-                        <!-- Tombol Riwayat -->
-                        <button id="btnRiwayat" style="border: 2px solid #cbd5e1; background: transparent; color: #475569; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- KARDUS 4: PANDUAN -->
-            <!-- ========================================== -->
-            <div id="tab-panduan" style="display: none; padding: 25px;">
-                <div style="max-width: 650px; margin: 0; text-align: left;">
-                    
-                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Panduan Penggunaan</h2>
-                    
-                    <!-- Dibungkus kotak putih dan dibuat format list -->
-                    <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <ol style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
-                            <li>Buka menu <strong>Modul</strong> untuk memilih level dan tema latihan.</li>
-                            <li>Pastikan memberikan izin akses <strong>mikrofon</strong> pada browser Anda.</li>
-                            <li>Jawab pertanyaan AI dengan jelas dan natural menggunakan bahasa Jepang.</li>
-                            <li>Jangan menutup atau memuat ulang (refresh) halaman saat sesi percakapan berlangsung agar tiket tidak hangus.</li>
-                        </ol>
-                    </div>
-
-                </div>
-            </div>
-
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- ================= VIEW 4: KAIWA ROOM ================= -->
@@ -904,14 +938,23 @@
                     riwayat: data.data.riwayat || ""
                 };
                 
-                // Update UI Dashboard
+                // Update Data ke UI Dashboard V2
                 document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                document.getElementById('userEmailDisplay').innerText = KAIWA_USER.email; // Ini untuk popup profil
                 document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                // (Nanti total sesi dan saldo koin bisa dipanggil di sini juga jika GS sudah mengirim datanya)
                 
                 showView('dashboard');
-                muatDaftarProduk(); // <-- TAMBAHKAN DI SINI
-                showMsg('dashMsg', 'success', data.message); // Menampilkan pesan selamat atau penolakan promo
-            } else {
+                
+                // ================================================
+                // MANTRA AJAIB PENYEMBUH LAYAR KOSONG SAAT LOGIN:
+                bukaTab('dashboard'); 
+                // ================================================
+                
+                muatDaftarProduk(); 
+                showMsg('dashMsg', 'success', data.message);
+                
+            } else { // <--- SEKARANG SUDAH BENAR (Hanya 1 kurung tutup sebelumnya)
                 showMsg('loginMsg', 'error', data.message);
                 kirimBlackBox("Proses Login/Daftar OAuth", data.message);
             }
@@ -1411,20 +1454,41 @@
         }
 
     // =========================================================
+    // FUNGSI POPUP PROFIL (HEADER ATAS)
+    // =========================================================
+    function toggleProfilePopup() {
+        const popup = document.getElementById('profilePopup');
+        popup.classList.toggle('hidden');
+    }
+
+    // Menutup popup jika user asal klik di luar area profil
+    window.addEventListener('click', function(e) {
+        const profileMenu = document.querySelector('.profile-menu');
+        const popup = document.getElementById('profilePopup');
+        if (profileMenu && popup && !profileMenu.contains(e.target)) {
+            popup.classList.add('hidden');
+        }
+    });
+
+    // =========================================================
     // FUNGSI NAVIGASI: PINDAH TAB (TAHAP 2)
     // =========================================================
     function bukaTab(namaTab) {
-        // 1. Sembunyikan semua kardus terlebih dahulu
+        // 1. Sembunyikan semua kardus terlebih dahulu (Ditambah Toko & Tukar)
         document.getElementById('tab-dashboard').style.display = 'none';
         document.getElementById('tab-modul').style.display = 'none';
         document.getElementById('tab-riwayat').style.display = 'none';
         document.getElementById('tab-panduan').style.display = 'none';
+        document.getElementById('tab-toko').style.display = 'none';
+        document.getElementById('tab-tukar').style.display = 'none';
 
         // 2. Matikan warna biru 'active' dari semua tombol menu
         document.getElementById('btn-tab-dashboard').classList.remove('active');
         document.getElementById('btn-tab-modul').classList.remove('active');
         document.getElementById('btn-tab-riwayat').classList.remove('active');
         document.getElementById('btn-tab-panduan').classList.remove('active');
+        document.getElementById('btn-tab-toko').classList.remove('active');
+        document.getElementById('btn-tab-tukar').classList.remove('active');
 
         // 3. Tampilkan HANYA kardus yang dipilih
         document.getElementById('tab-' + namaTab).style.display = 'block';
