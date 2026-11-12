@@ -950,33 +950,45 @@
         })
         .catch(err => console.error("Gagal memuat FingerprintJS:", err));
 
-    // 2. Konfigurasi Google OAuth (Lebih aman, dijamin library sudah load)
+    // =========================================================
+    // 2. KONFIGURASI GOOGLE OAUTH (DENGAN PENGAMAN GANDA)
+    // =========================================================
+    let isGoogleAuthLoaded = false; // Kunci gembok status
+
     window.onload = function () {
-        // Cek dulu apakah object google sudah siap
-        if (typeof google !== 'undefined' && google.accounts) {
-            initGoogleOAuth();
-        } else {
-            // Jika belum, tunggu beberapa detik (fallback)
-            setTimeout(initGoogleOAuth, 1500);
-        }
+        initGoogleOAuthSafe();
     };
 
-    function initGoogleOAuth() {
-        if (typeof google === 'undefined') {
-            showMsg('loginMsg', 'error', 'Gagal memuat tombol Google. Coba refresh halaman.');
+    function initGoogleOAuthSafe() {
+        // 1. Jika sudah pernah sukses diinisialisasi, batalkan agar tidak tumpang tindih!
+        if (isGoogleAuthLoaded) return;
+
+        // 2. Jika library Google belum selesai dimuat, tunggu 0.5 detik lalu coba lagi
+        if (typeof google === 'undefined' || !google.accounts) {
+            setTimeout(initGoogleOAuthSafe, 500);
             return;
         }
         
-        google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleCredentialResponse,
-            use_fedcm_for_prompt: true // <--- INI BARIS AJAIB YANG KETINGGALAN, SENSEI!
-        });
-        
-        google.accounts.id.renderButton(
-            document.getElementById("googleButtonDiv"),
-            { theme: "outline", size: "large", width: 250, shape: "rectangular" }
-        );
+        try {
+            // 3. Render tombol dengan aman
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse,
+                use_fedcm_for_prompt: true
+            });
+            
+            google.accounts.id.renderButton(
+                document.getElementById("googleButtonDiv"),
+                { theme: "outline", size: "large", width: 250, shape: "rectangular" }
+            );
+
+            // 4. Kunci gemboknya! Sistem sudah aman berjalan 1 kali.
+            isGoogleAuthLoaded = true; 
+            
+        } catch (error) {
+            console.error("Gagal merender tombol Google:", error);
+            showMsg('loginMsg', 'error', 'Sistem login gagal dimuat. Silakan refresh halaman.');
+        }
     }
 
     // 3. Menangani Respon Sukses dari Google
