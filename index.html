@@ -372,6 +372,19 @@
             .banner-img { display: none; }
         }
 
+        /* =========================================
+           CSS TAHAP 3: RUANG KAIWA (CHAT BUBBLE)
+        ========================================= */
+        .kaiwa-room-container { background: #ffffff; border-radius: 16px; border: 2px solid #e2e8f0; display: flex; flex-direction: column; height: 75vh; min-height: 500px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto; max-width: 650px;}
+        .kaiwa-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-bottom: 2px solid #e2e8f0; }
+        .chat-container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #f4f7fa; scroll-behavior: smooth; }
+        .chat-row { display: flex; gap: 10px; align-items: flex-end; width: 100%; }
+        .chat-row.user { justify-content: flex-end; }
+        .chat-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #e2e8f0; flex-shrink: 0; }
+        .chat-bubble { max-width: 75%; padding: 12px 16px; font-size: 14px; line-height: 1.5; border-radius: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .chat-row.ai .chat-bubble { background: #ffffff; color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; }
+        .chat-row.user .chat-bubble { background: var(--primary); color: #ffffff; border-bottom-right-radius: 4px; }
+        .kaiwa-footer { padding: 15px 20px; background: #ffffff; border-top: 2px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; }
 
         /* =========================================
            CSS TAHAP 4: MASTER-DETAIL & ACCORDION
@@ -465,8 +478,25 @@
                     </div>
                     <!-- ============================================== -->
 
-                    <div class="google-btn-wrapper">
-                        <div id="googleButtonDiv"></div>
+                    <!-- TOMBOL GOOGLE (BYPASS COOP) -->
+                    <div class="google-btn-wrapper" style="display: flex; flex-direction: column; align-items: center;">
+                        <div id="g_id_onload"
+                             data-client_id="1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"
+                             data-context="signin"
+                             data-ux_mode="popup"
+                             data-callback="handleCredentialResponse"
+                             data-auto_prompt="false"
+                             data-use_fedcm_for_prompt="true">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-shape="rectangular"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-size="large"
+                             data-logo_alignment="center"
+                             data-width="250">
+                        </div>
                     </div>
                     
                     <div id="loginMsg" class="msg"></div>
@@ -535,13 +565,9 @@
                             <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
                         </div>
                     </div>
-                    <!-- Profil -->
-                    <div class="profile-menu" onclick="toggleProfilePopup()">
-                        <div class="profile-avatar"><i class="fas fa-user"></i></div>
-                        <div id="profilePopup" class="profile-popup hidden">
-                            <p class="profile-email" id="userEmailDisplay">user@email.com</p>
-                            <button class="btn-logout-popup" onclick="prosesLogout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-                        </div>
+                    <!-- Profil & Avatar Baru -->
+                    <div class="profile-menu" onclick="bukaModalProfil()">
+                        <img id="profilImageDisplay" src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="profile-avatar" style="border: 2px solid #2b5cff; object-fit: cover; background: #e2e8f0; width: 45px; height: 45px;">
                     </div>
                 </div>
             </header>
@@ -747,21 +773,28 @@
         </div>
     </div>
 
-    <!-- ================= VIEW 4: KAIWA ROOM ================= -->
-    <div id="viewKaiwaRoom" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <!-- ================= VIEW 4: KAIWA ROOM (CHAT MODE) ================= -->
+    <div id="viewKaiwaRoom" class="hidden kaiwa-room-container">
+        <!-- Header Chat -->
+        <div class="kaiwa-header">
             <div style="text-align: left;">
-                <h3 style="margin: 0; font-size: 16px; color: var(--primary);">Sesi Aktif</h3>
-                <p id="activeProductDisplay" style="margin: 0; font-size: 12px; color: var(--text-muted);">Modul</p>
+                <h3 style="margin: 0; font-size: 16px; color: var(--primary);"><i class="fas fa-comments"></i> Sesi Kaiwa</h3>
+                <p id="activeProductDisplay" style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 600;">Modul</p>
             </div>
-            <button id="btnSelesaiKaiwa" style="background: #f1f5f9; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #ef4444;"><i class="fas fa-times"></i> Akhiri</button>
+            <button id="btnSelesaiKaiwa" style="background: #fee2e2; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 700; color: #ef4444; transition: 0.2s;"><i class="fas fa-times"></i> Akhiri Sesi</button>
         </div>
 
-        <div class="kaiwa-box">
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Fitur AI akan segera terhubung ke Cloudflare...</p>
-            <button class="mic-btn"><i class="fas fa-microphone"></i></button>
+        <!-- Ruang Balon Obrolan -->
+        <div class="chat-container" id="chatContainer">
+            <!-- Balon Chat akan muncul secara otomatis di sini -->
         </div>
-        <p style="font-size: 13px; color: var(--text-muted);">Tekan tombol merah untuk berbicara</p>
+
+        <!-- Footer Tombol Mic -->
+        <div class="kaiwa-footer">
+            <div id="statusTeksInfo" style="font-size: 13px; color: #64748b; margin-bottom: 10px; text-align: center; font-weight: 600;">Tekan tombol mikrofon untuk bicara</div>
+            <button class="mic-btn" id="tombolMicUtama"><i class="fas fa-microphone"></i></button>
+            <div id="indikatorPutaran" style="font-size: 12px; color: #94a3b8; margin-top: 10px; font-weight: bold;">Putaran: 0 / 0</div>
+        </div>
     </div>
 
     <!-- ================= VIEW 5: RAPOR ================= -->
@@ -814,7 +847,45 @@
 
         <button id="btnKembaliRiwayat" class="btn"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
     </div>
-
+    <!-- ================= MODAL EDIT PROFIL & AVATAR ================= -->
+    <div id="profilModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px);">
+        <div style="background: #fff; border-radius: 16px; width: 90%; max-width: 380px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            
+            <!-- Header Modal -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f4f8; padding-bottom: 12px; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: var(--text-main); font-size: 18px;"><i class="fas fa-user-edit"></i> Edit Profil</h3>
+                <button onclick="tutupModalProfil()" style="background: #f0f4f8; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; color: #ef4444;"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <!-- Input Ganti Nama -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 13px;">NAMA PANGGILAN ANDA</label>
+                <input type="text" id="inputNamaProfil" placeholder="Ketik nama Anda..." style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-weight: bold; color: var(--primary);">
+            </div>
+            
+            <!-- Grid Pilihan Avatar -->
+            <div>
+                <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #555; font-size: 13px;">PILIH AVATAR ANDA</label>
+                <div id="avatarGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                    
+                    <!-- Avatar Asli GitHub Anda -->
+                    <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    
+                    <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20perempuan.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    
+                    <!-- 6 Avatar Dummy -->
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Akira" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sakura" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Kenji" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Yui" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Taro" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hana" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+                </div>
+            </div>
+            
+            <button onclick="simpanProfil()" class="btn" style="margin-top: 20px;"><i class="fas fa-save"></i> Simpan Profil</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -898,7 +969,8 @@
         
         google.accounts.id.initialize({
             client_id: GOOGLE_CLIENT_ID,
-            callback: handleCredentialResponse
+            callback: handleCredentialResponse,
+            use_fedcm_for_prompt: true // <--- INI BARIS AJAIB YANG KETINGGALAN, SENSEI!
         });
         
         google.accounts.id.renderButton(
@@ -946,7 +1018,21 @@
                 document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
                 document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin; // <-- TAMBAHKAN INI
                 document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi; // <-- TAMBAHKAN INI
+                // ==========================================
+                // Tarik profil custom dari penyimpanan HP Siswa
+                const savedAvatar = localStorage.getItem('neexa_avatar');
+                const savedNama = localStorage.getItem('neexa_nama');
                 
+                if (savedNama) KAIWA_USER.nama = savedNama;
+                
+                // Gunakan avatar dari HP, atau gunakan avatar GitHub laki-laki sebagai Default
+                KAIWA_USER.avatar = savedAvatar || "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png"; 
+                
+                // Update ke Layar Header Dashboard
+                document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+                document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
+                // ==========================================
+
                 // ...
                 
                 showView('dashboard');
@@ -1021,13 +1107,32 @@
                             <div class="theme-body">
                                 <p class="theme-desc">${item.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.'}</p>
                                 <div class="theme-action">
-                                    <div class="form-group" style="margin-bottom: 10px;">
-                                        <label>Suara AI Tutor</label>
-                                        <select class="form-control suara-select-dinamis">
-                                            <option value="female" selected>Perempuan</option>
-                                            <option value="male">Laki-laki</option>
-                                        </select>
+                                    <!-- ================= PILIHAN SENSEI BARU ================= -->
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label>PILIH AI SENSEI</label>
+                                        <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
+                                            
+                                            <!-- Kartu Sensei Perempuan (Default) -->
+                                            <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
+                                                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+                                                <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
+                                                <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
+                                            </div>
+
+                                            <!-- Kartu Sensei Laki-laki -->
+                                            <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
+                                                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+                                                <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
+                                                <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
+                                            </div>
+
+                                            <!-- Input tersembunyi untuk menyimpan pilihan suara -->
+                                            <input type="hidden" class="suara-select-dinamis" value="female">
+                                            <!-- Input tersembunyi untuk menyimpan foto Sensei -->
+                                            <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+                                        </div>
                                     </div>
+                                    <!-- ======================================================= -->
                                     <button class="btn btn-mulai-dinamis" onclick="mulaiLatihan('${item.kode}', this, ${item.harga})">
                                         <i class="fas fa-microphone-alt"></i> Mulai Berlatih (${item.harga} Tiket)
                                     </button>
@@ -1099,15 +1204,16 @@
     // =========================================================
     async function mulaiLatihan(kodeTema, elemenTombol, hargaDeposit) {
         
-        // 1. Ambil Pilihan Suara & Set Produk Aktif
+        // 1. Ambil Pilihan Suara, Foto Sensei & Set Produk Aktif
         let wrapper = elemenTombol.closest('.theme-action');
         let suaraSelect = wrapper.querySelector('.suara-select-dinamis').value;
+        let fotoSensei = wrapper.querySelector('.foto-sensei-terpilih').value; // <-- TAMBAHAN BARU
         
         activeProduct = kodeTema; 
         
-        // *PENTING: Pastikan Anda punya variabel global untuk menyimpan gender suara agar TTS tahu!*
-        // Menyimpan pilihan suara ke memori global agar bisa dibaca mesin Mulut (TTS)
+        // Menyimpan pilihan suara & foto ke memori global
         window.suaraTutor = suaraSelect;
+        window.fotoTutor = fotoSensei; // <-- TAMBAHAN BARU
 
         // 2. Tentukan Batas Putaran & Harga Deposit (Harga diambil langsung dari GS!)
         let batasPutaran = 7; 
@@ -1157,8 +1263,15 @@
                 jumlahPeringatanLayar = 0; 
                 // ==========================================
                 
-                const statusTeks = document.querySelector('.kaiwa-box p');
-                statusTeks.innerText = `Sesi dimulai! Batas: ${batasPutaran} percakapan.\nTekan MIKROFON SEKALI untuk mulai bicara.`;
+                // SETUP TAMPILAN CHAT BARU
+                document.getElementById('chatContainer').innerHTML = ''; // Kosongkan layar chat
+                document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${batasPutaran}`;
+                document.getElementById('statusTeksInfo').innerText = "Tekan mikrofon SEKALI untuk membalas.";
+                
+                // Beri sapaan pertama dari AI Sensei secara otomatis!
+                setTimeout(() => {
+                    tambahChatBubble('ai', "こんにちは！ Mari kita mulai latihannya. Silakan tekan tombol mikrofon dan sapa saya.");
+                }, 500);
                 
                 showView('kaiwaRoom');
             } else {
@@ -1193,11 +1306,30 @@
     }
 
     // =========================================================
-    // FUNGSI MIKROFON & PROSES AI (Tetap Sama Seperti Aslinya)
+    // FUNGSI MIKROFON & PROSES AI (CHAT BUBBLE MODE)
     // =========================================================
-    const micBtn = document.querySelector('.mic-btn');
-    const statusTeks = document.querySelector('.kaiwa-box p');
+    const micBtn = document.getElementById('tombolMicUtama');
+    const statusTeks = document.getElementById('statusTeksInfo');
     let localStream = null; 
+
+    // Fungsi Pembantu: Cetak Balon Chat ke Layar
+    function tambahChatBubble(pengirim, teks) {
+        const chatContainer = document.getElementById('chatContainer');
+        const row = document.createElement('div');
+        row.className = `chat-row ${pengirim}`;
+        
+        // Pilih Avatar: Jika user, pakai avatar profilnya. Jika AI, pakai foto tutor.
+        let avatarSrc = (pengirim === 'user') ? KAIWA_USER.avatar : window.fotoTutor;
+        
+        if (pengirim === 'user') {
+            row.innerHTML = `<div class="chat-bubble">${teks}</div><img src="${avatarSrc}" class="chat-avatar">`;
+        } else {
+            row.innerHTML = `<img src="${avatarSrc}" class="chat-avatar"><div class="chat-bubble">${teks}</div>`;
+        }
+        
+        chatContainer.appendChild(row);
+        chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll ke bawah
+    }
 
     micBtn.addEventListener('click', async () => {
         if (!isAudioUnlocked) {
@@ -1208,15 +1340,12 @@
 
         if (!isRecording) {
             if (putaranSaatIni >= KAIWA_USER.maxPutaran) {
-                alert("Batas maksimal percakapan untuk sesi ini telah habis. Silakan Akhiri sesi untuk menyimpan rapor.");
+                alert("Batas maksimal percakapan habis. Silakan Akhiri sesi untuk menyimpan rapor.");
                 return;
             }
 
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 } 
-                });
-
+                localStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 44100 } });
                 let options = {};
                 if (MediaRecorder.isTypeSupported('audio/webm')) options = { mimeType: 'audio/webm' };
                 else if (MediaRecorder.isTypeSupported('audio/mp4')) options = { mimeType: 'audio/mp4' };
@@ -1227,30 +1356,25 @@
                 
                 micBtn.style.backgroundColor = "#b91c1c";
                 micBtn.innerHTML = '<i class="fas fa-stop"></i>';
-                statusTeks.innerText = "🔴 Sedang merekam suara Anda...\n(Tekan tombol lagi jika sudah selesai bicara)";
+                statusTeks.innerText = "🔴 Sedang mendengarkan... (Tekan untuk stop)";
 
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
-
                 mediaRecorder.onstop = async () => {
-                    micBtn.style.backgroundColor = "#94a3b8"; 
-                    micBtn.disabled = true;
+                    micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true;
                     statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
-                    
                     if (localStream) localStream.getTracks().forEach(track => track.stop());
 
                     const audioBlob = new Blob(audioChunks, { type: options.mimeType || 'audio/webm' });
                     audioChunks = []; 
-                    
                     await prosesAI(audioBlob);
                 };
             } catch (err) {
-                alert("Gagal mengakses mikrofon. Pastikan Anda memberikan izin akses mikrofon di browser.");
-                kirimBlackBox("Izin Mikrofon / TWS", err.message); 
+                alert("Gagal mengakses mikrofon.");
+                kirimBlackBox("Izin Mikrofon", err.message); 
             }
         } else {
             mediaRecorder.stop();
             isRecording = false;
-            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
         }
     });
 
@@ -1260,80 +1384,75 @@
 
         try {
             const resSTT = await fetch(WORKER_URL + 'api/stt?produk=' + encodeURIComponent(activeProduct), { method: 'POST', body: audioBlob });
-            if (!resSTT.ok) throw new Error("Server STT (Telinga) gagal: " + await resSTT.text()); 
-            
+            if (!resSTT.ok) throw new Error("STT gagal."); 
             const dataSTT = await resSTT.json();
             const teksSiswa = dataSTT.results?.channels[0]?.alternatives[0]?.transcript;
 
             if (!teksSiswa) {
-                statusTeks.innerText = "Suara tidak terdengar jelas, silakan coba tekan dan bicara lagi.";
+                statusTeks.innerText = "Suara tidak terdengar, silakan coba lagi.";
                 resetMic(); return;
             }
 
-            statusTeks.innerText = `Anda: "${teksSiswa}"\n\n🤔 AI sedang memikirkan balasan...`;
+            // 1. Munculkan teks siswa di chat bubble sebelah kanan
+            tambahChatBubble('user', teksSiswa);
+            statusTeks.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AI Sensei sedang mengetik...';
 
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ message: teksSiswa, history: chatHistory, produk: activeProduct, isLastTurn: statusLastTurn })
             });
-            if (!resChat.ok) throw new Error("Server LLM (Otak) gagal: " + await resChat.text()); 
+            if (!resChat.ok) throw new Error("LLM gagal."); 
             
             const dataChat = await resChat.json();
             if(dataChat.engine) activeEngineTracker = dataChat.engine;
-            if (dataChat.error) throw new Error("Penolakan Mesin Otak: " + dataChat.error.message);
-            if (!dataChat.choices || !dataChat.choices[0]) throw new Error("Mesin Otak membalas kosong.");
-            
-            // --- TANGKAP TOKEN DARI CLOUDFLARE ---
-            if (dataChat.tokens) {
-                totalTokenSesi += Number(dataChat.tokens);
-            }
-            // -------------------------------------
+            if(dataChat.tokens) totalTokenSesi += Number(dataChat.tokens);
 
             const teksAI = dataChat.choices[0].message.content;
             kirimAktivitas(activeEngineTracker + " (Jalur Chat)");
 
             historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
-            
             chatHistory.push({ role: "user", parts: [{ text: teksSiswa }] });
             chatHistory.push({ role: "model", parts: [{ text: teksAI }] });
             if (chatHistory.length > 8) chatHistory.splice(0, 2); 
 
-            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
+            statusTeks.innerHTML = '<i class="fas fa-volume-up"></i> Menyiapkan suara AI...';
 
             const pilihanSuara = window.suaraTutor || "female";
             const resTTS = await fetch(WORKER_URL + 'api/tts', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
             });
-            if (!resTTS.ok) throw new Error("Server TTS (Mulut) gagal: " + await resTTS.text()); 
             
             const dataTTS = await resTTS.json();
             audioPlayer.src = "data:audio/mp3;base64," + dataTTS.audioContent;
             audioPlayer.play();
 
-            statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"`;
+            // 2. Munculkan teks AI di chat bubble sebelah kiri
+            tambahChatBubble('ai', teksAI);
+            statusTeks.innerText = "Dengarkan AI Sensei bicara...";
+            
             putaranSaatIni++; 
+            document.getElementById('indikatorPutaran').innerText = `Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran}`;
 
             audioPlayer.onended = () => {
                 if(statusLastTurn) {
-                    statusTeks.innerText += `\n\n✅ Sesi Percakapan Selesai.\nSilakan tekan tombol "Akhiri" di sudut kanan atas untuk melihat Rapor.`;
+                    statusTeks.innerHTML = `✅ <b>Target Selesai!</b> Silakan Akhiri Sesi.`;
                     micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true; 
                 } else {
                     resetMic();
-                    statusTeks.innerText += `\n\n(Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran})\nSilakan tekan mikrofon untuk membalas...`;
+                    statusTeks.innerText = "Giliran Anda! Tekan mikrofon untuk membalas.";
                 }
             };
 
         } catch (err) {
-            console.error("Terjadi Gangguan:", err);
-            statusTeks.innerHTML = "⚠️ <b>KONEKSI TIDAK STABIL:</b> Maaf, suara gagal terkirim karena gangguan jaringan. Silakan periksa WiFi/Sinyal Anda lalu coba lagi."; 
-            kirimBlackBox("Proses Percakapan AI", err.message, activeEngineTracker); 
+            console.error(err);
+            statusTeks.innerHTML = "⚠️ Koneksi terputus. Coba bicara lagi."; 
             resetMic(); 
         }
     }
 
     function resetMic() {
-        micBtn.style.backgroundColor = "#0d9488"; micBtn.disabled = false; micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        micBtn.style.backgroundColor = "#ef4444"; micBtn.disabled = false; micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
     }
 
     // =========================================================
@@ -1591,6 +1710,84 @@
             // Perintah ini sama seperti mesin mengklik tombol "Akhiri Sesi" secara paksa
             document.getElementById('btnSelesaiKaiwa').click(); 
         }
+    }
+
+    // =========================================================
+    // MESIN EDIT PROFIL & AVATAR (TAHAP 1)
+    // =========================================================
+    let avatarPilihanSementara = "";
+
+    function bukaModalProfil() {
+        document.getElementById('inputNamaProfil').value = KAIWA_USER.nama;
+        document.getElementById('profilModal').style.display = 'flex';
+        
+        // Tandai dengan warna biru avatar yang sedang dipakai
+        const currentAvatar = KAIWA_USER.avatar;
+        document.querySelectorAll('.avatar-option').forEach(el => {
+            el.style.borderColor = 'transparent';
+            if(el.src === currentAvatar) {
+                el.style.borderColor = '#2b5cff';
+            }
+        });
+    }
+
+    function tutupModalProfil() {
+        document.getElementById('profilModal').style.display = 'none';
+    }
+
+    function pilihAvatar(elemenImg) {
+        // Hilangkan garis biru dari semua avatar
+        document.querySelectorAll('.avatar-option').forEach(el => el.style.borderColor = 'transparent');
+        // Beri garis biru pada avatar yang baru diklik
+        elemenImg.style.borderColor = '#2b5cff';
+        avatarPilihanSementara = elemenImg.src;
+    }
+
+    function simpanProfil() {
+        const namaBaru = document.getElementById('inputNamaProfil').value.trim();
+        if (namaBaru !== '') {
+            KAIWA_USER.nama = namaBaru;
+            document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+        }
+        
+        if (avatarPilihanSementara !== "") {
+            KAIWA_USER.avatar = avatarPilihanSementara;
+            document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
+        }
+
+        // KUNCI PENTING: Simpan ke memori HP siswa agar tidak hilang saat di-refresh!
+        localStorage.setItem('neexa_avatar', KAIWA_USER.avatar);
+        localStorage.setItem('neexa_nama', KAIWA_USER.nama);
+
+        tutupModalProfil();
+        alert("Profil berhasil diperbarui!");
+    }
+
+// =========================================================
+    // MESIN PILIHAN KARTU AI SENSEI (TAHAP 2)
+    // =========================================================
+    function pilihSensei(kartuDiklik, genderSuara) {
+        // 1. Cari bungkus utama dari kumpulan kartu ini
+        const container = kartuDiklik.closest('.sensei-selection-container');
+        
+        // 2. Matikan semua kartu yang ada di dalam bungkus ini
+        const semuaKartu = container.querySelectorAll('.sensei-card');
+        semuaKartu.forEach(kartu => {
+            kartu.classList.remove('selected');
+            kartu.style.borderColor = '#e2e8f0';
+            kartu.style.background = '#fff';
+            kartu.querySelector('div').style.color = '#475569'; // Warna teks nama dimatikan
+        });
+        
+        // 3. Nyalakan kartu yang baru diklik
+        kartuDiklik.classList.add('selected');
+        kartuDiklik.style.borderColor = '#2b5cff';
+        kartuDiklik.style.background = '#f0f4ff';
+        kartuDiklik.querySelector('div').style.color = '#2b5cff'; // Warna teks nama dinyalakan
+        
+        // 4. Simpan nilai pilihan ke input tersembunyi agar bisa dibaca oleh fungsi Mulai Latihan
+        container.querySelector('.suara-select-dinamis').value = genderSuara;
+        container.querySelector('.foto-sensei-terpilih').value = kartuDiklik.querySelector('img').src;
     }
 
 </script>
