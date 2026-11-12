@@ -478,8 +478,25 @@
                     </div>
                     <!-- ============================================== -->
 
-                    <div class="google-btn-wrapper">
-                        <div id="googleButtonDiv"></div>
+                    <!-- TOMBOL GOOGLE (BYPASS COOP) -->
+                    <div class="google-btn-wrapper" style="display: flex; flex-direction: column; align-items: center;">
+                        <div id="g_id_onload"
+                             data-client_id="1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"
+                             data-context="signin"
+                             data-ux_mode="popup"
+                             data-callback="handleCredentialResponse"
+                             data-auto_prompt="false"
+                             data-use_fedcm_for_prompt="true">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-shape="rectangular"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-size="large"
+                             data-logo_alignment="center"
+                             data-width="250">
+                        </div>
                     </div>
                     
                     <div id="loginMsg" class="msg"></div>
