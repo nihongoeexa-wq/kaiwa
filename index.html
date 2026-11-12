@@ -1058,8 +1058,8 @@
         activeProduct = kodeTema; 
         
         // *PENTING: Pastikan Anda punya variabel global untuk menyimpan gender suara agar TTS tahu!*
-        // Jika Anda memakai variabel 'suaraTutor', aktifkan baris di bawah ini:
-        // suaraTutor = suaraSelect; 
+        // Menyimpan pilihan suara ke memori global agar bisa dibaca mesin Mulut (TTS)
+        window.suaraTutor = suaraSelect;
 
         // 2. Tentukan Batas Putaran & Harga Deposit (Harga diambil langsung dari GS!)
         let batasPutaran = 7; 
@@ -1247,7 +1247,7 @@
 
             statusTeks.innerText = `Anda: "${teksSiswa}"\nAI: "${teksAI}"\n\n🔊 Menyiapkan suara AI...`;
 
-            const pilihanSuara = document.getElementById('suaraSelect').value;
+            const pilihanSuara = window.suaraTutor || "female";
             const resTTS = await fetch(WORKER_URL + 'api/tts', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ text: teksAI, gender: pilihanSuara })
@@ -1467,15 +1467,6 @@
                 elemenHeader.classList.add('active');
                 elemenBody.style.display = 'block';
             }
-        }
-
-        // 4. Pengganti Tombol "Mulai Kaiwa" Lama
-        function mulaiLatihan(kodeTema, elemenTombol) {
-            let wrapper = elemenTombol.closest('.theme-action');
-            let suaraSelect = wrapper.querySelector('.suara-select-dinamis').value;
-            
-            // Ini alert sementara, nanti kita sambungkan ke GAS untuk potong tiket
-            alert("Memulai Latihan!\nTema: " + kodeTema + "\nSuara: " + suaraSelect);
         }
 
 </script>
