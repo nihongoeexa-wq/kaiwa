@@ -622,7 +622,7 @@
                                 <h3>SHOKYU TIER (Basic)</h3>
                                 <p>Latihan percakapan ringan sehari-hari untuk pemula.</p>
                             </div>
-                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 26 Tiket</div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 3 Tiket</div>
                         </div>
                         <div class="tier-bar" onclick="bukaDetailTier('detail-chukyu')">
                             <div class="tier-icon">🔥</div>
@@ -630,7 +630,7 @@
                                 <h3>CHUKYU TIER (Mid)</h3>
                                 <p>Persiapan JFT-Basic & simulasi konteks menengah.</p>
                             </div>
-                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 52 Tiket</div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 5 Tiket</div>
                         </div>
                         <div class="tier-bar" onclick="bukaDetailTier('detail-jokyu')">
                             <div class="tier-icon">👑</div>
@@ -638,7 +638,7 @@
                                 <h3>JOKYU TIER (Pro)</h3>
                                 <p>Simulasi wawancara kerja & level mahir Tokutei Ginou.</p>
                             </div>
-                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 100 Tiket</div>
+                            <div class="tier-price"><i class="fas fa-ticket-alt"></i> 8 Tiket</div>
                         </div>
                     </div>
 
@@ -935,14 +935,19 @@
                     nama: data.data.nama,
                     email: data.data.email,
                     saldo: Number(data.data.saldo),
-                    riwayat: data.data.riwayat || ""
+                    riwayat: data.data.riwayat || "",
+                    koin: Number(data.data.koin) || 0, // <-- TAMBAHKAN INI
+                    sesi: Number(data.data.sesi) || 0  // <-- TAMBAHKAN INI
                 };
                 
                 // Update Data ke UI Dashboard V2
                 document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
-                document.getElementById('userEmailDisplay').innerText = KAIWA_USER.email; // Ini untuk popup profil
+                document.getElementById('userEmailDisplay').innerText = KAIWA_USER.email;
                 document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
-                // (Nanti total sesi dan saldo koin bisa dipanggil di sini juga jika GS sudah mengirim datanya)
+                document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin; // <-- TAMBAHKAN INI
+                document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi; // <-- TAMBAHKAN INI
+                
+                // ...
                 
                 showView('dashboard');
                 
@@ -1408,13 +1413,25 @@
                 
                 const dataGasRapor = await resGasRapor.json();
                 
-                // 5. Tangkap Notifikasi & Refund dari GAS
+                // 5. Tangkap Notifikasi, Tagihan & Koin dari GAS
                 if (dataGasRapor.success) {
-                    if (dataGasRapor.data && dataGasRapor.data.refund > 0) {
-                        KAIWA_USER.saldo += dataGasRapor.data.refund;
-                        document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo; 
+                    // Update saldo koin dan tiket
+                    if (dataGasRapor.data) {
+                        if (dataGasRapor.data.koin !== undefined) {
+                            KAIWA_USER.koin = dataGasRapor.data.koin;
+                            document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+                        }
+                        // Karena tiket ditagih (dikurangi), kita asumsikan saldo lokal harus dikurangi tagihan
+                        // Namun lebih aman memanggil nilai saldo riil dari GAS jika Anda mengirimkannya, 
+                        // tapi karena di GAS Anda tidak mengirim saldo akhir di objek return simpanRaporKaiwa, 
+                        // kita kurangi manual di frontend berdasarkan tagihan yang diterima.
+                        if (dataGasRapor.data.tagihan !== undefined) {
+                            KAIWA_USER.saldo -= dataGasRapor.data.tagihan;
+                            if (KAIWA_USER.saldo < 0) KAIWA_USER.saldo = 0;
+                            document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+                        }
                     }
-                    // Tampilkan notifikasi (apakah sisa 0 atau ada refund)
+                    
                     alert(dataGasRapor.message);
                 }
 
