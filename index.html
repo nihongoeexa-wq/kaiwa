@@ -478,9 +478,25 @@
                     </div>
                     <!-- ============================================== -->
 
-                    <!-- TOMBOL GOOGLE (TUNGGAL & BERSIH) -->
-                    <div class="google-btn-wrapper" style="display: flex; justify-content: center; margin-top: 15px; min-height: 44px;">
-                        <div id="googleButtonDiv"></div>
+                    <!-- TOMBOL GOOGLE (BYPASS COOP) -->
+                    <div class="google-btn-wrapper" style="display: flex; flex-direction: column; align-items: center; margin-top: 15px;">
+                        <div id="g_id_onload"
+                             data-client_id="1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"
+                             data-context="signin"
+                             data-ux_mode="popup"
+                             data-callback="handleCredentialResponse"
+                             data-auto_prompt="false"
+                             data-use_fedcm_for_prompt="true">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-shape="rectangular"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-size="large"
+                             data-logo_alignment="center"
+                             data-width="250">
+                        </div>
                     </div>
                     
                     <div id="loginMsg" class="msg"></div>
@@ -1697,13 +1713,15 @@
     }
 
     // =========================================================
-    // MESIN EDIT PROFIL & AVATAR (TAHAP 1)
+    // MESIN EDIT PROFIL & AVATAR (TAHAP 1 - REVISI)
     // =========================================================
     let avatarPilihanSementara = "";
 
     function bukaModalProfil() {
         document.getElementById('inputNamaProfil').value = KAIWA_USER.nama;
-        document.getElementById('profilModal').style.display = 'flex';
+        
+        // PERBAIKAN: Gunakan classList.remove untuk membuka modal
+        document.getElementById('profilModal').classList.remove('hidden');
         
         // Tandai dengan warna biru avatar yang sedang dipakai
         const currentAvatar = KAIWA_USER.avatar;
@@ -1716,7 +1734,8 @@
     }
 
     function tutupModalProfil() {
-        document.getElementById('profilModal').style.display = 'none';
+        // PERBAIKAN: Gunakan classList.add untuk menutup modal
+        document.getElementById('profilModal').classList.add('hidden');
     }
 
     function pilihAvatar(elemenImg) {
