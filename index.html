@@ -373,18 +373,97 @@
         }
 
         /* =========================================
-           CSS TAHAP 3: RUANG KAIWA (CHAT BUBBLE)
+           CSS TAHAP 3 & 4: RUANG KAIWA GAMIFIED (CENTERED)
         ========================================= */
-        .kaiwa-room-container { background: #ffffff; border-radius: 16px; border: 2px solid #e2e8f0; display: flex; flex-direction: column; height: 75vh; min-height: 500px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto; max-width: 650px;}
-        .kaiwa-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-bottom: 2px solid #e2e8f0; }
-        .chat-container { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #f4f7fa; scroll-behavior: smooth; }
+        
+        /* Wadah Utama Layar Penuh (Memusatkan Kotak Chat) */
+        .kaiwa-fullscreen-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #F4F7FA; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        /* Header Luar (Logo & Teks) */
+        .kaiwa-outer-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            width: 100%; max-width: 650px; padding: 0 20px; box-sizing: border-box;
+        }
+        .kaiwa-outer-header img { width: 35px; height: auto; }
+        .kaiwa-outer-header h2 { margin: 0; font-size: 16px; font-weight: 800; color: var(--primary); }
+
+        /* Kotak Ruang Kaiwa Utama */
+        .kaiwa-room-container { 
+            background: #ffffff; border-radius: 20px; border: 2px solid #e2e8f0; 
+            display: flex; flex-direction: column; 
+            height: 70vh; min-height: 450px; max-height: 700px;
+            width: 100%; max-width: 650px; overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(43, 59, 112, 0.1); 
+        }
+
+        /* Header Dalam Kotak (Judul Sesi & Nama User) */
+        .kaiwa-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 20px; background: #ffffff; border-bottom: 1px solid #f1f5f9; 
+        }
+        .user-badge-header {
+            background: #f0f4ff; color: var(--primary); font-weight: 700; font-size: 12px;
+            padding: 6px 12px; border-radius: 20px; border: 1px solid #dbeafe;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Gamifikasi: Progress Bar Ujian */
+        .exam-progress-container { width: 100%; background: #e2e8f0; height: 6px; }
+        .exam-progress-bar { 
+            height: 100%; background: linear-gradient(90deg, #10b981, #34d399); 
+            width: 0%; transition: width 0.5s ease-out; 
+        }
+
+        /* Ruang Balon Obrolan (Dengan Background Pola Tipis Premium) */
+        .chat-container { 
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; 
+            background-color: #f8fafc; scroll-behavior: smooth;
+            /* Pola Titik (Dot Pattern) Samar ala UI Jepang Modern */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
         .chat-row { display: flex; gap: 10px; align-items: flex-end; width: 100%; }
         .chat-row.user { justify-content: flex-end; }
         .chat-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #e2e8f0; flex-shrink: 0; }
         .chat-bubble { max-width: 75%; padding: 12px 16px; font-size: 14px; line-height: 1.5; border-radius: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .chat-row.ai .chat-bubble { background: #ffffff; color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid #e2e8f0; }
         .chat-row.user .chat-bubble { background: var(--primary); color: #ffffff; border-bottom-right-radius: 4px; }
-        .kaiwa-footer { padding: 15px 20px; background: #ffffff; border-top: 2px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Animasi AI Typing */
+        .typing-indicator span {
+            display: inline-block; width: 6px; height: 6px; background-color: #94a3b8; border-radius: 50%; margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Footer Mikrofon & Animasi Pulse */
+        .kaiwa-footer { padding: 15px 20px; background: #ffffff; border-top: 2px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; position: relative;}
+        .mic-btn-wrapper { position: relative; display: flex; justify-content: center; align-items: center; margin: 10px 0;}
+        
+        /* Animasi Denyut (Pulse) saat merekam */
+        .mic-pulse {
+            position: absolute; width: 80px; height: 80px; background: #ef4444; border-radius: 50%; z-index: 1;
+            opacity: 0; pointer-events: none;
+        }
+        .is-recording .mic-pulse { animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+        
+        /* Tombol Buat Rapor di luar kotak */
+        .btn-buat-rapor {
+            margin-top: 20px; background: #fee2e2; border: 2px solid #fecaca; color: #ef4444; 
+            padding: 14px 30px; border-radius: 12px; font-weight: 800; font-size: 15px; 
+            cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 #fecaca;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-buat-rapor:hover { transform: translateY(2px); box-shadow: 0 2px 0 #fecaca; background: #fecaca; }
+        .btn-buat-rapor:disabled { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; box-shadow: none; transform: none; cursor: not-allowed; }
 
         /* =========================================
            CSS TAHAP 4: MASTER-DETAIL & ACCORDION
@@ -773,28 +852,57 @@
         </div>
     </div>
 
-    <!-- ================= VIEW 4: KAIWA ROOM (CHAT MODE) ================= -->
-    <div id="viewKaiwaRoom" class="hidden kaiwa-room-container">
-        <!-- Header Chat -->
-        <div class="kaiwa-header">
-            <div style="text-align: left;">
-                <h3 style="margin: 0; font-size: 16px; color: var(--primary);"><i class="fas fa-comments"></i> Sesi Kaiwa</h3>
-                <p id="activeProductDisplay" style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 600;">Modul</p>
+    <!-- ================= VIEW 4: KAIWA ROOM (GAMIFIED CENTERED) ================= -->
+    <div id="viewKaiwaRoom" class="hidden kaiwa-fullscreen-overlay">
+        
+        <!-- Header Luar -->
+        <div class="kaiwa-outer-header">
+            <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa">
+            <h2>Smart AI Conversation</h2>
+        </div>
+
+        <!-- Kotak Obrolan -->
+        <div class="kaiwa-room-container">
+            <!-- Header Dalam -->
+            <div class="kaiwa-header">
+                <div style="text-align: left;">
+                    <h3 style="margin: 0; font-size: 15px; color: var(--text-main);"><i class="fas fa-comments"></i> Sesi Kaiwa</h3>
+                    <p id="activeProductDisplay" style="margin: 0; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Modul</p>
+                </div>
+                <!-- Nama User (Pengganti Tombol Akhiri Sesi) -->
+                <div class="user-badge-header">
+                    <i class="fas fa-user-circle"></i> <span id="namaUserDiKaiwa">User</span>
+                </div>
             </div>
-            <button id="btnSelesaiKaiwa" style="background: #fee2e2; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 700; color: #ef4444; transition: 0.2s;"><i class="fas fa-times"></i> Akhiri Sesi</button>
+
+            <!-- Progress Bar Ujian -->
+            <div class="exam-progress-container">
+                <div class="exam-progress-bar" id="progressBarKaiwa"></div>
+            </div>
+
+            <!-- Ruang Balon Obrolan -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Balon Chat otomatis muncul di sini -->
+            </div>
+
+            <!-- Footer Tombol Mic -->
+            <div class="kaiwa-footer">
+                <div id="statusTeksInfo" style="font-size: 13px; color: var(--primary); margin-bottom: 5px; text-align: center; font-weight: 800;">Tekan mikrofon untuk mulai.</div>
+                
+                <div class="mic-btn-wrapper" id="micWrapper">
+                    <div class="mic-pulse"></div>
+                    <button class="mic-btn" id="tombolMicUtama" style="position: relative; z-index: 2;"><i class="fas fa-microphone"></i></button>
+                </div>
+                
+                <div id="indikatorPutaran" style="font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Putaran: 0 / 0</div>
+            </div>
         </div>
 
-        <!-- Ruang Balon Obrolan -->
-        <div class="chat-container" id="chatContainer">
-            <!-- Balon Chat akan muncul secara otomatis di sini -->
-        </div>
+        <!-- Tombol Buat Rapor di Luar Kotak -->
+        <button id="btnSelesaiKaiwa" class="btn-buat-rapor">
+            <i class="fas fa-file-signature"></i> Buat Rapor Sesi
+        </button>
 
-        <!-- Footer Tombol Mic -->
-        <div class="kaiwa-footer">
-            <div id="statusTeksInfo" style="font-size: 13px; color: #64748b; margin-bottom: 10px; text-align: center; font-weight: 600;">Tekan tombol mikrofon untuk bicara</div>
-            <button class="mic-btn" id="tombolMicUtama"><i class="fas fa-microphone"></i></button>
-            <div id="indikatorPutaran" style="font-size: 12px; color: #94a3b8; margin-top: 10px; font-weight: bold;">Putaran: 0 / 0</div>
-        </div>
     </div>
 
     <!-- ================= VIEW 5: RAPOR ================= -->
@@ -1262,6 +1370,9 @@
                 // ==========================================
                 
                 // SETUP TAMPILAN CHAT BARU
+                document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama; // <-- INI BARU
+                document.getElementById('progressBarKaiwa').style.width = '0%'; // <-- INI BARU
+                
                 document.getElementById('chatContainer').innerHTML = ''; // Kosongkan layar chat
                 document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${batasPutaran}`;
                 document.getElementById('statusTeksInfo').innerText = "Tekan mikrofon SEKALI untuk membalas.";
@@ -1352,12 +1463,18 @@
                 mediaRecorder.start();
                 isRecording = true;
                 
+                // Memicu animasi denyut
+                document.getElementById('micWrapper').classList.add('is-recording'); 
+                
                 micBtn.style.backgroundColor = "#b91c1c";
                 micBtn.innerHTML = '<i class="fas fa-stop"></i>';
                 statusTeks.innerText = "🔴 Sedang mendengarkan... (Tekan untuk stop)";
 
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
                 mediaRecorder.onstop = async () => {
+                    // MENGHENTIKAN ANIMASI DENYUT
+                    document.getElementById('micWrapper').classList.remove('is-recording'); 
+                    
                     micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true;
                     statusTeks.innerText = "⏳ Mengirim rekaman ke AI...";
                     if (localStream) localStream.getTracks().forEach(track => track.stop());
@@ -1393,7 +1510,15 @@
 
             // 1. Munculkan teks siswa di chat bubble sebelah kanan
             tambahChatBubble('user', teksSiswa);
-            statusTeks.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AI Sensei sedang mengetik...';
+            
+            // Tampilkan animasi Typing (Titik memantul) dari AI
+            const typingHtml = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+            tambahChatBubble('ai', typingHtml);
+            // Simpan referensi ID balon terakhir agar bisa ditimpa nanti
+            const chatBox = document.getElementById('chatContainer');
+            const lastAiBubble = chatBox.lastElementChild.querySelector('.chat-bubble');
+            
+            statusTeks.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AI Sensei memproses...';
 
             const resChat = await fetch(WORKER_URL + 'api/chat', { 
                 method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -1425,16 +1550,20 @@
             audioPlayer.src = "data:audio/mp3;base64," + dataTTS.audioContent;
             audioPlayer.play();
 
-            // 2. Munculkan teks AI di chat bubble sebelah kiri
-            tambahChatBubble('ai', teksAI);
+            // 2. GANTI Animasi Typing menjadi Teks Asli AI
+            lastAiBubble.innerHTML = teksAI;
             statusTeks.innerText = "Dengarkan AI Sensei bicara...";
             
             putaranSaatIni++; 
             document.getElementById('indikatorPutaran').innerText = `Putaran: ${putaranSaatIni} / ${KAIWA_USER.maxPutaran}`;
+            
+            // 3. Update Progress Bar
+            let persentase = (putaranSaatIni / KAIWA_USER.maxPutaran) * 100;
+            document.getElementById('progressBarKaiwa').style.width = `${persentase}%`;
 
             audioPlayer.onended = () => {
                 if(statusLastTurn) {
-                    statusTeks.innerHTML = `✅ <b>Target Selesai!</b> Silakan Akhiri Sesi.`;
+                    statusTeks.innerHTML = `✅ <b>Target Selesai!</b> Silakan Buat Rapor.`;
                     micBtn.style.backgroundColor = "#94a3b8"; micBtn.disabled = true; 
                 } else {
                     resetMic();
