@@ -651,7 +651,7 @@
             <nav class="sidebar-menu">
                 <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">Dashboard</button>
                 <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul Latihan</button>
-                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat')">Riwayat Nilai</button>
+                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat'); tarikDataRiwayat();">Riwayat Nilai</button>
                 <!-- Menu Baru -->
                 <button class="menu-item" id="btn-tab-toko" onclick="bukaTab('toko')">Toko Voucher</button>
                 <button class="menu-item" id="btn-tab-tukar" onclick="bukaTab('tukar')">Tukar Koin</button>
@@ -723,7 +723,8 @@
                                     <div class="stat-icon" style="background:#fef08a; color:#b45309;"><i class="fas fa-star"></i></div>
                                     <div class="stat-info">
                                         <h4>Rata-rata Nilai</h4>
-                                        <p>Belum ada data</p>
+                                        <!-- TAMBAHKAN ID DI SINI -->
+                                        <p id="rataRataNilaiDisplay">Belum ada data</p>
                                     </div>
                                 </div>
                                 <div class="stat-card">
@@ -832,15 +833,50 @@
                 </div>
 
                 <!-- ========================================== -->
-                <!-- KARDUS 3: RIWAYAT -->
+                <!-- KARDUS 3: RIWAYAT (V2 CARD ACCORDION)      -->
                 <!-- ========================================== -->
                 <div id="tab-riwayat" style="display: none; padding: 25px;">
-                    <div style="max-width: 650px; margin: 0; text-align: left;">
-                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Riwayat Nilai</h2>
-                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                            <p style="color: #475569; font-size: 14px; margin-top: 0; margin-bottom: 20px;">Tabel performa Anda akan ditampilkan di sini.</p>
-                            <button id="btnRiwayat" style="border: 2px solid #cbd5e1; background: transparent; color: #475569; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s;"><i class="fas fa-history"></i> Muat Ulang Riwayat</button>
+                    <div class="riwayat-container" style="width: 100%; max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- HEADER RIWAYAT & FILTER -->
+                        <div style="background: white; border-radius: 16px; padding: 20px; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div>
+                                    <h2 style="margin: 0; font-size: 20px; color: var(--primary);"><i class="fas fa-history"></i> Riwayat Nilai</h2>
+                                    <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Rekap performa dan catatan evaluasi</p>
+                                </div>
+                                <button onclick="tarikDataRiwayat()" class="btn-outline" style="padding: 8px 15px; margin: 0; border-radius: 8px; font-size: 12px; width: auto;"><i class="fas fa-sync-alt"></i> Segarkan</button>
+                            </div>
+                            
+                            <!-- KONTROL FILTER & SORTING -->
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <select id="sortRiwayat" onchange="renderRiwayatCards()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569; background: #f8fafc; outline: none; cursor: pointer;">
+                                    <option value="terbaru">⏳ Terbaru</option>
+                                    <option value="terlama">🕰️ Terlama</option>
+                                    <option value="tertinggi">🏆 Nilai Tertinggi</option>
+                                    <option value="terendah">📉 Nilai Terendah</option>
+                                </select>
+                            </div>
                         </div>
+
+                        <!-- TABS UNTUK FILTER TIER -->
+                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+                            <button class="tier-tab-btn active" onclick="filterTierRiwayat('SEMUA', this)">Semua</button>
+                            <button class="tier-tab-btn" onclick="filterTierRiwayat('BSC', this)">🔰 Shokyu</button>
+                            <button class="tier-tab-btn" onclick="filterTierRiwayat('MID', this)">🔥 Chukyu</button>
+                            <button class="tier-tab-btn" onclick="filterTierRiwayat('PRO', this)">👑 Jokyu</button>
+                        </div>
+
+                        <!-- WADAH KARTU RIWAYAT -->
+                        <div id="wadahKartuRiwayat" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
+                            <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 40px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                                <p>Sedang memuat data dari server...</p>
+                            </div>
+                        </div>
+
+                        <!-- TOMBOL KEMBALI (TAMBAHAN BARU) -->
+                        <button onclick="bukaTab('dashboard')" class="btn" style="background: #e2e8f0; color: #475569; margin-top: 10px;"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
+
                     </div>
                 </div>
 
@@ -1025,51 +1061,6 @@
         </div>
     </div>
 
-    <!-- ================= VIEW 6: RIWAYAT NILAI ================= -->
-    <div id="viewRiwayat" class="hidden kaiwa-fullscreen-overlay">
-        
-        <div class="riwayat-container" style="width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 20px;">
-            
-            <!-- HEADER RIWAYAT & FILTER -->
-            <div style="background: white; border-radius: 16px; padding: 20px; border: 2px solid #e2e8f0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <div>
-                        <h2 style="margin: 0; font-size: 20px; color: var(--primary);"><i class="fas fa-history"></i> Riwayat Nilai</h2>
-                        <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Rekap performa dan catatan evaluasi Anda</p>
-                    </div>
-                    <button id="btnMuatRiwayat" onclick="tarikDataRiwayat()" class="btn-outline" style="padding: 8px 15px; margin: 0; border-radius: 8px; font-size: 12px; width: auto;"><i class="fas fa-sync-alt"></i> Segarkan</button>
-                </div>
-                
-                <!-- KONTROL FILTER & SORTING -->
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <select id="sortRiwayat" onchange="renderRiwayatCards()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569; background: #f8fafc; outline: none; cursor: pointer;">
-                        <option value="terbaru">⏳ Terbaru</option>
-                        <option value="terlama">🕰️ Terlama</option>
-                        <option value="tertinggi">🏆 Nilai Tertinggi</option>
-                        <option value="terendah">📉 Nilai Terendah</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- TABS UNTUK FILTER TIER -->
-            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
-                <button class="tier-tab-btn active" onclick="filterTierRiwayat('SEMUA', this)">Semua</button>
-                <button class="tier-tab-btn" onclick="filterTierRiwayat('BSC', this)">🔰 Shokyu</button>
-                <button class="tier-tab-btn" onclick="filterTierRiwayat('MID', this)">🔥 Chukyu</button>
-                <button class="tier-tab-btn" onclick="filterTierRiwayat('PRO', this)">👑 Jokyu</button>
-            </div>
-
-            <!-- WADAH KARTU RIWAYAT (DIISI OLEH JS) -->
-            <div id="wadahKartuRiwayat" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
-                <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 40px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
-                    <p>Tekan tombol <b>Segarkan</b> untuk memuat data.</p>
-                </div>
-            </div>
-
-            <button id="btnKembaliRiwayat" onclick="showView('dashboard')" class="btn" style="background: #e2e8f0; color: #475569;"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
-        </div>
-
-    </div>
     <!-- ================= MODAL EDIT PROFIL & AVATAR ================= -->
     <div id="profilModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px);">
         <div style="background: #fff; border-radius: 16px; width: 90%; max-width: 380px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
@@ -1261,6 +1252,7 @@
                 
                 showView('dashboard');
                 bukaTab('dashboard'); 
+                tarikDataRiwayat(); // Memuat data riwayat dan rata-rata secara diam-diam di background
                 
                 muatDaftarProduk(); 
                 showMsg('dashMsg', 'success', data.message);
@@ -2106,10 +2098,10 @@
     let dataRiwayatLokal = []; 
     let tierFilterAktif = 'SEMUA';
 
-    // 1. Memanggil Data dari Google Apps Script
+    // 1. Memanggil Data dari Google Apps Script & Menghitung Rata-rata
     async function tarikDataRiwayat() {
         const wadah = document.getElementById('wadahKartuRiwayat');
-        wadah.innerHTML = '<div style="text-align:center; padding:30px;"><i class="fas fa-circle-notch fa-spin" style="font-size:30px; color:#2b5cff;"></i><p>Menarik data riwayat Anda...</p></div>';
+        if(wadah) wadah.innerHTML = '<div style="text-align:center; padding:30px;"><i class="fas fa-circle-notch fa-spin" style="font-size:30px; color:#2b5cff;"></i><p>Menarik data riwayat Anda...</p></div>';
         
         try {
             const res = await fetch(GAS_URL, {
@@ -2120,12 +2112,34 @@
             
             if (hasil.success) {
                 dataRiwayatLokal = hasil.data; // Simpan ke memori HP
-                renderRiwayatCards(); // Gambar ke layar
+                if(wadah) renderRiwayatCards(); // Gambar ke layar (jika wadah sedang dibuka)
+
+                // --- LOGIKA MENGHITUNG RATA-RATA NILAI DASHBOARD ---
+                if (dataRiwayatLokal.length > 0) {
+                    let totalSkor = 0;
+                    dataRiwayatLokal.forEach(item => {
+                        totalSkor += item.nilaiTotal;
+                    });
+                    let rataRata = Math.round(totalSkor / dataRiwayatLokal.length);
+                    
+                    // Beri warna dinamis: Hijau (>80), Kuning (>60), Merah (<60)
+                    let warnaTeks = "#ef4444"; 
+                    if(rataRata >= 80) warnaTeks = "#10b981"; 
+                    else if(rataRata >= 60) warnaTeks = "#f59e0b";
+                    
+                    const elRataRata = document.getElementById('rataRataNilaiDisplay');
+                    if(elRataRata) elRataRata.innerHTML = `<span style="color: ${warnaTeks}; font-size: 24px; font-weight: 900;">${rataRata}</span> <span style="font-size: 12px; color: #64748b; font-weight: 700;">/ 100</span>`;
+                } else {
+                    const elRataRata = document.getElementById('rataRataNilaiDisplay');
+                    if(elRataRata) elRataRata.innerText = "Belum ada ujian";
+                }
+                // ---------------------------------------------------
+
             } else {
-                wadah.innerHTML = `<p style="color:red; text-align:center;">${hasil.message}</p>`;
+                if(wadah) wadah.innerHTML = `<p style="color:red; text-align:center;">${hasil.message}</p>`;
             }
         } catch (err) {
-            wadah.innerHTML = '<p style="color:red; text-align:center;">Gagal terhubung ke server.</p>';
+            if(wadah) wadah.innerHTML = '<p style="color:red; text-align:center;">Gagal terhubung ke server.</p>';
         }
     }
 
