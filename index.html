@@ -376,17 +376,21 @@
            CSS TAHAP 3 & 4: RUANG KAIWA GAMIFIED (CENTERED)
         ========================================= */
         
-        /* Wadah Utama Layar Penuh (Memusatkan Kotak Chat) */
+        /* Wadah Utama Layar Penuh (Memperbaiki Bug Terpotong & Mengaktifkan Scroll di HP) */
         .kaiwa-fullscreen-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; /* Mengganti 100vw/100vh yang bug di browser HP */
             background: #F4F7FA; z-index: 1000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            display: flex; flex-direction: column; align-items: center; 
+            overflow-y: auto; /* MENGAKTIFKAN SCROLL */
+            padding: 30px 15px 50px 15px; /* Jarak aman atas-bawah */
+            box-sizing: border-box;
         }
 
         /* Header Luar (Logo & Teks) */
         .kaiwa-outer-header {
             display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-            width: 100%; max-width: 650px; padding: 0 20px; box-sizing: border-box;
+            width: 100%; max-width: 650px; padding: 0 10px; box-sizing: border-box;
+            margin-top: auto; /* Mendorong kotak ke tengah di layar luas */
         }
         .kaiwa-outer-header img { width: 35px; height: auto; }
         .kaiwa-outer-header h2 { margin: 0; font-size: 16px; font-weight: 800; color: var(--primary); }
@@ -395,9 +399,10 @@
         .kaiwa-room-container { 
             background: #ffffff; border-radius: 20px; border: 2px solid #e2e8f0; 
             display: flex; flex-direction: column; 
-            height: 70vh; min-height: 450px; max-height: 700px;
+            height: 65vh; min-height: 420px; max-height: 700px; /* Dikecilkan sedikit agar muat di HP */
             width: 100%; max-width: 650px; overflow: hidden; 
             box-shadow: 0 15px 35px rgba(43, 59, 112, 0.1); 
+            flex-shrink: 0; /* Mencegah kotak tergencet di layar kecil */
         }
 
         /* Header Dalam Kotak (Judul Sesi & Nama User) */
@@ -457,10 +462,11 @@
         
         /* Tombol Buat Rapor di luar kotak */
         .btn-buat-rapor {
-            margin-top: 20px; background: #fee2e2; border: 2px solid #fecaca; color: #ef4444; 
+            margin-top: 20px; margin-bottom: auto; /* Pasangan margin-top auto di atas */
+            background: #fee2e2; border: 2px solid #fecaca; color: #ef4444; 
             padding: 14px 30px; border-radius: 12px; font-weight: 800; font-size: 15px; 
             cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 #fecaca;
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 8px; flex-shrink: 0;
         }
         .btn-buat-rapor:hover { transform: translateY(2px); box-shadow: 0 2px 0 #fecaca; background: #fecaca; }
         .btn-buat-rapor:disabled { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; box-shadow: none; transform: none; cursor: not-allowed; }
