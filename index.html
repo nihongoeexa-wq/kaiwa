@@ -950,79 +950,76 @@
     </div>
 
     <!-- ================= VIEW 5: RAPOR ================= -->
-    <div id="viewRapor" class="hidden kaiwa-fullscreen-overlay">
+    <div id="viewRapor" class="hidden kaiwa-fullscreen-overlay" style="padding: 15px; justify-content: center;">
         
-        <div class="rapor-container" style="width: 100%; max-width: 650px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column;">
+        <!-- KUNCI: height 95vh dan display flex column agar tombol bawah selalu menempel -->
+        <div class="rapor-container" style="width: 100%; max-width: 650px; height: 95vh; max-height: 850px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; margin: auto;">
             
-            <!-- HEADER & LENCANA TOTAL (CELEBRATION) -->
-            <div id="headerRapor" style="background: linear-gradient(135deg, #1e293b, #334155); padding: 30px 20px; text-align: center; color: white; position: relative;">
-                <h2 style="margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #f8fafc;">Hasil Evaluasi</h2>
-                <p style="margin: 5px 0 20px 0; font-size: 12px; color: #cbd5e1;">Evaluasi otomatis oleh AI Sensei</p>
+            <!-- HEADER & LENCANA TOTAL -->
+            <div id="headerRapor" style="background: linear-gradient(135deg, #1e293b, #334155); padding: 20px 15px; text-align: center; color: white; flex-shrink: 0;">
+                <h2 style="margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #f8fafc;">Hasil Evaluasi</h2>
                 
                 <!-- Animasi Loading -->
-                <div id="loadingRapor" style="margin: 20px 0;">
-                    <i class="fas fa-circle-notch fa-spin" style="font-size: 40px; color: #38bdf8;"></i>
-                    <p style="font-size: 14px; margin-top: 15px; color: #bae6fd;">Menganalisis Kinerja Anda...</p>
+                <div id="loadingRapor" style="margin: 15px 0;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size: 35px; color: #38bdf8;"></i>
+                    <p style="font-size: 13px; margin-top: 10px; color: #bae6fd;">Menganalisis Kinerja Anda...</p>
                 </div>
 
-                <!-- Lencana Nilai Total (Awalnya Sembunyi) -->
-                <div id="lencanaTotalArea" class="hidden" style="display: flex; flex-direction: column; align-items: center;">
-                    <div id="lencanaBentuk" style="width: 100px; height: 100px; border-radius: 50%; background: #0ea5e9; border: 4px solid #bae6fd; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 15px; transition: 0.5s;">
-                        <span id="valTotalScore" style="font-size: 36px; font-weight: 900; color: white;">0</span>
+                <!-- Lencana Nilai Total -->
+                <div id="lencanaTotalArea" class="hidden" style="display: flex; flex-direction: column; align-items: center; margin-top: 10px;">
+                    <div id="lencanaBentuk" style="width: 75px; height: 75px; border-radius: 50%; background: #0ea5e9; border: 4px solid #bae6fd; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 8px; transition: 0.5s;">
+                        <span id="valTotalScore" style="font-size: 28px; font-weight: 900; color: white;">0</span>
                     </div>
-                    <div id="pesanPerayaan" style="font-size: 16px; font-weight: 800; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Ganbatte!</div>
+                    <div id="pesanPerayaan" style="font-size: 15px; font-weight: 800; color: #fef08a; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Ganbatte!</div>
                 </div>
             </div>
 
-            <!-- KONTEN HASIL (AWALNYA SEMBUNYI) -->
-            <div id="hasilRapor" class="hidden" style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column; background: #f8fafc;">
+            <!-- KONTEN HASIL -->
+            <div id="hasilRapor" class="hidden" style="padding: 15px; flex-grow: 1; display: flex; flex-direction: column; background: #f8fafc; overflow: hidden;">
                 
-                <!-- 3 LINGKARAN INDIKATOR (CLICKABLE) -->
-                <div class="rapor-grid" style="background: white; padding: 20px 10px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'kosaKata')" style="cursor: pointer; transition: 0.2s;">
-                        <div class="circular-chart" id="chartKosaKata" style="width: 60px; height: 60px;"><div class="circular-inner" id="valKosaKata" style="width: 48px; height: 48px; font-size: 14px;">0</div></div>
-                        <div class="rapor-title" style="font-size: 11px;">Kosa Kata</div>
+                <!-- 3 LINGKARAN INDIKATOR -->
+                <div class="rapor-grid" style="background: white; padding: 15px 5px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; flex-shrink: 0; display: flex; justify-content: space-around;">
+                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'kosaKata')" style="cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center;">
+                        <div class="circular-chart" id="chartKosaKata" style="width: 55px; height: 55px;"><div class="circular-inner" id="valKosaKata" style="width: 43px; height: 43px; font-size: 13px;">0</div></div>
+                        <div class="rapor-title" style="font-size: 11px; margin-top: 8px;">Kosa Kata</div>
                     </div>
-                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'bunpou')" style="cursor: pointer; transition: 0.2s;">
-                        <div class="circular-chart" id="chartBunpou" style="width: 60px; height: 60px;"><div class="circular-inner" id="valBunpou" style="width: 48px; height: 48px; font-size: 14px;">0</div></div>
-                        <div class="rapor-title" style="font-size: 11px;">Bunpou</div>
+                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'bunpou')" style="cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center;">
+                        <div class="circular-chart" id="chartBunpou" style="width: 55px; height: 55px;"><div class="circular-inner" id="valBunpou" style="width: 43px; height: 43px; font-size: 13px;">0</div></div>
+                        <div class="rapor-title" style="font-size: 11px; margin-top: 8px;">Bunpou</div>
                     </div>
-                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'kelancaran')" style="cursor: pointer; transition: 0.2s;">
-                        <div class="circular-chart" id="chartKelancaran" style="width: 60px; height: 60px;"><div class="circular-inner" id="valKelancaran" style="width: 48px; height: 48px; font-size: 14px;">0</div></div>
-                        <div class="rapor-title" style="font-size: 11px;">Kelancaran</div>
+                    <div class="rapor-item clickable-circle" onclick="pilihTabRapor('koreksi', 'kelancaran')" style="cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center;">
+                        <div class="circular-chart" id="chartKelancaran" style="width: 55px; height: 55px;"><div class="circular-inner" id="valKelancaran" style="width: 43px; height: 43px; font-size: 13px;">0</div></div>
+                        <div class="rapor-title" style="font-size: 11px; margin-top: 8px;">Kelancaran</div>
                     </div>
                 </div>
 
-                <!-- TOMBOL MENU TAB (KOREKSI, REKOMENDASI, CHAT) -->
-                <div class="rapor-tabs" style="display: flex; gap: 8px; margin-bottom: 15px;">
-                    <button class="btn-tab-rapor active" id="tabBtnKoreksi" onclick="pilihTabRapor('koreksi', 'umum')"><i class="fas fa-exclamation-triangle"></i> Koreksi</button>
-                    <button class="btn-tab-rapor" id="tabBtnRekomendasi" onclick="pilihTabRapor('rekomendasi')"><i class="fas fa-lightbulb"></i> Tips</button>
-                    <button class="btn-tab-rapor" id="tabBtnChat" onclick="pilihTabRapor('chat')"><i class="fas fa-comments"></i> Percakapan</button>
+                <!-- TOMBOL MENU TAB -->
+                <div class="rapor-tabs" style="display: flex; gap: 5px; margin-bottom: 10px; flex-shrink: 0;">
+                    <button class="btn-tab-rapor active" id="tabBtnKoreksi" onclick="pilihTabRapor('koreksi', 'umum')" style="padding: 10px 5px;"><i class="fas fa-exclamation-triangle"></i> Koreksi</button>
+                    <button class="btn-tab-rapor" id="tabBtnRekomendasi" onclick="pilihTabRapor('rekomendasi')" style="padding: 10px 5px;"><i class="fas fa-lightbulb"></i> Tips</button>
+                    <button class="btn-tab-rapor" id="tabBtnChat" onclick="pilihTabRapor('chat')" style="padding: 10px 5px;"><i class="fas fa-comments"></i> Chat</button>
                 </div>
 
-                <!-- WADAH KONTEN TAB -->
-                <div class="tab-content-area" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; flex-grow: 1; overflow-y: auto; max-height: 350px;">
-                    
-                    <!-- AREA KOREKSI -->
+                <!-- WADAH KONTEN TAB (INI YANG BISA DI-SCROLL) -->
+                <div class="tab-content-area" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; flex-grow: 1; overflow-y: auto;">
                     <div id="tabKontenKoreksi">
                         <div id="infoFilterKoreksi" style="font-size: 12px; color: #64748b; margin-bottom: 15px; font-style: italic;">Menampilkan Semua Koreksi:</div>
-                        <div id="teksPerbaikan" style="font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-line;">-</div>
+                        <div id="teksPerbaikan" style="font-size: 13px; line-height: 1.6; color: #334155; white-space: pre-line;">-</div>
                     </div>
-
-                    <!-- AREA REKOMENDASI -->
                     <div id="tabKontenRekomendasi" class="hidden">
-                        <div id="teksRekomendasi" style="font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-line;">-</div>
+                        <div id="teksRekomendasi" style="font-size: 13px; line-height: 1.6; color: #334155; white-space: pre-line;">-</div>
                     </div>
-
-                    <!-- AREA CHAT (Hanya dari Sesi ini) -->
                     <div id="tabKontenChat" class="hidden">
-                        <div id="teksRiwayatChat" style="font-size: 13px; line-height: 1.6; color: #475569; white-space: pre-line; background: #f1f5f9; padding: 15px; border-radius: 8px; font-family: monospace;">-</div>
+                        <div id="teksRiwayatChat" style="font-size: 12px; line-height: 1.6; color: #475569; white-space: pre-line; background: #f1f5f9; padding: 15px; border-radius: 8px; font-family: monospace;">-</div>
                     </div>
-
                 </div>
 
-                <!-- TOMBOL KEMBALI DI BAWAH -->
-                <button id="btnKembaliDash" class="btn" style="margin-top: 20px; width: 100%;"><i class="fas fa-home"></i> Kembali ke Beranda</button>
+                <!-- TOMBOL BAWAH PINNED (TIDAK AKAN TENGGELAM) -->
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-shrink: 0;">
+                    <button id="btnKembaliDash" class="btn" style="flex: 1; background: #e2e8f0; color: #475569; font-size: 13px; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;"><i class="fas fa-home"></i> Beranda</button>
+                    
+                    <button onclick="showView('dashboard'); bukaTab('riwayat'); tarikDataRiwayat();" class="btn" style="flex: 1; font-size: 13px; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;"><i class="fas fa-history"></i> Riwayat</button>
+                </div>
 
             </div>
         </div>
