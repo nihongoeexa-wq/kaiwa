@@ -545,7 +545,53 @@
         .history-card.open .history-card-header { background: #f1f5f9; }
         .history-badge { background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; color: #475569; }
 
-    </style>
+        /* LENCANA GELAR / PANGKAT SISWA */
+        .rank-pill-header {
+          display: inline-flex; align-items: center; gap: 6px; margin-top: 4px;
+          padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800;
+          background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1;
+        }
+        /* PETA LEVEL KEHIDUPAN (KHD ROADMAP & GEMBOK) */
+        .khd-level-box {
+          border: 2px solid #e2e8f0; border-radius: 14px; margin-bottom: 14px;
+          background: #ffffff; overflow: hidden; transition: 0.2s;
+        }
+        .khd-level-box.locked-level { opacity: 0.78; background: #f8fafc; border-style: dashed; }
+        .khd-level-header {
+          padding: 15px 18px; display: flex; justify-content: space-between; align-items: center;
+          cursor: pointer; background: #ffffff; transition: 0.2s;
+        }
+        .khd-level-box.locked-level .khd-level-header { background: #f8fafc; cursor: not-allowed; }
+        .khd-level-body { display: none; padding: 15px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+        .khd-level-box.open .khd-level-body { display: block; }
+        .theme-item.locked-session { opacity: 0.65; background: #f1f5f9; border-style: dashed; }
+        .theme-item.locked-session .theme-header { background: #f1f5f9; cursor: not-allowed; color: #64748b; }
+        .badge-sesi-status {
+          font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 8px; white-space: nowrap;
+        }
+
+        /* FORM PENDAFTARAN, PROFIL TSK & WIDGET TESTIMONI */
+        .gender-btn-group { display: flex; gap: 10px; }
+        .gender-card-btn {
+          flex: 1; padding: 12px 10px; border: 2px solid #e2e8f0; border-radius: 12px;
+          background: #fff; cursor: pointer; text-align: center; font-weight: 800;
+          font-size: 13px; color: #475569; transition: 0.2s;
+        }
+        .gender-card-btn.selected { border-color: #2b5cff; background: #eff6ff; color: #1d4ed8; }
+        .profil-section-title {
+          font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase;
+          letter-spacing: 0.5px; margin: 18px 0 10px 0; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0;
+        }
+        .input-compact {
+          width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px;
+          font-size: 13px; font-family: inherit; box-sizing: border-box; background: #fff; color: var(--text-main);
+        }
+        .input-compact:focus { border-color: var(--primary); outline: none; }
+        .label-compact { display: block; font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 5px; text-transform: uppercase; }
+        .star-rating-box { display: flex; justify-content: center; gap: 8px; font-size: 26px; margin: 10px 0; cursor: pointer; }
+        .star-item { color: #cbd5e1; transition: 0.15s; }
+        .star-item.active { color: #f59e0b; transform: scale(1.08); }
+      </style>
 </head>
 <body>
 
@@ -672,9 +718,10 @@
             
             <!-- --- 2. HEADER ATAS (FREEZE BAR) --- -->
             <header class="top-header">
-                <div class="header-left">
-                    <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
-                </div>
+              <div class="header-left">
+                <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
+                <div id="headerGelarBadge" class="rank-pill-header">😴 Kaum Rebahan</div>
+              </div>
                 <div class="header-right">
                     <!-- Stat Bar -->
                     <div class="stat-group">
@@ -728,11 +775,12 @@
                                     </div>
                                 </div>
                                 <div class="stat-card">
-                                    <div class="stat-icon" style="background:#bae6fd; color:#0284c7;"><i class="fas fa-bullseye"></i></div>
-                                    <div class="stat-info">
-                                        <h4>Target Level</h4>
-                                        <p>JFT-Basic A2</p>
-                                    </div>
+                                  <div class="stat-icon" id="dashGelarIconBox" style="background:#e0f2fe; color:#0284c7;"><i class="fas fa-medal"></i></div>
+                                  <div class="stat-info">
+                                    <h4>Status &amp; Pangkat</h4>
+                                    <p id="dashGelarText" style="font-size: 14px;">😴 Kaum Rebahan</p>
+                                    <div id="dashGelarSub" style="font-size: 11px; color: #64748b; margin-top: 2px;">Mulai latihan untuk naik pangkat!</div>
+                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -749,10 +797,36 @@
                                 <div id="dashMsg" class="msg"></div>
                             </div>
                             
-                            <!-- Kotak Info/Pengumuman (Opsional) -->
+                            <!-- Kotak Promo 100 Tiket Testimoni Bintang 5 -->
+                            <div class="widget-box" id="widgetTestimoniBox" style="border-color: #fde047; background: linear-gradient(180deg, #fefce8 0%, #ffffff 100%);">
+                              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <h3 style="margin:0; color:#a16207;"><i class="fas fa-star" style="color:#f59e0b;"></i> Klaim 100 Tiket Gratis!</h3>
+                                <span id="badgeKuotaTestimoni" style="font-size:10px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 8px; border-radius:10px;">Sisa: 100</span>
+                              </div>
+                              <div id="formTestimoniArea">
+                                <p style="font-size:12px; color:#713f12; margin-bottom:8px;">Berikan ulasan jujur &amp; <strong>Bintang 5</strong> setelah latihan untuk mendapatkan <strong>+100 Tiket Gratis</strong> (khusus 100 siswa pertama)!</p>
+                                <div class="star-rating-box" id="starSelectorTesti">
+                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(1)"></i>
+                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(2)"></i>
+                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(3)"></i>
+                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(4)"></i>
+                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(5)"></i>
+                                </div>
+                                <textarea id="inputTeksTestimoni" rows="3" class="input-compact" placeholder="Ceritakan pengalaman belajarmu di Neexa (min. 20 karakter)..." style="resize:vertical; margin-bottom:8px;"></textarea>
+                                <button id="btnKirimTestimoni" onclick="kirimTestimoni()" class="btn" style="padding:10px; font-size:13px; background:#d97706;">
+                                  <i class="fas fa-paper-plane"></i> Kirim &amp; Klaim Bonus
+                                </button>
+                                <div id="testimoniMsg" class="msg"></div>
+                              </div>
+                              <div id="sudahTestimoniArea" class="hidden" style="text-align:center; padding:10px 0; color:#15803d; font-size:12px; font-weight:700;">
+                                ✅ Terima kasih! Testimoni Anda telah tercatat.
+                              </div>
+                            </div>
+
+                            <!-- Kotak Info/Pengumuman -->
                             <div class="widget-box info-widget">
-                                <h3><i class="fas fa-bullhorn"></i> Info LPK</h3>
-                                <p>Tetap semangat belajar! Jangan lupa gunakan WiFi yang stabil saat berlatih Kaiwa.</p>
+                              <h3><i class="fas fa-bullhorn"></i> Info Karier &amp; TSK</h3>
+                              <p>Ingin dilirik TSK Jepang di menu Job Order? Klik foto profilmu di kanan atas dan lengkapi <strong>Profil Karier Jepang</strong> hingga berstatus <strong>Job Ready</strong>!</p>
                             </div>
                         </div>
 
@@ -870,16 +944,16 @@
                     <div id="wadah-tema-blj-pro"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
                   </div>
 
-                  <!-- [LAYER 2B] TEMA KEHIDUPAN (SEIKATSU - LANGSUNG TANPA TIER) -->
+                  <!-- [LAYER 2B] PETA LEVEL KEHIDUPAN (SEIKATSU - SISTEM BUKA GEMBOK) -->
                   <div id="detail-khd" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
                     <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Tujuan Latihan</button>
                     <div class="detail-header" style="background: #ecfdf5; border-color: #a7f3d0;">
-                      <h2 style="color: #047857;">🏪 KEHIDUPAN / SEIKATSU (生活)</h2>
-                      <p><strong>Tujuan:</strong> Simulasi situasi nyata sehari-hari di Jepang (belanja, rumah sakit, stasiun, lingkungan kerja).</p>
-                      <p><strong>Aturan Sesi:</strong> Tersedia mode Normal &amp; Live. Rapor tengah jalan kena pinalti 5 tiket; keluar layar &gt; 3 detik dipotong penuh &amp; 0 koin.</p>
+                      <h2 style="color: #047857;">🏪 PETA HIDUP DI JEPANG (生活サバイバル)</h2>
+                      <p><strong>Syarat Buka Kunci (KKM):</strong> Selesaikan sesi secara penuh hingga putaran terakhir dengan <strong>Nilai Total minimal 75</strong> untuk membuka sesi &amp; pangkat berikutnya!</p>
+                      <p><strong>Pangkatmu Saat Ini:</strong> <span id="khdBannerGelar" style="font-weight: 800; color: #047857;">Memuat...</span></p>
                     </div>
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Pilih Skenario Kehidupan:</h3>
-                    <div id="wadah-tema-khd"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar skenario...</p></div>
+                    <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 12px; color: var(--text-main);">Pilih Level Perjalanan:</h3>
+                    <div id="wadah-tema-khd"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat peta perjalanan hidup di Jepang...</p></div>
                   </div>
 
                   <!-- [LAYER 2C] TEMA WAWANCARA (MENSETSU - LANGSUNG TANPA TIER) -->
@@ -1125,45 +1199,249 @@
         </div>
     </div>
 
-    <!-- ================= MODAL EDIT PROFIL & AVATAR ================= -->
-    <!-- ================= MODAL EDIT PROFIL & AVATAR ================= -->
-    <div id="profilModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px);">
-      <div style="background: #fff; border-radius: 16px; width: 90%; max-width: 380px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-      
-        <!-- Header Modal -->
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f4f8; padding-bottom: 12px; margin-bottom: 15px;">
-          <h3 style="margin: 0; color: var(--text-main); font-size: 18px;"><i class="fas fa-user-edit"></i> Profil Siswa</h3>
-          <button onclick="tutupModalProfil()" style="background: #f0f4f8; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; color: #ef4444;"><i class="fas fa-times"></i></button>
+    <!-- ================= MODAL 1: ONBOARDING WAJIB PENDAFTAR BARU ================= -->
+    <div id="onboardingModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.78); z-index: 10000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(4px); padding: 15px; box-sizing: border-box;">
+      <div style="background: #fff; border-radius: 18px; width: 100%; max-width: 400px; padding: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25);">
+        <div style="text-align: center; margin-bottom: 18px;">
+          <div style="font-size: 32px; margin-bottom: 6px;">👋</div>
+          <h3 style="margin: 0; color: var(--primary); font-size: 18px; font-weight: 800;">Selamat Datang di Neexa!</h3>
+          <p style="margin: 5px 0 0 0; font-size: 12px; color: #64748b;">Lengkapi 2 data dasar ini agar AI Sensei dapat menyesuaikan simulasi dengan tepat.</p>
         </div>
 
-        <!-- Info Email Aktif -->
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; margin-bottom: 15px; font-size: 12px; color: #475569; font-weight: 700; word-break: break-all;">
-          <i class="fas fa-envelope" style="color: var(--primary); margin-right: 5px;"></i> <span id="userEmailDisplay">-</span>
+        <div style="margin-bottom: 15px;">
+          <label class="label-compact">1. Nama Panggilan Anda <span style="color:#ef4444;">*</span></label>
+          <input type="text" id="onboardNama" class="input-compact" placeholder="Contoh: Rizki / Siti" style="font-weight: 700;">
         </div>
-      
-        <!-- Input Ganti Nama -->
-        <div style="margin-bottom: 20px;">
-          <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 13px;">NAMA PANGGILAN ANDA</label>
-          <input type="text" id="inputNamaProfil" placeholder="Ketik nama Anda..." style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; box-sizing: border-box; font-size: 15px; font-weight: bold; color: var(--primary);">
-        </div>
-      
-        <!-- Grid Pilihan Avatar -->
-        <div>
-          <label style="display: block; margin-bottom: 12px; font-weight: 600; color: #555; font-size: 13px;">PILIH AVATAR ANDA</label>
-          <div id="avatarGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-            <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20perempuan.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Akira" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sakura" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Kenji" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Yui" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Taro" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hana" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+
+        <div style="margin-bottom: 15px;">
+          <label class="label-compact">2. Jenis Kelamin <span style="color:#ef4444;">*</span></label>
+          <div class="gender-btn-group">
+            <div class="gender-card-btn" id="onboardGenderMale" onclick="pilihGenderUI('onboard', 'male')">👨 Laki-laki</div>
+            <div class="gender-card-btn" id="onboardGenderFemale" onclick="pilihGenderUI('onboard', 'female')">🧕 Perempuan</div>
           </div>
+          <input type="hidden" id="onboardGenderVal" value="">
         </div>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:#475569; background:#f8fafc; padding:10px 12px; border-radius:8px; border:1px solid #e2e8f0; cursor:pointer; margin-bottom:18px;">
+          <input type="checkbox" id="onboardSensorNama" style="width:16px; height:16px; cursor:pointer;">
+          <span>Samarkan sebagian nama saya di Leaderboard (Contoh: <b>Ri***</b>)</span>
+        </label>
+
+        <div id="onboardMsg" class="msg" style="margin-bottom: 10px;"></div>
+
+        <button id="btnSimpanOnboardCepat" onclick="simpanOnboardingAwal(false)" class="btn" style="padding: 13px; font-size: 14px;">
+          Masuk ke Beranda <i class="fas fa-arrow-right"></i>
+        </button>
+        <button onclick="simpanOnboardingAwal(true)" class="btn btn-outline" style="padding: 11px; font-size: 12px; margin-top: 8px;">
+          <i class="fas fa-briefcase"></i> Lengkapi Profil Pencari Kerja (TSK) Sekarang
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= MODAL 2: EDIT PROFIL & KUALIFIKASI KARIER TSK ================= -->
+    <div id="profilModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(3px); padding: 15px; box-sizing: border-box;">
+      <div style="background: #fff; border-radius: 18px; width: 100%; max-width: 480px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.25);">
       
-        <button onclick="simpanProfil()" class="btn" style="margin-top: 20px;"><i class="fas fa-save"></i> Simpan Profil</button>
-        <button onclick="keluarAkun()" class="btn" style="margin-top: 10px; background: #fee2e2; color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Keluar Akun (Logout)</button>
+        <!-- Header Modal (Sticky) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding: 16px 20px; flex-shrink: 0;">
+          <h3 style="margin: 0; color: var(--text-main); font-size: 17px;"><i class="fas fa-id-card" style="color:var(--primary);"></i> Profil &amp; Data Kandidat</h3>
+          <button onclick="tutupModalProfil()" style="background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #ef4444; font-size: 14px;"><i class="fas fa-times"></i></button>
+        </div>
+
+        <!-- Isi Scrollable -->
+        <div style="padding: 18px 20px; overflow-y: auto; flex: 1;">
+        
+          <!-- Kartu Ringkasan Akun, Pangkat & Status Job Ready -->
+          <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 15px; font-size: 12px;">
+            <div style="word-break: break-all; font-weight: 700; color: #334155; margin-bottom: 6px;">
+              <i class="fas fa-envelope" style="color: var(--primary); margin-right: 5px;"></i> <span id="userEmailDisplay">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px dashed #cbd5e1;">
+              <span style="color: #64748b; font-size: 11px; font-weight: 700;">PANGKAT:</span>
+              <span id="profilModalGelar" style="color: var(--primary); font-weight: 800;">😴 Kaum Rebahan</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+              <span style="color: #64748b; font-size: 11px; font-weight: 700;">STATUS JOB ORDER:</span>
+              <span id="badgeStatusJobReady" style="font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #e2e8f0; color: #475569;">⚪ Data Karier Belum Lengkap</span>
+            </div>
+          </div>
+
+          <!-- BAGIAN 1: DATA WAJIB & AVATAR -->
+          <div class="profil-section-title" style="margin-top: 0;">1. Identitas Utama (Wajib)</div>
+
+          <div style="margin-bottom: 12px;">
+            <label class="label-compact">Nama Panggilan <span style="color:#ef4444;">*</span></label>
+            <input type="text" id="inputNamaProfil" class="input-compact" placeholder="Ketik nama panggilan..." style="font-weight: 700;">
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label class="label-compact">Jenis Kelamin <span style="color:#ef4444;">*</span></label>
+            <div class="gender-btn-group">
+              <div class="gender-card-btn" id="profilGenderMale" onclick="pilihGenderUI('profil', 'male')">👨 Laki-laki</div>
+              <div class="gender-card-btn" id="profilGenderFemale" onclick="pilihGenderUI('profil', 'female')">🧕 Perempuan</div>
+            </div>
+            <input type="hidden" id="profilGenderVal" value="">
+          </div>
+
+          <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:#475569; background:#f8fafc; padding:9px 12px; border-radius:8px; border:1px solid #e2e8f0; cursor:pointer; margin-bottom:14px;">
+            <input type="checkbox" id="inputSensorNama" style="width:16px; height:16px; cursor:pointer;">
+            <span>Sensor sebagian nama saya di Leaderboard (Privasi)</span>
+          </label>
+
+          <div style="margin-bottom: 10px;">
+            <label class="label-compact">Pilih Avatar</label>
+            <div id="avatarGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20perempuan.png" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Akira" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sakura" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Kenji" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Yui" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Taro" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hana" class="avatar-option" onclick="pilihAvatar(this)" style="width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; object-fit: cover; background: #f8fafc;">
+            </div>
+          </div>
+
+          <!-- BAGIAN 2: BIODATA & TUJUAN PENGGUNAAN (OPSIONAL / BISA DIISI KAPAN SAJA) -->
+          <div class="profil-section-title">2. Biodata &amp; Tujuan Belajar (Opsional)</div>
+
+          <div style="margin-bottom: 12px;">
+            <label class="label-compact">Nama Lengkap (Sesuai KTP / Paspor)</label>
+            <input type="text" id="inputNamaLengkap" class="input-compact" placeholder="Nama lengkap resmi Anda...">
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 2;">
+              <label class="label-compact">Tanggal Lahir</label>
+              <input type="date" id="inputTglLahir" class="input-compact" onchange="updatePreviewUmur()">
+            </div>
+            <div style="flex: 1;">
+              <label class="label-compact">Usia (Otomatis)</label>
+              <input type="text" id="previewUmurOtomatis" class="input-compact" value="-" readonly style="background:#f1f5f9; font-weight:800; text-align:center; color:var(--primary);">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 3;">
+              <label class="label-compact">Nomor WhatsApp Aktif</label>
+              <input type="tel" id="inputWhatsapp" class="input-compact" placeholder="0812xxxx / +81xxxx">
+            </div>
+            <div style="flex: 2;">
+              <label class="label-compact">Domisili Saat Ini</label>
+              <select id="selectLokasi" class="input-compact">
+                <option value="Indonesia">🇮🇩 Indonesia</option>
+                <option value="Jepang">🇯🇵 Jepang</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            <label class="label-compact">Tujuan Utama Menggunakan Neexa</label>
+            <select id="selectTujuan" class="input-compact" onchange="handleUbahTujuan()">
+              <option value="">-- Pilih Tujuan Penggunaan --</option>
+              <option value="Belajar Berbicara Bahasa Jepang">Belajar Berbicara Bahasa Jepang</option>
+              <option value="Mencari Job Kerja di Jepang">Mencari Job Kerja di Jepang (Tokutei Ginou)</option>
+              <option value="Belajar Bahasa & Mencari Job Kerja">Belajar Bahasa Sekaligus Mencari Job</option>
+              <option value="Lainnya">Lainnya...</option>
+            </select>
+            <input type="text" id="inputTujuanLainnya" class="input-compact hidden" placeholder="Tuliskan tujuan Anda..." style="margin-top: 8px;">
+          </div>
+
+          <!-- BAGIAN 3: KUALIFIKASI KANDIDAT KERJA JEPANG (MUNCUL OTOMATIS JIKA PILIH "MENCARI JOB") -->
+          <div id="boxKualifikasiJob" class="hidden" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 14px; margin-top: 12px;">
+            <div style="font-size: 12px; font-weight: 800; color: #15803d; margin-bottom: 4px;">
+              <i class="fas fa-briefcase"></i> KUALIFIKASI KANDIDAT KERJA JEPANG (TSK)
+            </div>
+            <p style="font-size: 11px; color: #166534; margin: 0 0 12px 0; line-height: 1.4;">
+              Lengkapi poin di bawah ini &amp; unggah sertifikat untuk mendapat label <b>🟢 JOB READY</b> di Leaderboard serta membuka pendaftaran di menu <b>Job Order</b>!
+            </p>
+
+            <div style="margin-bottom: 12px;">
+              <label class="label-compact">Status Keberangkatan</label>
+              <select id="selectStatusLpk" class="input-compact" onchange="handleUbahStatusLpk()">
+                <option value="">-- Pilih Status Anda --</option>
+                <option value="Siswa LPK">Siswa LPK / Sending Organization</option>
+                <option value="Mandiri">Kandidat Mandiri (Jalur Pribadi)</option>
+                <option value="Eks-Jepang">Eks-Jepang (Eks-Ginou / Tokutei)</option>
+              </select>
+              <input type="text" id="inputNamaLpk" class="input-compact hidden" placeholder="Ketik Nama LPK Anda..." style="margin-top: 8px;">
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <label class="label-compact">Sertifikat Bahasa Jepang yang Dimiliki</label>
+              <div style="display: flex; gap: 8px;">
+                <select id="selectSertifikatBhs" class="input-compact" style="flex: 2;" onchange="handleUbahSertifikatBhs()">
+                  <option value="Belum Memiliki">Belum Memiliki (Sedang Belajar)</option>
+                  <option value="JFT-Basic A2">JFT-Basic A2</option>
+                  <option value="JLPT N5">JLPT N5</option>
+                  <option value="JLPT N4">JLPT N4</option>
+                  <option value="JLPT N3">JLPT N3</option>
+                  <option value="JLPT N2">JLPT N2</option>
+                  <option value="JLPT N1">JLPT N1</option>
+                  <option value="NAT-TEST 5Q">NAT-TEST 5Q (N5)</option>
+                  <option value="NAT-TEST 4Q">NAT-TEST 4Q (N4)</option>
+                  <option value="NAT-TEST 3Q">NAT-TEST 3Q (N3)</option>
+                  <option value="NAT-TEST 2Q">NAT-TEST 2Q (N2)</option>
+                  <option value="NAT-TEST 1Q">NAT-TEST 1Q (N1)</option>
+                  <option value="J-TEST">J-TEST</option>
+                  <option value="Lainnya">Lainnya...</option>
+                </select>
+                <input type="text" id="inputNilaiBhs" class="input-compact" style="flex: 1;" placeholder="Nilai/Skor">
+              </div>
+              <input type="text" id="inputBhsLainnya" class="input-compact hidden" placeholder="Ketik nama sertifikat bahasa..." style="margin-top: 8px;">
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <label class="label-compact">Sertifikat Keterampilan (SSW / Senmonkyu)</label>
+              <select id="selectSertifikatSsw" class="input-compact" onchange="handleUbahSertifikatSsw()">
+                <option value="Belum Memiliki">Belum Memiliki</option>
+                <option value="SSW Perawatan Lansia (Kaigo)">SSW - Perawatan Lansia (Kaigo)</option>
+                <option value="SSW Pengolahan Makanan">SSW - Pengolahan Makanan &amp; Minuman</option>
+                <option value="SSW Pertanian">SSW - Pertanian (Tanaman)</option>
+                <option value="SSW Peternakan">SSW - Peternakan</option>
+                <option value="SSW Manufaktur / Pabrik">SSW - Industri Manufaktur / Pabrik</option>
+                <option value="SSW Pelayanan Restoran">SSW - Pelayanan Restoran (Gaishoku)</option>
+                <option value="SSW Konstruksi">SSW - Konstruksi</option>
+                <option value="SSW Perawatan Mobil">SSW - Perawatan &amp; Perbaikan Mobil</option>
+                <option value="SSW Perkapalan">SSW - Pembuatan Kapal</option>
+                <option value="SSW Pembersihan Gedung">SSW - Pembersihan Gedung</option>
+                <option value="SSW Perhotelan">SSW - Perhotelan / Akomodasi</option>
+                <option value="SSW Penerbangan">SSW - Penerbangan (Ground Handling)</option>
+                <option value="SSW Perikanan">SSW - Perikanan &amp; Akuakultur</option>
+                <option value="SSW Driver / Transportasi">SSW - Transportasi Mobil (Driver)</option>
+                <option value="SSW Perkeretaapian">SSW - Perkeretaapian</option>
+                <option value="SSW Kehutanan / Kayu">SSW - Kehutanan / Industri Kayu</option>
+                <option value="Senmonkyu / Hyoka Chousho (Eks-Magang)">Senmonkyu / Hyoka Chousho (Eks-Magang 3 Thn)</option>
+                <option value="Lainnya">Lainnya...</option>
+              </select>
+              <input type="text" id="inputSswLainnya" class="input-compact hidden" placeholder="Ketik nama sertifikat keterampilan..." style="margin-top: 8px;">
+            </div>
+
+            <div>
+              <label class="label-compact">Unggah Bukti Sertifikat (PDF / JPG / PNG • Maks 2 MB)</label>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="file" id="inputFileSertifikat" accept=".pdf,image/jpeg,image/png" class="input-compact" style="padding: 7px; font-size: 11px; flex: 1;">
+                <button type="button" id="btnUploadDrive" onclick="unggahFileSertifikat()" class="btn" style="width: auto; padding: 9px 14px; font-size: 12px; background: #15803d;">
+                  <i class="fas fa-cloud-upload-alt"></i> Upload
+                </button>
+              </div>
+              <div id="infoLinkSertifikat" style="font-size: 11px; margin-top: 6px; color: #475569;">Belum ada dokumen terunggah.</div>
+            </div>
+          </div>
+
+          <div id="profilModalMsg" class="msg"></div>
+        </div>
+
+        <!-- Footer Tombol Simpan & Logout (Sticky) -->
+        <div style="padding: 14px 20px; border-top: 2px solid #f1f5f9; background: #fff; display: flex; gap: 10px; flex-shrink: 0;">
+          <button onclick="keluarAkun()" class="btn" style="flex: 1; padding: 12px; font-size: 13px; background: #fee2e2; color: #ef4444;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+          <button id="btnSimpanProfilLengkap" onclick="simpanProfil()" class="btn" style="flex: 2; padding: 12px; font-size: 13px;">
+            <i class="fas fa-save"></i> Simpan Profil
+          </button>
+        </div>
+
       </div>
     </div>
 </div>
@@ -1288,37 +1566,18 @@
       });
 
       if (data.success) {
-        const emailUser = String(data.data.email || '').trim().toLowerCase();
-        KAIWA_USER = {
-          nama: data.data.nama,
-          email: emailUser,
-          saldo: Number(data.data.saldo) || 0,
-          riwayat: data.data.riwayat || "",
-          koin: Number(data.data.koin) || 0,
-          sesi: Number(data.data.sesi) || 0,
-          token: data.data.token || ""
-        };
-
-        const savedAvatar = localStorage.getItem('neexa_avatar_' + emailUser);
-        const savedNama = localStorage.getItem('neexa_nama_' + emailUser);
-
-        if (savedNama) KAIWA_USER.nama = savedNama;
-        KAIWA_USER.avatar = savedAvatar || "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png";
-
-        document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
-        const elEmail = document.getElementById('userEmailDisplay');
-        if (elEmail) elEmail.innerText = KAIWA_USER.email;
-
-        document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
-        document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
-        document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
-        document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
+        terapkanDataUserKeUI(data.data);
 
         showView('dashboard');
         bukaTab('dashboard');
         muatDaftarProduk();
         tarikDataRiwayat();
         showMsg('dashMsg', 'success', escapeHtml(data.message));
+
+        // Jika akun baru atau belum pernah memilih Jenis Kelamin, tahan di Modal Onboarding Wajib!
+        if (data.data.wajibOnboarding) {
+          bukaModalOnboarding();
+        }
       } else {
         showMsg('loginMsg', 'error', escapeHtml(data.message));
         kirimBlackBox("Proses Login/Daftar OAuth", data.message);
@@ -1326,6 +1585,48 @@
     } catch (err) {
       showMsg('loginMsg', 'error', 'Gagal memproses login: ' + escapeHtml(err.message));
       kirimBlackBox("Koneksi GAS (OAuth)", err.message);
+    }
+  }
+
+  function terapkanDataUserKeUI(d) {
+    const emailUser = String(d.email || KAIWA_USER.email || '').trim().toLowerCase();
+    const defaultAvatarCowok = "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png";
+    const defaultAvatarCewek = "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20perempuan.png";
+
+    const avatarPilihan = d.avatar || localStorage.getItem('neexa_avatar_' + emailUser) || (d.gender === 'female' ? defaultAvatarCewek : defaultAvatarCowok);
+
+    KAIWA_USER = Object.assign(KAIWA_USER, d, {
+      email: emailUser,
+      saldo: Number(d.saldo !== undefined ? d.saldo : KAIWA_USER.saldo) || 0,
+      koin: Number(d.koin !== undefined ? d.koin : KAIWA_USER.koin) || 0,
+      sesi: Number(d.sesi !== undefined ? d.sesi : KAIWA_USER.sesi) || 0,
+      avatar: avatarPilihan
+    });
+
+    document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama || 'Siswa';
+    const elEmail = document.getElementById('userEmailDisplay');
+    if (elEmail) elEmail.innerText = KAIWA_USER.email;
+
+    document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+    document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+    document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
+    document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
+
+    // Sinkronisasi Widget Kuota Testimoni Bintang 5
+    const elBadgeKuota = document.getElementById('badgeKuotaTestimoni');
+    if (elBadgeKuota && d.sisaKuotaTestimoni !== undefined) {
+      elBadgeKuota.innerText = `Sisa: ${d.sisaKuotaTestimoni}/100`;
+    }
+    const formTesti = document.getElementById('formTestimoniArea');
+    const sudahTesti = document.getElementById('sudahTestimoniArea');
+    if (formTesti && sudahTesti) {
+      if (KAIWA_USER.sudahTestimoni) {
+        formTesti.classList.add('hidden');
+        sudahTesti.classList.remove('hidden');
+      } else {
+        formTesti.classList.remove('hidden');
+        sudahTesti.classList.add('hidden');
+      }
     }
   }
 
@@ -1343,14 +1644,26 @@
   }
 
   // =========================================================
-  // 2. MESIN KATALOG PINTAR (PENGGABUNG OTOMATIS 1 KARTU = KN & KL)
+  // 2. KONFIGURASI 7 LEVEL KHD, MESIN PANGKAT & GEMBOK KKM 75%
   // =========================================================
+  const KKM_BUKA_KUNCI = 75;
+  let CACHE_GRUP_KHD = [];
+
+  const DEFINISI_LEVEL_KHD = [
+    { level: 1, fase: "Hari ke-1", judul: "LEVEL 1: Mendarat di Bandara", gelarSaatIni: "🧳 Turis Kesasar (Lost Tourist)", deskripsi: "Lolos imigrasi & keluar dari bandara Jepang tanpa nyasar." },
+    { level: 2, fase: "Minggu ke-1", judul: "LEVEL 2: Bertahan Hidup Minggu Pertama", gelarSaatIni: "🐣 Anak Bawang (Newbie)", deskripsi: "Urus Zairyu Card, rekening bank, belanja Supaa, & aturan sampah asrama." },
+    { level: 3, fase: "Bulan 1 - 3", judul: "LEVEL 3: Adaptasi Dunia Kerja", gelarSaatIni: "🔰 Kouhai Amatir (Rookie)", deskripsi: "Mulai masuk kerja & memahami instruksi senior Jepang." },
+    { level: 4, fase: "Bulan 4 - 6", judul: "LEVEL 4: Gajian & Tagihan Hidup", gelarSaatIni: "💴 Pejuang Yen (Yen Warrior)", deskripsi: "Mengatur gaji, bayar tagihan hidup, & cari obat saat sakit ringan." },
+    { level: 5, fase: "Bulan 6 - 12", judul: "LEVEL 5: Kemandirian Kota", gelarSaatIni: "🚅 Warga Mandiri (Independent)", deskripsi: "Berobat ke klinik sendiri, potong rambut, & naik kereta tanpa tersesat." },
+    { level: 6, fase: "Tahun Ke-2", judul: "LEVEL 6: Menjadi Senior Andalan", gelarSaatIni: "🔥 Senpai Panutan (Senior)", deskripsi: "Membantu Kouhai baru & melaporkan kendala kerja secara detail." },
+    { level: 7, fase: "Tahun Ke-3+", judul: "LEVEL 7: Kehidupan Warga Lokal", gelarSaatIni: "🏯 Warga Lokal (Calon Nushi)", deskripsi: "Negosiasi kontrak, urus pajak/visa, & bergaul senatural orang Jepang." }
+  ];
+
   function bedahKodeProduk(kodeRaw) {
     const k = String(kodeRaw || '').trim().toUpperCase();
     let mode = "KN";
     let inti = k;
 
-    // Deteksi 2 huruf awal (KN atau KL)
     if (k.startsWith("KL-") || k.startsWith("KL_") || k.startsWith("KL")) {
       mode = "KL";
       inti = k.replace(/^KL[-_\s]*/, '');
@@ -1359,39 +1672,326 @@
       inti = k.replace(/^KN[-_\s]*/, '');
     }
 
-    // Deteksi Kategori Tujuan (BLJ, KHD, MST)
     let kategori = "BLJ";
-    if (inti.startsWith("KHD") || inti.includes("SEIKATSU")) kategori = "KHD";
-    else if (inti.startsWith("MST") || inti.includes("INTERVIEW") || inti.includes("MENSETSU")) kategori = "MST";
+    if (inti.startsWith("KHD")) kategori = "KHD";
+    else if (inti.startsWith("MST")) kategori = "MST";
+    else if (inti.startsWith("BLJ")) kategori = "BLJ";
 
-    // Deteksi Tier khusus BLJ
     let tier = "BSC";
-    if (inti.endsWith("PRO") || inti.includes("PRO")) tier = "PRO";
-    else if (inti.endsWith("MID") || inti.includes("MID")) tier = "MID";
+    if (inti.endsWith("PRO")) tier = "PRO";
+    else if (inti.endsWith("MID")) tier = "MID";
 
-    return { kodePenuh: k, mode: mode, kunciGrup: inti, kategori: kategori, tier: tier };
+    // Deteksi Level & Urutan Sesi KHD dari format [L1S1_...] atau [L2S3_...]
+    let levelKHD = 1;
+    let urutSesiKHD = 99;
+    const matchLS = inti.match(/\[L(\d+)S(\d+)/i);
+    if (matchLS) {
+      levelKHD = parseInt(matchLS[1], 10) || 1;
+      urutSesiKHD = parseInt(matchLS[2], 10) || 99;
+    }
+
+    return { kodePenuh: k, mode: mode, kunciGrup: inti, kategori: kategori, tier: tier, levelKHD: levelKHD, urutSesiKHD: urutSesiKHD };
+  }
+
+  // Rakitan HTML Pilihan Sensei & Tombol KN/KL (Dipakai oleh BLJ, MST, maupun Sesi KHD yang Terbuka)
+  function rakitIsiAksiTemaHTML(grup) {
+    const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
+    let tombolHTML = "";
+
+    if (grup.KN) {
+      const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
+      tombolHTML += `
+        <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 8px;">
+          <i class="fas fa-comments"></i> Kaiwa Normal (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
+        </button>
+        <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 10px;">
+          Total selesai penuh: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
+        </div>
+      `;
+    }
+
+    const izinkanKL = grup.KL && !(grup.kategori === "BLJ" && grup.tier !== "PRO");
+    if (izinkanKL) {
+      const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
+      tombolHTML += `
+        <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-top: 4px;">
+          <i class="fas fa-phone-alt"></i> Live Kaiwa / Telepon (Masuk ${grup.KL.tiketMasuk} Tiket)
+        </button>
+      `;
+    }
+
+    if (!tombolHTML) return "";
+
+    return `
+      <div class="theme-action">
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label>PILIH AI SENSEI</label>
+          <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
+            <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
+              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+              <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
+              <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
+            </div>
+            <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
+              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+              <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
+              <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
+            </div>
+            <input type="hidden" class="suara-select-dinamis" value="female">
+            <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+          </div>
+        </div>
+        ${tombolHTML}
+      </div>
+    `;
+  }
+
+  // Cek apakah sebuah grup sesi KHD sudah LULUS SAH (Nilai >= 75 DAN Putaran Selesai Penuh)
+  function cekKelulusanGrupKHD(grup) {
+    let skorTertinggiLulus = 0;
+    let skorPercobaan = 0;
+    let lulusSah = false;
+
+    const targetPutaran = (grup.KN ? Number(grup.KN.maxPutaran) : (grup.KL ? Number(grup.KL.maxPutaran) : 6)) || 6;
+
+    dataRiwayatLokal.forEach(riw => {
+      const infoRiw = bedahKodeProduk(riw.produk || '');
+      if (infoRiw.kunciGrup === grup.kunciGrup) {
+        const nilai = Number(riw.nilaiTotal) || 0;
+        if (nilai > skorPercobaan) skorPercobaan = nilai;
+
+        // Hitung jumlah putaran nyata di transkrip agar tidak bisa curang keluar di putaran 1
+        const jumlahPutaranChat = (String(riw.rekamanChat || '').match(/Siswa:/g) || []).length;
+        if (nilai >= KKM_BUKA_KUNCI && jumlahPutaranChat >= targetPutaran) {
+          lulusSah = true;
+          if (nilai > skorTertinggiLulus) skorTertinggiLulus = nilai;
+        }
+      }
+    });
+
+    return { lulus: lulusSah, skorLulus: skorTertinggiLulus, skorTerbaik: skorPercobaan };
+  }
+
+  // Render Peta 7 Level KHD Ber-Gembok + Hitung Pangkat Siswa untuk 3 Lokasi UI
+  function sinkronkanPetaKhdDanGelar() {
+    let pernahBLJ = false;
+    let pernahMST = false;
+    let pernahKHD = false;
+
+    dataRiwayatLokal.forEach(r => {
+      const inf = bedahKodeProduk(r.produk || '');
+      if (inf.kategori === "BLJ") pernahBLJ = true;
+      else if (inf.kategori === "MST") pernahMST = true;
+      else if (inf.kategori === "KHD") pernahKHD = true;
+    });
+
+    // Susun sesi KHD ke dalam 7 Level & cek kelulusan berurutan
+    let levelTertinggiTamat = 0;
+    let levelSebelumnyaTamat = true; // Level 1 otomatis terbuka pintunya
+
+    const wadahKHD = document.getElementById('wadah-tema-khd');
+    let htmlSemuaLevel = "";
+
+    DEFINISI_LEVEL_KHD.forEach(def => {
+      const daftarSesiLevelIni = CACHE_GRUP_KHD
+        .filter(g => g.levelKHD === def.level)
+        .sort((a, b) => a.urutSesiKHD - b.urutSesiKHD);
+
+      const belumAdaKonten = daftarSesiLevelIni.length === 0;
+      const levelTerbuka = (!belumAdaKonten) && levelSebelumnyaTamat;
+
+      let jumlahLulusDiLevel = 0;
+      let htmlSesiDalamLevel = "";
+      let sesiSebelumnyaLulus = levelTerbuka; // Sesi 1 terbuka jika Level-nya terbuka
+
+      daftarSesiLevelIni.forEach(sesiGrup => {
+        const hasilCek = cekKelulusanGrupKHD(sesiGrup);
+        const sesiIniTerbuka = sesiSebelumnyaLulus;
+
+        if (hasilCek.lulus) {
+          jumlahLulusDiLevel++;
+          sesiSebelumnyaLulus = true;
+        } else {
+          sesiSebelumnyaLulus = false; // Kunci sesi berikutnya jika sesi ini belum lulus KKM 75%
+        }
+
+        const namaAman = escapeHtml(sesiGrup.nama || 'Sesi Simulasi');
+        const deskripsiAman = escapeHtml(sesiGrup.deskripsi || '');
+
+        if (sesiIniTerbuka) {
+          const badgeSesi = hasilCek.lulus
+            ? `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">✅ Lulus (${hasilCek.skorLulus})</span>`
+            : (hasilCek.skorTerbaik > 0
+                ? `<span class="badge-sesi-status" style="background:#fef3c7; color:#b45309;">🎯 Skor: ${hasilCek.skorTerbaik}/75</span>`
+                : `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 Terbuka</span>`);
+
+          htmlSesiDalamLevel += `
+            <div class="theme-item">
+              <div class="theme-header" onclick="toggleTema(this)">
+                <span>📍 ${namaAman}</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  ${badgeSesi}
+                  <i class="fas fa-chevron-down chevron-icon"></i>
+                </div>
+              </div>
+              <div class="theme-body">
+                <p class="theme-desc">${deskripsiAman}</p>
+                ${rakitIsiAksiTemaHTML(sesiGrup)}
+              </div>
+            </div>
+          `;
+        } else {
+          htmlSesiDalamLevel += `
+            <div class="theme-item locked-session" onclick="alert('🔒 Sesi Terkunci!\\n\\nSelesaikan sesi sebelumnya secara penuh dengan Nilai Total minimal ${KKM_BUKA_KUNCI} untuk membuka skenario ini.')">
+              <div class="theme-header">
+                <span>🔒 ${namaAman}</span>
+                <span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">Min. Nilai ${KKM_BUKA_KUNCI}</span>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      const levelIniTamatPenuh = (!belumAdaKonten) && levelTerbuka && (jumlahLulusDiLevel === daftarSesiLevelIni.length);
+      if (levelIniTamatPenuh) {
+        levelTertinggiTamat = def.level;
+        levelSebelumnyaTamat = true;
+      } else {
+        levelSebelumnyaTamat = false;
+      }
+
+      // Badge status di kanan Header Level
+      let labelStatusLevel = "";
+      if (belumAdaKonten) {
+        labelStatusLevel = `<span class="badge-sesi-status" style="background:#f1f5f9; color:#64748b;">⏳ Segera Tersedia</span>`;
+      } else if (levelIniTamatPenuh) {
+        labelStatusLevel = `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">🏆 Tamat (${jumlahLulusDiLevel}/${daftarSesiLevelIni.length})</span>`;
+      } else if (levelTerbuka) {
+        labelStatusLevel = `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 ${jumlahLulusDiLevel}/${daftarSesiLevelIni.length} Sesi</span>`;
+      } else {
+        labelStatusLevel = `<span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">🔒 Terkunci</span>`;
+      }
+
+      const classBox = levelTerbuka ? (`khd-level-box` + (!levelIniTamatPenuh ? ` open` : ``)) : `khd-level-box locked-level`;
+      const aksiKlikLevel = levelTerbuka
+        ? `toggleLevelKHD(this)`
+        : (belumAdaKonten
+            ? `alert('⏳ ${escapeHtml(def.judul)} sedang disiapkan dan segera tersedia!')`
+            : `alert('🔒 Level Terkunci!\\n\\nTamatkan seluruh sesi pada Level ${def.level - 1} dengan nilai minimal ${KKM_BUKA_KUNCI} terlebih dahulu.')`);
+
+      htmlSemuaLevel += `
+        <div class="${classBox}">
+          <div class="khd-level-header" onclick="${aksiKlikLevel}">
+            <div style="padding-right: 10px;">
+              <div style="font-size: 11px; font-weight: 800; color: #047857; text-transform: uppercase;">${escapeHtml(def.fase)} • Gelar: ${escapeHtml(def.gelarSaatIni)}</div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--text-main); margin: 3px 0;">${escapeHtml(def.judul)}</div>
+              <div style="font-size: 11px; color: #64748b;">${escapeHtml(def.deskripsi)}</div>
+            </div>
+            ${labelStatusLevel}
+          </div>
+          ${levelTerbuka ? `<div class="khd-level-body">${htmlSesiDalamLevel}</div>` : ``}
+        </div>
+      `;
+    });
+
+    if (wadahKHD && CACHE_GRUP_KHD.length > 0) {
+      wadahKHD.innerHTML = htmlSemuaLevel;
+    }
+
+    // =========================================================
+    // PENENTUAN GELAR / PANGKAT TERPADU (INDONESIA -> JEPANG)
+    // =========================================================
+    let teksGelar = "😴 Kaum Rebahan";
+    let subInfoGelar = "Belum ada sesi latihan selesai";
+    let bgBadge = "#f1f5f9", warnaBadge = "#475569", borderBadge = "#cbd5e1";
+
+    if (levelTertinggiTamat >= 7) {
+      teksGelar = "👑 Sepuh Lokal (Nushi)";
+      subInfoGelar = "Dewa Kehidupan Jepang! Semua level tamat!";
+      bgBadge = "#fef9c3"; warnaBadge = "#a16207"; borderBadge = "#fde047";
+    } else if (levelTertinggiTamat >= 1) {
+      // Naik ke gelar level KHD berikutnya yang sedang dijalani
+      const infoNext = DEFINISI_LEVEL_KHD[levelTertinggiTamat]; // indeks array 1 = Level 2 (Anak Bawang), dst.
+      teksGelar = infoNext.gelarSaatIni;
+      subInfoGelar = `Lulus Level ${levelTertinggiTamat} • Sedang di Fase ${infoNext.fase}`;
+      bgBadge = levelTertinggiTamat >= 3 ? "#dcfce7" : "#ffedd5";
+      warnaBadge = levelTertinggiTamat >= 3 ? "#15803d" : "#c2410c";
+      borderBadge = levelTertinggiTamat >= 3 ? "#86efac" : "#fdba74";
+    } else if (pernahKHD) {
+      // Sudah mencoba KHD Level 1 tapi belum berhasil keluar bandara!
+      teksGelar = "🧳 Turis Kesasar (Lost Tourist)";
+      subInfoGelar = "Masih nyangkut di Bandara! Luluskan Level 1 (Nilai ≥ 75)";
+      bgBadge = "#fee2e2"; warnaBadge = "#b91c1c"; borderBadge = "#fca5a5";
+    } else if (pernahMST && pernahBLJ) {
+      teksGelar = "👔 Gakusei Job Hunter";
+      subInfoGelar = "Aktif belajar & simulasi wawancara kerja";
+      bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
+    } else if (pernahMST) {
+      teksGelar = "👔 Job Hunter (Pejuang Mensetsu)";
+      subInfoGelar = "Fokus menghadapi wawancara kerja Jepang";
+      bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
+    } else if (pernahBLJ) {
+      teksGelar = "📖 Gakusei (Siswa Bahasa)";
+      subInfoGelar = "Fokus melatih kosakata & kalimat dasar";
+      bgBadge = "#e0f2fe"; warnaBadge = "#0369a1"; borderBadge = "#7dd3fc";
+    }
+
+    // Pasang serentak di 3 Lokasi + Banner KHD
+    const elHeaderGelar = document.getElementById('headerGelarBadge');
+    if (elHeaderGelar) {
+      elHeaderGelar.innerText = teksGelar;
+      elHeaderGelar.style.background = bgBadge;
+      elHeaderGelar.style.color = warnaBadge;
+      elHeaderGelar.style.borderColor = borderBadge;
+    }
+
+    const elDashGelar = document.getElementById('dashGelarText');
+    const elDashSub = document.getElementById('dashGelarSub');
+    const elDashIcon = document.getElementById('dashGelarIconBox');
+    if (elDashGelar) elDashGelar.innerText = teksGelar;
+    if (elDashSub) elDashSub.innerText = subInfoGelar;
+    if (elDashIcon) {
+      elDashIcon.style.background = bgBadge;
+      elDashIcon.style.color = warnaBadge;
+    }
+
+    const elModalGelar = document.getElementById('profilModalGelar');
+    if (elModalGelar) {
+      elModalGelar.innerText = teksGelar;
+      elModalGelar.style.color = warnaBadge;
+    }
+
+    const elKhdBanner = document.getElementById('khdBannerGelar');
+    if (elKhdBanner) elKhdBanner.innerText = teksGelar;
+  }
+
+  function toggleLevelKHD(headerEl) {
+    headerEl.parentElement.classList.toggle('open');
   }
 
   async function muatDaftarProduk() {
-    const idWadahList = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-khd', 'wadah-tema-mst'];
+    const idWadahNonKHD = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-mst'];
     try {
       const hasil = await panggilGAS("getProduk", {});
       if (!hasil.success || !Array.isArray(hasil.data)) return;
 
       KATALOG_PRODUK_MAP = {};
+      CACHE_GRUP_KHD = [];
       const grupTemaMap = new Map();
 
-      // 1. Kelompokkan baris KN dan KL yang memiliki kode belakang sama menjadi 1 Kartu
       hasil.data.forEach(item => {
         const infoKode = bedahKodeProduk(item.kode);
         KATALOG_PRODUK_MAP[infoKode.kodePenuh] = item;
 
         if (!grupTemaMap.has(infoKode.kunciGrup)) {
           grupTemaMap.set(infoKode.kunciGrup, {
+            kunciGrup: infoKode.kunciGrup,
             nama: item.nama,
             deskripsi: item.deskripsi,
             kategori: infoKode.kategori,
             tier: infoKode.tier,
+            levelKHD: infoKode.levelKHD,
+            urutSesiKHD: infoKode.urutSesiKHD,
             KN: null,
             KL: null
           });
@@ -1402,89 +2002,43 @@
         grup[infoKode.mode] = item;
       });
 
-      // 2. Kosongkan ke-5 wadah tema
-      idWadahList.forEach(id => {
+      idWadahNonKHD.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.innerHTML = "";
       });
 
-      // 3. Cetak Kartu Tema dengan 1 atau 2 Tombol secara otomatis
       grupTemaMap.forEach(grup => {
+        // Khusus KHD ditangani oleh Peta 7 Level Ber-gembok!
+        if (grup.kategori === "KHD") {
+          CACHE_GRUP_KHD.push(grup);
+          return;
+        }
+
         const namaAtas = String(grup.nama || '').toUpperCase();
         let ikonTema = "💬";
         if (grup.kategori === "MST") ikonTema = "👔";
-        else if (namaAtas.includes("KONBINI") || namaAtas.includes("BELANJA")) ikonTema = "🛍️";
         else if (namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
-        else if (namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK") || namaAtas.includes("BYOUIN")) ikonTema = "🏥";
+        else if (namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK")) ikonTema = "🏥";
         else if (namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
 
-        const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
-        const deskripsiAman = escapeHtml(grup.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.');
-
-        // Susun Tombol Mode (KN dan/atau KL)
-        let tombolHTML = "";
-
-        if (grup.KN) {
-          const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
-          tombolHTML += `
-            <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 8px;">
-              <i class="fas fa-comments"></i> Kaiwa Normal (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
-            </button>
-            <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 10px;">
-              Total selesai penuh Normal: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
-            </div>
-          `;
-        }
-
-        // Sesuai aturan: untuk BLJ, pilihan KL hanya tampil di level PRO. Untuk KHD & MST bebas tampil.
-        const izinkanKL = grup.KL && !(grup.kategori === "BLJ" && grup.tier !== "PRO");
-        if (izinkanKL) {
-          const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
-          tombolHTML += `
-            <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-top: 4px;">
-              <i class="fas fa-phone-alt"></i> Live Kaiwa / Telepon (Masuk ${grup.KL.tiketMasuk} Tiket)
-            </button>
-          `;
-        }
-
-        if (!tombolHTML) return;
+        const isiAksi = rakitIsiAksiTemaHTML(grup);
+        if (!isiAksi) return;
 
         const kartuHTML = `
           <div class="theme-item">
             <div class="theme-header" onclick="toggleTema(this)">
-              <span>${ikonTema} ${namaAman}</span>
+              <span>${ikonTema} ${escapeHtml(grup.nama || 'Tema Latihan')}</span>
               <i class="fas fa-chevron-down chevron-icon"></i>
             </div>
             <div class="theme-body">
-              <p class="theme-desc">${deskripsiAman}</p>
-              <div class="theme-action">
-                <div class="form-group" style="margin-bottom: 15px;">
-                  <label>PILIH AI SENSEI</label>
-                  <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
-                    <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
-                      <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-                      <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
-                      <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
-                    </div>
-                    <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
-                      <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-                      <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
-                      <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
-                    </div>
-                    <input type="hidden" class="suara-select-dinamis" value="female">
-                    <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
-                  </div>
-                </div>
-                ${tombolHTML}
-              </div>
+              <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.')}</p>
+              ${isiAksi}
             </div>
           </div>
         `;
 
-        // Masukkan ke wadah yang sesuai
         let targetWadahId = "wadah-tema-blj-bsc";
-        if (grup.kategori === "KHD") targetWadahId = "wadah-tema-khd";
-        else if (grup.kategori === "MST") targetWadahId = "wadah-tema-mst";
+        if (grup.kategori === "MST") targetWadahId = "wadah-tema-mst";
         else if (grup.tier === "PRO") targetWadahId = "wadah-tema-blj-pro";
         else if (grup.tier === "MID") targetWadahId = "wadah-tema-blj-mid";
 
@@ -1492,13 +2046,15 @@
         if (wadahEl) wadahEl.innerHTML += kartuHTML;
       });
 
-      // Tampilkan info kosong jika suatu kategori belum diisi di Sheet
-      idWadahList.forEach(id => {
+      idWadahNonKHD.forEach(id => {
         const el = document.getElementById(id);
         if (el && el.innerHTML.trim() === "") {
           el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada tema pada kategori ini di Sheet PRODUK.</p>";
         }
       });
+
+      // Render Peta Level KHD & Gelar terbaru
+      sinkronkanPetaKhdDanGelar();
 
     } catch (err) {
       console.error("Gagal memuat katalog produk:", err);
@@ -1774,7 +2330,10 @@
     document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
   }
 
-  document.getElementById('btnKembaliDash').addEventListener('click', () => showView('dashboard'));
+  document.getElementById('btnKembaliDash').addEventListener('click', () => {
+    showView('dashboard');
+    tarikDataRiwayat(); // Otomatis buka gembok sesi baru & naikkan pangkat setelah ujian!
+  });
 
   // =========================================================
   // 5. SENSOR ANTI-KELUAR LAYAR (> 3 DETIK = TIKET PENUH & 0 KOIN)
@@ -1908,19 +2467,212 @@
   }
 
   // =========================================================
-  // 8. PROFIL, AVATAR, SENSEI, TAB RAPOR & RIWAYAT V2
+  // 8. ONBOARDING WAJIB, PROFIL KARIER TSK, DRIVE & TESTIMONI
   // =========================================================
+  let bintangTestimoniDipilih = 5;
+
+  function pilihGenderUI(prefix, nilaiGender) {
+    document.getElementById(prefix + 'GenderVal').value = nilaiGender;
+    const btnM = document.getElementById(prefix + 'GenderMale');
+    const btnF = document.getElementById(prefix + 'GenderFemale');
+    if (btnM) btnM.classList.toggle('selected', nilaiGender === 'male');
+    if (btnF) btnF.classList.toggle('selected', nilaiGender === 'female');
+
+    // Sesuaikan avatar default otomatis jika belum pernah pilih avatar custom
+    if (prefix === 'onboard') {
+      KAIWA_USER.avatar = (nilaiGender === 'female')
+        ? "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20perempuan.png"
+        : "https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png";
+    }
+  }
+
+  function bukaModalOnboarding() {
+    document.getElementById('onboardNama').value = KAIWA_USER.nama || '';
+    document.getElementById('onboardSensorNama').checked = Boolean(KAIWA_USER.sensorNama);
+    pilihGenderUI('onboard', KAIWA_USER.gender || '');
+    document.getElementById('onboardMsg').className = 'msg';
+    document.getElementById('onboardingModal').classList.remove('hidden');
+  }
+
+  async function simpanOnboardingAwal(lanjutIsiKarier = false) {
+    const namaIn = document.getElementById('onboardNama').value.trim();
+    const genderIn = document.getElementById('onboardGenderVal').value;
+    const sensorIn = document.getElementById('onboardSensorNama').checked;
+
+    if (!namaIn) return showMsg('onboardMsg', 'error', 'Nama Panggilan wajib diisi.');
+    if (!genderIn) return showMsg('onboardMsg', 'error', 'Silakan pilih Jenis Kelamin (Laki-laki / Perempuan).');
+
+    const btn = document.getElementById('btnSimpanOnboardCepat');
+    btn.disabled = true;
+    showMsg('onboardMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan data dasar...');
+
+    try {
+      const res = await panggilGAS('simpanProfilLengkap', {
+        email: KAIWA_USER.email,
+        nama: namaIn,
+        gender: genderIn,
+        avatar: KAIWA_USER.avatar,
+        sensorNama: sensorIn
+      });
+
+      if (res.success) {
+        terapkanDataUserKeUI(res.data);
+        localStorage.setItem('neexa_avatar_' + KAIWA_USER.email, KAIWA_USER.avatar);
+        localStorage.setItem('neexa_nama_' + KAIWA_USER.email, KAIWA_USER.nama);
+        document.getElementById('onboardingModal').classList.add('hidden');
+
+        if (lanjutIsiKarier) {
+          bukaModalProfil();
+          document.getElementById('selectTujuan').value = "Mencari Job Kerja di Jepang";
+          handleUbahTujuan();
+        }
+      } else {
+        showMsg('onboardMsg', 'error', escapeHtml(res.message));
+      }
+    } catch (err) {
+      showMsg('onboardMsg', 'error', 'Gagal menyimpan ke server. Periksa internet Anda.');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function hitungUmurDariInput(tglStr) {
+    if (!tglStr) return "";
+    const p = tglStr.split("-");
+    if (p.length !== 3) return "";
+    const thn = parseInt(p[0], 10), bln = parseInt(p[1], 10) - 1, hr = parseInt(p[2], 10);
+    const skrg = new Date();
+    let u = skrg.getFullYear() - thn;
+    const m = skrg.getMonth() - bln;
+    if (m < 0 || (m === 0 && skrg.getDate() < hr)) u--;
+    return (u >= 10 && u <= 80) ? `${u} Thn` : "";
+  }
+
+  function updatePreviewUmur() {
+    const tgl = document.getElementById('inputTglLahir').value;
+    document.getElementById('previewUmurOtomatis').value = hitungUmurDariInput(tgl) || "-";
+  }
+
+  function handleUbahTujuan() {
+    const val = document.getElementById('selectTujuan').value;
+    document.getElementById('inputTujuanLainnya').classList.toggle('hidden', val !== 'Lainnya');
+    document.getElementById('boxKualifikasiJob').classList.toggle('hidden', !val.toUpperCase().includes('JOB'));
+  }
+
+  function handleUbahStatusLpk() {
+    const val = document.getElementById('selectStatusLpk').value;
+    document.getElementById('inputNamaLpk').classList.toggle('hidden', val !== 'Siswa LPK');
+  }
+
+  function handleUbahSertifikatBhs() {
+    const val = document.getElementById('selectSertifikatBhs').value;
+    document.getElementById('inputBhsLainnya').classList.toggle('hidden', val !== 'Lainnya');
+  }
+
+  function handleUbahSertifikatSsw() {
+    const val = document.getElementById('selectSertifikatSsw').value;
+    document.getElementById('inputSswLainnya').classList.toggle('hidden', val !== 'Lainnya');
+  }
+
   function bukaModalProfil() {
+    document.getElementById('profilModalMsg').className = 'msg';
     document.getElementById('inputNamaProfil').value = KAIWA_USER.nama || '';
+    pilihGenderUI('profil', KAIWA_USER.gender || 'male');
+    document.getElementById('inputSensorNama').checked = Boolean(KAIWA_USER.sensorNama);
+
     const elEmail = document.getElementById('userEmailDisplay');
     if (elEmail) elEmail.innerText = KAIWA_USER.email || '-';
-    avatarPilihanSementara = "";
-    document.getElementById('profilModal').classList.remove('hidden');
 
+    // Badge Job Ready
+    const elJobBadge = document.getElementById('badgeStatusJobReady');
+    if (elJobBadge) {
+      if (KAIWA_USER.jobReady) {
+        elJobBadge.innerText = "🟢 SIAP KERJA (JOB READY)";
+        elJobBadge.style.background = "#dcfce7";
+        elJobBadge.style.color = "#15803d";
+      } else {
+        elJobBadge.innerText = "⚪ Data Karier Belum Lengkap";
+        elJobBadge.style.background = "#e2e8f0";
+        elJobBadge.style.color = "#475569";
+      }
+    }
+
+    // Isi Biodata Opsional
+    document.getElementById('inputNamaLengkap').value = KAIWA_USER.namaLengkap || '';
+    document.getElementById('inputTglLahir').value = KAIWA_USER.tglLahir || '';
+    updatePreviewUmur();
+    document.getElementById('inputWhatsapp').value = KAIWA_USER.whatsapp || '';
+    document.getElementById('selectLokasi').value = KAIWA_USER.lokasi === 'Jepang' ? 'Jepang' : 'Indonesia';
+
+    // Parse Tujuan
+    const rawTujuan = KAIWA_USER.tujuan || '';
+    const selTujuan = document.getElementById('selectTujuan');
+    if (rawTujuan.startsWith('Lainnya:')) {
+      selTujuan.value = 'Lainnya';
+      document.getElementById('inputTujuanLainnya').value = rawTujuan.replace(/^Lainnya:\s*/i, '');
+    } else {
+      selTujuan.value = rawTujuan;
+      document.getElementById('inputTujuanLainnya').value = '';
+    }
+    handleUbahTujuan();
+
+    // Parse Status LPK
+    const rawLpk = KAIWA_USER.statusLpk || '';
+    const selLpk = document.getElementById('selectStatusLpk');
+    if (rawLpk.startsWith('Siswa LPK:')) {
+      selLpk.value = 'Siswa LPK';
+      document.getElementById('inputNamaLpk').value = rawLpk.replace(/^Siswa LPK:\s*/i, '');
+    } else {
+      selLpk.value = rawLpk;
+      document.getElementById('inputNamaLpk').value = '';
+    }
+    handleUbahStatusLpk();
+
+    // Parse Sertifikat Bahasa & Skor (Format: "JFT-Basic A2 | Nilai: 215")
+    const rawBhs = KAIWA_USER.sertifikatBahasa || 'Belum Memiliki';
+    const splitBhs = rawBhs.split('|').map(s => s.trim());
+    const namaBhs = splitBhs[0] || 'Belum Memiliki';
+    const skorBhs = splitBhs[1] ? splitBhs[1].replace(/^Nilai:\s*/i, '') : '';
+    const selBhs = document.getElementById('selectSertifikatBhs');
+    if (namaBhs.startsWith('Lainnya:')) {
+      selBhs.value = 'Lainnya';
+      document.getElementById('inputBhsLainnya').value = namaBhs.replace(/^Lainnya:\s*/i, '');
+    } else {
+      selBhs.value = namaBhs;
+      if (!selBhs.value) selBhs.value = 'Belum Memiliki';
+      document.getElementById('inputBhsLainnya').value = '';
+    }
+    document.getElementById('inputNilaiBhs').value = skorBhs;
+    handleUbahSertifikatBhs();
+
+    // Parse Sertifikat SSW
+    const rawSsw = KAIWA_USER.sertifikatSsw || 'Belum Memiliki';
+    const selSsw = document.getElementById('selectSertifikatSsw');
+    if (rawSsw.startsWith('Lainnya:')) {
+      selSsw.value = 'Lainnya';
+      document.getElementById('inputSswLainnya').value = rawSsw.replace(/^Lainnya:\s*/i, '');
+    } else {
+      selSsw.value = rawSsw;
+      if (!selSsw.value) selSsw.value = 'Belum Memiliki';
+      document.getElementById('inputSswLainnya').value = '';
+    }
+    handleUbahSertifikatSsw();
+
+    // Info Link File Sertifikat
+    const elLinkInfo = document.getElementById('infoLinkSertifikat');
+    if (KAIWA_USER.fileSertifikat) {
+      elLinkInfo.innerHTML = `✅ Dokumen tersimpan: <a href="${escapeHtml(KAIWA_USER.fileSertifikat)}" target="_blank" style="color:#15803d; font-weight:700;">Lihat File Sertifikat</a>`;
+    } else {
+      elLinkInfo.innerText = "Belum ada dokumen terunggah.";
+    }
+
+    avatarPilihanSementara = "";
     const currentAvatar = KAIWA_USER.avatar;
     document.querySelectorAll('.avatar-option').forEach(el => {
       el.style.borderColor = (el.src === currentAvatar) ? '#2b5cff' : 'transparent';
     });
+
+    document.getElementById('profilModal').classList.remove('hidden');
   }
 
   function tutupModalProfil() {
@@ -1933,22 +2685,178 @@
     avatarPilihanSementara = elemenImg.src;
   }
 
-  function simpanProfil() {
+  async function unggahFileSertifikat() {
+    const fileInput = document.getElementById('inputFileSertifikat');
+    if (!fileInput.files || fileInput.files.length === 0) {
+      return alert("Pilih file sertifikat (PDF / JPG / PNG) terlebih dahulu.");
+    }
+    const file = fileInput.files[0];
+    if (file.size > 2 * 1024 * 1024) {
+      return alert("Ukuran file maksimal 2 MB. Silakan perkecil ukuran foto/PDF Anda.");
+    }
+
+    const btnUp = document.getElementById('btnUploadDrive');
+    const teksAsli = btnUp.innerHTML;
+    btnUp.disabled = true;
+    btnUp.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah...';
+
+    try {
+      const base64Str = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(',')[1]);
+        reader.onerror = err => reject(err);
+        reader.readAsDataURL(file);
+      });
+
+      const res = await panggilGAS('uploadSertifikat', {
+        email: KAIWA_USER.email,
+        base64: base64Str,
+        mimeType: file.type || 'application/pdf',
+        jenis: document.getElementById('selectSertifikatBhs').value || 'Sertifikat'
+      });
+
+      if (res.success && res.data.fileUrl) {
+        KAIWA_USER.fileSertifikat = res.data.fileUrl;
+        document.getElementById('infoLinkSertifikat').innerHTML = `✅ Berhasil diunggah! <a href="${escapeHtml(res.data.fileUrl)}" target="_blank" style="color:#15803d; font-weight:700;">Lihat Dokumen</a> (Jangan lupa klik Simpan Profil)`;
+      } else {
+        alert(res.message || "Gagal mengunggah dokumen.");
+      }
+    } catch (err) {
+      alert("Gagal mengunggah file: " + err.message);
+    } finally {
+      btnUp.disabled = false;
+      btnUp.innerHTML = teksAsli;
+    }
+  }
+
+  async function simpanProfil() {
     const namaBaru = document.getElementById('inputNamaProfil').value.trim();
-    if (namaBaru !== '') {
-      KAIWA_USER.nama = namaBaru;
-      document.getElementById('userNamaDisplay').innerText = KAIWA_USER.nama;
+    const genderBaru = document.getElementById('profilGenderVal').value;
+    if (!namaBaru) return showMsg('profilModalMsg', 'error', 'Nama Panggilan wajib diisi.');
+    if (!genderBaru) return showMsg('profilModalMsg', 'error', 'Jenis Kelamin wajib dipilih.');
+
+    // Rakit string Tujuan
+    let valTujuan = document.getElementById('selectTujuan').value;
+    if (valTujuan === 'Lainnya') {
+      const ketikTujuan = document.getElementById('inputTujuanLainnya').value.trim();
+      valTujuan = ketikTujuan ? `Lainnya: ${ketikTujuan}` : 'Lainnya';
     }
-    if (avatarPilihanSementara !== "") {
-      KAIWA_USER.avatar = avatarPilihanSementara;
-      document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
+
+    // Rakit string Status LPK
+    let valStatusLpk = document.getElementById('selectStatusLpk').value;
+    if (valStatusLpk === 'Siswa LPK') {
+      const namaLpk = document.getElementById('inputNamaLpk').value.trim();
+      if (!namaLpk && valTujuan.toUpperCase().includes('JOB')) {
+        return showMsg('profilModalMsg', 'error', 'Mohon isi Nama LPK Anda.');
+      }
+      valStatusLpk = namaLpk ? `Siswa LPK: ${namaLpk}` : 'Siswa LPK';
     }
-    if (KAIWA_USER.email) {
-      localStorage.setItem('neexa_avatar_' + KAIWA_USER.email, KAIWA_USER.avatar);
-      localStorage.setItem('neexa_nama_' + KAIWA_USER.email, KAIWA_USER.nama);
+
+    // Rakit string Sertifikat Bahasa + Skor
+    let valBhs = document.getElementById('selectSertifikatBhs').value;
+    if (valBhs === 'Lainnya') {
+      const ketikBhs = document.getElementById('inputBhsLainnya').value.trim();
+      valBhs = ketikBhs ? `Lainnya: ${ketikBhs}` : 'Lainnya';
     }
-    tutupModalProfil();
-    alert("Profil berhasil diperbarui!");
+    const skorBhs = document.getElementById('inputNilaiBhs').value.trim();
+    if (skorBhs && valBhs !== 'Belum Memiliki') {
+      valBhs = `${valBhs} | Nilai: ${skorBhs}`;
+    }
+
+    // Rakit string Sertifikat SSW
+    let valSsw = document.getElementById('selectSertifikatSsw').value;
+    if (valSsw === 'Lainnya') {
+      const ketikSsw = document.getElementById('inputSswLainnya').value.trim();
+      valSsw = ketikSsw ? `Lainnya: ${ketikSsw}` : 'Lainnya';
+    }
+
+    const avatarFinal = avatarPilihanSementara || KAIWA_USER.avatar;
+    const btnSimpan = document.getElementById('btnSimpanProfilLengkap');
+    btnSimpan.disabled = true;
+    showMsg('profilModalMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan profil ke database...');
+
+    try {
+      const res = await panggilGAS('simpanProfilLengkap', {
+        email: KAIWA_USER.email,
+        nama: namaBaru,
+        gender: genderBaru,
+        avatar: avatarFinal,
+        sensorNama: document.getElementById('inputSensorNama').checked,
+        namaLengkap: document.getElementById('inputNamaLengkap').value.trim(),
+        tglLahir: document.getElementById('inputTglLahir').value,
+        whatsapp: document.getElementById('inputWhatsapp').value.trim(),
+        lokasi: document.getElementById('selectLokasi').value,
+        tujuan: valTujuan,
+        statusLpk: valStatusLpk,
+        sertifikatBahasa: valBhs,
+        sertifikatSsw: valSsw,
+        fileSertifikat: KAIWA_USER.fileSertifikat || ''
+      });
+
+      if (res.success) {
+        terapkanDataUserKeUI(res.data);
+        localStorage.setItem('neexa_avatar_' + KAIWA_USER.email, KAIWA_USER.avatar);
+        localStorage.setItem('neexa_nama_' + KAIWA_USER.email, KAIWA_USER.nama);
+        tutupModalProfil();
+        alert(res.data.jobReady
+          ? "🎉 Profil tersimpan! Status Anda kini 🟢 SIAP KERJA (JOB READY)!"
+          : "✅ Profil berhasil diperbarui!");
+      } else {
+        showMsg('profilModalMsg', 'error', escapeHtml(res.message));
+      }
+    } catch (err) {
+      showMsg('profilModalMsg', 'error', 'Gagal menyimpan profil ke server.');
+    } finally {
+      btnSimpan.disabled = false;
+    }
+  }
+
+  // Fungsi Pilih Bintang & Kirim Testimoni (+100 Tiket Gratis)
+  function pilihBintangTesti(jml) {
+    bintangTestimoniDipilih = jml;
+    const stars = document.querySelectorAll('#starSelectorTesti .star-item');
+    stars.forEach((el, idx) => {
+      el.classList.toggle('active', idx < jml);
+    });
+  }
+
+  async function kirimTestimoni() {
+    const ulasan = document.getElementById('inputTeksTestimoni').value.trim();
+    if (ulasan.length < 20) {
+      return showMsg('testimoniMsg', 'error', 'Tuliskan ulasan jujur minimal 20 karakter.');
+    }
+
+    const btn = document.getElementById('btnKirimTestimoni');
+    btn.disabled = true;
+    showMsg('testimoniMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Mengirim testimoni...');
+
+    try {
+      const res = await panggilGAS('kirimTestimoni', {
+        email: KAIWA_USER.email,
+        bintang: bintangTestimoniDipilih,
+        ulasan: ulasan,
+        deviceId: deviceId
+      });
+
+      if (res.success) {
+        KAIWA_USER.saldo = Number(res.data.saldo);
+        KAIWA_USER.sudahTestimoni = true;
+        document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+        const elBadgeKuota = document.getElementById('badgeKuotaTestimoni');
+        if (elBadgeKuota && res.data.sisaKuotaTestimoni !== undefined) {
+          elBadgeKuota.innerText = `Sisa: ${res.data.sisaKuotaTestimoni}/100`;
+        }
+        alert(res.message);
+        document.getElementById('formTestimoniArea').classList.add('hidden');
+        document.getElementById('sudahTestimoniArea').classList.remove('hidden');
+      } else {
+        showMsg('testimoniMsg', 'error', escapeHtml(res.message));
+      }
+    } catch (err) {
+      showMsg('testimoniMsg', 'error', 'Gagal mengirim testimoni.');
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   function pilihSensei(kartuDiklik, genderSuara) {
@@ -2009,8 +2917,10 @@
 
     try {
       const hasil = await panggilGAS('getRiwayatSiswa', { email: KAIWA_USER.email });
+
       if (hasil.success) {
         dataRiwayatLokal = hasil.data || [];
+        sinkronkanPetaKhdDanGelar(); // Hitung ulang gembok KHD & Gelar Siswa!
         if (wadah) renderRiwayatCards();
 
         const elRataRata = document.getElementById('rataRataNilaiDisplay');
@@ -2054,16 +2964,11 @@
 
     let dataTampil = [...dataRiwayatLokal];
 
-    // Filter cerdas mendukung kode baru (BLJ / KHD / MST) maupun riwayat lama
+    // Filter murni berdasarkan kode kategori (BLJ / KHD / MST) tanpa bentrok isi [TEMA]
     if (tierFilterAktif !== 'SEMUA') {
       dataTampil = dataTampil.filter(item => {
-        const tag = String(item.produk || '').toUpperCase();
-        if (tierFilterAktif === 'KHD') return tag.includes('KHD') || tag.includes('SEIKATSU');
-        if (tierFilterAktif === 'MST') return tag.includes('MST') || tag.includes('INTERVIEW') || tag.includes('MENSETSU');
-        if (tierFilterAktif === 'BLJ') {
-          return tag.includes('BLJ') || (!tag.includes('KHD') && !tag.includes('MST') && (tag.includes('BSC') || tag.includes('MID') || tag.includes('PRO')));
-        }
-        return true;
+        const info = bedahKodeProduk(item.produk || '');
+        return info.kategori === tierFilterAktif;
       });
     }
 
