@@ -257,7 +257,7 @@
     }
   }
 
-  // Ekspos MesinKN ke global window agar bisa dipanggil oleh Dispatcher index.html
+   // Ekspos MesinKN ke global window agar bisa dipanggil oleh Dispatcher index.html
   window.MesinKN = {
     mulai: function (sesiConfig) {
       pasangListenerMicSatuKali();
@@ -268,6 +268,7 @@
       sesiConfig.menungguSalamPenutupMST = false;
 
       const isMST = sesiConfig.produk.includes("-MST") || sesiConfig.produk.startsWith("MST");
+      const statusTeks = document.getElementById('statusTeksInfo'); // <-- TAMBAHAN WAJIB INI!
 
       document.getElementById('activeProductDisplay').innerText = `${sesiConfig.namaTema} (${sesiConfig.produk})`;
       document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
