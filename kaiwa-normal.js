@@ -130,7 +130,9 @@
 
     const statusTeks = document.getElementById('statusTeksInfo');
     const micBtn = document.getElementById('tombolMicUtama');
-    const statusLastTurn = (sesi.putaranSaatIni + 1 >= sesi.maxPutaran);
+    const isMST = sesi.produk.includes("-MST") || sesi.produk.startsWith("MST");
+    const sedangBalasPenutupMST = isMST && sesi.menungguSalamPenutupMST === true;
+    const statusLastTurn = (!sedangBalasPenutupMST) && (sesi.putaranSaatIni + 1 >= sesi.maxPutaran);
     let activeEngineTracker = "Belum Diketahui";
 
     try {
@@ -160,7 +162,7 @@
       const lastAiBubble = tambahBubbleKN('ai', typingHtml, true);
       statusTeks.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AI Sensei menyiapkan jawaban & suara...';
 
-      // 2. Otak + Mulut Terpadu (Opsi B: Gemini 3.5 Flash-Lite + Google Chirp3-HD)
+      // 2. Otak + Mulut Terpadu (Opsi B)
       const resChatTts = await fetch(WORKER_URL + 'api/chat-tts', {
         method: 'POST',
         headers: {
@@ -173,13 +175,16 @@
           produk: sesi.produk,
           namaTema: sesi.namaTema,
           isLastTurn: statusLastTurn,
-          gender: sesi.suaraTutor || "female"
+          gender: sesi.suaraTutor || "female",
+          seedAcak: sesi.seedAcak || 77777,
+          isClosingReply: sedangBalasPenutupMST,
+          genderSiswa: KAIWA_USER.gender || ""
         })
       });
       if (!resChatTts.ok) throw new Error("Gagal memproses Chat-TTS.");
 
       const dataChat = await resChatTts.json();
-      if (!sesi.aktif) return; // Jika sesi sudah ditutup oleh sensor layar saat menunggu AI
+      if (!sesi.aktif) return;
 
       if (dataChat.engine) activeEngineTracker = dataChat.engine;
       if (dataChat.tokens) sesi.totalTokenSesi += Number(dataChat.tokens);
@@ -190,22 +195,46 @@
       sesi.historyPercakapan += `Siswa: ${teksSiswa}\nAI: ${teksAI}\n\n`;
       chatHistoryKN.push({ role: "user", parts: [{ text: teksSiswa }] });
       chatHistoryKN.push({ role: "model", parts: [{ text: teksAI }] });
-      if (chatHistoryKN.length > 8) chatHistoryKN.splice(0, 2);
+
+      // PENTING: Untuk BLJ & KHD hemat memori 4 putaran; untuk MST simpan utuh agar AI ingat seluruh Jikoshoukai!
+      if (!isMST && chatHistoryKN.length > 8) {
+        chatHistoryKN.splice(0, 2);
+      }
 
       lastAiBubble.textContent = teksAI;
-      statusTeks.innerText = "🔊 Dengarkan AI Sensei bicara...";
+      statusTeks.innerText = "🔊 Dengarkan AI berbicara...";
 
       sesi.putaranSaatIni++;
+
+      // Deteksi apakah Direktur MST baru saja mengucapkan kalimat penutupan resmi wawancara
+      let wawancaraResmiTuntas = false;
+      if (sedangBalasPenutupMST) {
+        // Kandidat sudah membalas salam penutup -> Kunci sesi menjadi 100% Tuntas Penuh!
+        wawancaraResmiTuntas = true;
+        sesi.maxPutaran = sesi.putaranSaatIni;
+      } else if (isMST && (teksAI.includes("本日の面接はこれで終了") || teksAI.includes("面接はこれで終了"))) {
+        // Direktur baru saja menutup wawancara -> Beri kandidat 1 giliran terakhir untuk mengucap salam penutup!
+        sesi.menungguSalamPenutupMST = true;
+        if (sesi.putaranSaatIni >= sesi.maxPutaran) {
+          sesi.maxPutaran = sesi.putaranSaatIni + 1;
+        }
+      }
+
       document.getElementById('indikatorPutaran').innerText = `Putaran: ${sesi.putaranSaatIni} / ${sesi.maxPutaran}`;
-      const persentase = (sesi.putaranSaatIni / sesi.maxPutaran) * 100;
+      const persentase = Math.min(100, (sesi.putaranSaatIni / sesi.maxPutaran) * 100);
       document.getElementById('progressBarKaiwa').style.width = `${persentase}%`;
+
+      const selesaiSesiSekarang = wawancaraResmiTuntas || (!sesi.menungguSalamPenutupMST && statusLastTurn);
 
       const akhiriGiliran = () => {
         if (!sesi.aktif) return;
-        if (statusLastTurn) {
-          statusTeks.innerHTML = `✅ <b>Target Selesai!</b> Silakan klik Buat Rapor Sesi.`;
+        if (selesaiSesiSekarang) {
+          statusTeks.innerHTML = `✅ <b>Sesi Selesai!</b> Silakan klik Buat Rapor Sesi.`;
           micBtn.style.backgroundColor = "#94a3b8";
           micBtn.disabled = true;
+        } else if (sesi.menungguSalamPenutupMST) {
+          resetTombolMicKN();
+          statusTeks.innerText = "🎙️ Ucapkan salam penutup wawancara Anda untuk mengakhiri sesi.";
         } else {
           resetTombolMicKN();
           statusTeks.innerText = "Giliran Anda! Tekan mikrofon untuk membalas.";
@@ -234,25 +263,37 @@
       pasangListenerMicSatuKali();
       chatHistoryKN = [];
 
+      // Buat angka kunci pengacak unik untuk sesi ini & reset penanda penutup MST
+      sesiConfig.seedAcak = Math.floor(Math.random() * 900000) + 100000;
+      sesiConfig.menungguSalamPenutupMST = false;
+
+      const isMST = sesiConfig.produk.includes("-MST") || sesiConfig.produk.startsWith("MST");
+
       document.getElementById('activeProductDisplay').innerText = `${sesiConfig.namaTema} (${sesiConfig.produk})`;
       document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
       document.getElementById('progressBarKaiwa').style.width = '0%';
       document.getElementById('chatContainer').innerHTML = '';
       document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${sesiConfig.maxPutaran}`;
-      document.getElementById('statusTeksInfo').innerText = "Tekan mikrofon SEKALI untuk membalas.";
       resetTombolMicKN();
 
-      // Sesuaikan kalimat pembuka awal berdasarkan kategori BLJ / KHD / MST
-      let sapaanAwal = `こんにちは！ Mari mulai latihan "${sesiConfig.namaTema}". Tekan mikrofon dan sapa saya.`;
-      if (sesiConfig.produk.includes("MST")) {
-        sapaanAwal = "失礼いたします。本日は面接にお越しいただき、ありがとうございます。まずは自己紹介をお願いします。";
-      } else if (sesiConfig.produk.includes("KHD")) {
-        sapaanAwal = `こんにちは！ Simulasi "${sesiConfig.namaTema}" dimulai. Silakan tekan mikrofon untuk memulai situasi.`;
+      if (isMST) {
+        // KHUSUS WAWANCARA (MST): AI DIAM MENUNGGU KANDIDAT MENYAPA LEBIH DULU!
+        statusTeks.innerText = "🎙️ Pewawancara menunggu salam pembuka Anda...";
+        const chatContainer = document.getElementById('chatContainer');
+        const bannerZoom = document.createElement('div');
+        bannerZoom.style.cssText = "background:#eff6ff; border:1px dashed #93c5fd; color:#1e40af; padding:12px 15px; border-radius:12px; font-size:12px; text-align:center; line-height:1.5; font-weight:600;";
+        bannerZoom.innerHTML = "💻 <b>Ruang Wawancara Online Terhubung</b><br>Pewawancara (Mensetsukan) telah hadir di layar dan menunggu Anda berbicara lebih dulu. Tekan mikrofon dan ucapkan salam pembuka wawancara online!";
+        chatContainer.appendChild(bannerZoom);
+      } else {
+        statusTeks.innerText = "Tekan mikrofon SEKALI untuk membalas.";
+        let sapaanAwal = `こんにちは！ Mari mulai latihan "${sesiConfig.namaTema}". Tekan mikrofon dan sapa saya.`;
+        if (sesiConfig.produk.includes("KHD")) {
+          sapaanAwal = `こんにちは！ Simulasi "${sesiConfig.namaTema}" dimulai. Silakan tekan mikrofon untuk memulai situasi.`;
+        }
+        setTimeout(() => {
+          if (window.NEEXA_SESI.aktif) tambahBubbleKN('ai', sapaanAwal);
+        }, 350);
       }
-
-      setTimeout(() => {
-        if (window.NEEXA_SESI.aktif) tambahBubbleKN('ai', sapaanAwal);
-      }, 350);
 
       showView('kaiwaRoom');
     },
