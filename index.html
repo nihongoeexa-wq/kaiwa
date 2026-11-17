@@ -2555,6 +2555,50 @@
     }
   }
 
+  function bukaKategoriTujuan(kodeTujuan) {
+    document.getElementById('modul-tujuan-view').style.display = 'none';
+    document.getElementById('sub-tier-blj').style.display = 'none';
+    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+
+    if (kodeTujuan === 'blj') {
+      document.getElementById('sub-tier-blj').style.display = 'block';
+    } else if (kodeTujuan === 'khd') {
+      document.getElementById('detail-khd').style.display = 'block';
+    } else if (kodeTujuan === 'mst') {
+      document.getElementById('detail-mst').style.display = 'block';
+    }
+  }
+
+  function bukaDaftarTema(idDetail) {
+    document.getElementById('sub-tier-blj').style.display = 'none';
+    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+    document.getElementById(idDetail).style.display = 'block';
+  }
+
+  function kembaliKeTierBLJ() {
+    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+    document.getElementById('sub-tier-blj').style.display = 'block';
+  }
+
+  function kembaliKeTujuan() {
+    document.getElementById('sub-tier-blj').style.display = 'none';
+    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+    document.getElementById('modul-tujuan-view').style.display = 'block';
+  }
+
+  function toggleTema(elemenHeader) {
+    const elemenBody = elemenHeader.nextElementSibling;
+    const isTerbuka = elemenHeader.classList.contains('active');
+
+    document.querySelectorAll('.theme-header').forEach(h => h.classList.remove('active'));
+    document.querySelectorAll('.theme-body').forEach(b => b.style.display = 'none');
+
+    if (!isTerbuka) {
+      elemenHeader.classList.add('active');
+      elemenBody.style.display = 'block';
+    }
+  }
+
   let tokoSudahDimuat = false;
 
   async function muatKatalogToko() {
