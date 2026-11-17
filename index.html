@@ -731,8 +731,9 @@
                         <div class="stat-badge stat-koin" title="Saldo Koin">
                             <i class="fas fa-coins"></i> <span id="saldoKoinDisplay">0</span>
                         </div>
-                        <div class="stat-badge stat-tiket" title="Saldo Tiket">
-                            <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
+                        <div class="stat-badge stat-tiket" onclick="bukaTab('toko')" title="Klik untuk Isi Ulang Tiket" style="cursor: pointer;">
+                          <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
+                          <i class="fas fa-plus-circle" style="font-size: 12px; color: #0369a1; margin-left: 2px;"></i>
                         </div>
                     </div>
                     <!-- Profil & Avatar Baru -->
@@ -1018,36 +1019,157 @@
                     </div>
                 </div>
 
-                <!-- ========================================== -->
-                <!-- KARDUS BARU: TOKO VOUCHER -->
-                <!-- ========================================== -->
-                <div id="tab-toko" style="display: none; padding: 25px;">
-                    <div style="max-width: 650px; margin: 0; text-align: left;">
-                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Toko Tiket</h2>
-                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
-                            <i class="fas fa-store" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
-                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Beli Paket Tiket</h3>
-                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Dapatkan tiket latihan dengan harga spesial via Admin atau Lynk.id.</p>
-                            <button onclick="window.open('https://lynk.id', '_blank')" class="btn" style="width: auto; padding: 10px 20px; margin:0 auto;"><i class="fas fa-shopping-cart"></i> Menuju Toko</button>
-                        </div>
-                    </div>
+        <!-- ========================================== -->
+        <!-- KARDUS AKTIF: TOKO TIKET & PAKET INTENSIF  -->
+        <!-- ========================================== -->
+        <div id="tab-toko" style="display: none; padding: 25px;">
+          <div style="max-width: 780px; margin: 0; text-align: left;">
+            
+            <!-- Banner Status Promo Dinamis dari Sheet TOKO_TIKET -->
+            <div style="background: linear-gradient(135deg, #1e293b, #2B3B70); border-radius: 16px; padding: 20px 24px; color: white; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(43,59,112,0.18);">
+              <div>
+                <div id="tokoNamaPromoBadge" style="display: inline-block; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; margin-bottom: 6px;">
+                  🔴 Memuat Promo...
                 </div>
+                <h2 style="margin: 0; font-size: 20px; font-weight: 800;">Toko Tiket Latihan Neexa</h2>
+                <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.88;">Pilih paket sesuai target belajarmu. Tiket masuk otomatis ke akun setelah pembayaran!</p>
+              </div>
+              <div id="tokoCountdownBox" class="hidden" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); padding: 10px 16px; border-radius: 12px; text-align: center;">
+                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Berakhir Dalam</div>
+                <div id="tokoSisaHariTeks" style="font-size: 18px; font-weight: 900; color: #fde047;">0 Hari</div>
+              </div>
+            </div>
 
-                <!-- ========================================== -->
-                <!-- KARDUS BARU: TUKAR KOIN -->
-                <!-- ========================================== -->
-                <div id="tab-tukar" style="display: none; padding: 25px;">
-                    <div style="max-width: 650px; margin: 0; text-align: left;">
-                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Tukar Koin</h2>
-                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align:center;">
-                            <i class="fas fa-coins" style="font-size: 40px; color: #fbbf24; margin-bottom: 15px;"></i>
-                            <h3 style="margin:0 0 10px 0; color: var(--text-main);">Tukar Koin Emas</h3>
-                            <p style="color: #475569; font-size: 14px; margin-bottom: 20px;">Kumpulkan koin dari hasil belajar untuk ditukar dengan tiket gratis.</p>
-                            <!-- Fitur dummy sementara -->
-                            <button class="btn btn-outline" style="width: auto; padding: 10px 20px; margin:0 auto; cursor:not-allowed;" disabled>Segera Hadir</button>
-                        </div>
-                    </div>
+            <!-- Kotak Salin Email Otomatis (Kunci Agar Webhook Lynk.id Masuk 100% Tepat Sasaran) -->
+            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 12px 16px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div style="font-size: 12px; color: #1e3a8a; line-height: 1.4;">
+                <i class="fas fa-bolt" style="color: #eab308;"></i> <strong>Agar Tiket Masuk Otomatis:</strong> Gunakan email Neexa Anda (<strong id="tokoEmailAktifDisplay">-</strong>) saat mengisi form pembayaran di Lynk.id!
+              </div>
+              <button onclick="salinEmailCheckout()" class="btn" style="width: auto; padding: 7px 12px; font-size: 11px; background: #2563eb;">
+                <i class="fas fa-copy"></i> Salin Email Saya
+              </button>
+            </div>
+
+            <!-- KATEGORI 1: VOUCHER HARIAN / SATUAN -->
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 12px 0;">
+              🎫 Kategori 1: Paket Satuan (Harian &amp; Coba Fitur)
+            </h3>
+            <div id="wadahTokoSatuan" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
+              <p style="font-size: 13px; color: #94a3b8;">Memuat daftar harga...</p>
+            </div>
+
+            <!-- KATEGORI 2: PAKET INTENSIF & B2B LPK -->
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0;">
+              🚀 Kategori 2: Paket Intensif Target Lulus &amp; B2B LPK
+            </h3>
+            <p style="font-size: 12px; color: #64748b; margin: 0 0 12px 0;">Dirancang untuk porsi latihan rutin 2–3 sesi setiap hari hingga siap berangkat kerja ke Jepang.</p>
+            <div id="wadahTokoIntensif" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
+              <p style="font-size: 13px; color: #94a3b8;">Memuat paket intensif...</p>
+            </div>
+
+            <!-- SLOT MASA DEPAN: TOP UP INSTAN QRIS MAYAR / MIDTRANS (MIN RP 10.000 TANPA VOUCHER) -->
+            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 800; color: var(--text-main);">
+                  ⚡ Top Up Instan QRIS Bebas Nominal (Mulai Rp 10.000)
                 </div>
+                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                  Isi ulang cepat langsung di dalam web tanpa berpindah halaman (Integrasi Payment Gateway).
+                </div>
+              </div>
+              <span style="font-size: 11px; font-weight: 800; background: #e2e8f0; color: #475569; padding: 6px 12px; border-radius: 8px;">Segera Hadir</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- KARDUS AKTIF: TUKAR KOIN EMAS -> TIKET     -->
+        <!-- ========================================== -->
+        <div id="tab-tukar" style="display: none; padding: 25px;">
+          <div style="max-width: 680px; margin: 0; text-align: left;">
+            <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 6px;">🪙 Tukar Koin Emas</h2>
+            <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Selesaikan latihan hingga tuntas dengan skor tinggi untuk mengumpulkan Koin Emas, lalu tukarkan menjadi Tiket Gratis!</p>
+
+            <!-- Banner Saldo Koin Siswa -->
+            <div style="background: linear-gradient(135deg, #b45309, #f59e0b); border-radius: 16px; padding: 20px 24px; color: white; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);">
+              <div>
+                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 0.5px;">Tabungan Koin Anda Saat Ini</div>
+                <div style="font-size: 28px; font-weight: 900; margin-top: 4px;"><i class="fas fa-coins"></i> <span id="tukarSaldoKoinBig">0</span> <span style="font-size: 14px; font-weight: 700;">Koin</span></div>
+              </div>
+              <div style="text-align: right; font-size: 12px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 12px; font-weight: 800;">
+                Saldo Tiket: <span id="tukarSaldoTiketMini">0</span> 🎫
+              </div>
+            </div>
+
+            <div id="tukarKoinMsg" class="msg" style="margin-bottom: 15px;"></div>
+
+            <!-- Grid 4 Pilihan Paket Tukar Koin -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px;">
+
+              <!-- 1. PAKET MINI -->
+              <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:11px; font-weight:800; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:8px;">PEMULA</span>
+                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 2.500 Koin</span>
+                  </div>
+                  <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+16 Tiket Gratis</h3>
+                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Cukup untuk 1 sesi penuh Shokyu (Basic) + sisa tabungan tiket.</p>
+                </div>
+                <button class="btn btn-tukar-item" data-paket="PAKET_MINI" data-koin="2500" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">
+                  Tukar 2.500 Koin
+                </button>
+              </div>
+
+              <!-- 2. PAKET REGULER -->
+              <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:11px; font-weight:800; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:8px;">HEMAT</span>
+                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 5.000 Koin</span>
+                  </div>
+                  <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+34 Tiket Gratis</h3>
+                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Pas untuk latihan di kelas Chukyu, Jokyu (Pro), atau Simulasi Kehidupan.</p>
+                </div>
+                <button class="btn btn-tukar-item" data-paket="PAKET_REGULER" data-koin="5000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">
+                  Tukar 5.000 Koin
+                </button>
+              </div>
+
+              <!-- 3. PAKET POPULER (10.000 KOIN = 70 TIKET) -->
+              <div style="background: #fefce8; border: 2px solid #facc15; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:11px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 9px; border-radius:8px;">⭐ PALING POPULER</span>
+                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 10.000 Koin</span>
+                  </div>
+                  <h3 style="margin: 4px 0; font-size: 22px; color: #854d0e; font-weight: 900;">+70 Tiket Gratis</h3>
+                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #713f12;">Setara paket Top Up Rp 10.500! Lebih banyak tiket dibanding beli biasa.</p>
+                </div>
+                <button class="btn btn-tukar-item" data-paket="PAKET_POPULER" data-koin="10000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #d97706;">
+                  Tukar 10.000 Koin
+                </button>
+              </div>
+
+              <!-- 4. PAKET SULTAN -->
+              <div style="background: #f5f3ff; border: 2px solid #c4b5fd; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:11px; font-weight:800; background:#ede9fe; color:#6d28d9; padding:3px 9px; border-radius:8px;">👑 BONUS TERBESAR</span>
+                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 25.000 Koin</span>
+                  </div>
+                  <h3 style="margin: 4px 0; font-size: 22px; color: #5b21b6; font-weight: 900;">+185 Tiket Gratis</h3>
+                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #4c1d95;">Ekstra bonus +10 tiket! Bebas latihan Wawancara (Mensetsu) berkali-kali.</p>
+                </div>
+                <button class="btn btn-tukar-item" data-paket="PAKET_SULTAN" data-koin="25000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #6d28d9;">
+                  Tukar 25.000 Koin
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
                 <!-- ========================================== -->
                 <!-- KARDUS 4: PANDUAN -->
@@ -1613,6 +1735,11 @@
     document.getElementById('profilImageDisplay').src = KAIWA_USER.avatar;
 
     // Sinkronisasi Widget Kuota Testimoni Bintang 5
+    // Sinkronisasi Widget Kuota Testimoni Bintang 5 (Otomatis sembunyi jika kuota diset 0)
+    const boxWidgetTesti = document.getElementById('widgetTestimoniBox');
+    if (boxWidgetTesti && d.sisaKuotaTestimoni !== undefined) {
+      boxWidgetTesti.classList.toggle('hidden', Number(d.sisaKuotaTestimoni) <= 0);
+    }
     const elBadgeKuota = document.getElementById('badgeKuotaTestimoni');
     if (elBadgeKuota && d.sisaKuotaTestimoni !== undefined) {
       elBadgeKuota.innerText = `Sisa: ${d.sisaKuotaTestimoni}/100`;
@@ -2121,7 +2248,7 @@
         suaraTutor: suaraDipilih,
         fotoTutor: fotoDipilih,
         tiketMasuk: Number(data.data.tiketMasuk) || 3,
-        tiketPerPutaran: Number(data.data.tiketPerPutaran) || 3,
+        tiketPerPutaran: Number(data.data.tiketPerPutaran) || 1,
         maxPutaran: Number(data.data.maxPutaran) || 7,
         hargaPenuh: Number(data.data.hargaPenuh) || 26,
         putaranSaatIni: 0,
@@ -2420,49 +2547,157 @@
     });
     document.getElementById('tab-' + namaTab).style.display = 'block';
     document.getElementById('btn-tab-' + namaTab).classList.add('active');
-  }
 
-  function bukaKategoriTujuan(kodeTujuan) {
-    document.getElementById('modul-tujuan-view').style.display = 'none';
-    document.getElementById('sub-tier-blj').style.display = 'none';
-    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
-
-    if (kodeTujuan === 'blj') {
-      document.getElementById('sub-tier-blj').style.display = 'block';
-    } else if (kodeTujuan === 'khd') {
-      document.getElementById('detail-khd').style.display = 'block';
-    } else if (kodeTujuan === 'mst') {
-      document.getElementById('detail-mst').style.display = 'block';
+    if (namaTab === 'tukar') {
+      segarkanHalamanTukarKoin();
+    } else if (namaTab === 'toko') {
+      muatKatalogToko();
     }
   }
 
-  function bukaDaftarTema(idDetail) {
-    document.getElementById('sub-tier-blj').style.display = 'none';
-    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
-    document.getElementById(idDetail).style.display = 'block';
+  let tokoSudahDimuat = false;
+
+  async function muatKatalogToko() {
+    const elEmail = document.getElementById('tokoEmailAktifDisplay');
+    if (elEmail) elEmail.innerText = KAIWA_USER.email || '-';
+
+    if (tokoSudahDimuat) return;
+
+    try {
+      const res = await panggilGAS('getTokoTiket', {});
+      if (!res.success || !res.data) return;
+
+      const d = res.data;
+      tokoSudahDimuat = true;
+
+      // Update Banner Promo & Sisa Hari
+      const elBadge = document.getElementById('tokoNamaPromoBadge');
+      if (elBadge) {
+        elBadge.innerText = d.namaPromoAktif || 'Harga Spesial';
+        elBadge.style.background = d.faseAktif === 1 ? '#ef4444' : (d.faseAktif === 2 ? '#d97706' : '#10b981');
+      }
+
+      const boxCount = document.getElementById('tokoCountdownBox');
+      const teksHari = document.getElementById('tokoSisaHariTeks');
+      if (boxCount && teksHari) {
+        if (d.sisaHariPromo > 0) {
+          teksHari.innerText = `${d.sisaHariPromo} Hari Lagi`;
+          boxCount.classList.remove('hidden');
+        } else {
+          boxCount.classList.add('hidden');
+        }
+      }
+
+      const wadahSatuan = document.getElementById('wadahTokoSatuan');
+      const wadahIntensif = document.getElementById('wadahTokoIntensif');
+      wadahSatuan.innerHTML = '';
+      wadahIntensif.innerHTML = '';
+
+      (d.paket || []).forEach(p => {
+        const isPopuler = p.badge.includes('Laris') || p.badge.includes('Rekomendasi');
+        const borderCard = isPopuler ? '2px solid #2b5cff' : '2px solid #e2e8f0';
+        const bgCard = isPopuler ? '#f8faff' : '#ffffff';
+        const hargaPerTiket = p.tiket > 0 ? Math.round(p.hargaAktif / p.tiket) : 0;
+
+        const htmlKartu = `
+          <div style="background:${bgCard}; border:${borderCard}; border-radius:14px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 10px rgba(0,0,0,0.03);">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:8px;">
+                <span style="font-size:10px; font-weight:800; background:${isPopuler ? '#dbeafe' : '#f1f5f9'}; color:${isPopuler ? '#1d4ed8' : '#475569'}; padding:3px 8px; border-radius:8px;">${escapeHtml(p.badge || 'Paket Tiket')}</span>
+                ${p.persenHemat > 0 ? `<span style="font-size:10px; font-weight:800; background:#dcfce7; color:#15803d; padding:3px 7px; border-radius:8px;">Hemat ${p.persenHemat}%</span>` : ''}
+              </div>
+              <h4 style="margin:0 0 4px 0; font-size:16px; font-weight:800; color:var(--text-main);">${escapeHtml(p.nama)}</h4>
+              <div style="font-size:13px; font-weight:800; color:#0284c7; margin-bottom:8px;">🎫 ${Number(p.tiket).toLocaleString('id-ID')} Tiket <span style="font-size:11px; font-weight:600; color:#64748b;">(~Rp ${hargaPerTiket.toLocaleString('id-ID')}/tiket)</span></div>
+              <p style="margin:0 0 14px 0; font-size:12px; color:#64748b; line-height:1.45;">${escapeHtml(p.deskripsi)}</p>
+            </div>
+            <div>
+              <div style="border-top:1px dashed #e2e8f0; padding-top:10px; margin-bottom:12px;">
+                ${p.hargaCoret > p.hargaAktif ? `<div style="font-size:12px; color:#94a3b8; text-decoration:line-through; font-weight:700;">Rp ${Number(p.hargaCoret).toLocaleString('id-ID')}</div>` : ''}
+                <div style="font-size:22px; font-weight:900; color:var(--primary);">Rp ${Number(p.hargaAktif).toLocaleString('id-ID')}</div>
+              </div>
+              <button class="btn" data-url="${escapeHtml(p.linkLynk)}" data-nama="${escapeHtml(p.nama)}" onclick="beliPaketLynk(this)" style="padding:11px; font-size:13px; background:${isPopuler ? '#2b5cff' : 'var(--primary)'};">
+                <i class="fas fa-shopping-cart"></i> Beli Sekarang
+              </button>
+            </div>
+          </div>
+        `;
+
+        if (p.kategori === 'INTENSIF') wadahIntensif.innerHTML += htmlKartu;
+        else wadahSatuan.innerHTML += htmlKartu;
+      });
+    } catch (err) {
+      console.error("Gagal memuat katalog toko:", err);
+    }
   }
 
-  function kembaliKeTierBLJ() {
-    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
-    document.getElementById('sub-tier-blj').style.display = 'block';
+  function salinEmailCheckout() {
+    if (!KAIWA_USER.email) return;
+    navigator.clipboard.writeText(KAIWA_USER.email).then(() => {
+      alert(`Email "${KAIWA_USER.email}" berhasil disalin! Tempelkan (Paste) pada kolom Email saat membayar di Lynk.id.`);
+    });
   }
 
-  function kembaliKeTujuan() {
-    document.getElementById('sub-tier-blj').style.display = 'none';
-    document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
-    document.getElementById('modul-tujuan-view').style.display = 'block';
+  function beliPaketLynk(btnEl) {
+    const url = btnEl.dataset.url || 'https://lynk.id';
+    const namaPaket = btnEl.dataset.nama || 'Paket Tiket';
+    if (KAIWA_USER.email && navigator.clipboard) {
+      navigator.clipboard.writeText(KAIWA_USER.email).catch(() => {});
+    }
+    alert(`🛒 Membuka halaman pembayaran "${namaPaket}".\n\nEmail Anda (${KAIWA_USER.email}) telah disalin otomatis. Pastikan menempelkan email tersebut di halaman Lynk.id agar tiket masuk otomatis ke akun Anda!`);
+    window.open(url, '_blank');
   }
 
-  function toggleTema(elemenHeader) {
-    const elemenBody = elemenHeader.nextElementSibling;
-    const isTerbuka = elemenHeader.classList.contains('active');
+  function segarkanHalamanTukarKoin() {
+    const koinUser = Number(KAIWA_USER.koin) || 0;
+    const tiketUser = Number(KAIWA_USER.saldo) || 0;
 
-    document.querySelectorAll('.theme-header').forEach(h => h.classList.remove('active'));
-    document.querySelectorAll('.theme-body').forEach(b => b.style.display = 'none');
+    const elBig = document.getElementById('tukarSaldoKoinBig');
+    const elMini = document.getElementById('tukarSaldoTiketMini');
+    if (elBig) elBig.innerText = koinUser.toLocaleString('id-ID');
+    if (elMini) elMini.innerText = tiketUser.toLocaleString('id-ID');
 
-    if (!isTerbuka) {
-      elemenHeader.classList.add('active');
-      elemenBody.style.display = 'block';
+    document.querySelectorAll('.btn-tukar-item').forEach(btn => {
+      const hargaKoin = Number(btn.dataset.koin) || 0;
+      if (koinUser >= hargaKoin) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fas fa-exchange-alt"></i> Tukar ${hargaKoin.toLocaleString('id-ID')} Koin`;
+      } else {
+        const kurang = hargaKoin - koinUser;
+        btn.disabled = true;
+        btn.innerHTML = `🔒 Kurang ${kurang.toLocaleString('id-ID')} Koin`;
+      }
+    });
+  }
+
+  async function eksekusiTukarKoin(btnEl) {
+    const kodePaket = btnEl.dataset.paket;
+    const hargaKoin = Number(btnEl.dataset.koin) || 0;
+
+    if (!confirm(`Tukarkan ${hargaKoin.toLocaleString('id-ID')} Koin Emas Anda menjadi Tiket Latihan sekarang?`)) return;
+
+    const semuaBtn = document.querySelectorAll('.btn-tukar-item');
+    semuaBtn.forEach(b => b.disabled = true);
+    showMsg('tukarKoinMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memproses penukaran koin...');
+
+    try {
+      const res = await panggilGAS('tukarKoin', {
+        email: KAIWA_USER.email,
+        kodePaket: kodePaket
+      });
+
+      if (res.success) {
+        KAIWA_USER.koin = Number(res.data.koin) || 0;
+        KAIWA_USER.saldo = Number(res.data.saldo) || 0;
+        document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+        document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+        showMsg('tukarKoinMsg', 'success', escapeHtml(res.message));
+      } else {
+        showMsg('tukarKoinMsg', 'error', escapeHtml(res.message));
+      }
+    } catch (err) {
+      showMsg('tukarKoinMsg', 'error', 'Gagal menghubungi server. Periksa koneksi Anda.');
+    } finally {
+      segarkanHalamanTukarKoin();
     }
   }
 
