@@ -590,8 +590,139 @@
         .label-compact { display: block; font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 5px; text-transform: uppercase; }
         .star-rating-box { display: flex; justify-content: center; gap: 8px; font-size: 26px; margin: 10px 0; cursor: pointer; }
         .star-item { color: #cbd5e1; transition: 0.15s; }
-        .star-item.active { color: #f59e0b; transform: scale(1.08); }
-      </style>
+    .star-rating-box { display: flex; justify-content: center; gap: 8px; font-size: 26px; margin: 10px 0; cursor: pointer; }
+    .star-item { color: #cbd5e1; transition: 0.15s; }
+    .star-item.active { color: #f59e0b; transform: scale(1.08); }
+
+    /* =========================================
+       CSS PRIORITAS #4: NAVIGASI 12 MENU, SUB-MENU, ALIGNMENT & LEADERBOARD
+    ========================================= */
+    .header-text h2 { font-size: 22px; line-height: 1.18; letter-spacing: -0.3px; }
+
+    /* Sidebar Scrollable & Sub-Navigasi Accordion */
+    .sidebar { padding: 18px 14px; }
+    .sidebar-header { margin-bottom: 22px; padding: 0 6px; }
+    .sidebar-menu { overflow-y: auto; gap: 4px; padding-right: 4px; }
+    .sidebar-menu::-webkit-scrollbar { width: 4px; }
+    .sidebar-menu::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+    .menu-item {
+      padding: 11px 14px; font-size: 12.5px; display: flex; align-items: center;
+      justify-content: space-between; gap: 8px; width: 100%; box-sizing: border-box;
+    }
+    .menu-item .menu-label-wrap { display: flex; align-items: center; gap: 9px; }
+    .menu-item .sub-chevron { font-size: 11px; transition: transform 0.25s ease; color: #94a3b8; }
+    .menu-item.expanded .sub-chevron { transform: rotate(180deg); color: var(--primary); }
+
+    .submenu-group {
+      display: none; flex-direction: column; gap: 4px; margin: 2px 0 6px 16px;
+      padding-left: 10px; border-left: 2px solid #cbd5e1;
+    }
+    .submenu-group.open { display: flex; }
+    .submenu-item {
+      padding: 9px 12px; background: transparent; border: 1.5px solid transparent;
+      border-radius: 10px; text-align: left; font-size: 12px; font-weight: 700;
+      color: #64748b; cursor: pointer; transition: 0.2s;
+    }
+    .submenu-item:hover { background: #f1f5f9; color: var(--primary); }
+    .submenu-item.active { background: #DDF4FF; color: var(--primary); border-color: #84D8FF; font-weight: 800; }
+
+    .sidebar-footer { margin-top: 12px; padding-top: 12px; }
+    .sidebar-footer h3 { font-size: 12.5px; margin-bottom: 3px; }
+    .sidebar-footer .footer-line { margin: 2px 0; font-size: 10px; font-weight: 700; color: #64748b; line-height: 1.35; }
+
+    /* Penyelarasan Panjang Kotak Semua Menu = Panjang Kotak Biru Dashboard */
+    .page-aligned-box {
+      width: 100%; max-width: 820px; margin: 0; text-align: left; box-sizing: border-box;
+    }
+
+    /* Kotak Klaim Voucher Memanjang Seukuran Kotak Biru Dashboard */
+    .voucher-horizontal-card {
+      background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
+      padding: 18px 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    .voucher-horizontal-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .voucher-horizontal-info h3 { margin: 0 0 3px 0; font-size: 15px; color: var(--text-main); font-weight: 800; }
+    .voucher-horizontal-info p { margin: 0; font-size: 12px; color: #64748b; }
+    .voucher-horizontal-form { display: flex; gap: 10px; flex: 1; min-width: 250px; max-width: 400px; }
+    .voucher-horizontal-form input {
+      flex: 1; padding: 11px 14px; border: 2px solid #e2e8f0; border-radius: 10px;
+      font-weight: 800; font-size: 13px; text-transform: uppercase; box-sizing: border-box;
+    }
+    .voucher-horizontal-form input:focus { border-color: var(--primary); outline: none; }
+    .voucher-horizontal-form button {
+      padding: 11px 22px; background: var(--primary); color: #fff; border: none;
+      border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+    }
+    .voucher-horizontal-form button:hover { background: var(--primary-hover); }
+
+    /* Kotak Info Penting Scrollable (Kanan Atas) */
+    .info-scroll-area {
+      max-height: 245px; overflow-y: auto; display: flex; flex-direction: column;
+      gap: 10px; padding-right: 4px;
+    }
+    .info-scroll-area::-webkit-scrollbar { width: 5px; }
+    .info-scroll-area::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+    .info-item-card {
+      background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: left;
+    }
+    .info-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
+    .info-kat-badge { font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; background: #dbeafe; color: #1d4ed8; }
+    .info-btn-mini {
+      display: inline-block; margin-top: 8px; padding: 6px 11px; background: var(--primary);
+      color: #fff; border: none; border-radius: 8px; font-size: 11px; font-weight: 800;
+      cursor: pointer; text-decoration: none; transition: 0.2s;
+    }
+    .info-btn-mini:hover { background: var(--primary-hover); }
+
+    /* Tabel Leaderboard & Highlight Mencolok Kandidat JOB READY untuk TSK */
+    .lb-table-wrap {
+      background: #fff; border: 2px solid #e2e8f0; border-radius: 16px;
+      overflow-x: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    .lb-table th {
+      background: #f8fafc; color: #475569; font-size: 11px; font-weight: 800;
+      text-transform: uppercase; padding: 13px 14px; border-bottom: 2px solid #e2e8f0; white-space: nowrap;
+    }
+    .lb-table td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .lb-table tr:last-child td { border-bottom: none; }
+    .lb-row-jobready {
+      background: linear-gradient(90deg, #f0fdf4 0%, #fefce8 100%) !important;
+      border-left: 4px solid #16a34a;
+    }
+    .badge-tsk-ready {
+      display: inline-flex; align-items: center; gap: 4px; background: #16a34a; color: #ffffff;
+      font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(22, 163, 74, 0.28); margin-left: 6px; white-space: nowrap;
+    }
+    .growth-pill { font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 8px; display: inline-block; }
+    .growth-up { background: #dcfce7; color: #15803d; }
+    .growth-down { background: #fee2e2; color: #b91c1c; }
+    .growth-stuck { background: #f1f5f9; color: #64748b; }
+
+    /* Mini Leaderboard di Kolom Kanan Dashboard */
+    .mini-lb-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 10px; border-radius: 10px; font-size: 12px; margin-bottom: 6px;
+      background: #f8fafc; border: 1px solid #e2e8f0;
+    }
+    .mini-lb-row.job-highlight {
+      background: #f0fdf4; border-color: #86efac;
+    }
+
+    /* Mobile Sub-Navigasi Bar */
+    .mobile-subnav-bar {
+      display: none; gap: 8px; padding: 10px 15px; background: #eff6ff;
+      border-bottom: 2px solid #bfdbfe; overflow-x: auto;
+    }
+    @media (max-width: 768px) {
+      .submenu-group.open { display: none; }
+      .mobile-subnav-bar.open { display: flex; }
+      .voucher-horizontal-form { max-width: 100%; width: 100%; }
+    }
+   </style>
 </head>
 <body>
 
@@ -600,597 +731,795 @@
         #viewLogin:not(.hidden) + .container { display: none; }
     </style>
 
-    <!-- ================= VIEW 1: LANDING PAGE NEEXA-LINGO ================= -->
-    <!-- (Perhatikan: ID tetap "viewLogin" agar script JS Anda tetap berfungsi normal) -->
-    <div id="viewLogin">
-        
-        <!-- KOTAK MERAH: Logo & Judul Samping -->
-        <div class="landing-header">
-            <!-- Pembungkus agar logo dan teks berjejer -->
-            <div class="header-content">
-                
-                <!-- Logo -->
-                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
-                
-                <!-- Teks di samping Logo -->
-                <div class="header-text">
-                    <h2>Smart AI Conversation</h2>
-                    <p>support by : LPK .....</p>
-                </div>
-
-            </div>
+  <!-- ================= VIEW 1: LANDING PAGE NEEXA-LINGO ================= -->
+  <div id="viewLogin">
+    
+    <!-- Logo & Judul Samping 2 Baris Proporsional -->
+    <div class="landing-header">
+      <div class="header-content">
+        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
+        <div class="header-text">
+          <h2>Smart AI<br>Conversation</h2>
         </div>
-
-        <div class="landing-container">
-            <!-- KOTAK KUNING: Gambar Ilustrasi (Kiri) -->
-            <div class="hero-image-box">
-                <!-- Link sudah diganti dengan URL asli gambar LP IMG1.png di GitHub -->
-                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
-            </div>
-
-            <!-- KOTAK HIJAU: Teks & Tombol (Kanan) -->
-            <div class="hero-text-box">
-                <h1>Cara paling seru dan cerdas untuk berlatih Kaiwa!</h1>
-                
-                <!-- Tombol 3D bergaya Duolingo -->
-                <button class="btn-3d btn-mulai" onclick="tampilkanAreaLogin()">MULAI</button>
-                <button class="btn-3d btn-belum-akun" onclick="tampilkanAreaDaftar()">AKU BELUM PUNYA AKUN</button>
-                
-                <!-- Area tombol Google (Awalnya tersembunyi, muncul jika tombol di atas diklik) -->
-                <div id="areaAutentikasi" style="display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 16px; border: 2px solid #e5e5e5;">
-                    <p style="margin-top:0; font-size: 14px; color: var(--primary); font-weight: bold;" id="judulAuth">Silakan Masuk</p>
-                    
-                    <!-- INI ELEMEN YANG HILANG (Radio Button Tersembunyi) -->
-                    <div style="display: none;">
-                        <input type="radio" name="authMode" id="modeMasuk" value="masuk" checked>
-                        <input type="radio" name="authMode" id="modeDaftar" value="daftar">
-                    </div>
-                    <!-- ============================================== -->
-
-                    <!-- TOMBOL GOOGLE (BYPASS COOP) -->
-                    <div class="google-btn-wrapper" style="display: flex; flex-direction: column; align-items: center; margin-top: 15px;">
-                        <div id="g_id_onload"
-                             data-client_id="1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com"
-                             data-context="signin"
-                             data-ux_mode="popup"
-                             data-callback="handleCredentialResponse"
-                             data-auto_prompt="false"
-                             data-use_fedcm_for_prompt="true">
-                        </div>
-                        <div class="g_id_signin"
-                             data-type="standard"
-                             data-shape="rectangular"
-                             data-theme="outline"
-                             data-text="signin_with"
-                             data-size="large"
-                             data-logo_alignment="center"
-                             data-width="250">
-                        </div>
-                    </div>
-                    
-                    <div id="loginMsg" class="msg"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- KOTAK BIRU: Support System Footer -->
-        <div class="support-footer">
-            <p>SUPPORT SYSTEM BY LPK ... (Isi Nama LPK)</p>
-            <p>📍 Alamat Lengkap LPK atau Perusahaan Anda di sini</p>
-            <p>© 2026 NEEXA System. Hak Cipta Dilindungi.</p>
-        </div>
+      </div>
     </div>
 
-    <!-- ================= WADAH APLIKASI (DASHBOARD V2) ================= -->
-    <div id="viewDashboard" class="hidden dashboard-wrapper">
+    <div class="landing-container">
+      <!-- Gambar Ilustrasi (Kiri) -->
+      <div class="hero-image-box">
+        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
+      </div>
+
+      <!-- Teks & Tombol 1x Klik Pop-up Google OAuth (Kanan) -->
+      <div class="hero-text-box">
+        <h1>Cara paling seru dan cerdas untuk berlatih Kaiwa!</h1>
         
-        <!-- --- 1. KOLOM KIRI (SIDEBAR STATIS) --- -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
-                <div class="sidebar-title">
-                    <h2>Smart AI</h2>
-                    <h2>Conversation</h2>
-                </div>
+        <button class="btn-3d btn-mulai" onclick="mulaiOAuthSatuKlik('masuk')">MULAI</button>
+        <button class="btn-3d btn-belum-akun" onclick="mulaiOAuthSatuKlik('daftar')">AKU BELUM PUNYA AKUN</button>
+
+        <!-- Penyimpan Mode Tersembunyi & Pesan Status Verifikasi -->
+        <div style="display: none;">
+          <input type="radio" name="authMode" id="modeMasuk" value="masuk" checked>
+          <input type="radio" name="authMode" id="modeDaftar" value="daftar">
+        </div>
+        <div id="loginMsg" class="msg" style="width: 100%; box-sizing: border-box;"></div>
+      </div>
+    </div>
+
+    <!-- Footer Resmi 3 Baris -->
+    <div class="support-footer">
+      <p>Nihongo Electronic Exam Auditorium (NEEXA) System</p>
+      <p>AI-Powered Japanese Conversation Platform</p>
+      <p>© 2026 NEEXA System. Hak Cipta Dilindungi.</p>
+    </div>
+  </div>
+
+  <!-- ================= WADAH APLIKASI (DASHBOARD V2) ================= -->
+  <div id="viewDashboard" class="hidden dashboard-wrapper">
+    
+    <!-- --- 1. KOLOM KIRI (SIDEBAR 12 MENU + SUB-NAVIGASI) --- -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="Logo Neexa" class="sidebar-logo">
+        <div class="sidebar-title">
+          <h2>Smart AI</h2>
+          <h2>Conversation</h2>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <!-- 1. DASHBOARD -->
+        <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">
+          <span class="menu-label-wrap">Dashboard</span>
+        </button>
+
+        <!-- 2. LATIHAN (SUB-NAVIGASI) -->
+        <button class="menu-item" id="btn-induk-latihan" onclick="toggleMenuInduk('latihan')">
+          <span class="menu-label-wrap">Latihan</span>
+          <i class="fas fa-chevron-down sub-chevron"></i>
+        </button>
+        <div class="submenu-group" id="submenu-latihan">
+          <button class="submenu-item" id="btn-tab-latihan-cbt" onclick="bukaTab('latihan-cbt')">CBT Shiken</button>
+          <button class="submenu-item" id="btn-tab-latihan-percakapan" onclick="bukaTab('latihan-percakapan')">Percakapan</button>
+          <button class="submenu-item" id="btn-tab-latihan-live" onclick="bukaTab('latihan-live')">Percakapan Live</button>
+        </div>
+
+        <!-- 3. SURVIVAL (KHUSUS KHD) -->
+        <button class="menu-item" id="btn-tab-survival" onclick="bukaTab('survival')">
+          <span class="menu-label-wrap">Survival</span>
+        </button>
+
+        <!-- 4. RIWAYAT -->
+        <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat'); tarikDataRiwayat();">
+          <span class="menu-label-wrap">Riwayat</span>
+        </button>
+
+        <!-- 5. LEADERBOARD -->
+        <button class="menu-item" id="btn-tab-leaderboard" onclick="bukaTab('leaderboard')">
+          <span class="menu-label-wrap">Leaderboard</span>
+        </button>
+
+        <!-- 6. JOB ORDER -->
+        <button class="menu-item" id="btn-tab-joborder" onclick="bukaTab('joborder')">
+          <span class="menu-label-wrap">Job Order</span>
+        </button>
+
+        <!-- 7. TESTIMONI -->
+        <button class="menu-item" id="btn-tab-testimoni" onclick="bukaTab('testimoni')">
+          <span class="menu-label-wrap">Testimoni</span>
+        </button>
+
+        <!-- 8. TOKO TIKET -->
+        <button class="menu-item" id="btn-tab-toko" onclick="bukaTab('toko')">
+          <span class="menu-label-wrap">Toko Tiket</span>
+        </button>
+
+        <!-- 9. TUKAR KOIN -->
+        <button class="menu-item" id="btn-tab-tukar" onclick="bukaTab('tukar')">
+          <span class="menu-label-wrap">Tukar Koin</span>
+        </button>
+
+        <!-- 10. PANDUAN (SUB-NAVIGASI) -->
+        <button class="menu-item" id="btn-induk-panduan" onclick="toggleMenuInduk('panduan')">
+          <span class="menu-label-wrap">Panduan</span>
+          <i class="fas fa-chevron-down sub-chevron"></i>
+        </button>
+        <div class="submenu-group" id="submenu-panduan">
+          <button class="submenu-item" id="btn-tab-panduan-akses" onclick="bukaTab('panduan-akses')">Cara Akses</button>
+          <button class="submenu-item" id="btn-tab-panduan-materi" onclick="bukaTab('panduan-materi')">Materi Bahasa Jepang</button>
+        </div>
+
+        <!-- 11. ABOUT US -->
+        <button class="menu-item" id="btn-tab-about" onclick="bukaTab('about')" style="text-transform: none;">
+          <span class="menu-label-wrap">About Us</span>
+        </button>
+
+        <!-- 12. HUBUNGI KAMI -->
+        <button class="menu-item" id="btn-tab-kontak" onclick="bukaTab('kontak')" style="text-transform: none;">
+          <span class="menu-label-wrap">Hubungi Kami</span>
+        </button>
+
+        <div class="menu-spacer"></div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <h3>NEEXA SYSTEM</h3>
+        <p class="footer-line">Nihongo Electronic Exam Auditorium</p>
+        <p class="footer-line">AI-Powered Japanese Conversation Platform</p>
+      </div>
+    </aside>
+
+    <!-- Bar Sub-Menu Khusus Tampilan HP -->
+    <div id="mobileSubnavLatihan" class="mobile-subnav-bar">
+      <button class="submenu-item" id="mbtn-latihan-cbt" onclick="bukaTab('latihan-cbt')">CBT Shiken</button>
+      <button class="submenu-item" id="mbtn-latihan-percakapan" onclick="bukaTab('latihan-percakapan')">Percakapan</button>
+      <button class="submenu-item" id="mbtn-latihan-live" onclick="bukaTab('latihan-live')">Percakapan Live</button>
+    </div>
+    <div id="mobileSubnavPanduan" class="mobile-subnav-bar">
+      <button class="submenu-item" id="mbtn-panduan-akses" onclick="bukaTab('panduan-akses')">Cara Akses</button>
+      <button class="submenu-item" id="mbtn-panduan-materi" onclick="bukaTab('panduan-materi')">Materi Bahasa Jepang</button>
+    </div>
+
+    <!-- --- AREA KANAN (HEADER + KONTEN) --- -->
+    <div class="main-area">
+      
+      <!-- --- 2. HEADER ATAS (FREEZE BAR) --- -->
+      <header class="top-header">
+       <div class="header-left">
+        <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
+        <div id="headerGelarBadge" class="rank-pill-header">😴 Kaum Rebahan</div>
+       </div>
+        <div class="header-right">
+          <div class="stat-group">
+            <div class="stat-badge stat-sesi" title="Total Sesi">
+              <i class="fas fa-fire"></i> <span id="totalSesiDisplay">0</span>
             </div>
-
-            <nav class="sidebar-menu">
-                <button class="menu-item active" id="btn-tab-dashboard" onclick="bukaTab('dashboard')">Dashboard</button>
-                <button class="menu-item" id="btn-tab-modul" onclick="bukaTab('modul')">Modul Latihan</button>
-                <button class="menu-item" id="btn-tab-riwayat" onclick="bukaTab('riwayat'); tarikDataRiwayat();">Riwayat Nilai</button>
-                <!-- Menu Baru -->
-                <button class="menu-item" id="btn-tab-toko" onclick="bukaTab('toko')">Toko Voucher</button>
-                <button class="menu-item" id="btn-tab-tukar" onclick="bukaTab('tukar')">Tukar Koin</button>
-                
-                <button class="menu-item" id="btn-tab-panduan" onclick="bukaTab('panduan')">Panduan</button>
-                
-                <div class="menu-spacer"></div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <h3>NEEXA SYSTEM</h3>
-                <p class="footer-support">Support By : LPK .......</p>
+            <div class="stat-badge stat-koin" title="Saldo Koin">
+              <i class="fas fa-coins"></i> <span id="saldoKoinDisplay">0</span>
             </div>
-        </aside>
+            <div class="stat-badge stat-tiket" onclick="bukaTab('toko')" title="Klik untuk Isi Ulang Tiket" style="cursor: pointer;">
+             <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
+             <i class="fas fa-plus-circle" style="font-size: 12px; color: #0369a1; margin-left: 2px;"></i>
+            </div>
+          </div>
+          <div class="profile-menu" onclick="bukaModalProfil()">
+            <img id="profilImageDisplay" src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="profile-avatar" style="border: 2px solid #2b5cff; object-fit: cover; background: #e2e8f0; width: 45px; height: 45px;">
+          </div>
+        </div>
+      </header>
 
-        <!-- --- AREA KANAN (HEADER + KONTEN) --- -->
-        <div class="main-area">
-            
-            <!-- --- 2. HEADER ATAS (FREEZE BAR) --- -->
-            <header class="top-header">
-              <div class="header-left">
-                <h2 class="welcome-text">Halo, <span id="userNamaDisplay" class="highlight-text">User</span>!</h2>
-                <div id="headerGelarBadge" class="rank-pill-header">😴 Kaum Rebahan</div>
-              </div>
-                <div class="header-right">
-                    <!-- Stat Bar -->
-                    <div class="stat-group">
-                        <div class="stat-badge stat-sesi" title="Total Sesi">
-                            <i class="fas fa-fire"></i> <span id="totalSesiDisplay">0</span>
-                        </div>
-                        <div class="stat-badge stat-koin" title="Saldo Koin">
-                            <i class="fas fa-coins"></i> <span id="saldoKoinDisplay">0</span>
-                        </div>
-                        <div class="stat-badge stat-tiket" onclick="bukaTab('toko')" title="Klik untuk Isi Ulang Tiket" style="cursor: pointer;">
-                          <i class="fas fa-ticket-alt"></i> <span id="saldoTiketDisplay">0</span>
-                          <i class="fas fa-plus-circle" style="font-size: 12px; color: #0369a1; margin-left: 2px;"></i>
-                        </div>
-                    </div>
-                    <!-- Profil & Avatar Baru -->
-                    <div class="profile-menu" onclick="bukaModalProfil()">
-                        <img id="profilImageDisplay" src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/anak%20muda%20laki%20laki.png" class="profile-avatar" style="border: 2px solid #2b5cff; object-fit: cover; background: #e2e8f0; width: 45px; height: 45px;">
-                    </div>
-                </div>
-            </header>
-
-            <!-- --- 3. AREA KONTEN SCROLLABLE --- -->
-            <main class="main-content">
-                
-                <!-- KARDUS 1: DASHBOARD (Layout Kiri Kanan) -->
-                <div id="tab-dashboard" style="display: none;">
-                    <div class="dashboard-grid">
-                        
-                        <!-- Area Kiri Dashboard (70%) -->
-                        <div class="dash-left">
-                            <!-- Banner Utama -->
-                            <div class="welcome-banner">
-                                <div class="banner-text">
-                                    <h2>Siap berlatih Kaiwa hari ini?</h2>
-                                    <p>Tingkatkan insting bahasa Jepangmu agar siap menghadapi ujian JFT-Basic dan wawancara kerja.</p>
-                                    <button class="btn-banner" onclick="bukaTab('modul')">Pilih Modul <i class="fas fa-arrow-right"></i></button>
-                                </div>
-                                <div class="banner-img">
-                                    <!-- Tempatkan ilustrasi lucu di sini jika ada -->
-                                    <i class="fas fa-rocket" style="font-size: 80px; opacity: 0.2; transform: rotate(15deg);"></i>
-                                </div>
-                            </div>
-                            
-                            <!-- Ringkasan Statistik -->
-                            <div class="stats-cards-container">
-                                <div class="stat-card">
-                                    <div class="stat-icon" style="background:#fef08a; color:#b45309;"><i class="fas fa-star"></i></div>
-                                    <div class="stat-info">
-                                        <h4>Rata-rata Nilai</h4>
-                                        <!-- TAMBAHKAN ID DI SINI -->
-                                        <p id="rataRataNilaiDisplay">Belum ada data</p>
-                                    </div>
-                                </div>
-                                <div class="stat-card">
-                                  <div class="stat-icon" id="dashGelarIconBox" style="background:#e0f2fe; color:#0284c7;"><i class="fas fa-medal"></i></div>
-                                  <div class="stat-info">
-                                    <h4>Status &amp; Pangkat</h4>
-                                    <p id="dashGelarText" style="font-size: 14px;">😴 Kaum Rebahan</p>
-                                    <div id="dashGelarSub" style="font-size: 11px; color: #64748b; margin-top: 2px;">Mulai latihan untuk naik pangkat!</div>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Area Kanan Dashboard (30%) -->
-                        <div class="dash-right">
-                            <!-- Kotak Klaim Voucher -->
-                            <div class="widget-box voucher-widget">
-                                <h3><i class="fas fa-gift"></i> Punya Kode Tiket?</h3>
-                                <p>Masukkan kode voucher untuk menambah tiket.</p>
-                                <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
-                                <button id="btnKlaimVoucher">Klaim</button>
-                                <div id="voucherMsg" class="msg" style="margin-top: 10px;"></div>
-                                <div id="dashMsg" class="msg"></div>
-                            </div>
-                            
-                            <!-- Kotak Promo 100 Tiket Testimoni Bintang 5 -->
-                            <div class="widget-box" id="widgetTestimoniBox" style="border-color: #fde047; background: linear-gradient(180deg, #fefce8 0%, #ffffff 100%);">
-                              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                                <h3 style="margin:0; color:#a16207;"><i class="fas fa-star" style="color:#f59e0b;"></i> Klaim 100 Tiket Gratis!</h3>
-                                <span id="badgeKuotaTestimoni" style="font-size:10px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 8px; border-radius:10px;">Sisa: 100</span>
-                              </div>
-                              <div id="formTestimoniArea">
-                                <p style="font-size:12px; color:#713f12; margin-bottom:8px;">Berikan ulasan jujur &amp; <strong>Bintang 5</strong> setelah latihan untuk mendapatkan <strong>+100 Tiket Gratis</strong> (khusus 100 siswa pertama)!</p>
-                                <div class="star-rating-box" id="starSelectorTesti">
-                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(1)"></i>
-                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(2)"></i>
-                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(3)"></i>
-                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(4)"></i>
-                                  <i class="fas fa-star star-item active" onclick="pilihBintangTesti(5)"></i>
-                                </div>
-                                <textarea id="inputTeksTestimoni" rows="3" class="input-compact" placeholder="Ceritakan pengalaman belajarmu di Neexa (min. 20 karakter)..." style="resize:vertical; margin-bottom:8px;"></textarea>
-                                <button id="btnKirimTestimoni" onclick="kirimTestimoni()" class="btn" style="padding:10px; font-size:13px; background:#d97706;">
-                                  <i class="fas fa-paper-plane"></i> Kirim &amp; Klaim Bonus
-                                </button>
-                                <div id="testimoniMsg" class="msg"></div>
-                              </div>
-                              <div id="sudahTestimoniArea" class="hidden" style="text-align:center; padding:10px 0; color:#15803d; font-size:12px; font-weight:700;">
-                                ✅ Terima kasih! Testimoni Anda telah tercatat.
-                              </div>
-                            </div>
-
-                            <!-- Kotak Info/Pengumuman -->
-                            <div class="widget-box info-widget">
-                              <h3><i class="fas fa-bullhorn"></i> Info Karier &amp; TSK</h3>
-                              <p>Ingin dilirik TSK Jepang di menu Job Order? Klik foto profilmu di kanan atas dan lengkapi <strong>Profil Karier Jepang</strong> hingga berstatus <strong>Job Ready</strong>!</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- ========================================== -->
-                <!-- KARDUS 2: MODUL (3 TUJUAN: BLJ, KHD, MST)  -->
-                <!-- ========================================== -->
-                <div id="tab-modul" style="display: none; padding: 25px;">
-          
-                  <!-- [LAYER 1] PILIH KATEGORI TUJUAN UTAMA -->
-                  <div id="modul-tujuan-view" style="max-width: 650px; margin: 0; text-align: left;">
-                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 6px;">Pilih Tujuan Latihan</h2>
-                    <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Sesuaikan latihan Kaiwa dengan kebutuhanmu hari ini.</p>
-
-                    <!-- A. BELAJAR (KISO) -->
-                    <div class="tier-bar" onclick="bukaKategoriTujuan('blj')">
-                      <div class="tier-icon" style="background: #eff6ff;">📘</div>
-                      <div class="tier-info">
-                        <h3>BELAJAR / KISO (基礎)</h3>
-                        <p>Membiasakan bicara bahasa Jepang serta mengingat kosakata & pola kalimat bertingkat.</p>
-                      </div>
-                      <div class="tier-price" style="background: #dbeafe; color: #1d4ed8;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
-                    </div>
-
-                    <!-- B. KEHIDUPAN (SEIKATSU) -->
-                    <div class="tier-bar" onclick="bukaKategoriTujuan('khd')">
-                      <div class="tier-icon" style="background: #ecfdf5;">🏪</div>
-                      <div class="tier-info">
-                        <h3>KEHIDUPAN / SEIKATSU (生活)</h3>
-                        <p>Simulasi penggunaan bahasa Jepang praktis dalam situasi kehidupan sehari-hari.</p>
-                      </div>
-                      <div class="tier-price" style="background: #d1fae5; color: #047857;">Simulasi <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
-                    </div>
-
-                    <!-- C. WAWANCARA (MENSETSU) -->
-                    <div class="tier-bar" onclick="bukaKategoriTujuan('mst')">
-                      <div class="tier-icon" style="background: #fff1f2;">💼</div>
-                      <div class="tier-info">
-                        <h3>WAWANCARA / MENSETSU (面接)</h3>
-                        <p>Simulasi wawancara kerja formal bersama HRD perusahaan Jepang.</p>
-                      </div>
-                      <div class="tier-price" style="background: #ffe4e6; color: #be123c;">Uji Mental <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
-                    </div>
-                  </div>
-
-                  <!-- [LAYER 2 - KHUSUS BELAJAR] PILIH TIER KESULITAN (BSC, MID, PRO) -->
-                  <div id="sub-tier-blj" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Tujuan Latihan</button>
-                    <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 6px;">📘 Belajar (Kiso) — Pilih Level</h2>
-                    <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Pilih tingkat kesulitan kosakata dan pola kalimat.</p>
-
-                    <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-bsc')">
-                      <div class="tier-icon">🐣</div>
-                      <div class="tier-info">
-                        <h3>SHOKYU (Basic)</h3>
-                        <p>Pemula: latihan keberanian bicara & kalimat dasar tanpa takut salah partikel.</p>
-                      </div>
-                      <div class="tier-price">Kaiwa Normal</div>
-                    </div>
-
-                    <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-mid')">
-                      <div class="tier-icon">🔥</div>
-                      <div class="tier-info">
-                        <h3>CHUKYU (Mid)</h3>
-                        <p>Menengah: variasi kosakata dan pola kalimat setara JFT-Basic A2 / N4.</p>
-                      </div>
-                      <div class="tier-price">Kaiwa Normal</div>
-                    </div>
-
-                    <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-pro')">
-                      <div class="tier-icon">👑</div>
-                      <div class="tier-info">
-                        <h3>JOKYU (Pro)</h3>
-                        <p>Mahir: koreksi pelafalan tegas & tersedia pilihan Live Kaiwa (Telepon).</p>
-                      </div>
-                      <div class="tier-price" style="background: #ede9fe; color: #6d28d9;">Normal & Live</div>
-                    </div>
-                  </div>
-
-                  <!-- [LAYER 3A] TEMA BELAJAR - SHOKYU (BSC) -->
-                  <div id="detail-blj-bsc" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
-                    <div class="detail-header">
-                      <h2>📘 BELAJAR — SHOKYU (Basic)</h2>
-                      <p><strong>Tujuan:</strong> Membiasakan lisan berbicara bahasa Jepang & mengingat kosakata dasar.</p>
-                      <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
-                    </div>
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
-                    <div id="wadah-tema-blj-bsc"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
-                  </div>
-
-                  <!-- [LAYER 3B] TEMA BELAJAR - CHUKYU (MID) -->
-                  <div id="detail-blj-mid" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
-                    <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
-                      <h2 style="color: #c026d3;">📘 BELAJAR — CHUKYU (Mid)</h2>
-                      <p><strong>Tujuan:</strong> Menguatkan daya ingat pola kalimat & respons percakapan tingkat menengah.</p>
-                      <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
-                    </div>
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
-                    <div id="wadah-tema-blj-mid"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
-                  </div>
-
-                  <!-- [LAYER 3C] TEMA BELAJAR - JOKYU (PRO) -->
-                  <div id="detail-blj-pro" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
-                    <div class="detail-header" style="background: #f5f3ff; border-color: #ddd6fe;">
-                      <h2 style="color: #6d28d9;">📘 BELAJAR — JOKYU (Pro)</h2>
-                      <p><strong>Tujuan:</strong> Ketepatan pelafalan (Hatsuon), kecepatan refleks kalimat, & tersedia mode Live Telepon.</p>
-                      <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
-                    </div>
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
-                    <div id="wadah-tema-blj-pro"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
-                  </div>
-
-                  <!-- [LAYER 2B] PETA LEVEL KEHIDUPAN (SEIKATSU - SISTEM BUKA GEMBOK) -->
-                  <div id="detail-khd" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Tujuan Latihan</button>
-                    <div class="detail-header" style="background: #ecfdf5; border-color: #a7f3d0;">
-                      <h2 style="color: #047857;">🏪 PETA HIDUP DI JEPANG (生活サバイバル)</h2>
-                      <p><strong>Syarat Buka Kunci (KKM):</strong> Selesaikan sesi secara penuh hingga putaran terakhir dengan <strong>Nilai Total minimal 75</strong> untuk membuka sesi &amp; pangkat berikutnya!</p>
-                      <p><strong>Pangkatmu Saat Ini:</strong> <span id="khdBannerGelar" style="font-weight: 800; color: #047857;">Memuat...</span></p>
-                    </div>
-                    <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 12px; color: var(--text-main);">Pilih Level Perjalanan:</h3>
-                    <div id="wadah-tema-khd"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat peta perjalanan hidup di Jepang...</p></div>
-                  </div>
-
-                  <!-- [LAYER 2C] TEMA WAWANCARA (MENSETSU - LANGSUNG TANPA TIER) -->
-                  <div id="detail-mst" class="modul-detail-view" style="display: none; max-width: 650px; margin: 0; text-align: left;">
-                    <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Tujuan Latihan</button>
-                    <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
-                      <h2 style="color: #be123c;">💼 WAWANCARA / MENSETSU (面接)</h2>
-                      <p><strong>Tujuan:</strong> Simulasi wawancara kerja resmi dengan HRD Jepang (wajib menggunakan bahasa sopan Teineigo).</p>
-                      <p><strong>Aturan Sesi:</strong> Tersedia mode Normal &amp; Live. Rapor tengah jalan kena pinalti 5 tiket; keluar layar &gt; 3 detik dipotong penuh &amp; 0 koin.</p>
-                    </div>
-                    <h3 style="font-size: 15px; margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Pilih Bidang Wawancara:</h3>
-                    <div id="wadah-tema-mst"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar wawancara...</p></div>
-                  </div>
-
-                </div>
-
-                <!-- ========================================== -->
-                <!-- KARDUS 3: RIWAYAT (V2 CARD ACCORDION)      -->
-                <!-- ========================================== -->
-                <div id="tab-riwayat" style="display: none; padding: 25px;">
-                    <div class="riwayat-container" style="width: 100%; max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
-                        
-                        <!-- HEADER RIWAYAT & FILTER -->
-                        <div style="background: white; border-radius: 16px; padding: 20px; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                                <div>
-                                    <h2 style="margin: 0; font-size: 20px; color: var(--primary);"><i class="fas fa-history"></i> Riwayat Nilai</h2>
-                                    <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Rekap performa dan catatan evaluasi</p>
-                                </div>
-                                <button onclick="tarikDataRiwayat()" class="btn-outline" style="padding: 8px 15px; margin: 0; border-radius: 8px; font-size: 12px; width: auto;"><i class="fas fa-sync-alt"></i> Segarkan</button>
-                            </div>
-                            
-                            <!-- KONTROL FILTER & SORTING -->
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <select id="sortRiwayat" onchange="renderRiwayatCards()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569; background: #f8fafc; outline: none; cursor: pointer;">
-                                    <option value="terbaru">⏳ Terbaru</option>
-                                    <option value="terlama">🕰️ Terlama</option>
-                                    <option value="tertinggi">🏆 Nilai Tertinggi</option>
-                                    <option value="terendah">📉 Nilai Terendah</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- TABS UNTUK FILTER KATEGORI TUJUAN -->
-                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
-                          <button class="tier-tab-btn active" onclick="filterTierRiwayat('SEMUA', this)">Semua</button>
-                          <button class="tier-tab-btn" onclick="filterTierRiwayat('BLJ', this)">📘 Belajar</button>
-                          <button class="tier-tab-btn" onclick="filterTierRiwayat('KHD', this)">🏪 Kehidupan</button>
-                          <button class="tier-tab-btn" onclick="filterTierRiwayat('MST', this)">💼 Wawancara</button>
-                        </div>
-
-                        <!-- WADAH KARTU RIWAYAT -->
-                        <div id="wadahKartuRiwayat" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
-                            <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 40px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
-                                <p>Sedang memuat data dari server...</p>
-                            </div>
-                        </div>
-
-                        <!-- TOMBOL KEMBALI (TAMBAHAN BARU) -->
-                        <button onclick="bukaTab('dashboard')" class="btn" style="background: #e2e8f0; color: #475569; margin-top: 10px;"><i class="fas fa-arrow-left"></i> Kembali ke Beranda</button>
-
-                    </div>
-                </div>
-
+      <!-- --- 3. AREA KONTEN SCROLLABLE --- -->
+      <main class="main-content">
+        
         <!-- ========================================== -->
-        <!-- KARDUS AKTIF: TOKO TIKET & PAKET INTENSIF  -->
+        <!-- MENU 1: DASHBOARD                          -->
         <!-- ========================================== -->
-        <div id="tab-toko" style="display: none; padding: 25px;">
-          <div style="max-width: 780px; margin: 0; text-align: left;">
+        <div id="tab-dashboard" class="nav-page-section" style="display: none;">
+          <div class="dashboard-grid">
             
-            <!-- Banner Status Promo Dinamis dari Sheet TOKO_TIKET -->
-            <div style="background: linear-gradient(135deg, #1e293b, #2B3B70); border-radius: 16px; padding: 20px 24px; color: white; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(43,59,112,0.18);">
-              <div>
-                <div id="tokoNamaPromoBadge" style="display: inline-block; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; margin-bottom: 6px;">
-                  🔴 Memuat Promo...
+            <!-- Area Kiri Dashboard (70%) -->
+            <div class="dash-left">
+              <!-- 1. Banner Utama -->
+              <div class="welcome-banner">
+                <div class="banner-text">
+                  <h2>Siap berlatih Kaiwa hari ini?</h2>
+                  <p>Tingkatkan percakapan bahasa Jepangmu agar siap menghadapi wawancara kerja dan kehidupan di Jepang.</p>
+                  <button class="btn-banner" onclick="bukaTab('latihan-percakapan')">Pilih Kategori <i class="fas fa-arrow-right"></i></button>
                 </div>
-                <h2 style="margin: 0; font-size: 20px; font-weight: 800;">Toko Tiket Latihan Neexa</h2>
-                <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.88;">Pilih paket sesuai target belajarmu. Tiket masuk otomatis ke akun setelah pembayaran!</p>
-              </div>
-              <div id="tokoCountdownBox" class="hidden" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); padding: 10px 16px; border-radius: 12px; text-align: center;">
-                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Berakhir Dalam</div>
-                <div id="tokoSisaHariTeks" style="font-size: 18px; font-weight: 900; color: #fde047;">0 Hari</div>
-              </div>
-            </div>
-
-            <!-- Kotak Salin Email Otomatis (Kunci Agar Webhook Lynk.id Masuk 100% Tepat Sasaran) -->
-            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 12px 16px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-              <div style="font-size: 12px; color: #1e3a8a; line-height: 1.4;">
-                <i class="fas fa-bolt" style="color: #eab308;"></i> <strong>Agar Tiket Masuk Otomatis:</strong> Gunakan email Neexa Anda (<strong id="tokoEmailAktifDisplay">-</strong>) saat mengisi form pembayaran di Lynk.id!
-              </div>
-              <button onclick="salinEmailCheckout()" class="btn" style="width: auto; padding: 7px 12px; font-size: 11px; background: #2563eb;">
-                <i class="fas fa-copy"></i> Salin Email Saya
-              </button>
-            </div>
-
-            <!-- KATEGORI 1: VOUCHER HARIAN / SATUAN -->
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 12px 0;">
-              🎫 Kategori 1: Paket Satuan (Harian &amp; Coba Fitur)
-            </h3>
-            <div id="wadahTokoSatuan" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
-              <p style="font-size: 13px; color: #94a3b8;">Memuat daftar harga...</p>
-            </div>
-
-            <!-- KATEGORI 2: PAKET INTENSIF & B2B LPK -->
-            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0;">
-              🚀 Kategori 2: Paket Intensif Target Lulus &amp; B2B LPK
-            </h3>
-            <p style="font-size: 12px; color: #64748b; margin: 0 0 12px 0;">Dirancang untuk porsi latihan rutin 2–3 sesi setiap hari hingga siap berangkat kerja ke Jepang.</p>
-            <div id="wadahTokoIntensif" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
-              <p style="font-size: 13px; color: #94a3b8;">Memuat paket intensif...</p>
-            </div>
-
-            <!-- SLOT MASA DEPAN: TOP UP INSTAN QRIS MAYAR / MIDTRANS (MIN RP 10.000 TANPA VOUCHER) -->
-            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-              <div>
-                <div style="font-size: 13px; font-weight: 800; color: var(--text-main);">
-                  ⚡ Top Up Instan QRIS Bebas Nominal (Mulai Rp 10.000)
-                </div>
-                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
-                  Isi ulang cepat langsung di dalam web tanpa berpindah halaman (Integrasi Payment Gateway).
+                <div class="banner-img">
+                  <i class="fas fa-rocket" style="font-size: 80px; opacity: 0.2; transform: rotate(15deg);"></i>
                 </div>
               </div>
-              <span style="font-size: 11px; font-weight: 800; background: #e2e8f0; color: #475569; padding: 6px 12px; border-radius: 8px;">Segera Hadir</span>
+
+              <!-- 2. Kotak Punya Kode Tiket / Klaim Voucher (Memanjang Seukuran Kotak Biru) -->
+              <div class="voucher-horizontal-card">
+                <div class="voucher-horizontal-row">
+                  <div class="voucher-horizontal-info">
+                    <h3><i class="fas fa-gift" style="color: var(--primary);"></i> Punya Kode Tiket?</h3>
+                    <p>Masukkan kode voucher untuk menambah saldo tiket latihanmu.</p>
+                  </div>
+                  <div class="voucher-horizontal-form">
+                    <input type="text" id="inputVoucher" placeholder="KODE VOUCHER" autocomplete="off">
+                    <button id="btnKlaimVoucher">Klaim</button>
+                  </div>
+                </div>
+                <div id="voucherMsg" class="msg"></div>
+                <div id="dashMsg" class="msg" style="display:none;"></div>
+              </div>
+
+              <!-- 3. Ringkasan Statistik -->
+              <div class="stats-cards-container">
+                <div class="stat-card">
+                  <div class="stat-icon" style="background:#fef08a; color:#b45309;"><i class="fas fa-star"></i></div>
+                  <div class="stat-info">
+                    <h4>Rata-rata Nilai</h4>
+                    <p id="rataRataNilaiDisplay">Belum ada data</p>
+                  </div>
+                </div>
+                <div class="stat-card">
+                 <div class="stat-icon" id="dashGelarIconBox" style="background:#e0f2fe; color:#0284c7;"><i class="fas fa-medal"></i></div>
+                 <div class="stat-info">
+                  <h4>Status &amp; Pangkat</h4>
+                  <p id="dashGelarText" style="font-size: 14px;">😴 Kaum Rebahan</p>
+                  <div id="dashGelarSub" style="font-size: 11px; color: #64748b; margin-top: 2px;">Mulai latihan untuk naik pangkat!</div>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Area Kanan Dashboard (30%) -->
+            <div class="dash-right">
+              <!-- 1. Info Penting (Scrollable dari Sheet INFO_PENTING) -->
+              <div class="widget-box" style="padding: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h3 style="margin:0;"><i class="fas fa-bullhorn" style="color:var(--primary);"></i> Info Penting</h3>
+                  <span style="font-size:10px; font-weight:800; color:#64748b; background:#f1f5f9; padding:3px 8px; border-radius:8px;">Terbaru</span>
+                </div>
+                <div id="wadahInfoPenting" class="info-scroll-area">
+                  <div style="font-size:12px; color:#94a3b8; text-align:center; padding:15px 0;">Memuat informasi terbaru...</div>
+                </div>
+              </div>
+
+              <!-- 2. Kotak Promo Testimoni (Otomatis Hidden Saat Kuota = 0) -->
+              <div class="widget-box hidden" id="widgetTestimoniBox" style="border-color: #fde047; background: linear-gradient(180deg, #fefce8 0%, #ffffff 100%); padding: 20px;">
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <h3 style="margin:0; color:#a16207;"><i class="fas fa-star" style="color:#f59e0b;"></i> Klaim 100 Tiket Gratis!</h3>
+                <span id="badgeKuotaTestimoni" style="font-size:10px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 8px; border-radius:10px;">Sisa: 0</span>
+               </div>
+               <div id="formTestimoniArea">
+                <p style="font-size:12px; color:#713f12; margin-bottom:8px;">Berikan ulasan jujur &amp; <strong>Bintang 5</strong> setelah latihan untuk mendapatkan <strong>+100 Tiket Gratis</strong>!</p>
+                <div class="star-rating-box" id="starSelectorTesti">
+                 <i class="fas fa-star star-item active" onclick="pilihBintangTesti(1)"></i>
+                 <i class="fas fa-star star-item active" onclick="pilihBintangTesti(2)"></i>
+                 <i class="fas fa-star star-item active" onclick="pilihBintangTesti(3)"></i>
+                 <i class="fas fa-star star-item active" onclick="pilihBintangTesti(4)"></i>
+                 <i class="fas fa-star star-item active" onclick="pilihBintangTesti(5)"></i>
+                </div>
+                <textarea id="inputTeksTestimoni" rows="3" class="input-compact" placeholder="Ceritakan pengalaman belajarmu di Neexa (min. 20 karakter)..." style="resize:vertical; margin-bottom:8px;"></textarea>
+                <button id="btnKirimTestimoni" onclick="kirimTestimoni()" class="btn" style="padding:10px; font-size:13px; background:#d97706;">
+                 <i class="fas fa-paper-plane"></i> Kirim &amp; Klaim Bonus
+                </button>
+                <div id="testimoniMsg" class="msg"></div>
+               </div>
+               <div id="sudahTestimoniArea" class="hidden" style="text-align:center; padding:10px 0; color:#15803d; font-size:12px; font-weight:700;">
+                ✅ Terima kasih! Testimoni Anda telah tercatat.
+               </div>
+              </div>
+
+              <!-- 3A. Rangkuman Leaderboard: TOP Dewa Neexa -->
+              <div class="widget-box" style="padding: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h3 style="margin:0; font-size:14.5px;">👑 TOP Dewa Neexa</h3>
+                  <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('global');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Lihat Semua &rarr;</button>
+                </div>
+                <div id="miniLbGlobalBox">
+                  <div style="font-size:12px; color:#94a3b8; text-align:center; padding:12px 0;">Memuat peringkat...</div>
+                </div>
+              </div>
+
+              <!-- 3B. Rangkuman Leaderboard: TOP Mensetsu -->
+              <div class="widget-box" style="padding: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h3 style="margin:0; font-size:14.5px;">💼 TOP Mensetsu (HRD)</h3>
+                  <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('mst');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Klasemen &rarr;</button>
+                </div>
+                <div id="miniLbMstBox">
+                  <div style="font-size:12px; color:#94a3b8; text-align:center; padding:12px 0;">Memuat klasemen...</div>
+                </div>
+              </div>
             </div>
 
           </div>
         </div>
 
         <!-- ========================================== -->
-        <!-- KARDUS AKTIF: TUKAR KOIN EMAS -> TIKET     -->
+        <!-- MENU 2A: LATIHAN -> CBT SHIKEN             -->
         <!-- ========================================== -->
-        <div id="tab-tukar" style="display: none; padding: 25px;">
-          <div style="max-width: 680px; margin: 0; text-align: left;">
-            <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 6px;">🪙 Tukar Koin Emas</h2>
+        <div id="tab-latihan-cbt" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.02);">
+              <div style="font-size:44px; margin-bottom:10px;">🖥️</div>
+              <span style="display:inline-block; background:#dbeafe; color:#1d4ed8; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
+              <h2 style="margin:0 0 8px 0; font-size:22px; color:var(--text-main);">CBT Shiken (JFT-Basic &amp; SSW)</h2>
+              <p style="margin:0 auto; max-width:540px; font-size:13.5px; color:#64748b; line-height:1.6;">
+                Simulasi ujian berbasis komputer (Computer Based Test) untuk persiapan kelulusan sertifikat JFT-Basic A2 dan ujian keterampilan Tokutei Ginou (SSW) sedang dalam tahap sinkronisasi akun terpadu.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 2B: LATIHAN -> PERCAKAPAN (BLJ & MST KN) -->
+        <!-- ========================================== -->
+        <div id="tab-latihan-percakapan" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            
+            <!-- [LAYER 1] PILIH KATEGORI PERCAKAPAN (BLJ & MST KHUSUS KN) -->
+            <div id="modul-tujuan-view">
+              <h2 style="font-size: 20px; color: var(--text-main); margin: 0 0 6px 0;">Pilih Kategori Percakapan</h2>
+              <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Latihan bicara interaktif berbasis giliran (Kaiwa Normal) untuk penguasaan tata bahasa &amp; wawancara kerja.</p>
+
+              <!-- A. BELAJAR (KISO) -->
+              <div class="tier-bar" onclick="bukaKategoriTujuan('blj')">
+               <div class="tier-icon" style="background: #eff6ff;">📘</div>
+               <div class="tier-info">
+                <h3>BELAJAR / KISO (基礎)</h3>
+                <p>Membiasakan bicara bahasa Jepang serta mengingat kosakata &amp; pola kalimat bertingkat.</p>
+               </div>
+               <div class="tier-price" style="background: #dbeafe; color: #1d4ed8;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+              </div>
+
+              <!-- B. WAWANCARA (MENSETSU) -->
+              <div class="tier-bar" onclick="bukaKategoriTujuan('mst')">
+               <div class="tier-icon" style="background: #fff1f2;">💼</div>
+               <div class="tier-info">
+                <h3>WAWANCARA / MENSETSU (面接)</h3>
+                <p>Simulasi wawancara kerja formal 5 Fase bersama Direktur / HRD perusahaan Jepang.</p>
+               </div>
+               <div class="tier-price" style="background: #ffe4e6; color: #be123c;">Uji Mental <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+              </div>
+            </div>
+
+            <!-- [LAYER 2 - KHUSUS BELAJAR] PILIH TIER KESULITAN (BSC, MID, PRO) -->
+            <div id="sub-tier-blj" style="display: none;">
+              <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Kategori</button>
+              <h2 style="font-size: 20px; color: var(--text-main); margin: 0 0 6px 0;">📘 Belajar (Kiso) — Pilih Level</h2>
+              <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Pilih tingkat kesulitan kosakata dan pola kalimat.</p>
+
+              <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-bsc')">
+               <div class="tier-icon">🐣</div>
+               <div class="tier-info">
+                <h3>SHOKYU (Basic)</h3>
+                <p>Pemula: latihan keberanian bicara &amp; kalimat dasar tanpa takut salah partikel.</p>
+               </div>
+               <div class="tier-price">Kaiwa Normal</div>
+              </div>
+
+              <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-mid')">
+               <div class="tier-icon">🔥</div>
+               <div class="tier-info">
+                <h3>CHUKYU (Mid)</h3>
+                <p>Menengah: variasi kosakata dan pola kalimat setara JFT-Basic A2 / N4.</p>
+               </div>
+               <div class="tier-price">Kaiwa Normal</div>
+              </div>
+
+              <div class="tier-bar" onclick="bukaDaftarTema('detail-blj-pro')">
+               <div class="tier-icon">👑</div>
+               <div class="tier-info">
+                <h3>JOKYU (Pro)</h3>
+                <p>Mahir: koreksi pelafalan (Hatsuon) &amp; ketepatan partikel secara tegas oleh Sensei.</p>
+               </div>
+               <div class="tier-price" style="background: #ede9fe; color: #6d28d9;">Kaiwa Normal</div>
+              </div>
+            </div>
+
+            <!-- [LAYER 3A] TEMA BELAJAR - SHOKYU (BSC) -->
+            <div id="detail-blj-bsc" class="modul-detail-view" style="display: none;">
+              <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
+              <div class="detail-header">
+               <h2>📘 BELAJAR — SHOKYU (Basic)</h2>
+               <p><strong>Tujuan:</strong> Membiasakan lisan berbicara bahasa Jepang &amp; mengingat kosakata dasar.</p>
+               <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
+              </div>
+              <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
+              <div id="wadah-tema-blj-bsc"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
+            </div>
+
+            <!-- [LAYER 3B] TEMA BELAJAR - CHUKYU (MID) -->
+            <div id="detail-blj-mid" class="modul-detail-view" style="display: none;">
+              <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
+              <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe;">
+               <h2 style="color: #c026d3;">📘 BELAJAR — CHUKYU (Mid)</h2>
+               <p><strong>Tujuan:</strong> Menguatkan daya ingat pola kalimat &amp; respons percakapan tingkat menengah.</p>
+               <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
+              </div>
+              <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
+              <div id="wadah-tema-blj-mid"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
+            </div>
+
+            <!-- [LAYER 3C] TEMA BELAJAR - JOKYU (PRO) -->
+            <div id="detail-blj-pro" class="modul-detail-view" style="display: none;">
+              <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Level</button>
+              <div class="detail-header" style="background: #f5f3ff; border-color: #ddd6fe;">
+               <h2 style="color: #6d28d9;">📘 BELAJAR — JOKYU (Pro)</h2>
+               <p><strong>Tujuan:</strong> Ketepatan pelafalan (Hatsuon) &amp; kecepatan refleks merangkai kalimat tingkat mahir.</p>
+               <p><strong>Aturan Sesi:</strong> Pinalti rapor sebelum selesai 5 tiket (koin nilai hangus). Keluar layar &gt; 3 detik dipotong tiket penuh &amp; 0 koin.</p>
+              </div>
+              <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 10px; color: var(--text-main);">Daftar Tema Latihan:</h3>
+              <div id="wadah-tema-blj-pro"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar tema...</p></div>
+            </div>
+
+            <!-- [LAYER 2C] TEMA WAWANCARA (MENSETSU - KHUSUS KN) -->
+            <div id="detail-mst" class="modul-detail-view" style="display: none;">
+              <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Kategori</button>
+              <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3;">
+               <h2 style="color: #be123c;">💼 WAWANCARA / MENSETSU (面接)</h2>
+               <p><strong>Tujuan:</strong> Simulasi wawancara kerja resmi dengan HRD Jepang (wajib menggunakan bahasa sopan Teineigo).</p>
+               <p><strong>Aturan Sesi:</strong> Rapor tengah jalan kena pinalti 5 tiket; keluar layar &gt; 3 detik dipotong penuh &amp; 0 koin.</p>
+              </div>
+              <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 10px; color: var(--text-main);">Pilih Bidang Wawancara:</h3>
+              <div id="wadah-tema-mst"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat daftar wawancara...</p></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 2C: LATIHAN -> PERCAKAPAN LIVE (KL)   -->
+        <!-- ========================================== -->
+        <div id="tab-latihan-live" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.02);">
+              <div style="font-size:44px; margin-bottom:10px;">📞</div>
+              <span style="display:inline-block; background:#ccfbf1; color:#0f766e; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
+              <h2 style="margin:0 0 8px 0; font-size:22px; color:var(--text-main);">Percakapan Live (Real-Time WebSocket)</h2>
+              <p style="margin:0 auto; max-width:540px; font-size:13.5px; color:#64748b; line-height:1.6;">
+                Mode telepon suara dua arah tanpa tombol rekam (Kaiwa Live / Produk KL) sedang disempurnakan agar percakapan terasa semakin responsif layaknya menelepon langsung orang Jepang.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 3: SURVIVAL (KHUSUS PRODUK KHD)       -->
+        <!-- ========================================== -->
+        <div id="tab-survival" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div id="detail-khd">
+              <div class="detail-header" style="background: #ecfdf5; border-color: #a7f3d0;">
+               <h2 style="color: #047857;">🏪 SURVIVAL — PETA HIDUP DI JEPANG (生活サバイバル)</h2>
+               <p><strong>Syarat Buka Kunci (KKM):</strong> Selesaikan sesi secara penuh hingga putaran terakhir dengan <strong>Nilai Total minimal 75</strong> untuk membuka sesi &amp; kasta kehidupan berikutnya!</p>
+               <p><strong>Kasta Kehidupanmu Saat Ini:</strong> <span id="khdBannerGelar" style="font-weight: 800; color: #047857;">Memuat...</span></p>
+              </div>
+              <h3 style="font-size: 15px; margin-top: 22px; margin-bottom: 12px; color: var(--text-main);">Pilih Level Perjalanan:</h3>
+              <div id="wadah-tema-khd"><p style="font-size: 13px; color: #94a3b8; text-align: center;">Memuat peta perjalanan hidup di Jepang...</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 4: RIWAYAT                            -->
+        <!-- ========================================== -->
+        <div id="tab-riwayat" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box" style="display: flex; flex-direction: column; gap: 18px;">
+            
+            <div style="background: white; border-radius: 16px; padding: 20px; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <h2 style="margin: 0; font-size: 20px; color: var(--primary);"><i class="fas fa-history"></i> Riwayat Latihan &amp; Nilai</h2>
+                  <p style="margin: 5px 0 0 0; font-size: 12px; color: var(--text-muted);">Rekap performa, transkrip, dan catatan evaluasi AI Sensei</p>
+                </div>
+                <button onclick="tarikDataRiwayat()" class="btn-outline" style="padding: 8px 15px; margin: 0; border-radius: 8px; font-size: 12px; width: auto;"><i class="fas fa-sync-alt"></i> Segarkan</button>
+              </div>
+              
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <select id="sortRiwayat" onchange="renderRiwayatCards()" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #475569; background: #f8fafc; outline: none; cursor: pointer;">
+                  <option value="terbaru">⏳ Terbaru</option>
+                  <option value="terlama">🕰️ Terlama</option>
+                  <option value="tertinggi">🏆 Nilai Tertinggi</option>
+                  <option value="terendah">📉 Nilai Terendah</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+             <button class="tier-tab-btn active" onclick="filterTierRiwayat('SEMUA', this)">Semua</button>
+             <button class="tier-tab-btn" onclick="filterTierRiwayat('BLJ', this)">📘 Belajar</button>
+             <button class="tier-tab-btn" onclick="filterTierRiwayat('KHD', this)">🏪 Survival</button>
+             <button class="tier-tab-btn" onclick="filterTierRiwayat('MST', this)">💼 Wawancara</button>
+            </div>
+
+            <div id="wadahKartuRiwayat" style="display: flex; flex-direction: column; gap: 15px; min-height: 200px;">
+              <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 40px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                <p>Sedang memuat data dari server...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 5: 4 LEADERBOARD LENGKAP              -->
+        <!-- ========================================== -->
+        <div id="tab-leaderboard" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box" style="display: flex; flex-direction: column; gap: 16px;">
+
+            <!-- Header Leaderboard & Toggle Privasi Nama -->
+            <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <h2 style="margin: 0; font-size: 20px; color: var(--primary);"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Papan Peringkat Neexa</h2>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">Kandidat berlabel <span class="badge-tsk-ready" style="margin-left:2px;">🟢 JOB READY</span> diprioritaskan untuk dilirik perekrut TSK Jepang!</p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <label style="display: inline-flex; align-items: center; gap: 7px; background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #334155; cursor: pointer;">
+                  <input type="checkbox" id="toggleSensorLb" onchange="togglePrivasiLeaderboard(this)" style="width: 15px; height: 15px; cursor: pointer;">
+                  <span>Sensor Nama Saya</span>
+                </label>
+                <button onclick="muatDataLeaderboard(true)" class="btn-outline" style="width: auto; margin: 0; padding: 8px 14px; font-size: 12px; border-radius: 10px;">
+                  <i class="fas fa-sync-alt"></i> Segarkan
+                </button>
+              </div>
+            </div>
+
+            <!-- Pilihan 4 Kategori Leaderboard -->
+            <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
+              <button class="tier-tab-btn lb-main-tab active" id="lbTabGlobal" onclick="pilihKategoriLeaderboard('global')">👑 Top Global (Dewa Neexa)</button>
+              <button class="tier-tab-btn lb-main-tab" id="lbTabBlj" onclick="pilihKategoriLeaderboard('blj')">📘 Master Tata Bahasa (BLJ)</button>
+              <button class="tier-tab-btn lb-main-tab" id="lbTabMst" onclick="pilihKategoriLeaderboard('mst')">💼 Pilihan HRD TSK (MST)</button>
+              <button class="tier-tab-btn lb-main-tab" id="lbTabKhd" onclick="pilihKategoriLeaderboard('khd')">🏪 7 Kasta Kehidupan (KHD)</button>
+            </div>
+
+            <!-- Sub-Tab Khusus BLJ (BSC / MID / PRO) -->
+            <div id="lbSubTabBljWrap" class="hidden" style="display: flex; gap: 8px;">
+              <button class="tier-tab-btn lb-sub-blj active" id="lbSubBSC" onclick="pilihSubTierLB('BSC')" style="font-size: 12px; padding: 6px 14px;">🐣 Shokyu (BSC)</button>
+              <button class="tier-tab-btn lb-sub-blj" id="lbSubMID" onclick="pilihSubTierLB('MID')" style="font-size: 12px; padding: 6px 14px;">🔥 Chukyu (MID)</button>
+              <button class="tier-tab-btn lb-sub-blj" id="lbSubPRO" onclick="pilihSubTierLB('PRO')" style="font-size: 12px; padding: 6px 14px;">👑 Jokyu (PRO)</button>
+            </div>
+
+            <!-- Keterangan Aturan Klasemen Dinamis -->
+            <div id="lbInfoAturanBox" style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 11px 15px; font-size: 12px; color: #1e3a8a; line-height: 1.45;">
+              Menampilkan akumulasi seluruh skor rapor dari semua kategori latihan.
+            </div>
+
+            <!-- Tabel Leaderboard -->
+            <div id="wadahTabelLeaderboard" class="lb-table-wrap">
+              <div style="padding: 35px; text-align: center; color: #94a3b8; font-size: 13px;">Memuat data peringkat...</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 6: JOB ORDER (ETALASE TSK)            -->
+        <!-- ========================================== -->
+        <div id="tab-joborder" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background: linear-gradient(135deg, #0f172a, #2B3B70); border-radius: 20px; padding: 30px; color: #fff; margin-bottom: 18px; box-shadow: 0 10px 25px rgba(43,59,112,0.18);">
+              <span style="display:inline-block; background:#facc15; color:#713f12; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
+              <h2 style="margin:0 0 8px 0; font-size:22px; font-weight:800;">🇯🇵 Job Order Jepang (Bursa Kerja TSK)</h2>
+              <p style="margin:0 0 16px 0; font-size:13px; opacity:0.9; line-height:1.6;">
+                Daftar lowongan pekerjaan Tokutei Ginou resmi dari berbagai lembaga TSK Jepang akan segera tayang di halaman ini. Semua siswa dapat melihat daftar lowongan, namun akses lamar &amp; wawancara khusus bagi kandidat berstatus <strong>🟢 SIAP KERJA (JOB READY)</strong> yang memiliki saldo tiket &amp; memenuhi minimal sesi latihan.
+              </p>
+              <button onclick="bukaModalProfil()" class="btn-banner" style="font-size:13px; padding:10px 20px;">
+                <i class="fas fa-user-check"></i> Cek &amp; Lengkapi Syarat Job Ready Saya
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 7: TESTIMONI PENGGUNA                 -->
+        <!-- ========================================== -->
+        <div id="tab-testimoni" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box" style="display: flex; flex-direction: column; gap: 18px;">
+            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <h2 style="margin:0; font-size:20px; color:var(--primary);"><i class="fas fa-comment-dots" style="color:#f59e0b;"></i> Testimoni Pengguna Neexa</h2>
+                <p style="margin:4px 0 0 0; font-size:12px; color:#64748b;">Pengalaman nyata dari rekan-rekan pembelajar dan pejuang kerja Jepang.</p>
+              </div>
+              <button onclick="toggleFormTestimoniHalaman()" class="btn" style="width:auto; padding:9px 16px; font-size:12px; background:#d97706;">
+                <i class="fas fa-pen"></i> Tulis Testimoni
+              </button>
+            </div>
+
+            <!-- Form Kirim Testimoni di Halaman Testimoni -->
+            <div id="boxTulisTestimoniPublik" class="hidden" style="background:#fefce8; border:2px solid #fde047; border-radius:16px; padding:20px;">
+              <h3 style="margin:0 0 6px 0; font-size:15px; color:#854d0e;">Bagikan Pengalaman Belajarmu</h3>
+              <p style="margin:0 0 10px 0; font-size:12px; color:#713f12;">Selesaikan minimal 1 sesi latihan Kaiwa untuk dapat mengirimkan ulasan.</p>
+              <div class="star-rating-box" id="starSelectorTestiPublik" style="justify-content:flex-start;">
+                <i class="fas fa-star star-item active" onclick="pilihBintangTesti(1)"></i>
+                <i class="fas fa-star star-item active" onclick="pilihBintangTesti(2)"></i>
+                <i class="fas fa-star star-item active" onclick="pilihBintangTesti(3)"></i>
+                <i class="fas fa-star star-item active" onclick="pilihBintangTesti(4)"></i>
+                <i class="fas fa-star star-item active" onclick="pilihBintangTesti(5)"></i>
+              </div>
+              <textarea id="inputTeksTestimoniPublik" rows="3" class="input-compact" placeholder="Tulis ulasan jujur Anda minimal 20 karakter..." style="margin-bottom:10px;"></textarea>
+              <button id="btnKirimTestimoniPublik" onclick="kirimTestimoniDariTab()" class="btn" style="width:auto; padding:10px 20px; font-size:13px; background:#d97706;">
+                <i class="fas fa-paper-plane"></i> Kirim Testimoni
+              </button>
+              <div id="testimoniPublikMsg" class="msg"></div>
+            </div>
+
+            <!-- Daftar Kartu Testimoni Semua Pengguna -->
+            <div id="wadahDaftarTestimoniPublik" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:15px;">
+              <div style="grid-column: 1 / -1; text-align:center; padding:35px; color:#94a3b8; background:#fff; border-radius:16px; border:1px dashed #cbd5e1;">
+                Memuat testimoni pengguna...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 8: TOKO TIKET                         -->
+        <!-- ========================================== -->
+        <div id="tab-toko" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background: linear-gradient(135deg, #1e293b, #2B3B70); border-radius: 16px; padding: 20px 24px; color: white; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 25px rgba(43,59,112,0.18);">
+             <div>
+              <div id="tokoNamaPromoBadge" style="display: inline-block; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; margin-bottom: 6px;">
+               🔴 Memuat Promo...
+              </div>
+              <h2 style="margin: 0; font-size: 20px; font-weight: 800;">Toko Tiket Latihan Neexa</h2>
+              <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.88;">Pilih paket sesuai target belajarmu. Tiket masuk otomatis ke akun setelah pembayaran!</p>
+             </div>
+             <div id="tokoCountdownBox" class="hidden" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); padding: 10px 16px; border-radius: 12px; text-align: center;">
+              <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85;">Berakhir Dalam</div>
+              <div id="tokoSisaHariTeks" style="font-size: 18px; font-weight: 900; color: #fde047;">0 Hari</div>
+             </div>
+            </div>
+
+            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 12px 16px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+             <div style="font-size: 12px; color: #1e3a8a; line-height: 1.4;">
+              <i class="fas fa-bolt" style="color: #eab308;"></i> <strong>Agar Tiket Masuk Otomatis:</strong> Gunakan email Neexa Anda (<strong id="tokoEmailAktifDisplay">-</strong>) saat mengisi form pembayaran di Lynk.id!
+             </div>
+             <button onclick="salinEmailCheckout()" class="btn" style="width: auto; padding: 7px 12px; font-size: 11px; background: #2563eb;">
+              <i class="fas fa-copy"></i> Salin Email Saya
+             </button>
+            </div>
+
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 12px 0;">
+             🎫 Kategori 1: Paket Satuan (Harian &amp; Coba Fitur)
+            </h3>
+            <div id="wadahTokoSatuan" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
+             <p style="font-size: 13px; color: #94a3b8;">Memuat daftar harga...</p>
+            </div>
+
+            <h3 style="font-size: 15px; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0;">
+             🚀 Kategori 2: Paket Intensif Target Lulus &amp; B2B LPK
+            </h3>
+            <p style="font-size: 12px; color: #64748b; margin: 0 0 12px 0;">Dirancang untuk porsi latihan rutin 2–3 sesi setiap hari hingga siap berangkat kerja ke Jepang.</p>
+            <div id="wadahTokoIntensif" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 28px;">
+             <p style="font-size: 13px; color: #94a3b8;">Memuat paket intensif...</p>
+            </div>
+
+            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+             <div>
+              <div style="font-size: 13px; font-weight: 800; color: var(--text-main);">
+               ⚡ Top Up Instan QRIS Bebas Nominal (Mulai Rp 10.000)
+              </div>
+              <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+               Isi ulang cepat langsung di dalam web tanpa berpindah halaman (Integrasi Payment Gateway).
+              </div>
+             </div>
+             <span style="font-size: 11px; font-weight: 800; background: #e2e8f0; color: #475569; padding: 6px 12px; border-radius: 8px;">Segera Hadir</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 9: TUKAR KOIN EMAS -> TIKET           -->
+        <!-- ========================================== -->
+        <div id="tab-tukar" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <h2 style="font-size: 20px; color: var(--text-main); margin: 0 0 6px 0;">🪙 Tukar Koin Emas</h2>
             <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Selesaikan latihan hingga tuntas dengan skor tinggi untuk mengumpulkan Koin Emas, lalu tukarkan menjadi Tiket Gratis!</p>
 
-            <!-- Banner Saldo Koin Siswa -->
             <div style="background: linear-gradient(135deg, #b45309, #f59e0b); border-radius: 16px; padding: 20px 24px; color: white; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);">
-              <div>
-                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 0.5px;">Tabungan Koin Anda Saat Ini</div>
-                <div style="font-size: 28px; font-weight: 900; margin-top: 4px;"><i class="fas fa-coins"></i> <span id="tukarSaldoKoinBig">0</span> <span style="font-size: 14px; font-weight: 700;">Koin</span></div>
-              </div>
-              <div style="text-align: right; font-size: 12px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 12px; font-weight: 800;">
-                Saldo Tiket: <span id="tukarSaldoTiketMini">0</span> 🎫
-              </div>
+             <div>
+              <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 0.5px;">Tabungan Koin Anda Saat Ini</div>
+              <div style="font-size: 28px; font-weight: 900; margin-top: 4px;"><i class="fas fa-coins"></i> <span id="tukarSaldoKoinBig">0</span> <span style="font-size: 14px; font-weight: 700;">Koin</span></div>
+             </div>
+             <div style="text-align: right; font-size: 12px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 12px; font-weight: 800;">
+              Saldo Tiket: <span id="tukarSaldoTiketMini">0</span> 🎫
+             </div>
             </div>
 
             <div id="tukarKoinMsg" class="msg" style="margin-bottom: 15px;"></div>
 
-            <!-- Grid 4 Pilihan Paket Tukar Koin -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px;">
-
-              <!-- 1. PAKET MINI -->
-              <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-size:11px; font-weight:800; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:8px;">PEMULA</span>
-                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 2.500 Koin</span>
-                  </div>
-                  <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+16 Tiket Gratis</h3>
-                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Cukup untuk 1 sesi penuh Shokyu (Basic) + sisa tabungan tiket.</p>
-                </div>
-                <button class="btn btn-tukar-item" data-paket="PAKET_MINI" data-koin="2500" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">
-                  Tukar 2.500 Koin
-                </button>
+             <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:800; background:#f1f5f9; color:#475569; padding:3px 9px; border-radius:8px;">PEMULA</span>
+                <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 2.500 Koin</span>
+               </div>
+               <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+16 Tiket Gratis</h3>
+               <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Cukup untuk 1 sesi penuh Shokyu (Basic) + sisa tabungan tiket.</p>
               </div>
+              <button class="btn btn-tukar-item" data-paket="PAKET_MINI" data-koin="2500" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">Tukar 2.500 Koin</button>
+             </div>
 
-              <!-- 2. PAKET REGULER -->
-              <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-size:11px; font-weight:800; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:8px;">HEMAT</span>
-                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 5.000 Koin</span>
-                  </div>
-                  <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+34 Tiket Gratis</h3>
-                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Pas untuk latihan di kelas Chukyu, Jokyu (Pro), atau Simulasi Kehidupan.</p>
-                </div>
-                <button class="btn btn-tukar-item" data-paket="PAKET_REGULER" data-koin="5000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">
-                  Tukar 5.000 Koin
-                </button>
+             <div style="background: #fff; border: 2px solid #e2e8f0; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:800; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:8px;">HEMAT</span>
+                <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 5.000 Koin</span>
+               </div>
+               <h3 style="margin: 4px 0; font-size: 20px; color: var(--primary); font-weight: 900;">+34 Tiket Gratis</h3>
+               <p style="margin: 0 0 15px 0; font-size: 12px; color: #64748b;">Pas untuk latihan di kelas Chukyu, Jokyu (Pro), atau Simulasi Survival.</p>
               </div>
+              <button class="btn btn-tukar-item" data-paket="PAKET_REGULER" data-koin="5000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px;">Tukar 5.000 Koin</button>
+             </div>
 
-              <!-- 3. PAKET POPULER (10.000 KOIN = 70 TIKET) -->
-              <div style="background: #fefce8; border: 2px solid #facc15; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
-                <div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-size:11px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 9px; border-radius:8px;">⭐ PALING POPULER</span>
-                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 10.000 Koin</span>
-                  </div>
-                  <h3 style="margin: 4px 0; font-size: 22px; color: #854d0e; font-weight: 900;">+70 Tiket Gratis</h3>
-                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #713f12;">Setara paket Top Up Rp 10.500! Lebih banyak tiket dibanding beli biasa.</p>
-                </div>
-                <button class="btn btn-tukar-item" data-paket="PAKET_POPULER" data-koin="10000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #d97706;">
-                  Tukar 10.000 Koin
-                </button>
+             <div style="background: #fefce8; border: 2px solid #facc15; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:800; background:#fef08a; color:#854d0e; padding:3px 9px; border-radius:8px;">⭐ PALING POPULER</span>
+                <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 10.000 Koin</span>
+               </div>
+               <h3 style="margin: 4px 0; font-size: 22px; color: #854d0e; font-weight: 900;">+70 Tiket Gratis</h3>
+               <p style="margin: 0 0 15px 0; font-size: 12px; color: #713f12;">Setara paket Top Up Rp 10.500! Lebih banyak tiket dibanding beli biasa.</p>
               </div>
+              <button class="btn btn-tukar-item" data-paket="PAKET_POPULER" data-koin="10000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #d97706;">Tukar 10.000 Koin</button>
+             </div>
 
-              <!-- 4. PAKET SULTAN -->
-              <div style="background: #f5f3ff; border: 2px solid #c4b5fd; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <span style="font-size:11px; font-weight:800; background:#ede9fe; color:#6d28d9; padding:3px 9px; border-radius:8px;">👑 BONUS TERBESAR</span>
-                    <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 25.000 Koin</span>
-                  </div>
-                  <h3 style="margin: 4px 0; font-size: 22px; color: #5b21b6; font-weight: 900;">+185 Tiket Gratis</h3>
-                  <p style="margin: 0 0 15px 0; font-size: 12px; color: #4c1d95;">Ekstra bonus +10 tiket! Bebas latihan Wawancara (Mensetsu) berkali-kali.</p>
-                </div>
-                <button class="btn btn-tukar-item" data-paket="PAKET_SULTAN" data-koin="25000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #6d28d9;">
-                  Tukar 25.000 Koin
-                </button>
+             <div style="background: #f5f3ff; border: 2px solid #c4b5fd; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:11px; font-weight:800; background:#ede9fe; color:#6d28d9; padding:3px 9px; border-radius:8px;">👑 BONUS TERBESAR</span>
+                <span style="font-size:13px; font-weight:800; color:#b45309;"><i class="fas fa-coins"></i> 25.000 Koin</span>
+               </div>
+               <h3 style="margin: 4px 0; font-size: 22px; color: #5b21b6; font-weight: 900;">+185 Tiket Gratis</h3>
+               <p style="margin: 0 0 15px 0; font-size: 12px; color: #4c1d95;">Ekstra bonus +10 tiket! Bebas latihan Wawancara (Mensetsu) berkali-kali.</p>
               </div>
-
+              <button class="btn btn-tukar-item" data-paket="PAKET_SULTAN" data-koin="25000" onclick="eksekusiTukarKoin(this)" style="padding: 11px; font-size: 13px; background: #6d28d9;">Tukar 25.000 Koin</button>
+             </div>
             </div>
           </div>
         </div>
 
-                <!-- ========================================== -->
-                <!-- KARDUS 4: PANDUAN -->
-                <!-- ========================================== -->
-                <div id="tab-panduan" style="display: none; padding: 25px;">
-                    <div style="max-width: 650px; margin: 0; text-align: left;">
-                        <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 20px;">Panduan Penggunaan</h2>
-                        <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                            <ol style="color: #475569; font-size: 14px; margin: 0; padding-left: 20px; line-height: 1.8;">
-                                <li>Buka menu <strong>Modul Latihan</strong> untuk memilih tema.</li>
-                                <li>Pastikan memberikan izin akses <strong>mikrofon</strong> pada browser.</li>
-                                <li>Jawab pertanyaan AI dengan jelas dan natural.</li>
-                                <li>Jangan menutup halaman saat sesi berlangsung agar tiket tidak hangus.</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-            </main>
+        <!-- ========================================== -->
+        <!-- MENU 10A: PANDUAN -> CARA AKSES            -->
+        <!-- ========================================== -->
+        <div id="tab-panduan-akses" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center;">
+              <div style="font-size:42px; margin-bottom:10px;">🧭</div>
+              <span style="display:inline-block; background:#dbeafe; color:#1d4ed8; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
+              <h2 style="margin:0 0 8px 0; font-size:20px; color:var(--text-main);">Panduan Cara Akses Platform</h2>
+              <p style="margin:0 auto; max-width:500px; font-size:13px; color:#64748b;">Dokumentasi panduan lengkap penggunaan fitur Neexa Kaiwa sedang disiapkan.</p>
+            </div>
+          </div>
         </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 10B: PANDUAN -> MATERI BAHASA JEPANG  -->
+        <!-- ========================================== -->
+        <div id="tab-panduan-materi" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box">
+            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center;">
+              <div style="font-size:42px; margin-bottom:10px;">📚</div>
+              <span style="display:inline-block; background:#dbeafe; color:#1d4ed8; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
+              <h2 style="margin:0 0 8px 0; font-size:20px; color:var(--text-main);">Materi Bahasa Jepang Pendukung</h2>
+              <p style="margin:0 auto; max-width:500px; font-size:13px; color:#64748b;">Rangkuman kosakata, pola kalimat JFT-Basic A2, dan kisi-kisi Mensetsu akan segera hadir di sini.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MENU 11 & 12: ABOUT US & HUBUNGI KAMI      -->
+        <!-- ========================================== -->
+        <div id="tab-about" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box"></div>
+        </div>
+
+        <div id="tab-kontak" class="nav-page-section" style="display: none;">
+          <div class="page-aligned-box"></div>
+        </div>
+
+      </main>
     </div>
+  </div>
 
     <!-- ================= VIEW 4: KAIWA ROOM (GAMIFIED CENTERED) ================= -->
     <div id="viewKaiwaRoom" class="hidden kaiwa-fullscreen-overlay">
@@ -1664,51 +1993,88 @@
       .catch(err => console.error("Gagal memuat FingerprintJS:", err));
   }
 
-  function tampilkanAreaLogin() {
-    document.getElementById('modeMasuk').checked = true;
-    document.getElementById('areaAutentikasi').style.display = 'block';
-    document.getElementById('judulAuth').innerText = "Silakan Masuk dengan Akun Google";
-  }
+ let oauthTokenClient = null;
+ let modeOAuthAktif = 'masuk';
 
-  function tampilkanAreaDaftar() {
-    document.getElementById('modeDaftar').checked = true;
-    document.getElementById('areaAutentikasi').style.display = 'block';
-    document.getElementById('judulAuth').innerText = "Daftar Baru dengan Akun Google";
-  }
+ function siapkanOAuthSatuKlik() {
+  if (oauthTokenClient) return oauthTokenClient;
+  if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) return null;
 
-  async function handleCredentialResponse(response) {
-    showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akun ke server...');
-    const authMode = document.querySelector('input[name="authMode"]:checked').value;
-
-    try {
-      const data = await panggilGAS('loginOAuth', {
-        idToken: response.credential,
-        deviceId: deviceId,
-        mode: authMode
-      });
-
-      if (data.success) {
-        terapkanDataUserKeUI(data.data);
-
-        showView('dashboard');
-        bukaTab('dashboard');
-        muatDaftarProduk();
-        tarikDataRiwayat();
-        showMsg('dashMsg', 'success', escapeHtml(data.message));
-
-        // Jika akun baru atau belum pernah memilih Jenis Kelamin, tahan di Modal Onboarding Wajib!
-        if (data.data.wajibOnboarding) {
-          bukaModalOnboarding();
-        }
-      } else {
-        showMsg('loginMsg', 'error', escapeHtml(data.message));
-        kirimBlackBox("Proses Login/Daftar OAuth", data.message);
-      }
-    } catch (err) {
-      showMsg('loginMsg', 'error', 'Gagal memproses login: ' + escapeHtml(err.message));
-      kirimBlackBox("Koneksi GAS (OAuth)", err.message);
+  oauthTokenClient = google.accounts.oauth2.initTokenClient({
+   client_id: GOOGLE_CLIENT_ID,
+   scope: 'openid email profile',
+   callback: async function(tokenRes) {
+    if (!tokenRes || tokenRes.error) {
+     if (tokenRes && tokenRes.error !== 'popup_closed_by_user') {
+      showMsg('loginMsg', 'error', 'Autentikasi Google dibatalkan (' + escapeHtml(tokenRes.error) + ').');
+     }
+     return;
     }
+    await verifikasiAkunKeGAS({ accessToken: tokenRes.access_token });
+   }
+  });
+  return oauthTokenClient;
+ }
+
+ function mulaiOAuthSatuKlik(modePilihan) {
+  modeOAuthAktif = (modePilihan === 'daftar') ? 'daftar' : 'masuk';
+  document.getElementById('modeMasuk').checked = (modeOAuthAktif === 'masuk');
+  document.getElementById('modeDaftar').checked = (modeOAuthAktif === 'daftar');
+
+  const client = siapkanOAuthSatuKlik();
+  if (!client) {
+   showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyiapkan layanan Google, silakan klik sekali lagi...');
+   setTimeout(() => {
+    const retryClient = siapkanOAuthSatuKlik();
+    if (retryClient) {
+     document.getElementById('loginMsg').className = 'msg';
+     retryClient.requestAccessToken({ prompt: 'select_account' });
+    } else {
+     showMsg('loginMsg', 'error', 'Layanan Google belum termuat. Periksa koneksi internet atau matikan pemblokir skrip.');
+    }
+   }, 700);
+   return;
   }
+
+  document.getElementById('loginMsg').className = 'msg';
+  client.requestAccessToken({ prompt: 'select_account' });
+ }
+
+ async function verifikasiAkunKeGAS(kredensialObj) {
+  showMsg('loginMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akun ke server...');
+
+  try {
+   const data = await panggilGAS('loginOAuth', Object.assign({
+    deviceId: deviceId,
+    mode: modeOAuthAktif
+   }, kredensialObj));
+
+   if (data.success) {
+    terapkanDataUserKeUI(data.data);
+
+    showView('dashboard');
+    bukaTab('dashboard');
+    muatDaftarProduk();
+    tarikDataRiwayat();
+    muatInfoPenting();
+    muatDataLeaderboard(false);
+
+    // Pastikan tidak ada notifikasi hijau "Login Berhasil" di bawah voucher
+    const elDashMsg = document.getElementById('dashMsg');
+    if (elDashMsg) { elDashMsg.className = 'msg'; elDashMsg.style.display = 'none'; }
+
+    if (data.data.wajibOnboarding) {
+     bukaModalOnboarding();
+    }
+   } else {
+    showMsg('loginMsg', 'error', escapeHtml(data.message));
+    kirimBlackBox("Proses Login/Daftar OAuth", data.message);
+   }
+  } catch (err) {
+   showMsg('loginMsg', 'error', 'Gagal memproses login: ' + escapeHtml(err.message));
+   kirimBlackBox("Koneksi GAS (OAuth)", err.message);
+  }
+ }
 
   function terapkanDataUserKeUI(d) {
     const emailUser = String(d.email || KAIWA_USER.email || '').trim().toLowerCase();
@@ -1820,34 +2186,31 @@
     return { kodePenuh: k, mode: mode, kunciGrup: inti, kategori: kategori, tier: tier, levelKHD: levelKHD, urutSesiKHD: urutSesiKHD };
   }
 
-  // Rakitan HTML Pilihan Sensei & Tombol KN/KL (Dipakai oleh BLJ, MST, maupun Sesi KHD yang Terbuka)
-  function rakitIsiAksiTemaHTML(grup) {
-    const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
-    let tombolHTML = "";
+ // Rakitan HTML Pilihan Sensei & Tombol Terpisah (KN untuk Percakapan & Survival, KL disiapkan terpisah untuk Percakapan Live)
+ function rakitIsiAksiTemaHTML(grup, modeTarget = "KN") {
+  const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
+  let tombolHTML = "";
 
-    if (grup.KN) {
-      const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
-      tombolHTML += `
-        <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 8px;">
-          <i class="fas fa-comments"></i> Kaiwa Normal (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
-        </button>
-        <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 10px;">
-          Total selesai penuh: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
-        </div>
-      `;
-    }
+  if (modeTarget === "KN" && grup.KN) {
+   const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
+   tombolHTML += `
+    <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 8px;">
+     <i class="fas fa-comments"></i> Mulai Percakapan (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
+    </button>
+    <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 4px;">
+     Total selesai penuh: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
+    </div>
+   `;
+  } else if (modeTarget === "KL" && grup.KL) {
+   const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
+   tombolHTML += `
+    <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488;">
+     <i class="fas fa-phone-alt"></i> Mulai Live Kaiwa (Masuk ${grup.KL.tiketMasuk} Tiket)
+    </button>
+   `;
+  }
 
-    const izinkanKL = grup.KL && !(grup.kategori === "BLJ" && grup.tier !== "PRO");
-    if (izinkanKL) {
-      const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
-      tombolHTML += `
-        <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-top: 4px;">
-          <i class="fas fa-phone-alt"></i> Live Kaiwa / Telepon (Masuk ${grup.KL.tiketMasuk} Tiket)
-        </button>
-      `;
-    }
-
-    if (!tombolHTML) return "";
+  if (!tombolHTML) return "";
 
     return `
       <div class="theme-action">
@@ -2540,20 +2903,457 @@
   // =========================================================
   // 7. NAVIGASI 3 LAYER KATEGORI TUJUAN (BLJ, KHD, MST)
   // =========================================================
-  function bukaTab(namaTab) {
-    ['dashboard', 'modul', 'riwayat', 'panduan', 'toko', 'tukar'].forEach(t => {
-      document.getElementById('tab-' + t).style.display = 'none';
-      document.getElementById('btn-tab-' + t).classList.remove('active');
-    });
-    document.getElementById('tab-' + namaTab).style.display = 'block';
-    document.getElementById('btn-tab-' + namaTab).classList.add('active');
+ const DAFTAR_SEMUA_TAB = [
+  'dashboard',
+  'latihan-cbt', 'latihan-percakapan', 'latihan-live',
+  'survival', 'riwayat', 'leaderboard', 'joborder',
+  'testimoni', 'toko', 'tukar',
+  'panduan-akses', 'panduan-materi',
+  'about', 'kontak'
+ ];
 
-    if (namaTab === 'tukar') {
-      segarkanHalamanTukarKoin();
-    } else if (namaTab === 'toko') {
-      muatKatalogToko();
-    }
+ function toggleMenuInduk(namaInduk) {
+  const grup = document.getElementById('submenu-' + namaInduk);
+  const btnInduk = document.getElementById('btn-induk-' + namaInduk);
+  const mobLat = document.getElementById('mobileSubnavLatihan');
+  const mobPan = document.getElementById('mobileSubnavPanduan');
+
+  if (!grup || !btnInduk) return;
+  const akanDibuka = !grup.classList.contains('open');
+
+  grup.classList.toggle('open', akanDibuka);
+  btnInduk.classList.toggle('expanded', akanDibuka);
+
+  if (namaInduk === 'latihan' && mobLat) {
+   mobLat.classList.toggle('open', akanDibuka);
+   if (akanDibuka && mobPan) mobPan.classList.remove('open');
+  } else if (namaInduk === 'panduan' && mobPan) {
+   mobPan.classList.toggle('open', akanDibuka);
+   if (akanDibuka && mobLat) mobLat.classList.remove('open');
   }
+ }
+
+ function bukaTab(namaTab) {
+  // Alias pengaman jika ada tombol lama yang memanggil 'modul' atau 'panduan'
+  if (namaTab === 'modul') namaTab = 'latihan-percakapan';
+  if (namaTab === 'panduan') namaTab = 'panduan-akses';
+
+  DAFTAR_SEMUA_TAB.forEach(t => {
+   const sec = document.getElementById('tab-' + t);
+   if (sec) sec.style.display = 'none';
+   const btn = document.getElementById('btn-tab-' + t);
+   if (btn) btn.classList.remove('active');
+   const mbtn = document.getElementById('mbtn-' + t);
+   if (mbtn) mbtn.classList.remove('active');
+  });
+
+  document.getElementById('btn-induk-latihan')?.classList.remove('active');
+  document.getElementById('btn-induk-panduan')?.classList.remove('active');
+
+  const targetSec = document.getElementById('tab-' + namaTab);
+  if (targetSec) targetSec.style.display = 'block';
+
+  const targetBtn = document.getElementById('btn-tab-' + namaTab);
+  if (targetBtn) targetBtn.classList.add('active');
+  const targetMbtn = document.getElementById('mbtn-' + namaTab);
+  if (targetMbtn) targetMbtn.classList.add('active');
+
+  // Pastikan menu induk ikut terbuka & tersorot jika memilih sub-menu
+  if (namaTab.startsWith('latihan-')) {
+   document.getElementById('submenu-latihan')?.classList.add('open');
+   document.getElementById('btn-induk-latihan')?.classList.add('expanded', 'active');
+   document.getElementById('mobileSubnavLatihan')?.classList.add('open');
+   document.getElementById('mobileSubnavPanduan')?.classList.remove('open');
+   if (namaTab === 'latihan-percakapan') kembaliKeTujuan();
+  } else if (namaTab.startsWith('panduan-')) {
+   document.getElementById('submenu-panduan')?.classList.add('open');
+   document.getElementById('btn-induk-panduan')?.classList.add('expanded', 'active');
+   document.getElementById('mobileSubnavPanduan')?.classList.add('open');
+   document.getElementById('mobileSubnavLatihan')?.classList.remove('open');
+  } else {
+   document.getElementById('mobileSubnavLatihan')?.classList.remove('open');
+   document.getElementById('mobileSubnavPanduan')?.classList.remove('open');
+  }
+
+  if (namaTab === 'tukar') {
+   segarkanHalamanTukarKoin();
+  } else if (namaTab === 'toko') {
+   muatKatalogToko();
+  } else if (namaTab === 'leaderboard') {
+   const chkLb = document.getElementById('toggleSensorLb');
+   if (chkLb) chkLb.checked = Boolean(KAIWA_USER.sensorNama);
+   muatDataLeaderboard(false);
+  } else if (namaTab === 'testimoni') {
+   muatTestimoniPublik(false);
+  }
+ }
+
+ // =========================================================
+ // MESIN INFO PENTING SCROLLABLE (DARI SHEET INFO_PENTING)
+ // =========================================================
+ async function muatInfoPenting() {
+  const wadah = document.getElementById('wadahInfoPenting');
+  if (!wadah) return;
+
+  try {
+   const res = await panggilGAS('getInfoPenting', {});
+   if (!res.success || !Array.isArray(res.data) || res.data.length === 0) {
+    wadah.innerHTML = '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:15px 0;">Belum ada pengumuman aktif saat ini.</div>';
+    return;
+   }
+
+   wadah.innerHTML = res.data.map(item => {
+    const kat = escapeHtml(item.kategori || 'INFO');
+    let bgKat = '#dbeafe', colKat = '#1d4ed8';
+    if (kat.includes('JOB')) { bgKat = '#dcfce7'; colKat = '#15803d'; }
+    else if (kat.includes('PROMO')) { bgKat = '#fef08a'; colKat = '#854d0e'; }
+    else if (kat.includes('LOLOS')) { bgKat = '#ede9fe'; colKat = '#6d28d9'; }
+
+    const btnHtml = (item.teksTombol && item.targetTombol)
+     ? `<button class="info-btn-mini" data-target="${escapeHtml(item.targetTombol)}" onclick="jalankanTargetInfo(this)">${escapeHtml(item.teksTombol)} &rarr;</button>`
+     : '';
+
+    return `
+     <div class="info-item-card">
+      <div class="info-item-top">
+       <span class="info-kat-badge" style="background:${bgKat}; color:${colKat};">${kat}</span>
+       <span style="font-size:10px; color:#94a3b8; font-weight:700;">${escapeHtml(item.tanggal || '')}</span>
+      </div>
+      <div style="font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:4px;">${escapeHtml(item.judul)}</div>
+      <div style="font-size:12px; color:#475569; line-height:1.45;">${escapeHtml(item.isi)}</div>
+      ${btnHtml}
+     </div>
+    `;
+   }).join('');
+  } catch (err) {
+   wadah.innerHTML = '<div style="font-size:12px; color:#94a3b8; text-align:center;">Gagal memuat info penting.</div>';
+  }
+ }
+
+ function jalankanTargetInfo(btnEl) {
+  const target = String(btnEl.dataset.target || '').trim();
+  if (!target) return;
+  if (target.toLowerCase() === 'tab:profil') {
+   bukaModalProfil();
+  } else if (target.toLowerCase().startsWith('tab:')) {
+   const namaTab = target.substring(4).trim().toLowerCase();
+   bukaTab(namaTab);
+  } else {
+   window.open(target, '_blank');
+  }
+ }
+
+ // =========================================================
+ // MESIN 4 LEADERBOARD LENGKAP + MINI KLASEMEN DASHBOARD
+ // =========================================================
+ let CACHE_LEADERBOARD = null;
+ let kategoriLbAktif = 'global';
+ let subTierBljAktif = 'BSC';
+
+ async function muatDataLeaderboard(paksaSegar = false) {
+  const wadah = document.getElementById('wadahTabelLeaderboard');
+  if (!paksaSegar && CACHE_LEADERBOARD) {
+   renderTabelLeaderboardAktif();
+   renderMiniLeaderboardDashboard();
+   return;
+  }
+
+  if (wadah) {
+   wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#64748b; font-size:13px;"><i class="fas fa-circle-notch fa-spin" style="color:var(--primary); font-size:22px; margin-bottom:8px;"></i><br>Menghitung klasemen terbaru...</div>';
+  }
+
+  try {
+   const res = await panggilGAS('getLeaderboard', { segarkan: paksaSegar });
+   if (res.success && res.data) {
+    CACHE_LEADERBOARD = res.data;
+    renderTabelLeaderboardAktif();
+    renderMiniLeaderboardDashboard();
+   } else if (wadah) {
+    wadah.innerHTML = `<div style="padding:30px; text-align:center; color:#ef4444;">${escapeHtml(res.message || 'Gagal memuat leaderboard.')}</div>`;
+   }
+  } catch (err) {
+   if (wadah) wadah.innerHTML = '<div style="padding:30px; text-align:center; color:#ef4444;">Gagal terhubung ke server klasemen.</div>';
+  }
+ }
+
+ function pilihKategoriLeaderboard(kat) {
+  kategoriLbAktif = kat;
+  document.querySelectorAll('.lb-main-tab').forEach(b => b.classList.remove('active'));
+  const mapId = { global: 'lbTabGlobal', blj: 'lbTabBlj', mst: 'lbTabMst', khd: 'lbTabKhd' };
+  document.getElementById(mapId[kat])?.classList.add('active');
+
+  const subBlj = document.getElementById('lbSubTabBljWrap');
+  if (subBlj) subBlj.classList.toggle('hidden', kat !== 'blj');
+
+  renderTabelLeaderboardAktif();
+ }
+
+ function pilihSubTierLB(tier) {
+  subTierBljAktif = tier;
+  document.querySelectorAll('.lb-sub-blj').forEach(b => b.classList.remove('active'));
+  document.getElementById('lbSub' + tier)?.classList.add('active');
+  renderTabelLeaderboardAktif();
+ }
+
+ function formatIkonPeringkat(no) {
+  if (no === 1) return '<span style="font-size:17px;">🥇</span>';
+  if (no === 2) return '<span style="font-size:17px;">🥈</span>';
+  if (no === 3) return '<span style="font-size:17px;">🥉</span>';
+  return `<span style="font-weight:800; color:#64748b;">#${no}</span>`;
+ }
+
+ function formatNamaKandidatLB(row) {
+  const badgeTSK = row.jobReady
+   ? `<span class="badge-tsk-ready" title="Kandidat Siap Kerja TSK">🟢 JOB READY</span>`
+   : '';
+  const subKualifikasi = (row.jobReady && row.kualifikasi)
+   ? `<div style="font-size:10.5px; color:#15803d; font-weight:700; margin-top:2px;">🎓 ${escapeHtml(row.kualifikasi)}</div>`
+   : '';
+  return `
+   <div>
+    <span style="font-weight:800; color:var(--text-main);">${escapeHtml(row.nama)}</span>${badgeTSK}
+    ${subKualifikasi}
+   </div>
+  `;
+ }
+
+ function renderTabelLeaderboardAktif() {
+  const wadah = document.getElementById('wadahTabelLeaderboard');
+  const boxInfo = document.getElementById('lbInfoAturanBox');
+  if (!wadah || !CACHE_LEADERBOARD) return;
+
+  let html = '';
+
+  if (kategoriLbAktif === 'global') {
+   if (boxInfo) boxInfo.innerHTML = '<strong>👑 Dewa Neexa (Top Global):</strong> Akumulasi (SUM) seluruh nilai rapor dari semua kategori latihan.';
+   const rows = CACHE_LEADERBOARD.global || [];
+   if (rows.length === 0) {
+    wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada data sesi tercatat.</div>';
+    return;
+   }
+   html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Total Sesi</th><th>Skor Kumulatif</th></tr></thead><tbody>`;
+   rows.forEach((r, idx) => {
+    html += `<tr class="${r.jobReady ? 'lb-row-jobready' : ''}">
+     <td>${formatIkonPeringkat(idx + 1)}</td>
+     <td>${formatNamaKandidatLB(r)}</td>
+     <td style="font-weight:700;">${r.totalSesi} Sesi</td>
+     <td style="font-weight:900; color:var(--primary); font-size:15px;">${Number(r.skorKumulatif).toLocaleString('id-ID')}</td>
+    </tr>`;
+   });
+   html += `</tbody></table>`;
+
+  } else if (kategoriLbAktif === 'blj') {
+   if (boxInfo) boxInfo.innerHTML = `<strong>📘 Master Tata Bahasa (${subTierBljAktif}):</strong> Diambil 1 Nilai Tertinggi dari sesi yang diselesaikan penuh (Tie-breaker: rata-rata nilai di tier ${subTierBljAktif}).`;
+   const rows = (CACHE_LEADERBOARD.blj && CACHE_LEADERBOARD.blj[subTierBljAktif]) ? CACHE_LEADERBOARD.blj[subTierBljAktif] : [];
+   if (rows.length === 0) {
+    wadah.innerHTML = `<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada siswa yang menuntaskan sesi penuh pada tier ${subTierBljAktif}.</div>`;
+    return;
+   }
+   html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Kategori</th><th>Nilai Tertinggi</th></tr></thead><tbody>`;
+   rows.forEach((r, idx) => {
+    html += `<tr class="${r.jobReady ? 'lb-row-jobready' : ''}">
+     <td>${formatIkonPeringkat(idx + 1)}</td>
+     <td>${formatNamaKandidatLB(r)}</td>
+     <td style="font-size:12px; color:#475569; font-weight:700;">${escapeHtml(r.kategori)}</td>
+     <td><span style="font-weight:900; color:#1d4ed8; font-size:15px;">${r.nilaiTertinggi}</span> <span style="font-size:10.5px; color:#64748b;">(Avg: ${r.rataRata})</span></td>
+    </tr>`;
+   });
+   html += `</tbody></table>`;
+
+  } else if (kategoriLbAktif === 'mst') {
+   if (boxInfo) boxInfo.innerHTML = '<strong>💼 Kandidat Pilihan HRD TSK (Liga Mensetsu):</strong> Sesi 1 (&ge;60) = +3 Pts | Naik vs sesi lalu = +3 Pts | Zona Elit HRD (&ge;85 beruntun) = tetap +3 Pts | Sama = +1 Pt | Turun atau &lt;60 = 0 Pts.';
+   const rows = CACHE_LEADERBOARD.mst || [];
+   if (rows.length === 0) {
+    wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada data simulasi wawancara Mensetsu.</div>';
+    return;
+   }
+   html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Learn</th><th>Growth</th><th>Max</th><th>Min</th><th>PTS</th></tr></thead><tbody>`;
+   rows.forEach((r, idx) => {
+    const clsG = r.growth === 'UP' ? 'growth-up' : (r.growth === 'DOWN' ? 'growth-down' : 'growth-stuck');
+    const iconG = r.growth === 'UP' ? '▲ UP' : (r.growth === 'DOWN' ? '▼ DOWN' : '▬ STUCK');
+    html += `<tr class="${r.jobReady ? 'lb-row-jobready' : ''}">
+     <td>${formatIkonPeringkat(idx + 1)}</td>
+     <td>${formatNamaKandidatLB(r)}</td>
+     <td style="font-weight:700;">${r.learn}x</td>
+     <td><span class="growth-pill ${clsG}">${iconG}</span></td>
+     <td style="font-weight:800; color:#15803d;">${r.max}</td>
+     <td style="font-weight:700; color:#64748b;">${r.min}</td>
+     <td style="font-weight:900; color:#be123c; font-size:15px;">${r.pts} Pts</td>
+    </tr>`;
+   });
+   html += `</tbody></table>`;
+
+  } else if (kategoriLbAktif === 'khd') {
+   if (boxInfo) boxInfo.innerHTML = '<strong>🏪 7 Level Kasta Kehidupan (Survival KHD):</strong> Diurutkan dari Kasta tertinggi (syarat buka kunci KKM &ge; 75 sesi tuntas penuh), lalu akumulasi Total Skor Survival.';
+   const rows = CACHE_LEADERBOARD.khd || [];
+   if (rows.length === 0) {
+    wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada petualang di mode Survival Kehidupan.</div>';
+    return;
+   }
+   html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Kasta Saat Ini</th><th>Total Main</th><th>Total Skor Survival</th></tr></thead><tbody>`;
+   rows.forEach((r, idx) => {
+    html += `<tr class="${r.jobReady ? 'lb-row-jobready' : ''}">
+     <td>${formatIkonPeringkat(idx + 1)}</td>
+     <td>${formatNamaKandidatLB(r)}</td>
+     <td style="font-weight:800; color:#047857;">${escapeHtml(r.kastaLabel)}</td>
+     <td style="font-weight:700;">${r.totalMain}x</td>
+     <td style="font-weight:900; color:var(--primary); font-size:15px;">${Number(r.totalSkor).toLocaleString('id-ID')}</td>
+    </tr>`;
+   });
+   html += `</tbody></table>`;
+  }
+
+  wadah.innerHTML = html;
+ }
+
+ function renderMiniLeaderboardDashboard() {
+  const boxG = document.getElementById('miniLbGlobalBox');
+  const boxM = document.getElementById('miniLbMstBox');
+  if (!CACHE_LEADERBOARD) return;
+
+  if (boxG) {
+   const topG = (CACHE_LEADERBOARD.global || []).slice(0, 5);
+   if (topG.length === 0) {
+    boxG.innerHTML = '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:8px 0;">Belum ada data skor.</div>';
+   } else {
+    boxG.innerHTML = topG.map((r, i) => `
+     <div class="mini-lb-row ${r.jobReady ? 'job-highlight' : ''}">
+      <div style="display:flex; align-items:center; gap:7px; overflow:hidden;">
+       <span style="font-weight:800; min-width:20px;">${i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : '#' + (i + 1)))}</span>
+       <span style="font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.nama)}</span>
+       ${r.jobReady ? '<span style="font-size:9px; background:#16a34a; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">TSK</span>' : ''}
+      </div>
+      <span style="font-weight:900; color:var(--primary);">${Number(r.skorKumulatif).toLocaleString('id-ID')}</span>
+     </div>
+    `).join('');
+   }
+  }
+
+  if (boxM) {
+   const topM = (CACHE_LEADERBOARD.mst || []).slice(0, 5);
+   if (topM.length === 0) {
+    boxM.innerHTML = '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:8px 0;">Belum ada klasemen HRD.</div>';
+   } else {
+    boxM.innerHTML = topM.map((r, i) => `
+     <div class="mini-lb-row ${r.jobReady ? 'job-highlight' : ''}">
+      <div style="display:flex; align-items:center; gap:7px; overflow:hidden;">
+       <span style="font-weight:800; min-width:20px;">${i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : '#' + (i + 1)))}</span>
+       <span style="font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.nama)}</span>
+       ${r.jobReady ? '<span style="font-size:9px; background:#16a34a; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">TSK</span>' : ''}
+      </div>
+      <span style="font-weight:900; color:#be123c;">${r.pts} Pts</span>
+     </div>
+    `).join('');
+   }
+  }
+ }
+
+ async function togglePrivasiLeaderboard(chkEl) {
+  const nilaiBaru = chkEl.checked;
+  chkEl.disabled = true;
+  try {
+   const res = await panggilGAS('ubahPrivasiNama', {
+    email: KAIWA_USER.email,
+    sensorNama: nilaiBaru
+   });
+   if (res.success) {
+    KAIWA_USER.sensorNama = nilaiBaru;
+    const chkProfil = document.getElementById('inputSensorNama');
+    if (chkProfil) chkProfil.checked = nilaiBaru;
+    await muatDataLeaderboard(true);
+   } else {
+    chkEl.checked = !nilaiBaru;
+    alert(res.message);
+   }
+  } catch (err) {
+   chkEl.checked = !nilaiBaru;
+   alert('Gagal mengubah pengaturan privasi nama.');
+  } finally {
+   chkEl.disabled = false;
+  }
+ }
+
+ // =========================================================
+ // MESIN DINDING TESTIMONI PUBLIK (MENU TESTIMONI)
+ // =========================================================
+ let testimoniPublikDimuat = false;
+
+ function toggleFormTestimoniHalaman() {
+  if (KAIWA_USER.sudahTestimoni) {
+   return alert('Terima kasih! Akun Anda sudah pernah mengirimkan testimoni.');
+  }
+  document.getElementById('boxTulisTestimoniPublik')?.classList.toggle('hidden');
+ }
+
+ async function muatTestimoniPublik(paksaSegar = false) {
+  const wadah = document.getElementById('wadahDaftarTestimoniPublik');
+  if (!wadah || (!paksaSegar && testimoniPublikDimuat)) return;
+
+  try {
+   const res = await panggilGAS('getTestimoniPublik', {});
+   if (!res.success || !Array.isArray(res.data)) return;
+   testimoniPublikDimuat = true;
+
+   if (res.data.length === 0) {
+    wadah.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:35px; color:#94a3b8; background:#fff; border-radius:16px; border:1px dashed #cbd5e1;">Belum ada ulasan yang ditampilkan. Jadilah yang pertama berbagi pengalamanmu!</div>';
+    return;
+   }
+
+   wadah.innerHTML = res.data.map(t => {
+    const bintangHtml = '★'.repeat(t.bintang) + '☆'.repeat(5 - t.bintang);
+    return `
+     <div style="background:#ffffff; border:2px solid ${t.jobReady ? '#86efac' : '#e2e8f0'}; border-radius:16px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 8px rgba(0,0,0,0.02);">
+      <div>
+       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="color:#f59e0b; font-size:15px; letter-spacing:1px;">${bintangHtml}</span>
+        <span style="font-size:10.5px; color:#94a3b8; font-weight:700;">${escapeHtml(t.waktu)}</span>
+       </div>
+       <p style="margin:0 0 14px 0; font-size:13px; color:#334155; line-height:1.55;">"${escapeHtml(t.ulasan)}"</p>
+      </div>
+      <div style="border-top:1px dashed #e2e8f0; padding-top:10px; display:flex; justify-content:space-between; align-items:center;">
+       <span style="font-size:12.5px; font-weight:800; color:var(--primary);">${escapeHtml(t.nama)}</span>
+       ${t.jobReady ? '<span class="badge-tsk-ready">🟢 JOB READY</span>' : ''}
+      </div>
+     </div>
+    `;
+   }).join('');
+  } catch (err) {
+   console.error('Gagal memuat testimoni publik:', err);
+  }
+ }
+
+ async function kirimTestimoniDariTab() {
+  const ulasan = document.getElementById('inputTeksTestimoniPublik').value.trim();
+  if (ulasan.length < 20) {
+   return showMsg('testimoniPublikMsg', 'error', 'Tuliskan ulasan jujur minimal 20 karakter.');
+  }
+  const btn = document.getElementById('btnKirimTestimoniPublik');
+  btn.disabled = true;
+  showMsg('testimoniPublikMsg', 'loading', '<i class="fas fa-spinner fa-spin"></i> Mengirim testimoni...');
+
+  try {
+   const res = await panggilGAS('kirimTestimoni', {
+    email: KAIWA_USER.email,
+    bintang: bintangTestimoniDipilih,
+    ulasan: ulasan,
+    deviceId: deviceId
+   });
+   if (res.success) {
+    KAIWA_USER.saldo = Number(res.data.saldo);
+    KAIWA_USER.sudahTestimoni = true;
+    document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+    document.getElementById('boxTulisTestimoniPublik').classList.add('hidden');
+    alert(res.message);
+    await muatTestimoniPublik(true);
+   } else {
+    showMsg('testimoniPublikMsg', 'error', escapeHtml(res.message));
+   }
+  } catch (err) {
+   showMsg('testimoniPublikMsg', 'error', 'Gagal mengirim testimoni.');
+  } finally {
+   btn.disabled = false;
+  }
+ }
 
   function bukaKategoriTujuan(kodeTujuan) {
     document.getElementById('modul-tujuan-view').style.display = 'none';
