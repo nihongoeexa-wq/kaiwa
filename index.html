@@ -3639,9 +3639,24 @@
      </div>
     `;
 
-    if (p.kategori === 'INTENSIF') wadahIntensif.innerHTML += htmlKartu;
+    const katUpper = String(p.kategori || '').trim().toUpperCase();
+    const kdUpper = String(p.kode || '').trim().toUpperCase();
+    const nmUpper = String(p.nama || '').trim().toUpperCase();
+    const masukIntensif = (
+     katUpper.includes('INTENSIF') ||
+     katUpper.includes('B2B') ||
+     kdUpper.startsWith('INT') ||
+     nmUpper.includes('BULAN') ||
+     Number(p.tiket) >= 1000
+    );
+
+    if (masukIntensif) wadahIntensif.innerHTML += htmlKartu;
     else wadahSatuan.innerHTML += htmlKartu;
    });
+
+   if (wadahIntensif.innerHTML.trim() === '') {
+    wadahIntensif.innerHTML = '<p style="font-size:13px; color:#94a3b8;">Belum ada paket intensif tersedia.</p>';
+   }
   } catch (err) {
    console.error("Gagal memuat katalog toko:", err);
   }
