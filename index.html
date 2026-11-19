@@ -750,6 +750,70 @@
       display: none; gap: 8px; padding: 10px 15px; background: #eff6ff;
       border-bottom: 2px solid #bfdbfe; overflow-x: auto;
     }
+    /* =========================================
+       CSS PANDUAN VISUAL MINI-UI & PERINGATAN EKSTERNAL
+    ========================================= */
+    .panduan-wrap {
+      width: 100%; max-width: 880px; margin: 0 auto; text-align: left;
+      display: flex; flex-direction: column; gap: 18px; box-sizing: border-box;
+    }
+    .alert-eksternal-box {
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      border: 2px solid #f59e0b; border-radius: 18px; padding: 20px 22px;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.08);
+    }
+    .eksternal-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px; margin-top: 14px;
+    }
+    .eksternal-item {
+      background: #ffffff; border: 1.5px solid #fde68a; border-radius: 12px;
+      padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .eksternal-icon {
+      width: 34px; height: 34px; border-radius: 10px; background: #fef3c7; color: #d97706;
+      display: flex; justify-content: center; align-items: center; font-size: 15px; flex-shrink: 0;
+    }
+
+    /* Kartu Akordeon Panduan + Visual Mockup */
+    .guide-card {
+      background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
+      overflow: hidden; transition: 0.2s; box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
+    .guide-card.open { border-color: #93c5fd; }
+    .guide-card-header {
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; background: #ffffff; gap: 12px; transition: 0.2s;
+    }
+    .guide-card-header:hover { background: #f8fafc; }
+    .guide-card.open .guide-card-header { background: #eff6ff; border-bottom: 1.5px solid #dbeafe; }
+    .guide-num-badge {
+      width: 32px; height: 32px; border-radius: 10px; background: var(--primary); color: #fff;
+      font-weight: 900; font-size: 13px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+    }
+    .guide-card-body { display: none; padding: 20px; background: #ffffff; }
+    .guide-card.open .guide-card-body { display: block; }
+    .guide-card .guide-chev { color: #94a3b8; transition: transform 0.25s ease; }
+    .guide-card.open .guide-chev { transform: rotate(180deg); color: var(--primary); }
+
+    /* Kotak Ilustrasi Mini-UI Asli Website */
+    .mini-ui-stage {
+      background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .mini-ui-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px;
+      color: #64748b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .mock-browser-popup {
+      background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 12px 14px;
+      max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); font-size: 12px;
+    }
+    .guide-step-list {
+      margin: 0; padding-left: 18px; font-size: 13px; color: #334155; line-height: 1.7;
+    }
+    .guide-step-list li { margin-bottom: 6px; }
+
     @media (max-width: 768px) {
       .submenu-group.open { display: none; }
       .mobile-subnav-bar.open { display: flex; }
@@ -1600,16 +1664,341 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- MENU 10A: PANDUAN -> CARA AKSES            -->
+        <!-- MENU 10A: PANDUAN -> CARA AKSES (VISUAL)   -->
         <!-- ========================================== -->
         <div id="tab-panduan-akses" class="nav-page-section" style="display: none;">
-          <div class="page-aligned-box">
-            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center;">
-              <div style="font-size:42px; margin-bottom:10px;">🧭</div>
-              <span style="display:inline-block; background:#dbeafe; color:#1d4ed8; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
-              <h2 style="margin:0 0 8px 0; font-size:20px; color:var(--text-main);">Panduan Cara Akses Platform</h2>
-              <p style="margin:0 auto; max-width:500px; font-size:13px; color:#64748b;">Dokumentasi panduan lengkap penggunaan fitur Neexa Kaiwa sedang disiapkan.</p>
+          <div class="panduan-wrap">
+
+            <!-- Header Halaman Panduan -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px 0; font-size:22px; font-weight:800; color:var(--text-main);">🧭 Panduan Resmi Cara Akses &amp; Aturan Neexa</h2>
+                <p style="margin:0; font-size:13px; color:#64748b;">Pelajari panduan visual di bawah ini agar sesi latihan lancar dan tiket Anda selalu aman.</p>
+              </div>
+              <button onclick="semuaKartuPanduan(true)" class="btn-outline" style="width:auto; margin:0; padding:8px 14px; font-size:12px; border-radius:10px;">
+                <i class="fas fa-book-open"></i> Buka Semua Bab
+              </button>
             </div>
+
+            <!-- ⚠️ KOTAK PERINGATAN WAJIB: FAKTOR SINYAL, PERANGKAT & EKSTERNAL -->
+            <div class="alert-eksternal-box">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+                <span style="background:#ef4444; color:#fff; font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:20px;">WAJIB DIBACA SEBELUM LATIHAN</span>
+                <h3 style="margin:0; font-size:16px; color:#92400e; font-weight:800;">⚠️ Cek Sinyal, Perangkat &amp; Faktor Eksternal!</h3>
+              </div>
+              <p style="margin:4px 0 0 0; font-size:12.5px; color:#78350f; line-height:1.5;">
+                Neexa memproses suara AI secara <em>real-time</em>. Kendala di bawah ini berasal dari perangkat/jaringan pengguna dan dapat membuat sesi terputus sendiri atau suara gagal terbaca:
+              </p>
+
+              <div class="eksternal-grid">
+                <!-- 1. Sinyal Stabil -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon"><i class="fas fa-wifi"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:var(--text-main);">1. Sinyal Internet Wajib Stabil</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;">Gunakan Wi-Fi atau 4G/5G yang kuat. Sinyal hilang/putus-nyambung saat berbicara atau saat pembuatan rapor dapat membuat sesi keluar sendiri.</div>
+                  </div>
+                </div>
+
+                <!-- 2. Mic & Speaker Normal -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon"><i class="fas fa-headset"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:var(--text-main);">2. Mikrofon &amp; Speaker Normal</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;">Pastikan lubang mic HP/headset tidak rusak, tidak tertutup jari, tidak berisik angin/kipas, dan volume media HP tidak dalam keadaan bisu (<em>mute</em>).</div>
+                  </div>
+                </div>
+
+                <!-- 3. Dilarang In-App Browser -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon" style="background:#fee2e2; color:#dc2626;"><i class="fab fa-chrome"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:#b91c1c;">3. Buka di Chrome / Safari Asli</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;"><strong>JANGAN</strong> membuka link langsung di dalam aplikasi WhatsApp, Instagram, atau TikTok karena browser bawaan medsos sering memblokir Login Google &amp; Mikrofon!</div>
+                  </div>
+                </div>
+
+                <!-- 4. Telepon Masuk, Notifikasi & Kunci Layar -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon" style="background:#fee2e2; color:#dc2626;"><i class="fas fa-mobile-alt"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:#b91c1c;">4. Awas Layar Mati &amp; Pindah App</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;">Mengangkat telepon masuk, membalas chat WA, atau layar HP terkunci otomatis &gt; 3 detik saat latihan dihitung sebagai <strong>pelanggaran keluar layar</strong>!</div>
+                  </div>
+                </div>
+
+                <!-- 5. AdBlock / Penghemat Data -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon"><i class="fas fa-shield-alt"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:var(--text-main);">5. Matikan AdBlock / VPN Berat</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;">Matikan ekstensi AdBlock ekstrem, Brave Shield, atau VPN gratis karena dapat memblokir jendela pop-up Google OAuth &amp; memperlambat pengiriman suara.</div>
+                  </div>
+                </div>
+
+                <!-- 6. Mode Hemat Baterai -->
+                <div class="eksternal-item">
+                  <div class="eksternal-icon"><i class="fas fa-battery-half"></i></div>
+                  <div>
+                    <div style="font-size:12.5px; font-weight:800; color:var(--text-main);">6. Hindari Mode Hemat Baterai</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.45; margin-top:2px;">Mode <em>Battery Saver</em> ekstrem di sebagian HP dapat mematikan akses perekam suara browser secara tiba-tiba di tengah percakapan.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 1: PERSIAPAN & IZIN MIKROFON                    -->
+            <!-- =================================================== -->
+            <div class="guide-card open">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">1</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">🎙️ Mengaktifkan Izin Mikrofon &amp; Cara Bicara ke AI</div>
+                    <div style="font-size:11.5px; color:#64748b;">Langkah wajib pertama kali masuk ruang latihan suara</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <!-- Ilustrasi Mini-UI Asli -->
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Ilustrasi Tampilan di Layar Anda</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-around;">
+                    <!-- Mockup Pop-up Izin Browser -->
+                    <div class="mock-browser-popup">
+                      <div style="font-weight:800; color:#1e293b; margin-bottom:8px;">
+                        <i class="fas fa-lock" style="color:#16a34a;"></i> kaiwa.pages.dev ingin:
+                      </div>
+                      <div style="color:#475569; margin-bottom:12px;">
+                        <i class="fas fa-microphone" style="color:var(--primary);"></i> Menggunakan mikrofon Anda
+                      </div>
+                      <div style="display:flex; gap:8px; justify-content:flex-end;">
+                        <span style="padding:5px 10px; border-radius:6px; background:#f1f5f9; color:#94a3b8; font-weight:700; font-size:11px;">Blokir</span>
+                        <span style="padding:5px 12px; border-radius:6px; background:#2563eb; color:#fff; font-weight:800; font-size:11px; box-shadow:0 0 0 3px rgba(37,99,235,0.25);">✓ Izinkan (Allow)</span>
+                      </div>
+                    </div>
+
+                    <!-- Mockup Urutan Klik Tombol Mic -->
+                    <div style="display:flex; align-items:center; gap:12px; background:#fff; padding:12px 16px; border-radius:12px; border:1.5px solid #e2e8f0;">
+                      <div style="text-align:center;">
+                        <div style="width:46px; height:46px; border-radius:50%; background:#ef4444; color:#fff; display:flex; justify-content:center; align-items:center; margin:0 auto 4px auto; font-size:18px;"><i class="fas fa-microphone"></i></div>
+                        <span style="font-size:10px; font-weight:800; color:#475569;">1. Klik 1x Mulai</span>
+                      </div>
+                      <i class="fas fa-arrow-right" style="color:#cbd5e1;"></i>
+                      <div style="text-align:center;">
+                        <div style="width:46px; height:46px; border-radius:50%; background:#b91c1c; color:#fff; display:flex; justify-content:center; align-items:center; margin:0 auto 4px auto; font-size:16px; box-shadow:0 0 0 5px rgba(239,68,68,0.2);"><i class="fas fa-stop"></i></div>
+                        <span style="font-size:10px; font-weight:800; color:#b91c1c;">2. Bicara &amp; Klik Stop</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ol class="guide-step-list">
+                  <li>Saat browser memunculkan kotak izin mikrofon, wajib pilih <strong>"Izinkan saat mengunjungi situs" (Allow)</strong>. Jika terlanjur terklik <em>Blokir</em>, klik ikon gembok/pengaturan di sebelah kiri alamat <code>kaiwa.pages.dev</code> di bagian atas Chrome lalu ubah Mikrofon menjadi <strong>Izinkan</strong>.</li>
+                  <li><strong>Cara merekam (Bukan ditekan tahan!):</strong> Klik tombol mikrofon merah <strong>1 kali</strong> hingga ikon berubah menjadi kotak Stop, ucapkan kalimat bahasa Jepang dengan jelas, lalu <strong>klik 1 kali lagi</strong> untuk mengirim suara.</li>
+                  <li>Tunggu hingga AI Sensei selesai berbicara sebelum menekan mikrofon kembali untuk giliran berikutnya.</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 2: ATURAN PERCAKAPAN, WAWANCARA (MST) & SURVIVAL -->
+            <!-- =================================================== -->
+            <div class="guide-card">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">2</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">🗣️ Perbedaan Mode Belajar (BLJ), Wawancara (MST) &amp; Survival (KHD)</div>
+                    <div style="font-size:11.5px; color:#64748b;">Penting: Siapa yang menyapa duluan &amp; cara membuka gembok level</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Perbedaan Cara Mulai di Ruang Kaiwa</div>
+                  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
+                    <div style="background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:10px; padding:12px;">
+                      <div style="font-size:12px; font-weight:800; color:#1d4ed8; margin-bottom:4px;">📘 Belajar (BLJ)</div>
+                      <div style="font-size:11.5px; color:#334155;">3 Tingkat kesulitan (Basic, Mid, Pro). Pilih Sensei Fumi/Ken, tekan mic dan sapa Sensei untuk melatih pola kalimat.</div>
+                    </div>
+                    <div style="background:#fff1f2; border:1.5px solid #fecdd3; border-radius:10px; padding:12px;">
+                      <div style="font-size:12px; font-weight:800; color:#be123c; margin-bottom:4px;">💼 Wawancara HRD (MST)</div>
+                      <div style="font-size:11.5px; color:#334155;"><strong>HRD Diam Menunggu!</strong> Anda WAJIB menyapa duluan dengan salam Zoom (cth: <em>Shitsureishimasu, kikoemasuka?</em>) &amp; wajib membalas salam penutup di akhir.</div>
+                    </div>
+                    <div style="background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:10px; padding:12px;">
+                      <div style="font-size:12px; font-weight:800; color:#047857; margin-bottom:4px;">🏪 Survival Jepang (KHD)</div>
+                      <div style="font-size:11.5px; color:#334155;">7 Level kehidupan nyata. Selesaikan putaran penuh dengan <strong>Nilai Total &ge; 75</strong> untuk membuka gembok skenario &amp; kasta berikutnya!</div>
+                    </div>
+                  </div>
+                </div>
+
+                <ul class="guide-step-list">
+                  <li><strong>Khusus Kandidat Perempuan di Wawancara (MST):</strong> Pastikan memilih gender <em>Perempuan</em> di Profil agar HRD AI mengaktifkan simulasi pertanyaan nyata mengenai kesiapan aturan Hijab keselamatan kerja di Jepang.</li>
+                  <li><strong>Tips Komunikasi:</strong> Jika ucapan AI terlalu cepat, ucapkan <em>"Sumimasen, mou ichido onegaishimasu"</em> (diulang sama persis) atau <em>"Kantan na Nihongo de onegaishimasu"</em> (disederhanakan).</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 3: TIKET, KOIN EMAS & ATURAN DENDA              -->
+            <!-- =================================================== -->
+            <div class="guide-card">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">3</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">🎫 Hitungan Tiket, Tabungan Koin Emas &amp; Pinalti Sesi</div>
+                    <div style="font-size:11.5px; color:#64748b;">Cara hemat tiket, panen koin emas, dan menghindari denda</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Perbandingan Sesi Tuntas vs Berhenti Tengah Jalan vs Keluar Layar</div>
+                  <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+                    <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                      <div><strong style="color:#15803d;">✅ Selesai Penuh (Sampai Putaran Akhir)</strong><br><span style="color:#475569; font-size:11px;">Biaya Masuk + (1 Tiket &times; Putaran) + <strong>2 Tiket Rapor</strong></span></div>
+                      <span style="background:#fef08a; color:#854d0e; font-weight:800; padding:4px 10px; border-radius:8px;">🪙 Dapat Koin Penuh + Bonus Skor!</span>
+                    </div>
+                    <div style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                      <div><strong style="color:#b45309;">⚠️ Klik Buat Rapor Sebelum Selesai</strong><br><span style="color:#475569; font-size:11px;">Biaya Masuk + (1 Tiket &times; Putaran) + <strong>5 Tiket Denda Rapor</strong></span></div>
+                      <span style="background:#f1f5f9; color:#64748b; font-weight:800; padding:4px 10px; border-radius:8px;">Koin Prestasi Nilai = 0 (Hangus)</span>
+                    </div>
+                    <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                      <div><strong style="color:#dc2626;">🚨 Keluar Layar / Buka Tab Lain &gt; 3 Detik (2x)</strong><br><span style="color:#475569; font-size:11px;">Sesi dihentikan otomatis sistem anti-curang</span></div>
+                      <span style="background:#fee2e2; color:#b91c1c; font-weight:800; padding:4px 10px; border-radius:8px;">Dipotong Tiket Penuh &amp; 0 Koin!</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ul class="guide-step-list">
+                  <li><strong>Tiket Masuk</strong> dipotong di awal saat memasuki ruang latihan, sedangkan sisa tiket putaran &amp; evaluasi rapor dipotong di akhir sesi.</li>
+                  <li>Semakin tinggi Nilai Rapor Anda (terutama <strong>&ge; 90</strong>) pada sesi yang tuntas penuh, semakin besar <strong>Koin Emas</strong> yang didapat untuk ditukar menjadi <strong>Tiket Gratis</strong> di menu <strong>Tukar Koin</strong>!</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 4: TOP UP TIKET OTOMATIS 24 JAM                 -->
+            <!-- =================================================== -->
+            <div class="guide-card">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">4</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">⚡ Cara Beli Tiket Otomatis Masuk (24 Jam Nonstop)</div>
+                    <div style="font-size:11.5px; color:#64748b;">Rahasia agar pembayaran di Lynk.id langsung menambah saldo detik itu juga</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Ilustrasi Kunci Sinkronisasi Email Pembayaran</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center;">
+                    <div style="background:#eff6ff; border:1.5px solid #93c5fd; border-radius:10px; padding:10px 14px; font-size:12px; color:#1e3a8a;">
+                      <strong>1. Di Toko Tiket Neexa:</strong><br>
+                      Klik <span style="background:#2563eb; color:#fff; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;"><i class="fas fa-copy"></i> Salin Email Saya</span>
+                    </div>
+                    <i class="fas fa-arrow-right" style="color:#94a3b8;"></i>
+                    <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:10px 14px; font-size:12px; color:#166534;">
+                      <strong>2. Di Form Checkout Lynk.id:</strong><br>
+                      Tempel (<em>Paste</em>) email yang <strong>100% SAMA PERSIS</strong>!
+                    </div>
+                  </div>
+                </div>
+
+                <ol class="guide-step-list">
+                  <li>Buka menu <strong>Toko Tiket</strong>, lalu klik tombol <strong>Beli Sekarang</strong> pada paket yang diinginkan (email akun Neexa Anda otomatis tersalin).</li>
+                  <li>Pada halaman pembayaran <strong>Lynk.id</strong>, tempelkan email tersebut di kolom Email Pembeli, lalu selesaikan pembayaran QRIS / Virtual Account / E-Wallet.</li>
+                  <li>Begitu lunas, sistem otomatis menambahkan tiket ke akun Anda dalam hitungan detik (muat ulang halaman atau buka kembali aplikasi untuk melihat saldo baru).</li>
+                  <li><strong>Punya Kode Voucher dari LPK / Admin?</strong> Masukkan kodenya di kotak <strong>Punya Kode Tiket?</strong> pada halaman <strong>Dashboard</strong> lalu klik <strong>Klaim</strong>.</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 5: LENCANA JOB READY & PELUANG KERJA TSK        -->
+            <!-- =================================================== -->
+            <div class="guide-card">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">5</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">💼 Cara Mendapat Label 🟢 JOB READY (Dilirik TSK Jepang)</div>
+                    <div style="font-size:11.5px; color:#64748b;">Syarat tampil mencolok di Leaderboard &amp; membuka pendaftaran Job Order</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Urutan Aktivasi Status Kandidat Siap Kerja</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; font-size:12px; font-weight:700;">
+                    <span style="background:#fff; border:1.5px solid #cbd5e1; padding:6px 12px; border-radius:20px;">1. Klik Foto Profil (Kanan Atas)</span>
+                    <span>&rarr;</span>
+                    <span style="background:#fff; border:1.5px solid #cbd5e1; padding:6px 12px; border-radius:20px;">2. Pilih Tujuan "Mencari Job"</span>
+                    <span>&rarr;</span>
+                    <span style="background:#fff; border:1.5px solid #cbd5e1; padding:6px 12px; border-radius:20px;">3. Upload Sertifikat &amp; Simpan</span>
+                    <span>&rarr;</span>
+                    <span class="badge-tsk-ready" style="padding:5px 12px; font-size:11px;">🟢 JOB READY</span>
+                  </div>
+                </div>
+
+                <ol class="guide-step-list">
+                  <li>Klik <strong>Foto Avatar Profil</strong> Anda di pojok kanan atas layar.</li>
+                  <li>Isi Nama Lengkap sesuai KTP/Paspor, Tanggal Lahir, Nomor WhatsApp aktif, lalu pada <strong>Tujuan Utama</strong> pilih opsi <em>Mencari Job Kerja di Jepang</em>.</li>
+                  <li>Pilih Status Keberangkatan (Siswa LPK / Mandiri / Eks-Jepang), pilih sertifikat bahasa (minimal JFT-Basic A2 / JLPT N4) beserta sertifikat SSW jika ada.</li>
+                  <li>Pilih file bukti sertifikat (PDF/JPG/PNG maks 2 MB), klik tombol hijau <strong>Upload</strong> hingga muncul tulisan <em>Berhasil diunggah</em>, lalu wajib klik tombol biru <strong>Simpan Profil</strong> di bagian bawah.</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- =================================================== -->
+            <!-- BAB 6: PRIVASI NAMA & SISTEM 4 LEADERBOARD          -->
+            <!-- =================================================== -->
+            <div class="guide-card">
+              <div class="guide-card-header" onclick="toggleKartuPanduan(this)">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="guide-num-badge">6</div>
+                  <div>
+                    <div style="font-size:15px; font-weight:800; color:var(--text-main);">🔒 Fitur Sensor Nama (Privasi) &amp; Cara Baca 4 Leaderboard</div>
+                    <div style="font-size:11.5px; color:#64748b;">Menyamarkan nama di publik &amp; mengejar poin klasemen HRD</div>
+                  </div>
+                </div>
+                <i class="fas fa-chevron-down guide-chev"></i>
+              </div>
+              <div class="guide-card-body">
+                <div class="mini-ui-stage">
+                  <div class="mini-ui-label"><i class="fas fa-eye"></i> Simulasi Toggle Privasi &amp; Penanda Akun Sendiri</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; background:#eff6ff; border:1.5px solid #3b82f6; border-radius:12px; padding:12px 16px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <span style="font-weight:800; color:#1d4ed8;">🔥 #1</span>
+                      <span style="font-weight:800; color:#1e3a8a;">Ha***</span>
+                      <span class="badge-lb-me">🔥 KAMU</span>
+                      <span class="badge-tsk-ready">🟢 JOB READY</span>
+                    </div>
+                    <div style="font-size:11.5px; color:#1e40af; font-weight:700;">
+                      ☑️ Sensor Nama Saya = Aktif (Tampil <b>Ha***</b>)
+                    </div>
+                  </div>
+                </div>
+
+                <ul class="guide-step-list">
+                  <li><strong>Bebas Atur Privasi Kapan Saja:</strong> Centang kotak <strong>Sensor Nama Saya</strong> di halaman <em>Leaderboard</em>, <em>Testimoni</em>, atau <em>Profil</em> jika ingin menyamarkan nama Anda menjadi 2 huruf awal (cth: <code>Ha***</code>). Posisi Anda sendiri tetap mudah dikenali berkat tanda <span class="badge-lb-me">🔥 KAMU</span>.</li>
+                  <li><strong>👑 TOP GLOBAL (Super Rajin):</strong> Menjumlahkan seluruh skor rapor dari semua sesi latihan yang Anda kerjakan.</li>
+                  <li><strong>📘 Master Tata Bahasa (BLJ):</strong> Mengambil 1 rekor nilai tertinggi Anda dari sesi yang diselesaikan penuh pada masing-masing level (BSC / MID / PRO).</li>
+                  <li><strong>💼 Pilihan HRD TSK (Liga Mensetsu):</strong> Sistem poin liga konsistensi wawancara! Sesi pertama (&ge;60) dapat <strong>+3 Pts</strong>. Sesi berikutnya jika skor naik dapat <strong>+3 Pts</strong>, bertahan di Zona Elit (&ge;85 berturut-turut) tetap dapat <strong>+3 Pts</strong>, skor sama dapat <strong>+1 Pt</strong>, dan jika turun atau &lt;60 mendapat <strong>0 Pts</strong>.</li>
+                  <li><strong>🏪 7 Kasta Kehidupan (Survival KHD):</strong> Diurutkan dari pemegang Kasta tertinggi yang berhasil menembus KKM &ge; 75 di tiap level perjalanan Jepang.</li>
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -3733,9 +4122,23 @@
     }
   }
 
-  // =========================================================
-  // 8. ONBOARDING WAJIB, PROFIL KARIER TSK, DRIVE & TESTIMONI
-  // =========================================================
+ // =========================================================
+ // FUNGSI INTERAKTIF HALAMAN PANDUAN -> CARA AKSES
+ // =========================================================
+ function toggleKartuPanduan(headerEl) {
+  const card = headerEl.parentElement;
+  if (card) card.classList.toggle('open');
+ }
+
+ function semuaKartuPanduan(bukaSemua = true) {
+  document.querySelectorAll('#tab-panduan-akses .guide-card').forEach(c => {
+   c.classList.toggle('open', bukaSemua);
+  });
+ }
+
+ // =========================================================
+ // 8. ONBOARDING WAJIB, PROFIL KARIER TSK, DRIVE & TESTIMONI
+ // =========================================================
   let bintangTestimoniDipilih = 5;
 
   function pilihGenderUI(prefix, nilaiGender) {
