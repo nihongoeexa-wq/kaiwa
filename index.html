@@ -1305,7 +1305,7 @@
                 <div style="display:inline-block; background:#fef08a; color:#854d0e; font-size:10.5px; font-weight:900; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
                   ⚡ REKOMENDASI LULUSAN BLJ PRO • TERBUKA UNTUK UMUM
                 </div>
-                <h2 style="margin:0 0 6px 0; font-size:20px; font-weight:800;">⚠️JANGAN DICOBA MASIH DALAM PENGEMBANGAN SISTEM</h2>
+                <h2 style="margin:0 0 6px 0; font-size:20px; font-weight:800;">📞 Percakapan Live (Telepon AI Real-Time)</h2>
                 <p style="margin:0; font-size:12.5px; opacity:0.92; line-height:1.5;">
                   Bicara dua arah secara langsung tanpa tombol rekam menggunakan <strong>Argo Waktu per 30 Detik</strong> (tanpa denda berhenti di tengah jalan). Siapkan mental &amp; pendengaranmu sebelum mengangkat telepon!
                 </p>
@@ -2557,16 +2557,16 @@
    </div>
   </div>
 
-<!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL) -->
-<script src="kaiwa-normal.js"></script>
-<script src="kaiwa-live.js"></script>
+<!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
+<script src="kaiwa-normal.js?v=20261120v2"></script>
+<script src="kaiwa-live.js?v=20261120v2"></script>
 
 <script>
   // ==========================================
   // KONFIGURASI API & MEMORI INDUK (DISPATCHER)
   // ==========================================
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzIB9C4kDz4p9RYoruLaMjWoS39J2h0vA44vFAcddn5hd4kax3FNXdHW02qGkmbBtGHqA/exec"; // <-- WAJIB ISI URL WEB APP GAS ANDA
-  const WORKER_URL = "https://api.neexasystem.com/";
+  const WORKER_URL = "https://hanasu.nihongoeexa.workers.dev/";
   const GOOGLE_CLIENT_ID = "1072925628123-1e59g0ea5oia74ofav99vqlkd52no4ic.apps.googleusercontent.com";
 
   let KAIWA_USER = {};
