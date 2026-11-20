@@ -1295,15 +1295,142 @@
         <!-- MENU 2C: LATIHAN -> PERCAKAPAN LIVE (KL)   -->
         <!-- ========================================== -->
         <div id="tab-latihan-live" class="nav-page-section" style="display: none;">
-          <div class="page-aligned-box">
-            <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:35px 30px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.02);">
-              <div style="font-size:44px; margin-bottom:10px;">📞</div>
-              <span style="display:inline-block; background:#ccfbf1; color:#0f766e; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px; margin-bottom:10px;">SEGERA HADIR</span>
-              <h2 style="margin:0 0 8px 0; font-size:22px; color:var(--text-main);">Percakapan Live (Real-Time WebSocket)</h2>
-              <p style="margin:0 auto; max-width:540px; font-size:13.5px; color:#64748b; line-height:1.6;">
-                Mode telepon suara dua arah tanpa tombol rekam (Kaiwa Live / Produk KL) sedang disempurnakan agar percakapan terasa semakin responsif layaknya menelepon langsung orang Jepang.
-              </p>
+          <div class="dashboard-grid">
+
+            <!-- Kolom Kiri (70%): Kategori & Tema Percakapan Live (KL) -->
+            <div class="dash-left" style="text-align: left;">
+
+              <!-- Banner Peringatan Kelas Tingkat Tinggi (Argo 30 Detik) -->
+              <div style="background: linear-gradient(135deg, #0f766e, #115e59); border-radius: 18px; padding: 20px 24px; color: #fff; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);">
+                <div style="display:inline-block; background:#fef08a; color:#854d0e; font-size:10.5px; font-weight:900; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
+                  ⚡ REKOMENDASI LULUSAN BLJ PRO • TERBUKA UNTUK UMUM
+                </div>
+                <h2 style="margin:0 0 6px 0; font-size:20px; font-weight:800;">📞 Percakapan Live (Telepon AI Real-Time)</h2>
+                <p style="margin:0; font-size:12.5px; opacity:0.92; line-height:1.5;">
+                  Bicara dua arah secara langsung tanpa tombol rekam menggunakan <strong>Argo Waktu per 30 Detik</strong> (tanpa denda berhenti di tengah jalan). Siapkan mental &amp; pendengaranmu sebelum mengangkat telepon!
+                </p>
+              </div>
+
+              <!-- [LIVE LAYER 1] PILIH KATEGORI LIVE (KL-BLJ vs KL-MST) -->
+              <div id="live-tujuan-view">
+                <div class="tier-bar" onclick="bukaKategoriLive('blj')">
+                 <div class="tier-icon" style="background: #ccfbf1;">⚡</div>
+                 <div class="tier-info">
+                  <h3>PERCAKAPAN LIVE — KISO / BELAJAR</h3>
+                  <p>Latihan telepon bahasa Jepang real-time bertingkat untuk menguji kecepatan refleks bicara.</p>
+                 </div>
+                 <div class="tier-price" style="background: #ccfbf1; color: #0f766e;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+                </div>
+
+                <div class="tier-bar" onclick="bukaKategoriLive('mst')">
+                 <div class="tier-icon" style="background: #ffe4e6;">📞</div>
+                 <div class="tier-info">
+                  <h3>WAWANCARA LIVE — MENSETSU HRD (面接)</h3>
+                  <p>Simulasi telepon/Zoom langsung bersama Direktur Jepang dengan tekanan waktu nyata.</p>
+                 </div>
+                 <div class="tier-price" style="background: #ffe4e6; color: #be123c;">Argo 30 Dtk <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+                </div>
+              </div>
+
+              <!-- [LIVE LAYER 2A] PILIH TIER BLJ LIVE -->
+              <div id="sub-tier-live-blj" style="display: none;">
+                <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Live</button>
+                <h2 style="font-size: 19px; color: var(--text-main); margin: 0 0 14px 0;">⚡ Percakapan Live — Pilih Level</h2>
+
+                <div class="tier-bar" onclick="bukaDaftarTemaLive('detail-live-blj-bsc')">
+                 <div class="tier-icon">🐣</div>
+                 <div class="tier-info">
+                  <h3>LIVE SHOKYU (Basic)</h3>
+                  <p>Telepon kalimat dasar dengan tempo ramah bagi yang baru mencoba mode Live.</p>
+                 </div>
+                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live 30 Dtk</div>
+                </div>
+
+                <div class="tier-bar" onclick="bukaDaftarTemaLive('detail-live-blj-mid')">
+                 <div class="tier-icon">🔥</div>
+                 <div class="tier-info">
+                  <h3>LIVE CHUKYU (Mid)</h3>
+                  <p>Telepon setara JFT-Basic A2 / N4 untuk melatih kelancaran respons spontan.</p>
+                 </div>
+                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live 30 Dtk</div>
+                </div>
+
+                <div class="tier-bar" onclick="bukaDaftarTemaLive('detail-live-blj-pro')">
+                 <div class="tier-icon">👑</div>
+                 <div class="tier-info">
+                  <h3>LIVE JOKYU (Pro)</h3>
+                  <p>Kecepatan bicara natural orang Jepang dengan koreksi pelafalan tegas.</p>
+                 </div>
+                 <div class="tier-price" style="background:#ede9fe; color:#6d28d9;">Target Utama</div>
+                </div>
+              </div>
+
+              <!-- [LIVE LAYER 3] WADAH TEMA MASING-MASING KATEGORI KL -->
+              <div id="detail-live-blj-bsc" class="live-detail-view" style="display: none;">
+                <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
+                <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;">
+                 <h2 style="color:#0f766e;">📞 LIVE — SHOKYU (Basic)</h2>
+                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                </div>
+                <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
+                <div id="wadah-live-blj-bsc"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
+              </div>
+
+              <div id="detail-live-blj-mid" class="live-detail-view" style="display: none;">
+                <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
+                <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;">
+                 <h2 style="color:#0f766e;">📞 LIVE — CHUKYU (Mid)</h2>
+                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                </div>
+                <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
+                <div id="wadah-live-blj-mid"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
+              </div>
+
+              <div id="detail-live-blj-pro" class="live-detail-view" style="display: none;">
+                <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
+                <div class="detail-header" style="background:#f5f3ff; border-color:#ddd6fe;">
+                 <h2 style="color:#6d28d9;">📞 LIVE — JOKYU (Pro)</h2>
+                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                </div>
+                <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
+                <div id="wadah-live-blj-pro"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
+              </div>
+
+              <div id="detail-live-mst" class="live-detail-view" style="display: none;">
+                <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Live</button>
+                <div class="detail-header" style="background:#fff1f2; border-color:#fecdd3;">
+                 <h2 style="color:#be123c;">📞 WAWANCARA LIVE — MENSETSU HRD</h2>
+                 <p><strong>Penting:</strong> Begitu tersambung, Anda wajib mengucapkan salam pembuka lebih dulu kepada Direktur Jepang!</p>
+                </div>
+                <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Pilih Bidang Wawancara Live:</h3>
+                <div id="wadah-live-mst"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar wawancara Live...</p></div>
+              </div>
+
             </div>
+
+            <!-- Kolom Kanan (30%): Kotak Leaderboard Kecil -->
+            <div class="dash-right">
+              <div class="widget-box" style="padding: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h3 style="margin:0; font-size:14px;">👑 TOP GLOBAL (Super Rajin)</h3>
+                  <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('global');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Lihat Semua &rarr;</button>
+                </div>
+                <div class="wadah-mini-lb-global">
+                  <div style="font-size:12px; color:#94a3b8; text-align:center; padding:12px 0;">Memuat peringkat...</div>
+                </div>
+              </div>
+
+              <div class="widget-box" style="padding: 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <h3 style="margin:0; font-size:14px;">📞 TOP Mensetsu LIVE</h3>
+                  <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('mstLive');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Klasemen &rarr;</button>
+                </div>
+                <div class="wadah-mini-lb-mst-live">
+                  <div style="font-size:12px; color:#94a3b8; text-align:center; padding:12px 0;">Memuat klasemen Live...</div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -1414,11 +1541,13 @@
               </div>
             </div>
 
-            <!-- Pilihan 4 Kategori Leaderboard -->
+            <!-- Pilihan Kategori Leaderboard (Termasuk Papan Khusus LIVE) -->
             <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
               <button class="tier-tab-btn lb-main-tab active" id="lbTabGlobal" onclick="pilihKategoriLeaderboard('global')">👑 TOP GLOBAL (Super Rajin)</button>
               <button class="tier-tab-btn lb-main-tab" id="lbTabBlj" onclick="pilihKategoriLeaderboard('blj')">📘 Master Tata Bahasa (BLJ)</button>
+              <button class="tier-tab-btn lb-main-tab" id="lbTabBljLive" onclick="pilihKategoriLeaderboard('bljLive')">⚡ Master BLJ LIVE</button>
               <button class="tier-tab-btn lb-main-tab" id="lbTabMst" onclick="pilihKategoriLeaderboard('mst')">💼 Pilihan HRD TSK (MST)</button>
+              <button class="tier-tab-btn lb-main-tab" id="lbTabMstLive" onclick="pilihKategoriLeaderboard('mstLive')">📞 Pilihan HRD LIVE</button>
               <button class="tier-tab-btn lb-main-tab" id="lbTabKhd" onclick="pilihKategoriLeaderboard('khd')">🏪 7 Kasta Kehidupan (KHD)</button>
             </div>
 
@@ -2407,9 +2536,30 @@
     </div>
 </div>
 
-<!-- MEMUAT MESIN KAIWA NORMAL (EKSTERNAL) -->
+  <!-- ================= MODAL 3: KONFIRMASI MATIKAN MODE ANTI SUARA BOCOR (LIVE) ================= -->
+  <div id="modalKonfirmasiAntiBocor" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.72); z-index: 10050; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(4px); padding: 16px; box-sizing: border-box;">
+   <div style="background: #ffffff; border-radius: 18px; width: 100%; max-width: 410px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.28); text-align: center; border: 2px solid #fecaca;">
+    <div style="width: 52px; height: 52px; border-radius: 50%; background: #fef2f2; color: #dc2626; font-size: 24px; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px auto;">
+     <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h3 style="margin: 0 0 8px 0; font-size: 17px; font-weight: 800; color: #991b1b;">Matikan Mode Aman Anti Suara Bocor?</h3>
+    <p style="margin: 0 0 20px 0; font-size: 13px; color: #475569; line-height: 1.55;">
+     Mematikan fitur ini membuat mikrofon terus menyala saat AI berbicara. Suara bising atau pantulan speaker bisa masuk ke mikrofon dan membuat AI mengira Anda menyela, sehingga AI berhenti bicara di tengah kalimat. Gunakan headset jika ingin mematikan fitur ini.
+    </p>
+    <div style="display: flex; gap: 10px;">
+     <button type="button" onclick="tutupModalAntiBocor(false)" class="btn" style="flex: 1; padding: 12px; font-size: 13px; background: #e2e8f0; color: #334155;">
+      Batal
+     </button>
+     <button type="button" onclick="tutupModalAntiBocor(true)" class="btn" style="flex: 1; padding: 12px; font-size: 13px; background: #dc2626; color: #ffffff;">
+      Matikan
+     </button>
+    </div>
+   </div>
+  </div>
+
+<!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL) -->
 <script src="kaiwa-normal.js"></script>
-<!-- Catatan: Saat kaiwa-live.js sudah dibuat nanti, cukup tambahkan <script src="kaiwa-live.js"></script> tepat di bawah baris ini -->
+<script src="kaiwa-live.js"></script>
 
 <script>
   // ==========================================
@@ -2696,605 +2846,704 @@
     return { kodePenuh: k, mode: mode, kunciGrup: inti, kategori: kategori, tier: tier, levelKHD: levelKHD, urutSesiKHD: urutSesiKHD };
   }
 
- // Rakitan HTML Pilihan Sensei & Tombol Terpisah (KN untuk Percakapan & Survival, KL disiapkan terpisah untuk Percakapan Live)
+ // Kontrol Modal Sakelar Mode Aman Anti Suara Bocor (Khusus KL Live)
+ let tombolAntiBocorSedangDiedit = null;
+
+ function klikSakelarAntiBocor(btnEl) {
+  const wrap = btnEl.closest('.theme-action');
+  const inputBarge = wrap.querySelector('.barge-in-select-dinamis');
+  const sedangBebasPotong = inputBarge.value === '1';
+
+  if (sedangBebasPotong) {
+   // Nyalakan kembali Mode Aman secara langsung tanpa pop-up
+   inputBarge.value = '0';
+   btnEl.style.background = '#f0fdf4';
+   btnEl.style.borderColor = '#86efac';
+   btnEl.style.color = '#15803d';
+   btnEl.innerHTML = '<span>🛡️ Mode Aman Anti Suara Bocor: <b>AKTIF</b></span> <span style="font-size:10.5px; text-decoration:underline;">Matikan</span>';
+  } else {
+   // Tampilkan Pop-up Peringatan dengan pilihan Batal / Matikan
+   tombolAntiBocorSedangDiedit = btnEl;
+   document.getElementById('modalKonfirmasiAntiBocor')?.classList.remove('hidden');
+  }
+ }
+
+ function tutupModalAntiBocor(jadiMatikan) {
+  document.getElementById('modalKonfirmasiAntiBocor')?.classList.add('hidden');
+  if (jadiMatikan && tombolAntiBocorSedangDiedit) {
+   const btnEl = tombolAntiBocorSedangDiedit;
+   const wrap = btnEl.closest('.theme-action');
+   const inputBarge = wrap.querySelector('.barge-in-select-dinamis');
+   inputBarge.value = '1';
+   btnEl.style.background = '#fef2f2';
+   btnEl.style.borderColor = '#fca5a5';
+   btnEl.style.color = '#b91c1c';
+   btnEl.innerHTML = '<span>⚡ Mode Aman Anti Suara Bocor: <b>MATI (Bebas Potong)</b></span> <span style="font-size:10.5px; text-decoration:underline;">Aktifkan</span>';
+  }
+  tombolAntiBocorSedangDiedit = null;
+ }
+
+ // Rakitan HTML Pilihan Sensei & Tombol Terpisah (KN, KL Murni, maupun HYBRID untuk Survival KHD)
  function rakitIsiAksiTemaHTML(grup, modeTarget = "KN") {
   const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
   let tombolHTML = "";
+  let butuhSakelarAntiBocor = false;
 
-  if (modeTarget === "KN" && grup.KN) {
+  if ((modeTarget === "KN" || modeTarget === "HYBRID") && grup.KN) {
    const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
    tombolHTML += `
-    <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 8px;">
+    <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 6px;">
      <i class="fas fa-comments"></i> Mulai Percakapan (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
     </button>
-    <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 4px;">
+    <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 10px;">
      Total selesai penuh: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
     </div>
    `;
-  } else if (modeTarget === "KL" && grup.KL) {
+  }
+
+  if ((modeTarget === "KL" || (modeTarget === "HYBRID" && !grup.KN)) && grup.KL) {
+   butuhSakelarAntiBocor = true;
    const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
+   const durasiMaksDetik = (Number(grup.KL.maxPutaran) || 6) * 30;
+   const teksMenit = durasiMaksDetik % 60 === 0 ? `${durasiMaksDetik / 60} Menit` : `${(durasiMaksDetik / 60).toFixed(1)} Menit`;
+
    tombolHTML += `
-    <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488;">
-     <i class="fas fa-phone-alt"></i> Mulai Live Kaiwa (Masuk ${grup.KL.tiketMasuk} Tiket)
+    <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-bottom: 6px;">
+     <i class="fas fa-phone-alt"></i> Mulai Panggilan Live (Masuk ${grup.KL.tiketMasuk} Tiket • Maks ${teksMenit})
     </button>
+    <div style="font-size: 11px; color: #0f766e; text-align: center; font-weight: 600;">
+     Argo: <strong>${grup.KL.tiketPerPutaran} Tiket / 30 detik</strong> + 2 Tiket Rapor (Maks Penuh: ${grup.KL.hargaPenuh} Tiket • Tanpa Denda)
+    </div>
    `;
   }
 
   if (!tombolHTML) return "";
 
-    return `
-      <div class="theme-action">
-        <div class="form-group" style="margin-bottom: 15px;">
-          <label>PILIH AI SENSEI</label>
-          <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
-            <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
-              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-              <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
-              <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
-            </div>
-            <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
-              <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-              <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
-              <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
-            </div>
-            <input type="hidden" class="suara-select-dinamis" value="female">
-            <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
-          </div>
-        </div>
-        ${tombolHTML}
+  const htmlSakelarBocor = butuhSakelarAntiBocor ? `
+    <div style="margin-bottom: 12px;">
+     <button type="button" onclick="klikSakelarAntiBocor(this)" style="width:100%; padding:9px 12px; border-radius:10px; border:1.5px solid #86efac; background:#f0fdf4; color:#15803d; font-size:11.5px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit;">
+      <span>🛡️ Mode Aman Anti Suara Bocor: <b>AKTIF</b></span>
+      <span style="font-size:10.5px; text-decoration:underline;">Matikan</span>
+     </button>
+     <input type="hidden" class="barge-in-select-dinamis" value="0">
+    </div>
+  ` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
+
+  return `
+   <div class="theme-action">
+    <div class="form-group" style="margin-bottom: 12px;">
+     <label>PILIH AI SENSEI</label>
+     <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
+      <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
+       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+       <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
+       <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
       </div>
-    `;
-  }
+      <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
+       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
+       <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
+       <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
+      </div>
+      <input type="hidden" class="suara-select-dinamis" value="female">
+      <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+     </div>
+    </div>
+    ${htmlSakelarBocor}
+    ${tombolHTML}
+   </div>
+  `;
+ }
 
-  // Cek apakah sebuah grup sesi KHD sudah LULUS SAH (Nilai >= 75 DAN Putaran Selesai Penuh)
-  function cekKelulusanGrupKHD(grup) {
-    let skorTertinggiLulus = 0;
-    let skorPercobaan = 0;
-    let lulusSah = false;
+ // Cek apakah sebuah grup sesi KHD sudah LULUS SAH (Mendukung KN maupun KL Live Hybrid!)
+ function cekKelulusanGrupKHD(grup) {
+  let skorTertinggiLulus = 0;
+  let skorPercobaan = 0;
+  let lulusSah = false;
 
-    const targetPutaran = (grup.KN ? Number(grup.KN.maxPutaran) : (grup.KL ? Number(grup.KL.maxPutaran) : 6)) || 6;
+  const targetPutaran = (grup.KN ? Number(grup.KN.maxPutaran) : (grup.KL ? Number(grup.KL.maxPutaran) : 6)) || 6;
 
-    dataRiwayatLokal.forEach(riw => {
-      const infoRiw = bedahKodeProduk(riw.produk || '');
-      if (infoRiw.kunciGrup === grup.kunciGrup) {
-        const nilai = Number(riw.nilaiTotal) || 0;
-        if (nilai > skorPercobaan) skorPercobaan = nilai;
+  dataRiwayatLokal.forEach(riw => {
+   const infoRiw = bedahKodeProduk(riw.produk || '');
+   if (infoRiw.kunciGrup === grup.kunciGrup) {
+    const nilai = Number(riw.nilaiTotal) || 0;
+    if (nilai > skorPercobaan) skorPercobaan = nilai;
 
-        // Hitung jumlah putaran nyata di transkrip agar tidak bisa curang keluar di putaran 1
-        const jumlahPutaranChat = (String(riw.rekamanChat || '').match(/Siswa:/g) || []).length;
-        if (nilai >= KKM_BUKA_KUNCI && jumlahPutaranChat >= targetPutaran) {
-          lulusSah = true;
-          if (nilai > skorTertinggiLulus) skorTertinggiLulus = nilai;
-        }
-      }
-    });
+    const rawChat = String(riw.rekamanChat || '');
+    const jumlahPutaranChat = (rawChat.match(/Siswa:/g) || []).length;
+    const sahTuntas = infoRiw.mode === 'KL'
+     ? (/\[STATUS:\s*TUNTAS\]/i.test(rawChat) || jumlahPutaranChat >= 3)
+     : (jumlahPutaranChat >= targetPutaran);
 
-    return { lulus: lulusSah, skorLulus: skorTertinggiLulus, skorTerbaik: skorPercobaan };
-  }
-
-  // Render Peta 7 Level KHD Ber-Gembok + Hitung Pangkat Siswa untuk 3 Lokasi UI
-  function sinkronkanPetaKhdDanGelar() {
-    let pernahBLJ = false;
-    let pernahMST = false;
-    let pernahKHD = false;
-
-    dataRiwayatLokal.forEach(r => {
-      const inf = bedahKodeProduk(r.produk || '');
-      if (inf.kategori === "BLJ") pernahBLJ = true;
-      else if (inf.kategori === "MST") pernahMST = true;
-      else if (inf.kategori === "KHD") pernahKHD = true;
-    });
-
-    // Susun sesi KHD ke dalam 7 Level & cek kelulusan berurutan
-    let levelTertinggiTamat = 0;
-    let levelSebelumnyaTamat = true; // Level 1 otomatis terbuka pintunya
-
-    const wadahKHD = document.getElementById('wadah-tema-khd');
-    let htmlSemuaLevel = "";
-
-    DEFINISI_LEVEL_KHD.forEach(def => {
-      const daftarSesiLevelIni = CACHE_GRUP_KHD
-        .filter(g => g.levelKHD === def.level)
-        .sort((a, b) => a.urutSesiKHD - b.urutSesiKHD);
-
-      const belumAdaKonten = daftarSesiLevelIni.length === 0;
-      const levelTerbuka = (!belumAdaKonten) && levelSebelumnyaTamat;
-
-      let jumlahLulusDiLevel = 0;
-      let htmlSesiDalamLevel = "";
-      let sesiSebelumnyaLulus = levelTerbuka; // Sesi 1 terbuka jika Level-nya terbuka
-
-      daftarSesiLevelIni.forEach(sesiGrup => {
-        const hasilCek = cekKelulusanGrupKHD(sesiGrup);
-        const sesiIniTerbuka = sesiSebelumnyaLulus;
-
-        if (hasilCek.lulus) {
-          jumlahLulusDiLevel++;
-          sesiSebelumnyaLulus = true;
-        } else {
-          sesiSebelumnyaLulus = false; // Kunci sesi berikutnya jika sesi ini belum lulus KKM 75%
-        }
-
-        const namaAman = escapeHtml(sesiGrup.nama || 'Sesi Simulasi');
-        const deskripsiAman = escapeHtml(sesiGrup.deskripsi || '');
-
-        if (sesiIniTerbuka) {
-          const badgeSesi = hasilCek.lulus
-            ? `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">✅ Lulus (${hasilCek.skorLulus})</span>`
-            : (hasilCek.skorTerbaik > 0
-                ? `<span class="badge-sesi-status" style="background:#fef3c7; color:#b45309;">🎯 Skor: ${hasilCek.skorTerbaik}/75</span>`
-                : `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 Terbuka</span>`);
-
-          htmlSesiDalamLevel += `
-            <div class="theme-item">
-              <div class="theme-header" onclick="toggleTema(this)">
-                <span>📍 ${namaAman}</span>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  ${badgeSesi}
-                  <i class="fas fa-chevron-down chevron-icon"></i>
-                </div>
-              </div>
-              <div class="theme-body">
-                <p class="theme-desc">${deskripsiAman}</p>
-                ${rakitIsiAksiTemaHTML(sesiGrup)}
-              </div>
-            </div>
-          `;
-        } else {
-          htmlSesiDalamLevel += `
-            <div class="theme-item locked-session" onclick="alert('🔒 Sesi Terkunci!\\n\\nSelesaikan sesi sebelumnya secara penuh dengan Nilai Total minimal ${KKM_BUKA_KUNCI} untuk membuka skenario ini.')">
-              <div class="theme-header">
-                <span>🔒 ${namaAman}</span>
-                <span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">Min. Nilai ${KKM_BUKA_KUNCI}</span>
-              </div>
-            </div>
-          `;
-        }
-      });
-
-      const levelIniTamatPenuh = (!belumAdaKonten) && levelTerbuka && (jumlahLulusDiLevel === daftarSesiLevelIni.length);
-      if (levelIniTamatPenuh) {
-        levelTertinggiTamat = def.level;
-        levelSebelumnyaTamat = true;
-      } else {
-        levelSebelumnyaTamat = false;
-      }
-
-      // Badge status di kanan Header Level
-      let labelStatusLevel = "";
-      if (belumAdaKonten) {
-        labelStatusLevel = `<span class="badge-sesi-status" style="background:#f1f5f9; color:#64748b;">⏳ Segera Tersedia</span>`;
-      } else if (levelIniTamatPenuh) {
-        labelStatusLevel = `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">🏆 Tamat (${jumlahLulusDiLevel}/${daftarSesiLevelIni.length})</span>`;
-      } else if (levelTerbuka) {
-        labelStatusLevel = `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 ${jumlahLulusDiLevel}/${daftarSesiLevelIni.length} Sesi</span>`;
-      } else {
-        labelStatusLevel = `<span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">🔒 Terkunci</span>`;
-      }
-
-      const classBox = levelTerbuka ? (`khd-level-box` + (!levelIniTamatPenuh ? ` open` : ``)) : `khd-level-box locked-level`;
-      const aksiKlikLevel = levelTerbuka
-        ? `toggleLevelKHD(this)`
-        : (belumAdaKonten
-            ? `alert('⏳ ${escapeHtml(def.judul)} sedang disiapkan dan segera tersedia!')`
-            : `alert('🔒 Level Terkunci!\\n\\nTamatkan seluruh sesi pada Level ${def.level - 1} dengan nilai minimal ${KKM_BUKA_KUNCI} terlebih dahulu.')`);
-
-      htmlSemuaLevel += `
-        <div class="${classBox}">
-          <div class="khd-level-header" onclick="${aksiKlikLevel}">
-            <div style="padding-right: 10px;">
-              <div style="font-size: 11px; font-weight: 800; color: #047857; text-transform: uppercase;">${escapeHtml(def.fase)} • Gelar: ${escapeHtml(def.gelarSaatIni)}</div>
-              <div style="font-size: 14px; font-weight: 800; color: var(--text-main); margin: 3px 0;">${escapeHtml(def.judul)}</div>
-              <div style="font-size: 11px; color: #64748b;">${escapeHtml(def.deskripsi)}</div>
-            </div>
-            ${labelStatusLevel}
-          </div>
-          ${levelTerbuka ? `<div class="khd-level-body">${htmlSesiDalamLevel}</div>` : ``}
-        </div>
-      `;
-    });
-
-    if (wadahKHD && CACHE_GRUP_KHD.length > 0) {
-      wadahKHD.innerHTML = htmlSemuaLevel;
+    if (nilai >= KKM_BUKA_KUNCI && sahTuntas) {
+     lulusSah = true;
+     if (nilai > skorTertinggiLulus) skorTertinggiLulus = nilai;
     }
-
-    // =========================================================
-    // PENENTUAN GELAR / PANGKAT TERPADU (INDONESIA -> JEPANG)
-    // =========================================================
-    let teksGelar = "😴 Kaum Rebahan";
-    let subInfoGelar = "Belum ada sesi latihan selesai";
-    let bgBadge = "#f1f5f9", warnaBadge = "#475569", borderBadge = "#cbd5e1";
-
-    if (levelTertinggiTamat >= 7) {
-      teksGelar = "👑 Sepuh Lokal (Nushi)";
-      subInfoGelar = "Dewa Kehidupan Jepang! Semua level tamat!";
-      bgBadge = "#fef9c3"; warnaBadge = "#a16207"; borderBadge = "#fde047";
-    } else if (levelTertinggiTamat >= 1) {
-      // Naik ke gelar level KHD berikutnya yang sedang dijalani
-      const infoNext = DEFINISI_LEVEL_KHD[levelTertinggiTamat]; // indeks array 1 = Level 2 (Anak Bawang), dst.
-      teksGelar = infoNext.gelarSaatIni;
-      subInfoGelar = `Lulus Level ${levelTertinggiTamat} • Sedang di Fase ${infoNext.fase}`;
-      bgBadge = levelTertinggiTamat >= 3 ? "#dcfce7" : "#ffedd5";
-      warnaBadge = levelTertinggiTamat >= 3 ? "#15803d" : "#c2410c";
-      borderBadge = levelTertinggiTamat >= 3 ? "#86efac" : "#fdba74";
-    } else if (pernahKHD) {
-      // Sudah mencoba KHD Level 1 tapi belum berhasil keluar bandara!
-      teksGelar = "🧳 Turis Kesasar (Lost Tourist)";
-      subInfoGelar = "Masih nyangkut di Bandara! Luluskan Level 1 (Nilai ≥ 75)";
-      bgBadge = "#fee2e2"; warnaBadge = "#b91c1c"; borderBadge = "#fca5a5";
-    } else if (pernahMST && pernahBLJ) {
-      teksGelar = "👔 Gakusei Job Hunter";
-      subInfoGelar = "Aktif belajar & simulasi wawancara kerja";
-      bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
-    } else if (pernahMST) {
-      teksGelar = "👔 Job Hunter (Pejuang Mensetsu)";
-      subInfoGelar = "Fokus menghadapi wawancara kerja Jepang";
-      bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
-    } else if (pernahBLJ) {
-      teksGelar = "📖 Gakusei (Siswa Bahasa)";
-      subInfoGelar = "Fokus melatih kosakata & kalimat dasar";
-      bgBadge = "#e0f2fe"; warnaBadge = "#0369a1"; borderBadge = "#7dd3fc";
-    }
-
-    // Pasang serentak di 3 Lokasi + Banner KHD
-    const elHeaderGelar = document.getElementById('headerGelarBadge');
-    if (elHeaderGelar) {
-      elHeaderGelar.innerText = teksGelar;
-      elHeaderGelar.style.background = bgBadge;
-      elHeaderGelar.style.color = warnaBadge;
-      elHeaderGelar.style.borderColor = borderBadge;
-    }
-
-    const elDashGelar = document.getElementById('dashGelarText');
-    const elDashSub = document.getElementById('dashGelarSub');
-    const elDashIcon = document.getElementById('dashGelarIconBox');
-    if (elDashGelar) elDashGelar.innerText = teksGelar;
-    if (elDashSub) elDashSub.innerText = subInfoGelar;
-    if (elDashIcon) {
-      elDashIcon.style.background = bgBadge;
-      elDashIcon.style.color = warnaBadge;
-    }
-
-    const elModalGelar = document.getElementById('profilModalGelar');
-    if (elModalGelar) {
-      elModalGelar.innerText = teksGelar;
-      elModalGelar.style.color = warnaBadge;
-    }
-
-    const elKhdBanner = document.getElementById('khdBannerGelar');
-    if (elKhdBanner) elKhdBanner.innerText = teksGelar;
-  }
-
-  function toggleLevelKHD(headerEl) {
-    headerEl.parentElement.classList.toggle('open');
-  }
-
-  async function muatDaftarProduk() {
-    const idWadahNonKHD = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-mst'];
-    try {
-      const hasil = await panggilGAS("getProduk", {});
-      if (!hasil.success || !Array.isArray(hasil.data)) return;
-
-      KATALOG_PRODUK_MAP = {};
-      CACHE_GRUP_KHD = [];
-      const grupTemaMap = new Map();
-
-      hasil.data.forEach(item => {
-        const infoKode = bedahKodeProduk(item.kode);
-        KATALOG_PRODUK_MAP[infoKode.kodePenuh] = item;
-
-        if (!grupTemaMap.has(infoKode.kunciGrup)) {
-          grupTemaMap.set(infoKode.kunciGrup, {
-            kunciGrup: infoKode.kunciGrup,
-            nama: item.nama,
-            deskripsi: item.deskripsi,
-            kategori: infoKode.kategori,
-            tier: infoKode.tier,
-            levelKHD: infoKode.levelKHD,
-            urutSesiKHD: infoKode.urutSesiKHD,
-            KN: null,
-            KL: null
-          });
-        }
-        const grup = grupTemaMap.get(infoKode.kunciGrup);
-        if (!grup.nama && item.nama) grup.nama = item.nama;
-        if (!grup.deskripsi && item.deskripsi) grup.deskripsi = item.deskripsi;
-        grup[infoKode.mode] = item;
-      });
-
-      idWadahNonKHD.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = "";
-      });
-
-      grupTemaMap.forEach(grup => {
-        // Khusus KHD ditangani oleh Peta 7 Level Ber-gembok!
-        if (grup.kategori === "KHD") {
-          CACHE_GRUP_KHD.push(grup);
-          return;
-        }
-
-        const namaAtas = String(grup.nama || '').toUpperCase();
-        let ikonTema = "💬";
-        if (grup.kategori === "MST") ikonTema = "👔";
-        else if (namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
-        else if (namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK")) ikonTema = "🏥";
-        else if (namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
-
-        const isiAksi = rakitIsiAksiTemaHTML(grup);
-        if (!isiAksi) return;
-
-        const kartuHTML = `
-          <div class="theme-item">
-            <div class="theme-header" onclick="toggleTema(this)">
-              <span>${ikonTema} ${escapeHtml(grup.nama || 'Tema Latihan')}</span>
-              <i class="fas fa-chevron-down chevron-icon"></i>
-            </div>
-            <div class="theme-body">
-              <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.')}</p>
-              ${isiAksi}
-            </div>
-          </div>
-        `;
-
-        let targetWadahId = "wadah-tema-blj-bsc";
-        if (grup.kategori === "MST") targetWadahId = "wadah-tema-mst";
-        else if (grup.tier === "PRO") targetWadahId = "wadah-tema-blj-pro";
-        else if (grup.tier === "MID") targetWadahId = "wadah-tema-blj-mid";
-
-        const wadahEl = document.getElementById(targetWadahId);
-        if (wadahEl) wadahEl.innerHTML += kartuHTML;
-      });
-
-      idWadahNonKHD.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.innerHTML.trim() === "") {
-          el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada tema pada kategori ini di Sheet PRODUK.</p>";
-        }
-      });
-
-      // Render Peta Level KHD & Gelar terbaru
-      sinkronkanPetaKhdDanGelar();
-
-    } catch (err) {
-      console.error("Gagal memuat katalog produk:", err);
-    }
-  }
-
-  // =========================================================
-  // 3. DISPATCHER MULTIROUTING (MEMBACA 2 HURUF AWAL: KN vs KL)
-  // =========================================================
-  async function mulaiSesiDispatcher(elemenTombol) {
-    const kodeProduk = String(elemenTombol.dataset.kode || '').trim().toUpperCase();
-    const namaTema = String(elemenTombol.dataset.nama || 'Latihan Kaiwa');
-    const duaHurufAwal = kodeProduk.substring(0, 2); // "KN" atau "KL"
-
-    // 1. CEK KETERSEDIAAN MESIN SEBELUM MEMOTONG TIKET SISWA!
-    if (duaHurufAwal === "KL") {
-      if (typeof window.MesinKL === "undefined") {
-        alert("📞 Fitur Live Kaiwa (Mode Telepon) sedang disiapkan dan segera hadir!\n\nSilakan gunakan tombol Kaiwa Normal terlebih dahulu (tiket Anda belum dipotong).");
-        return;
-      }
-    } else {
-      if (typeof window.MesinKN === "undefined") {
-        alert("⚠️ Mesin Kaiwa Normal (kaiwa-normal.js) belum termuat. Silakan muat ulang (refresh) halaman.");
-        return;
-      }
-    }
-
-    // 2. Cek saldo awal di sisi layar berdasarkan data Sheet
-    const detailLokal = KATALOG_PRODUK_MAP[kodeProduk] || { tiketMasuk: 3 };
-    if (KAIWA_USER.saldo < detailLokal.tiketMasuk) {
-      alert(`Saldo tiket tidak cukup (${KAIWA_USER.saldo} tiket). Butuh ${detailLokal.tiketMasuk} tiket biaya masuk untuk memulai tema ini.`);
-      return;
-    }
-
-    const wrapper = elemenTombol.closest('.theme-action');
-    const suaraDipilih = wrapper.querySelector('.suara-select-dinamis').value;
-    const fotoDipilih = wrapper.querySelector('.foto-sensei-terpilih').value;
-
-    const teksAsli = elemenTombol.innerHTML;
-    elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan sesi...';
-    elemenTombol.disabled = true;
-
-    try {
-      // 3. Potong Tiket Masuk & Ambil Parameter Dinamis Resmi dari kode.gs
-      const data = await panggilGAS('pakaiTiket', {
-        email: KAIWA_USER.email,
-        produk: kodeProduk
-      });
-
-      if (!data.success) {
-        alert(data.message);
-        return;
-      }
-
-      KAIWA_USER.saldo = Number(data.data.saldo);
-      document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
-
-      // 4. Simpan Konfigurasi Dinamis ke Memori Sesi Terpusat
-      window.NEEXA_SESI = {
-        aktif: true,
-        modeMesin: duaHurufAwal === "KL" ? "KL" : "KN",
-        produk: kodeProduk,
-        namaTema: namaTema,
-        suaraTutor: suaraDipilih,
-        fotoTutor: fotoDipilih,
-        tiketMasuk: Number(data.data.tiketMasuk) || 3,
-        tiketPerPutaran: Number(data.data.tiketPerPutaran) || 1,
-        maxPutaran: Number(data.data.maxPutaran) || 7,
-        hargaPenuh: Number(data.data.hargaPenuh) || 26,
-        putaranSaatIni: 0,
-        totalTokenSesi: 0,
-        historyPercakapan: ""
-      };
-
-      jumlahPeringatanLayar = 0;
-      sedangProsesRapor = false;
-      clearTimeout(timerKeluarLayar);
-
-      // 5. ROUTING KE FILE SCRIPT SESUAI 2 HURUF PERTAMA!
-      if (window.NEEXA_SESI.modeMesin === "KL") {
-        window.MesinKL.mulai(window.NEEXA_SESI);
-      } else {
-        window.MesinKN.mulai(window.NEEXA_SESI);
-      }
-
-    } catch (err) {
-      console.error(err);
-      alert('Gagal menghubungi server. Periksa koneksi internet Anda.');
-    } finally {
-      elemenTombol.innerHTML = teksAsli;
-      elemenTombol.disabled = false;
-    }
-  }
-
-  function hentikanMesinAktif() {
-    if (window.NEEXA_SESI.modeMesin === "KL" && typeof window.MesinKL !== "undefined" && window.MesinKL.hentikan) {
-      window.MesinKL.hentikan();
-    } else if (typeof window.MesinKN !== "undefined" && window.MesinKN.hentikan) {
-      window.MesinKN.hentikan();
-    }
-  }
-
-  // =========================================================
-  // 4. EVALUASI RAPOR TERPUSAT (DIPAKAI BERSAMA OLEH KN & KL)
-  // =========================================================
-  document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
-    if (sedangProsesRapor) return;
-
-    const sesi = window.NEEXA_SESI;
-    if (sesi.historyPercakapan.trim() === "") {
-      if (confirm("Anda belum memulai percakapan. Yakin ingin kembali ke Beranda? (Tiket biaya masuk yang sudah terpakai tidak dikembalikan)")) {
-        sesi.aktif = false;
-        hentikanMesinAktif();
-        showView('dashboard');
-      }
-      return;
-    }
-
-    const pesanKonfirmasi = (sesi.putaranSaatIni < sesi.maxPutaran)
-      ? `Percakapan baru berjalan ${sesi.putaranSaatIni} dari ${sesi.maxPutaran} putaran.\n\nMembuat rapor di tengah jalan dikenakan biaya rapor pinalti (5 tiket) dan Koin Nilai = 0 (Anda hanya mendapat koin masuk & koin per percakapan). Lanjutkan?`
-      : "Selesaikan sesi dan lihat rapor evaluasi?";
-
-    if (confirm(pesanKonfirmasi)) {
-      prosesSelesaiSesi(false);
-    }
+   }
   });
 
-  async function prosesSelesaiSesi(isPelanggaran = false) {
-    if (sedangProsesRapor) return;
-    sedangProsesRapor = true;
-    window.NEEXA_SESI.aktif = false;
-    clearTimeout(timerKeluarLayar);
+  return { lulus: lulusSah, skorLulus: skorTertinggiLulus, skorTerbaik: skorPercobaan };
+ }
+
+ // Render Peta 7 Level KHD Ber-Gembok (Otomatis Hybrid KN / KL) + Hitung Pangkat Siswa
+ function sinkronkanPetaKhdDanGelar() {
+  let pernahBLJ = false;
+  let pernahMST = false;
+  let pernahKHD = false;
+
+  dataRiwayatLokal.forEach(r => {
+   const inf = bedahKodeProduk(r.produk || '');
+   if (inf.kategori === "BLJ") pernahBLJ = true;
+   else if (inf.kategori === "MST") pernahMST = true;
+   else if (inf.kategori === "KHD") pernahKHD = true;
+  });
+
+  let levelTertinggiTamat = 0;
+  let levelSebelumnyaTamat = true;
+
+  const wadahKHD = document.getElementById('wadah-tema-khd');
+  let htmlSemuaLevel = "";
+
+  DEFINISI_LEVEL_KHD.forEach(def => {
+   const daftarSesiLevelIni = CACHE_GRUP_KHD
+    .filter(g => g.levelKHD === def.level)
+    .sort((a, b) => a.urutSesiKHD - b.urutSesiKHD);
+
+   const belumAdaKonten = daftarSesiLevelIni.length === 0;
+   const levelTerbuka = (!belumAdaKonten) && levelSebelumnyaTamat;
+
+   let jumlahLulusDiLevel = 0;
+   let htmlSesiDalamLevel = "";
+   let sesiSebelumnyaLulus = levelTerbuka;
+
+   daftarSesiLevelIni.forEach(sesiGrup => {
+    const hasilCek = cekKelulusanGrupKHD(sesiGrup);
+    const sesiIniTerbuka = sesiSebelumnyaLulus;
+
+    if (hasilCek.lulus) {
+     jumlahLulusDiLevel++;
+     sesiSebelumnyaLulus = true;
+    } else {
+     sesiSebelumnyaLulus = false;
+    }
+
+    const namaAman = escapeHtml(sesiGrup.nama || 'Sesi Simulasi');
+    const deskripsiAman = escapeHtml(sesiGrup.deskripsi || '');
+    const labelModeKHD = (!sesiGrup.KN && sesiGrup.KL) ? `<span class="badge-sesi-status" style="background:#ccfbf1; color:#0f766e;">📞 LIVE</span>` : '';
+
+    if (sesiIniTerbuka) {
+     const badgeSesi = hasilCek.lulus
+      ? `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">✅ Lulus (${hasilCek.skorLulus})</span>`
+      : (hasilCek.skorTerbaik > 0
+        ? `<span class="badge-sesi-status" style="background:#fef3c7; color:#b45309;">🎯 Skor: ${hasilCek.skorTerbaik}/75</span>`
+        : `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 Terbuka</span>`);
+
+     htmlSesiDalamLevel += `
+      <div class="theme-item">
+       <div class="theme-header" onclick="toggleTema(this)">
+        <span>📍 ${namaAman}</span>
+        <div style="display:flex; align-items:center; gap:6px;">
+         ${labelModeKHD}
+         ${badgeSesi}
+         <i class="fas fa-chevron-down chevron-icon"></i>
+        </div>
+       </div>
+       <div class="theme-body">
+        <p class="theme-desc">${deskripsiAman}</p>
+        ${rakitIsiAksiTemaHTML(sesiGrup, "HYBRID")}
+       </div>
+      </div>
+     `;
+    } else {
+     htmlSesiDalamLevel += `
+      <div class="theme-item locked-session" onclick="alert('🔒 Sesi Terkunci!\\n\\nSelesaikan sesi sebelumnya secara penuh dengan Nilai Total minimal ${KKM_BUKA_KUNCI} untuk membuka skenario ini.')">
+       <div class="theme-header">
+        <span>🔒 ${namaAman}</span>
+        <span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">Min. Nilai ${KKM_BUKA_KUNCI}</span>
+       </div>
+      </div>
+     `;
+    }
+   });
+
+   const levelIniTamatPenuh = (!belumAdaKonten) && levelTerbuka && (jumlahLulusDiLevel === daftarSesiLevelIni.length);
+   if (levelIniTamatPenuh) {
+    levelTertinggiTamat = def.level;
+    levelSebelumnyaTamat = true;
+   } else {
+    levelSebelumnyaTamat = false;
+   }
+
+   let labelStatusLevel = "";
+   if (belumAdaKonten) {
+    labelStatusLevel = `<span class="badge-sesi-status" style="background:#f1f5f9; color:#64748b;">⏳ Segera Tersedia</span>`;
+   } else if (levelIniTamatPenuh) {
+    labelStatusLevel = `<span class="badge-sesi-status" style="background:#dcfce7; color:#15803d;">🏆 Tamat (${jumlahLulusDiLevel}/${daftarSesiLevelIni.length})</span>`;
+   } else if (levelTerbuka) {
+    labelStatusLevel = `<span class="badge-sesi-status" style="background:#dbeafe; color:#1d4ed8;">🔓 ${jumlahLulusDiLevel}/${daftarSesiLevelIni.length} Sesi</span>`;
+   } else {
+    labelStatusLevel = `<span class="badge-sesi-status" style="background:#e2e8f0; color:#64748b;">🔒 Terkunci</span>`;
+   }
+
+   const classBox = levelTerbuka ? (`khd-level-box` + (!levelIniTamatPenuh ? ` open` : ``)) : `khd-level-box locked-level`;
+   const aksiKlikLevel = levelTerbuka
+    ? `toggleLevelKHD(this)`
+    : (belumAdaKonten
+      ? `alert('⏳ ${escapeHtml(def.judul)} sedang disiapkan dan segera tersedia!')`
+      : `alert('🔒 Level Terkunci!\\n\\nTamatkan seluruh sesi pada Level ${def.level - 1} dengan nilai minimal ${KKM_BUKA_KUNCI} terlebih dahulu.')`);
+
+   htmlSemuaLevel += `
+    <div class="${classBox}">
+     <div class="khd-level-header" onclick="${aksiKlikLevel}">
+      <div style="padding-right: 10px;">
+       <div style="font-size: 11px; font-weight: 800; color: #047857; text-transform: uppercase;">${escapeHtml(def.fase)} • Gelar: ${escapeHtml(def.gelarSaatIni)}</div>
+       <div style="font-size: 14px; font-weight: 800; color: var(--text-main); margin: 3px 0;">${escapeHtml(def.judul)}</div>
+       <div style="font-size: 11px; color: #64748b;">${escapeHtml(def.deskripsi)}</div>
+      </div>
+      ${labelStatusLevel}
+     </div>
+     ${levelTerbuka ? `<div class="khd-level-body">${htmlSesiDalamLevel}</div>` : ``}
+    </div>
+   `;
+  });
+
+  if (wadahKHD && CACHE_GRUP_KHD.length > 0) {
+   wadahKHD.innerHTML = htmlSemuaLevel;
+  }
+
+  let teksGelar = "😴 Kaum Rebahan";
+  let subInfoGelar = "Belum ada sesi latihan selesai";
+  let bgBadge = "#f1f5f9", warnaBadge = "#475569", borderBadge = "#cbd5e1";
+
+  if (levelTertinggiTamat >= 7) {
+   teksGelar = "👑 Sepuh Lokal (Nushi)";
+   subInfoGelar = "Dewa Kehidupan Jepang! Semua level tamat!";
+   bgBadge = "#fef9c3"; warnaBadge = "#a16207"; borderBadge = "#fde047";
+  } else if (levelTertinggiTamat >= 1) {
+   const infoNext = DEFINISI_LEVEL_KHD[levelTertinggiTamat];
+   teksGelar = infoNext.gelarSaatIni;
+   subInfoGelar = `Lulus Level ${levelTertinggiTamat} • Sedang di Fase ${infoNext.fase}`;
+   bgBadge = levelTertinggiTamat >= 3 ? "#dcfce7" : "#ffedd5";
+   warnaBadge = levelTertinggiTamat >= 3 ? "#15803d" : "#c2410c";
+   borderBadge = levelTertinggiTamat >= 3 ? "#86efac" : "#fdba74";
+  } else if (pernahKHD) {
+   teksGelar = "🧳 Turis Kesasar (Lost Tourist)";
+   subInfoGelar = "Masih nyangkut di Bandara! Luluskan Level 1 (Nilai ≥ 75)";
+   bgBadge = "#fee2e2"; warnaBadge = "#b91c1c"; borderBadge = "#fca5a5";
+  } else if (pernahMST && pernahBLJ) {
+   teksGelar = "👔 Gakusei Job Hunter";
+   subInfoGelar = "Aktif belajar & simulasi wawancara kerja";
+   bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
+  } else if (pernahMST) {
+   teksGelar = "👔 Job Hunter (Pejuang Mensetsu)";
+   subInfoGelar = "Fokus menghadapi wawancara kerja Jepang";
+   bgBadge = "#e0e7ff"; warnaBadge = "#3730a3"; borderBadge = "#a5b4fc";
+  } else if (pernahBLJ) {
+   teksGelar = "📖 Gakusei (Siswa Bahasa)";
+   subInfoGelar = "Fokus melatih kosakata & kalimat dasar";
+   bgBadge = "#e0f2fe"; warnaBadge = "#0369a1"; borderBadge = "#7dd3fc";
+  }
+
+  const elHeaderGelar = document.getElementById('headerGelarBadge');
+  if (elHeaderGelar) {
+   elHeaderGelar.innerText = teksGelar;
+   elHeaderGelar.style.background = bgBadge;
+   elHeaderGelar.style.color = warnaBadge;
+   elHeaderGelar.style.borderColor = borderBadge;
+  }
+
+  const elDashGelar = document.getElementById('dashGelarText');
+  const elDashSub = document.getElementById('dashGelarSub');
+  const elDashIcon = document.getElementById('dashGelarIconBox');
+  if (elDashGelar) elDashGelar.innerText = teksGelar;
+  if (elDashSub) elDashSub.innerText = subInfoGelar;
+  if (elDashIcon) {
+   elDashIcon.style.background = bgBadge;
+   elDashIcon.style.color = warnaBadge;
+  }
+
+  const elModalGelar = document.getElementById('profilModalGelar');
+  if (elModalGelar) {
+   elModalGelar.innerText = teksGelar;
+   elModalGelar.style.color = warnaBadge;
+  }
+
+  const elKhdBanner = document.getElementById('khdBannerGelar');
+  if (elKhdBanner) elKhdBanner.innerText = teksGelar;
+ }
+
+ function toggleLevelKHD(headerEl) {
+  headerEl.parentElement.classList.toggle('open');
+ }
+
+ async function muatDaftarProduk() {
+  const idWadahKN = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-mst'];
+  const idWadahKL = ['wadah-live-blj-bsc', 'wadah-live-blj-mid', 'wadah-live-blj-pro', 'wadah-live-mst'];
+
+  try {
+   const hasil = await panggilGAS("getProduk", {});
+   if (!hasil.success || !Array.isArray(hasil.data)) return;
+
+   KATALOG_PRODUK_MAP = {};
+   CACHE_GRUP_KHD = [];
+   const grupTemaMap = new Map();
+
+   hasil.data.forEach(item => {
+    const infoKode = bedahKodeProduk(item.kode);
+    KATALOG_PRODUK_MAP[infoKode.kodePenuh] = item;
+
+    if (!grupTemaMap.has(infoKode.kunciGrup)) {
+     grupTemaMap.set(infoKode.kunciGrup, {
+      kunciGrup: infoKode.kunciGrup,
+      nama: item.nama,
+      deskripsi: item.deskripsi,
+      kategori: infoKode.kategori,
+      tier: infoKode.tier,
+      levelKHD: infoKode.levelKHD,
+      urutSesiKHD: infoKode.urutSesiKHD,
+      KN: null,
+      KL: null
+     });
+    }
+    const grup = grupTemaMap.get(infoKode.kunciGrup);
+    if (!grup.nama && item.nama) grup.nama = item.nama;
+    if (!grup.deskripsi && item.deskripsi) grup.deskripsi = item.deskripsi;
+    grup[infoKode.mode] = item;
+   });
+
+   [...idWadahKN, ...idWadahKL].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = "";
+   });
+
+   grupTemaMap.forEach(grup => {
+    // Khusus KHD ditangani oleh Peta 7 Level Ber-gembok (Hybrid KN/KL)
+    if (grup.kategori === "KHD") {
+     CACHE_GRUP_KHD.push(grup);
+     return;
+    }
+
+    const namaAtas = String(grup.nama || '').toUpperCase();
+    let ikonTema = "💬";
+    if (grup.kategori === "MST") ikonTema = "👔";
+    else if (namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
+    else if (namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK")) ikonTema = "🏥";
+    else if (namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
+
+    // 1. Render ke menu LATIHAN -> PERCAKAPAN jika ada produk KN
+    const isiAksiKN = rakitIsiAksiTemaHTML(grup, "KN");
+    if (isiAksiKN) {
+     const kartuKN = `
+      <div class="theme-item">
+       <div class="theme-header" onclick="toggleTema(this)">
+        <span>${ikonTema} ${escapeHtml(grup.nama || 'Tema Latihan')}</span>
+        <i class="fas fa-chevron-down chevron-icon"></i>
+       </div>
+       <div class="theme-body">
+        <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.')}</p>
+        ${isiAksiKN}
+       </div>
+      </div>
+     `;
+     let targetKN = "wadah-tema-blj-bsc";
+     if (grup.kategori === "MST") targetKN = "wadah-tema-mst";
+     else if (grup.tier === "PRO") targetKN = "wadah-tema-blj-pro";
+     else if (grup.tier === "MID") targetKN = "wadah-tema-blj-mid";
+     document.getElementById(targetKN)?.insertAdjacentHTML('beforeend', kartuKN);
+    }
+
+    // 2. Render ke menu LATIHAN -> PERCAKAPAN LIVE jika ada produk KL
+    const isiAksiKL = rakitIsiAksiTemaHTML(grup, "KL");
+    if (isiAksiKL) {
+     const kartuKL = `
+      <div class="theme-item">
+       <div class="theme-header" onclick="toggleTema(this)">
+        <span>📞 ${escapeHtml(grup.nama || 'Tema Live')}</span>
+        <i class="fas fa-chevron-down chevron-icon"></i>
+       </div>
+       <div class="theme-body">
+        <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Simulasi telepon suara real-time bersama AI.')}</p>
+        ${isiAksiKL}
+       </div>
+      </div>
+     `;
+     let targetKL = "wadah-live-blj-bsc";
+     if (grup.kategori === "MST") targetKL = "wadah-live-mst";
+     else if (grup.tier === "PRO") targetKL = "wadah-live-blj-pro";
+     else if (grup.tier === "MID") targetKL = "wadah-live-blj-mid";
+     document.getElementById(targetKL)?.insertAdjacentHTML('beforeend', kartuKL);
+    }
+   });
+
+   idWadahKN.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.innerHTML.trim() === "") {
+     el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada tema KN pada kategori ini di Sheet PRODUK.</p>";
+    }
+   });
+
+   idWadahKL.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.innerHTML.trim() === "") {
+     el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada produk berkode <b>KL-...</b> pada kategori ini di Sheet PRODUK.</p>";
+    }
+   });
+
+   sinkronkanPetaKhdDanGelar();
+  } catch (err) {
+   console.error("Gagal memuat katalog produk:", err);
+  }
+ }
+
+ // =========================================================
+ // 3. DISPATCHER MULTIROUTING (MEMBACA 2 HURUF AWAL: KN vs KL)
+ // =========================================================
+ async function mulaiSesiDispatcher(elemenTombol) {
+  const kodeProduk = String(elemenTombol.dataset.kode || '').trim().toUpperCase();
+  const namaTema = String(elemenTombol.dataset.nama || 'Latihan Kaiwa');
+  const duaHurufAwal = kodeProduk.substring(0, 2);
+
+  if (duaHurufAwal === "KL") {
+   if (typeof window.MesinKL === "undefined") {
+    alert("⚠️ Mesin Kaiwa Live (kaiwa-live.js) belum termuat. Silakan muat ulang (refresh) halaman.");
+    return;
+   }
+  } else {
+   if (typeof window.MesinKN === "undefined") {
+    alert("⚠️ Mesin Kaiwa Normal (kaiwa-normal.js) belum termuat. Silakan muat ulang (refresh) halaman.");
+    return;
+   }
+  }
+
+  const detailLokal = KATALOG_PRODUK_MAP[kodeProduk] || { tiketMasuk: 3 };
+  if (KAIWA_USER.saldo < detailLokal.tiketMasuk) {
+   alert(`Saldo tiket tidak cukup (${KAIWA_USER.saldo} tiket). Butuh ${detailLokal.tiketMasuk} tiket biaya masuk untuk memulai tema ini.`);
+   return;
+  }
+
+  const wrapper = elemenTombol.closest('.theme-action');
+  const suaraDipilih = wrapper.querySelector('.suara-select-dinamis').value;
+  const fotoDipilih = wrapper.querySelector('.foto-sensei-terpilih').value;
+  const bebasPotongDipilih = wrapper.querySelector('.barge-in-select-dinamis')?.value === '1';
+
+  const teksAsli = elemenTombol.innerHTML;
+  elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan sesi...';
+  elemenTombol.disabled = true;
+
+  try {
+   const data = await panggilGAS('pakaiTiket', {
+    email: KAIWA_USER.email,
+    produk: kodeProduk
+   });
+
+   if (!data.success) {
+    alert(data.message);
+    return;
+   }
+
+   KAIWA_USER.saldo = Number(data.data.saldo);
+   document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+
+   window.NEEXA_SESI = {
+    aktif: true,
+    modeMesin: duaHurufAwal === "KL" ? "KL" : "KN",
+    produk: kodeProduk,
+    namaTema: namaTema,
+    suaraTutor: suaraDipilih,
+    fotoTutor: fotoDipilih,
+    bebasPotong: bebasPotongDipilih,
+    selesaiResmiKL: false,
+    tiketMasuk: Number(data.data.tiketMasuk) || 3,
+    tiketPerPutaran: Number(data.data.tiketPerPutaran) || 1,
+    maxPutaran: Number(data.data.maxPutaran) || 7,
+    hargaPenuh: Number(data.data.hargaPenuh) || 26,
+    putaranSaatIni: 0,
+    totalTokenSesi: 0,
+    historyPercakapan: ""
+   };
+
+   jumlahPeringatanLayar = 0;
+   sedangProsesRapor = false;
+   clearTimeout(timerKeluarLayar);
+
+   if (window.NEEXA_SESI.modeMesin === "KL") {
+    window.MesinKL.mulai(window.NEEXA_SESI);
+   } else {
+    window.MesinKN.mulai(window.NEEXA_SESI);
+   }
+
+  } catch (err) {
+   console.error(err);
+   alert('Gagal menghubungi server. Periksa koneksi internet Anda.');
+  } finally {
+   elemenTombol.innerHTML = teksAsli;
+   elemenTombol.disabled = false;
+  }
+ }
+
+ function hentikanMesinAktif() {
+  if (window.NEEXA_SESI.modeMesin === "KL" && typeof window.MesinKL !== "undefined" && window.MesinKL.hentikan) {
+   window.MesinKL.hentikan();
+  } else if (typeof window.MesinKN !== "undefined" && window.MesinKN.hentikan) {
+   window.MesinKN.hentikan();
+  }
+ }
+
+ // =========================================================
+ // 4. EVALUASI RAPOR TERPUSAT (DIPAKAI BERSAMA OLEH KN & KL)
+ // =========================================================
+ document.getElementById('btnSelesaiKaiwa').addEventListener('click', () => {
+  if (sedangProsesRapor) return;
+
+  const sesi = window.NEEXA_SESI;
+  if (sesi.modeMesin === "KL" && typeof window.MesinKL !== "undefined" && window.MesinKL.komitAkhir) {
+   window.MesinKL.komitAkhir();
+  }
+
+  if (sesi.historyPercakapan.trim() === "") {
+   if (confirm("Belum ada percakapan yang terekam. Yakin ingin mengakhiri dan kembali ke Beranda? (Tiket biaya masuk yang sudah terpakai tidak dikembalikan)")) {
+    sesi.aktif = false;
     hentikanMesinAktif();
+    showView('dashboard');
+   }
+   return;
+  }
 
-    const sesi = window.NEEXA_SESI;
+  let pesanKonfirmasi = "Selesaikan sesi dan lihat rapor evaluasi?";
+  if (sesi.modeMesin === "KL") {
+   pesanKonfirmasi = `Akhiri panggilan Live sekarang?\n\nArgo terpakai: ${sesi.putaranSaatIni}/${sesi.maxPutaran} blok (30 detik) + 2 tiket Rapor (Tanpa denda berhenti lebih awal). Lanjutkan?`;
+  } else if (sesi.putaranSaatIni < sesi.maxPutaran) {
+   pesanKonfirmasi = `Percakapan baru berjalan ${sesi.putaranSaatIni} dari ${sesi.maxPutaran} putaran.\n\nMembuat rapor di tengah jalan dikenakan biaya rapor pinalti (5 tiket) dan Koin Nilai = 0. Lanjutkan?`;
+  }
 
-    showView('rapor');
-    document.getElementById('loadingRapor').innerHTML = `
-      <i class="fas fa-circle-notch fa-spin" style="font-size: 35px; color: #38bdf8;"></i>
-      <p style="font-size: 13px; margin-top: 10px; color: #bae6fd;">${isPelanggaran ? 'Memproses pinalti keluar layar...' : 'Sensei sedang menganalisis kinerja Anda...'}</p>
-    `;
-    document.getElementById('loadingRapor').classList.remove('hidden');
-    document.getElementById('hasilRapor').classList.add('hidden');
-    document.getElementById('lencanaTotalArea').classList.add('hidden');
+  if (confirm(pesanKonfirmasi)) {
+   prosesSelesaiSesi(false);
+  }
+ });
 
-    let activeEngineEvaluator = "Belum Diketahui";
+ async function prosesSelesaiSesi(isPelanggaran = false) {
+  if (sedangProsesRapor) return;
+  sedangProsesRapor = true;
+  const sesi = window.NEEXA_SESI;
 
-    try {
-      let raporData = {
-        kosaKata: 0,
-        polaKalimat: 0,
-        kelancaran: 0,
-        perbaikan: "Sesi dihentikan otomatis oleh sistem karena meninggalkan layar lebih dari 3 detik sebelum percakapan tercatat.",
-        rekomendasi: "Tetap fokus di dalam layar selama sesi latihan berlangsung agar tidak terkena pinalti tiket penuh."
-      };
-      let evalSig = "";
-      let tokenUntukDisimpan = 0;
+  if (sesi.modeMesin === "KL" && typeof window.MesinKL !== "undefined" && window.MesinKL.komitAkhir) {
+   window.MesinKL.komitAkhir();
+  }
+  sesi.aktif = false;
+  clearTimeout(timerKeluarLayar);
+  hentikanMesinAktif();
 
-      if (sesi.historyPercakapan.trim() !== "") {
-        const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...getWorkerAuthHeader()
-          },
-          body: JSON.stringify({
-            history: sesi.historyPercakapan,
-            produk: sesi.produk
-          })
-        });
+  showView('rapor');
+  document.getElementById('loadingRapor').innerHTML = `
+   <i class="fas fa-circle-notch fa-spin" style="font-size: 35px; color: #38bdf8;"></i>
+   <p style="font-size: 13px; margin-top: 10px; color: #bae6fd;">${isPelanggaran ? 'Memproses pinalti keluar layar...' : 'Sensei sedang menganalisis kinerja Anda...'}</p>
+  `;
+  document.getElementById('loadingRapor').classList.remove('hidden');
+  document.getElementById('hasilRapor').classList.add('hidden');
+  document.getElementById('lencanaTotalArea').classList.add('hidden');
 
-        if (!resEval.ok) throw new Error(`Server evaluasi sibuk (Status: ${resEval.status}).`);
-        const rawData = await resEval.json();
+  let activeEngineEvaluator = "Belum Diketahui";
 
-        if (rawData.engine) activeEngineEvaluator = rawData.engine;
-        if (rawData.error) throw new Error("Evaluator Error: " + rawData.error);
+  try {
+   let raporData = {
+    kosaKata: 0,
+    polaKalimat: 0,
+    kelancaran: 0,
+    perbaikan: "Sesi dihentikan otomatis oleh sistem karena meninggalkan layar lebih dari 3 detik sebelum percakapan tercatat.",
+    rekomendasi: "Tetap fokus di dalam layar selama sesi latihan berlangsung agar tidak terkena pinalti tiket penuh."
+   };
+   let evalSig = "";
+   let tokenUntukDisimpan = 0;
 
-        tokenUntukDisimpan = Number(rawData.tokens) || 0;
-        evalSig = rawData.evalSignature || "";
+   if (sesi.historyPercakapan.trim() !== "") {
+    const resEval = await fetch(WORKER_URL + 'api/evaluasi', {
+     method: 'POST',
+     headers: {
+      'Content-Type': 'application/json',
+      ...getWorkerAuthHeader()
+     },
+     body: JSON.stringify({
+      history: sesi.historyPercakapan,
+      produk: sesi.produk
+     })
+    });
 
-        const jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').trim();
-        raporData = JSON.parse(jsonContent);
-        kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
-      }
+    if (!resEval.ok) throw new Error(`Server evaluasi sibuk (Status: ${resEval.status}).`);
+    const rawData = await resEval.json();
 
-      setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
-      setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
-      setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
+    if (rawData.engine) activeEngineEvaluator = rawData.engine;
+    if (rawData.error) throw new Error("Evaluator Error: " + rawData.error);
 
-      document.getElementById('teksPerbaikan').innerText = raporData.perbaikan;
-      document.getElementById('teksRekomendasi').innerText = raporData.rekomendasi;
+    tokenUntukDisimpan = (Number(rawData.tokens) || 0) + (Number(sesi.totalTokenSesi) || 0);
+    // PENTING: evalSignature dari Worker menggunakan rawData.tokens, maka kirimkan angka yang sama persis ke GAS!
+    tokenUntukDisimpan = Number(rawData.tokens) || 0;
+    evalSig = rawData.evalSignature || "";
 
-      const skorRata = Math.round((Number(raporData.kosaKata) + Number(raporData.polaKalimat) + Number(raporData.kelancaran)) / 3);
-      const valTotalEl = document.getElementById('valTotalScore');
-      if (valTotalEl) {
-        valTotalEl.innerText = skorRata;
-        document.getElementById('lencanaTotalArea').classList.remove('hidden');
+    const jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').trim();
+    raporData = JSON.parse(jsonContent);
+    kirimAktivitas(activeEngineEvaluator + " (Jalur Evaluasi)");
+   }
 
-        const lencanaBox = document.getElementById('lencanaBentuk');
-        const pesanPerayaan = document.getElementById('pesanPerayaan');
+   setLingkaran('chartKosaKata', 'valKosaKata', raporData.kosaKata);
+   setLingkaran('chartBunpou', 'valBunpou', raporData.polaKalimat);
+   setLingkaran('chartKelancaran', 'valKelancaran', raporData.kelancaran);
 
-        if (isPelanggaran) {
-          lencanaBox.style.background = "#ef4444";
-          lencanaBox.style.borderColor = "#fecaca";
-          pesanPerayaan.innerText = "Sesi Dihentikan Sistem (0 Koin) 🚨";
-          pesanPerayaan.style.color = "#fca5a5";
-        } else if (skorRata >= 70) {
-          lencanaBox.style.background = "#10b981";
-          lencanaBox.style.borderColor = "#a7f3d0";
-          pesanPerayaan.innerText = "Subarashii! (Hebat!) 🎉";
-          pesanPerayaan.style.color = "#10b981";
-        } else {
-          lencanaBox.style.background = "#0ea5e9";
-          lencanaBox.style.borderColor = "#bae6fd";
-          pesanPerayaan.innerText = "Ganbatte! (Semangat!) 💪";
-          pesanPerayaan.style.color = "#38bdf8";
-        }
-      }
+   document.getElementById('teksPerbaikan').innerText = raporData.perbaikan;
+   document.getElementById('teksRekomendasi').innerText = raporData.rekomendasi;
 
-      document.getElementById('loadingRapor').classList.add('hidden');
-      document.getElementById('hasilRapor').classList.remove('hidden');
+   const skorRata = Math.round((Number(raporData.kosaKata) + Number(raporData.polaKalimat) + Number(raporData.kelancaran)) / 3);
+   const valTotalEl = document.getElementById('valTotalScore');
+   if (valTotalEl) {
+    valTotalEl.innerText = skorRata;
+    document.getElementById('lencanaTotalArea').classList.remove('hidden');
 
-      const statusSelesaiPenuh = (!isPelanggaran) && (sesi.putaranSaatIni >= sesi.maxPutaran);
+    const lencanaBox = document.getElementById('lencanaBentuk');
+    const pesanPerayaan = document.getElementById('pesanPerayaan');
 
-      const dataGasRapor = await panggilGAS('simpanRaporKaiwa', {
-        nama: KAIWA_USER.nama,
-        email: KAIWA_USER.email,
-        produk: sesi.produk,
-        kosaKata: raporData.kosaKata,
-        polaKalimat: raporData.polaKalimat,
-        kelancaran: raporData.kelancaran,
-        perbaikan: raporData.perbaikan,
-        rekomendasi: raporData.rekomendasi,
-        history: sesi.historyPercakapan,
-        totalToken: tokenUntukDisimpan,
-        putaranTerpakai: sesi.putaranSaatIni,
-        isSelesaiPenuh: statusSelesaiPenuh,
-        isPelanggaran: isPelanggaran,
-        evalSignature: evalSig
-      });
+    if (isPelanggaran) {
+     lencanaBox.style.background = "#ef4444";
+     lencanaBox.style.borderColor = "#fecaca";
+     pesanPerayaan.innerText = "Sesi Dihentikan Sistem (0 Koin) 🚨";
+     pesanPerayaan.style.color = "#fca5a5";
+    } else if (skorRata >= 70) {
+     lencanaBox.style.background = "#10b981";
+     lencanaBox.style.borderColor = "#a7f3d0";
+     pesanPerayaan.innerText = "Subarashii! (Hebat!) 🎉";
+     pesanPerayaan.style.color = "#10b981";
+    } else {
+     lencanaBox.style.background = "#0ea5e9";
+     lencanaBox.style.borderColor = "#bae6fd";
+     pesanPerayaan.innerText = "Ganbatte! (Semangat!) 💪";
+     pesanPerayaan.style.color = "#38bdf8";
+    }
+   }
+
+   document.getElementById('loadingRapor').classList.add('hidden');
+   document.getElementById('hasilRapor').classList.remove('hidden');
+
+   const statusSelesaiPenuh = (!isPelanggaran) && (
+    sesi.putaranSaatIni >= sesi.maxPutaran || sesi.selesaiResmiKL === true
+   );
+
+   const historyUntukDisimpan = (sesi.modeMesin === "KL" && statusSelesaiPenuh)
+    ? `[MODUL: ${sesi.produk}] [STATUS: TUNTAS]\n` + sesi.historyPercakapan
+    : sesi.historyPercakapan;
+
+   const dataGasRapor = await panggilGAS('simpanRaporKaiwa', {
+    nama: KAIWA_USER.nama,
+    email: KAIWA_USER.email,
+    produk: sesi.produk,
+    kosaKata: raporData.kosaKata,
+    polaKalimat: raporData.polaKalimat,
+    kelancaran: raporData.kelancaran,
+    perbaikan: raporData.perbaikan,
+    rekomendasi: raporData.rekomendasi,
+    history: historyUntukDisimpan,
+    totalToken: tokenUntukDisimpan,
+    putaranTerpakai: sesi.putaranSaatIni,
+    isSelesaiPenuh: statusSelesaiPenuh,
+    isPelanggaran: isPelanggaran,
+    evalSignature: evalSig
+   });
 
       if (dataGasRapor.success && dataGasRapor.data) {
         if (dataGasRapor.data.koin !== undefined) {
@@ -3475,6 +3724,7 @@
    document.getElementById('mobileSubnavLatihan')?.classList.add('open');
    document.getElementById('mobileSubnavPanduan')?.classList.remove('open');
    if (namaTab === 'latihan-percakapan') kembaliKeTujuan();
+   if (namaTab === 'latihan-live') { kembaliKeTujuanLive(); muatDataLeaderboard(false); }
   } else if (namaTab.startsWith('panduan-')) {
    document.getElementById('submenu-panduan')?.classList.add('open');
    document.getElementById('btn-induk-panduan')?.classList.add('expanded', 'active');
@@ -3605,14 +3855,49 @@
   }
  }
 
+ function bukaKategoriLive(kode) {
+  document.getElementById('live-tujuan-view').style.display = 'none';
+  document.getElementById('sub-tier-live-blj').style.display = 'none';
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+
+  if (kode === 'blj') document.getElementById('sub-tier-live-blj').style.display = 'block';
+  else if (kode === 'mst') document.getElementById('detail-live-mst').style.display = 'block';
+ }
+
+ function bukaDaftarTemaLive(idDetail) {
+  document.getElementById('sub-tier-live-blj').style.display = 'none';
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+  document.getElementById(idDetail).style.display = 'block';
+ }
+
+ function kembaliKeTierLiveBLJ() {
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+  document.getElementById('sub-tier-live-blj').style.display = 'block';
+ }
+
+ function kembaliKeTujuanLive() {
+  const v = document.getElementById('live-tujuan-view');
+  if (!v) return;
+  document.getElementById('sub-tier-live-blj').style.display = 'none';
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+  v.style.display = 'block';
+ }
+
  function pilihKategoriLeaderboard(kat) {
   kategoriLbAktif = kat;
   document.querySelectorAll('.lb-main-tab').forEach(b => b.classList.remove('active'));
-  const mapId = { global: 'lbTabGlobal', blj: 'lbTabBlj', mst: 'lbTabMst', khd: 'lbTabKhd' };
+  const mapId = {
+   global: 'lbTabGlobal',
+   blj: 'lbTabBlj',
+   bljLive: 'lbTabBljLive',
+   mst: 'lbTabMst',
+   mstLive: 'lbTabMstLive',
+   khd: 'lbTabKhd'
+  };
   document.getElementById(mapId[kat])?.classList.add('active');
 
   const subBlj = document.getElementById('lbSubTabBljWrap');
-  if (subBlj) subBlj.classList.toggle('hidden', kat !== 'blj');
+  if (subBlj) subBlj.classList.toggle('hidden', !(kat === 'blj' || kat === 'bljLive'));
 
   renderTabelLeaderboardAktif();
  }
@@ -3662,7 +3947,7 @@
   let html = '';
 
   if (kategoriLbAktif === 'global') {
-   if (boxInfo) boxInfo.innerHTML = '<strong>👑 TOP GLOBAL (Super Rajin):</strong> Akumulasi (SUM) seluruh nilai rapor dari semua kategori latihan.';
+   if (boxInfo) boxInfo.innerHTML = '<strong>👑 TOP GLOBAL (Super Rajin):</strong> Akumulasi (SUM) seluruh nilai rapor dari semua kategori latihan (Gabungan Normal + Live).';
    const rows = CACHE_LEADERBOARD.global || [];
    if (rows.length === 0) {
     wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada data sesi tercatat.</div>';
@@ -3680,11 +3965,17 @@
    });
    html += `</tbody></table>`;
 
-  } else if (kategoriLbAktif === 'blj') {
-   if (boxInfo) boxInfo.innerHTML = `<strong>📘 Master Tata Bahasa (${subTierBljAktif}):</strong> Diambil 1 Nilai Tertinggi dari sesi yang diselesaikan penuh (Tie-breaker: rata-rata nilai di tier ${subTierBljAktif}).`;
-   const rows = (CACHE_LEADERBOARD.blj && CACHE_LEADERBOARD.blj[subTierBljAktif]) ? CACHE_LEADERBOARD.blj[subTierBljAktif] : [];
+  } else if (kategoriLbAktif === 'blj' || kategoriLbAktif === 'bljLive') {
+   const isLive = kategoriLbAktif === 'bljLive';
+   if (boxInfo) {
+    boxInfo.innerHTML = isLive
+     ? `<strong>⚡ Master BLJ LIVE (${subTierBljAktif}):</strong> Rekor nilai tertinggi panggilan telepon real-time pada tier ${subTierBljAktif}.`
+     : `<strong>📘 Master Tata Bahasa (${subTierBljAktif}):</strong> Diambil 1 Nilai Tertinggi dari sesi yang diselesaikan penuh (Tie-breaker: rata-rata nilai di tier ${subTierBljAktif}).`;
+   }
+   const bucket = isLive ? CACHE_LEADERBOARD.bljLive : CACHE_LEADERBOARD.blj;
+   const rows = (bucket && bucket[subTierBljAktif]) ? bucket[subTierBljAktif] : [];
    if (rows.length === 0) {
-    wadah.innerHTML = `<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada siswa yang menuntaskan sesi penuh pada tier ${subTierBljAktif}.</div>`;
+    wadah.innerHTML = `<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada rekor ${isLive ? 'Live ' : ''}pada tier ${subTierBljAktif}.</div>`;
     return;
    }
    html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Kategori</th><th>Nilai Tertinggi</th></tr></thead><tbody>`;
@@ -3694,16 +3985,21 @@
      <td style="white-space:nowrap;">${formatIkonPeringkat(idx + 1, isMe)}</td>
      <td>${formatNamaKandidatLB(r, isMe)}</td>
      <td style="font-size:12px; color:#475569; font-weight:700;">${escapeHtml(r.kategori)}</td>
-     <td><span style="font-weight:900; color:#1d4ed8; font-size:15px;">${r.nilaiTertinggi}</span> <span style="font-size:10.5px; color:#64748b;">(Avg: ${r.rataRata})</span></td>
+     <td><span style="font-weight:900; color:${isLive ? '#0f766e' : '#1d4ed8'}; font-size:15px;">${r.nilaiTertinggi}</span> <span style="font-size:10.5px; color:#64748b;">(Avg: ${r.rataRata})</span></td>
     </tr>`;
    });
    html += `</tbody></table>`;
 
-  } else if (kategoriLbAktif === 'mst') {
-   if (boxInfo) boxInfo.innerHTML = '<strong>💼 Kandidat Pilihan HRD TSK (Liga Mensetsu):</strong> Sesi 1 (&ge;60) = +3 Pts | Naik vs sesi lalu = +3 Pts | Zona Elit HRD (&ge;85 beruntun) = tetap +3 Pts | Sama = +1 Pt | Turun atau &lt;60 = 0 Pts.';
-   const rows = CACHE_LEADERBOARD.mst || [];
+  } else if (kategoriLbAktif === 'mst' || kategoriLbAktif === 'mstLive') {
+   const isLiveMst = kategoriLbAktif === 'mstLive';
+   if (boxInfo) {
+    boxInfo.innerHTML = isLiveMst
+     ? '<strong>📞 Pilihan HRD LIVE (Liga Mensetsu Real-Time):</strong> Klasemen khusus panggilan telepon wawancara langsung (KL-MST).'
+     : '<strong>💼 Kandidat Pilihan HRD TSK (Liga Mensetsu):</strong> Sesi 1 (&ge;60) = +3 Pts | Naik vs sesi lalu = +3 Pts | Zona Elit HRD (&ge;85 beruntun) = tetap +3 Pts | Sama = +1 Pt | Turun atau &lt;60 = 0 Pts.';
+   }
+   const rows = isLiveMst ? (CACHE_LEADERBOARD.mstLive || []) : (CACHE_LEADERBOARD.mst || []);
    if (rows.length === 0) {
-    wadah.innerHTML = '<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada data simulasi wawancara Mensetsu.</div>';
+    wadah.innerHTML = `<div style="padding:35px; text-align:center; color:#94a3b8;">Belum ada data simulasi wawancara ${isLiveMst ? 'Live' : 'Mensetsu'}.</div>`;
     return;
    }
    html = `<table class="lb-table"><thead><tr><th>Peringkat</th><th>Nama</th><th>Learn</th><th>Growth</th><th>Max</th><th>Min</th><th>PTS</th></tr></thead><tbody>`;
@@ -3747,54 +4043,40 @@
   wadah.innerHTML = html;
  }
 
+ function renderMiniDaftarBaris(arr, pakaiPts = false) {
+  if (!arr || arr.length === 0) {
+   return '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:8px 0;">Belum ada data klasemen.</div>';
+  }
+  return arr.slice(0, 5).map((r, i) => {
+   const isMe = apakahBarisMilikSaya(r);
+   const rankTeks = (isMe ? '🔥 ' : '') + (i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : '#' + (i + 1))));
+   const rowCls = isMe ? 'me-highlight' : (r.jobReady ? 'job-highlight' : '');
+   const nilaiKanan = pakaiPts
+    ? `<span style="font-weight:900; color:#be123c; white-space:nowrap;">${r.pts} Pts</span>`
+    : `<span style="font-weight:900; color:var(--primary); white-space:nowrap;">${Number(r.skorKumulatif).toLocaleString('id-ID')}</span>`;
+   return `
+    <div class="mini-lb-row ${rowCls}">
+     <div style="display:flex; align-items:center; gap:6px; overflow:hidden;">
+      <span style="font-weight:800; white-space:nowrap;">${rankTeks}</span>
+      <span style="font-weight:800; color:${isMe ? '#1e3a8a' : 'var(--text-main)'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.nama)}</span>
+      ${isMe ? '<span style="font-size:9px; background:#ea580c; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">KAMU</span>' : ''}
+      ${r.jobReady ? '<span style="font-size:9px; background:#16a34a; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">TSK</span>' : ''}
+     </div>
+     ${nilaiKanan}
+    </div>
+   `;
+  }).join('');
+ }
+
  function renderMiniLeaderboardDashboard() {
   if (!CACHE_LEADERBOARD) return;
+  const htmlGlobal = renderMiniDaftarBaris(CACHE_LEADERBOARD.global || [], false);
+  const htmlMst = renderMiniDaftarBaris(CACHE_LEADERBOARD.mst || [], true);
+  const htmlMstLive = renderMiniDaftarBaris(CACHE_LEADERBOARD.mstLive || [], true);
 
-  // Render serentak ke semua kotak Mini Global (Dashboard, Percakapan & Riwayat)
-  const topG = (CACHE_LEADERBOARD.global || []).slice(0, 5);
-  const htmlMiniGlobal = (topG.length === 0)
-   ? '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:8px 0;">Belum ada data skor.</div>'
-   : topG.map((r, i) => {
-      const isMe = apakahBarisMilikSaya(r);
-      const rankTeks = (isMe ? '🔥 ' : '') + (i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : '#' + (i + 1))));
-      const rowCls = isMe ? 'me-highlight' : (r.jobReady ? 'job-highlight' : '');
-      return `
-       <div class="mini-lb-row ${rowCls}">
-        <div style="display:flex; align-items:center; gap:6px; overflow:hidden;">
-         <span style="font-weight:800; white-space:nowrap;">${rankTeks}</span>
-         <span style="font-weight:800; color:${isMe ? '#1e3a8a' : 'var(--text-main)'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.nama)}</span>
-         ${isMe ? '<span style="font-size:9px; background:#ea580c; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">KAMU</span>' : ''}
-         ${r.jobReady ? '<span style="font-size:9px; background:#16a34a; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">TSK</span>' : ''}
-        </div>
-        <span style="font-weight:900; color:var(--primary); white-space:nowrap;">${Number(r.skorKumulatif).toLocaleString('id-ID')}</span>
-       </div>
-      `;
-     }).join('');
-
-  document.querySelectorAll('.wadah-mini-lb-global').forEach(el => { el.innerHTML = htmlMiniGlobal; });
-
-  // Render serentak ke semua kotak Mini Mensetsu (Dashboard, Percakapan & Riwayat)
-  const topM = (CACHE_LEADERBOARD.mst || []).slice(0, 5);
-  const htmlMiniMst = (topM.length === 0)
-   ? '<div style="font-size:12px; color:#94a3b8; text-align:center; padding:8px 0;">Belum ada klasemen HRD.</div>'
-   : topM.map((r, i) => {
-      const isMe = apakahBarisMilikSaya(r);
-      const rankTeks = (isMe ? '🔥 ' : '') + (i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : '#' + (i + 1))));
-      const rowCls = isMe ? 'me-highlight' : (r.jobReady ? 'job-highlight' : '');
-      return `
-       <div class="mini-lb-row ${rowCls}">
-        <div style="display:flex; align-items:center; gap:6px; overflow:hidden;">
-         <span style="font-weight:800; white-space:nowrap;">${rankTeks}</span>
-         <span style="font-weight:800; color:${isMe ? '#1e3a8a' : 'var(--text-main)'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.nama)}</span>
-         ${isMe ? '<span style="font-size:9px; background:#ea580c; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">KAMU</span>' : ''}
-         ${r.jobReady ? '<span style="font-size:9px; background:#16a34a; color:#fff; padding:1px 5px; border-radius:8px; font-weight:800;">TSK</span>' : ''}
-        </div>
-        <span style="font-weight:900; color:#be123c; white-space:nowrap;">${r.pts} Pts</span>
-       </div>
-      `;
-     }).join('');
-
-  document.querySelectorAll('.wadah-mini-lb-mst').forEach(el => { el.innerHTML = htmlMiniMst; });
+  document.querySelectorAll('.wadah-mini-lb-global').forEach(el => { el.innerHTML = htmlGlobal; });
+  document.querySelectorAll('.wadah-mini-lb-mst').forEach(el => { el.innerHTML = htmlMst; });
+  document.querySelectorAll('.wadah-mini-lb-mst-live').forEach(el => { el.innerHTML = htmlMstLive; });
  }
 
  async function togglePrivasiLeaderboard(chkEl) {
