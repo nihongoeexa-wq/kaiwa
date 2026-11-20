@@ -396,8 +396,8 @@
   const rateAsli = audioCtxCapture.sampleRate;
   sourceNodeKL = audioCtxCapture.createMediaStreamSource(mediaStreamKL);
 
-  // Gunakan AudioWorkletNode Modern (Bebas peringatan Deprecation di Konsol!)
-  if (audioCtxCapture.audioWorklet) {
+  try {
+   if (!audioCtxCapture.audioWorklet) throw new Error("No Worklet");
    const kodeWorklet = `
     class NeexaPcmProcessor extends AudioWorkletProcessor {
      constructor() {
@@ -406,7 +406,7 @@
       this._idx = 0;
      }
      process(inputs) {
-      const ch = inputs 0  && inputs 0  0 ;
+      const ch = inputs[0] && inputs[0][0];
       if (!ch) return true;
       for (let i = 0; i < ch.length; i++) {
        this._buf[this._idx++] = ch[i];
@@ -429,6 +429,15 @@
     olahSampelMikrofonVAD(ev.data, rateAsli);
    };
    sourceNodeKL.connect(workletNodeKL);
+  } catch (workletErr) {
+   // Cadangan otomatis jika browser memblokir Blob AudioWorklet
+   const spNode = audioCtxCapture.createScriptProcessor(2048, 1, 1);
+   spNode.onaudioprocess = function (ev) {
+    olahSampelMikrofonVAD(ev.inputBuffer.getChannelData(0), rateAsli);
+   };
+   sourceNodeKL.connect(spNode);
+   spNode.connect(audioCtxCapture.destination);
+   workletNodeKL = { port: {}, disconnect: () => { spNode.onaudioprocess = null; spNode.disconnect(); } };
   }
  }
 
@@ -520,17 +529,9 @@
    }, 8000);
   }
 
-  wsLive.onopen = async function () {
-   try {
-    await mulaiAliranMikrofonKL();
-    if (wsLive && wsLive.readyState === WebSocket.OPEN) {
-     wsLive.send(JSON.stringify({ neexaInit: true }));
-    }
-   } catch (errMic) {
-    clearTimeout(handshakeWatchdogKL);
-    alert("Gagal mengakses mikrofon untuk panggilan Live. Pastikan izin mikrofon aktif.");
-    kirimBlackBox("Izin Mic KL Live", errMic.message);
-    window.MesinKL.hentikan();
+  wsLive.onopen = function () {
+   if (wsLive && wsLive.readyState === WebSocket.OPEN) {
+    wsLive.send(JSON.stringify({ neexaInit: true }));
    }
   };
 
@@ -552,6 +553,10 @@
    if (msg.neexaWsError) {
     alasanErrorTerakhirKL = `${msg.neexaWsError} (Kode ${msg.code || '-'})`;
     console.error("Detail Error Gemini Live:", alasanErrorTerakhirKL);
+    // Jika error 1008 karena API Key diblokir (blocked), jangan retry sia-sia
+    if (String(msg.neexaWsError).toLowerCase().includes('blocked')) {
+     sudahCobaFallbackModel = true;
+    }
     return;
    }
 
@@ -645,7 +650,7 @@
  }
 
  window.MesinKL = {
-  mulai: function (sesiConfig) {
+  mulai: async function (sesiConfig) {
    pasangListenerTombolKL();
    this.hentikan();
 
@@ -691,6 +696,18 @@
    chatContainer.appendChild(infoBanner);
 
    showView('kaiwaRoom');
+
+   // 1. Pastikan Mikrofon menyala 1x di depan sebelum membuka jalur WebSocket
+   try {
+    await mulaiAliranMikrofonKL();
+   } catch (errMic) {
+    alert("Gagal mengakses mikrofon. Pastikan izin mikrofon di browser aktif.");
+    kirimBlackBox("Izin Mic KL Live", errMic.message);
+    this.hentikan();
+    return;
+   }
+
+   // 2. Buka sambungan telepon WebSocket ke Gemini Live
    bukaKoneksiWebSocketKL(false);
   },
 
