@@ -3326,8 +3326,29 @@
   const bebasPotongDipilih = wrapper.querySelector('.barge-in-select-dinamis')?.value === '1';
 
   const teksAsli = elemenTombol.innerHTML;
-  elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan sesi...';
+  elemenTombol.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengecek mikrofon & sesi...';
   elemenTombol.disabled = true;
+
+  // KHUSUS MODE LIVE (KL): Pastikan izin mikrofon disetujui TEPAT SAAT KLIK sebelum tiket siswa dipotong!
+  if (duaHurufAwal === "KL") {
+   try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+     throw new Error("Browser ini tidak mendukung akses mikrofon (Buka menggunakan Google Chrome / Safari asli).");
+    }
+    const tesStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    tesStream.getTracks().forEach(t => t.stop());
+   } catch (errIzin) {
+    elemenTombol.innerHTML = teksAsli;
+    elemenTombol.disabled = false;
+    const namaErr = String(errIzin.name || '');
+    if (namaErr === 'NotAllowedError' || namaErr === 'PermissionDeniedError') {
+     alert("🎙️ Akses Mikrofon Diblokir Browser!\n\nCara Mengaktifkan:\n1. Klik ikon Pengaturan / Gembok di sebelah kiri alamat 'neexasystem.com' di atas layar.\n2. Klik menu 'Izin / Permissions'.\n3. Ubah Mikrofon menjadi 'Izinkan / Allow', lalu muat ulang halaman.\n\n(Tenang, tiket Anda belum dipotong!)");
+    } else {
+     alert("🎙️ Mikrofon gagal diakses (" + (errIzin.message || namaErr) + "). Pastikan mikrofon tidak sedang dipakai aplikasi lain seperti WA/Zoom, dan tiket Anda belum dipotong.");
+    }
+    return;
+   }
+  }
 
   try {
    const data = await panggilGAS('pakaiTiket', {
