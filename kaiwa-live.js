@@ -5,21 +5,26 @@
 
 (function () {
  let wsLive = null;
- let audioCtxCapture = null;
- let audioCtxPlay = null;
+ let audioCtxKL = null;
  let mediaStreamKL = null;
  let workletNodeKL = null;
  let sourceNodeKL = null;
- let workletUrlBlob = null;
  let nextPlayTimeKL = 0;
  let activeSourcesKL = [];
 
+ let panggilanSudahDimulaiKL = false;
+ let sedangMenyambungKL = false;
+ let setupSudahSelesaiKL = false;
  let timerDetikInterval = null;
  let detikBerjalanKL = 0;
+
  let aiSedangBicaraKL = false;
+ let echoTailTimerKL = null;
  let micManualMuteKL = false;
  let sudahCobaFallbackModel = false;
  let isListenerKLAttached = false;
+ let handshakeWatchdogKL = null;
+ let alasanErrorTerakhirKL = "";
 
  let currentUserBubbleKL = null;
  let currentUserTeksKL = "";
@@ -28,31 +33,32 @@
 
  let menungguSalamPenutupMST_KL = false;
  let autoTutupTimerKL = null;
- let setupSudahSelesaiKL = false;
- let handshakeWatchdogKL = null;
- let alasanErrorTerakhirKL = "";
-
- // State Detektor Aktivitas Suara (Client-Side VAD khusus Gemini 3.8 Live)
- let userSedangBicaraVAD = false;
- let hitungFrameSuara = 0;
- let waktuTerakhirSuaraMs = 0;
- let preRollBufferB64 = [];
 
  function pasangListenerTombolKL() {
   if (isListenerKLAttached) return;
   const micBtn = document.getElementById('tombolMicUtama');
   if (!micBtn) return;
 
-  micBtn.addEventListener('click', function () {
+  micBtn.addEventListener('click', async function () {
    const sesi = window.NEEXA_SESI;
-   if (!sesi || !sesi.aktif || sesi.modeMesin !== "KL" || !setupSudahSelesaiKL) return;
+   if (!sesi || !sesi.aktif || sesi.modeMesin !== "KL") return;
+   if (sedangMenyambungKL) return;
 
+   // KLIK PERTAMA DI DALAM RUANGAN: Buka Mikrofon Murni dari Sentuhan Jari & Aktifkan Live!
+   if (!panggilanSudahDimulaiKL) {
+    await aktifkanPanggilanDariKlikUser();
+    return;
+   }
+
+   // KLIK BERIKUTNYA SAAT LIVE BERLANGSUNG: Jeda (Mute) / Lanjutkan Bicara
+   if (!setupSudahSelesaiKL) return;
    micManualMuteKL = !micManualMuteKL;
-   if (micManualMuteKL && userSedangBicaraVAD) {
-    akhiriGiliranSuaraUserVAD();
+   if (micManualMuteKL && wsLive && wsLive.readyState === WebSocket.OPEN) {
+    wsLive.send(JSON.stringify({ realtimeInput: { audioStreamEnd: true } }));
    }
    perbaruiStatusVisualMicKL();
   });
+
   isListenerKLAttached = true;
  }
 
@@ -149,7 +155,18 @@
   const statusTeks = document.getElementById('statusTeksInfo');
   if (!micBtn || !statusTeks || !sesi || !sesi.aktif) return;
 
-  if (!setupSudahSelesaiKL) {
+  // Kondisi 1: Belum diklik sama sekali (Menunggu 1x klik pengaktifan dari siswa)
+  if (!panggilanSudahDimulaiKL && !sedangMenyambungKL) {
+   micWrap?.classList.remove('is-recording');
+   micBtn.style.backgroundColor = "#10b981";
+   micBtn.disabled = false;
+   micBtn.innerHTML = '<i class="fas fa-phone-alt"></i>';
+   statusTeks.innerHTML = "👆 <b>Tekan tombol hijau SEKALI</b> untuk mengaktifkan telepon Live";
+   return;
+  }
+
+  // Kondisi 2: Sedang proses jabat tangan ke server Gemini Live
+  if (sedangMenyambungKL || !setupSudahSelesaiKL) {
    micWrap?.classList.remove('is-recording');
    micBtn.style.backgroundColor = "#94a3b8";
    micBtn.disabled = true;
@@ -159,80 +176,85 @@
 
   const modeAntiBocor = !sesi.bebasPotong;
 
+  // Kondisi 3: Siswa menekan tombol untuk Mute sementara
   if (micManualMuteKL) {
    micWrap?.classList.remove('is-recording');
    micBtn.style.backgroundColor = "#64748b";
    micBtn.disabled = false;
    micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-   statusTeks.innerText = "🔇 Mikrofon di-mute sementara (Klik ikon untuk lanjut bicara)";
-  } else if (aiSedangBicaraKL && modeAntiBocor) {
+   statusTeks.innerText = "🔇 Dijeda (Mute) — Tekan tombol lagi untuk lanjut bicara";
+   return;
+  }
+
+  // Kondisi 4: AI sedang mengeluarkan suara & Mode Aman Anti-Bocor aktif
+  if (aiSedangBicaraKL && modeAntiBocor) {
    micWrap?.classList.remove('is-recording');
    micBtn.style.backgroundColor = "#0284c7";
    micBtn.disabled = false;
    micBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-   statusTeks.innerText = "🛡️ AI sedang bicara (Mode Anti-Bocor menahan suara luar)";
-  } else if (userSedangBicaraVAD) {
-   micWrap?.classList.add('is-recording');
-   micBtn.style.backgroundColor = "#dc2626";
-   micBtn.disabled = false;
-   micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-   statusTeks.innerText = "🎙️ Mendengar suara Anda... (Berhenti bicara sejenak agar AI menjawab)";
+   statusTeks.innerText = "🔊 Dengarkan AI berbicara... (Otomatis merah kembali setelah selesai)";
+   return;
+  }
+
+  // Kondisi 5: KAIWA LIVE AKTIF BERLANGSUNG -> TOMBOL MERAH BERDENYUT!
+  micWrap?.classList.add('is-recording');
+  micBtn.style.backgroundColor = "#ef4444";
+  micBtn.disabled = false;
+  micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+
+  if (aiSedangBicaraKL && !modeAntiBocor) {
+   statusTeks.innerText = "🔴 LIVE AKTIF (Bebas Potong) — AI sedang bicara, klik tombol jika ingin Mute";
+  } else if (menungguSalamPenutupMST_KL) {
+   statusTeks.innerText = "🔴 LIVE AKTIF — Silakan ucapkan salam penutup wawancara Anda!";
   } else {
-   micWrap?.classList.add('is-recording');
-   micBtn.style.backgroundColor = "#0d9488";
-   micBtn.disabled = false;
-   micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-   statusTeks.innerText = menungguSalamPenutupMST_KL
-    ? "🎙️ Silakan ucapkan salam penutup wawancara Anda..."
-    : "🟢 Sambungan Live Aktif — Langsung bicara (Klik ikon untuk Mute)";
+   statusTeks.innerText = "🔴 LIVE BERLANGSUNG — Silakan berbicara bahasa Jepang sekarang!";
   }
  }
 
  function hentikanAntreanSuaraAI() {
+  clearTimeout(echoTailTimerKL);
   activeSourcesKL.forEach(src => {
    try { src.stop(); } catch (e) {}
   });
   activeSourcesKL = [];
-  if (audioCtxPlay) {
-   nextPlayTimeKL = audioCtxPlay.currentTime;
+  if (audioCtxKL) {
+   nextPlayTimeKL = audioCtxKL.currentTime;
   }
   aiSedangBicaraKL = false;
   perbaruiStatusVisualMicKL();
  }
 
  function putarPotonganPcm24k(base64Pcm) {
-  if (!audioCtxPlay || !window.NEEXA_SESI.aktif) return;
+  if (!audioCtxKL || !window.NEEXA_SESI.aktif) return;
   if (!base64Pcm || base64Pcm.length <= 4) return;
-  if (audioCtxPlay.state === 'suspended') {
-   audioCtxPlay.resume().catch(() => {});
+  if (audioCtxKL.state === 'suspended') {
+   audioCtxKL.resume().catch(() => {});
   }
 
-  const binStr = atob(base64Pcm);
-  const len = binStr.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+  clearTimeout(echoTailTimerKL);
 
-  const int16 = new Int16Array(bytes.buffer);
+  const binStr = atob(base64Pcm);
+  const evenLen = binStr.length - (binStr.length % 2);
+  if (evenLen <= 0) return;
+
+  const bytes = new Uint8Array(evenLen);
+  for (let i = 0; i < evenLen; i++) bytes[i] = binStr.charCodeAt(i);
+
+  const int16 = new Int16Array(bytes.buffer, 0, evenLen / 2);
   const float32 = new Float32Array(int16.length);
   for (let i = 0; i < int16.length; i++) {
    float32[i] = int16[i] / 32768.0;
   }
 
-  const audioBuffer = audioCtxPlay.createBuffer(1, float32.length, 24000);
+  const audioBuffer = audioCtxKL.createBuffer(1, float32.length, 24000);
   audioBuffer.getChannelData(0).set(float32);
 
-  const source = audioCtxPlay.createBufferSource();
+  const source = audioCtxKL.createBufferSource();
   source.buffer = audioBuffer;
-  source.connect(audioCtxPlay.destination);
+  source.connect(audioCtxKL.destination);
 
-  const now = audioCtxPlay.currentTime;
+  const now = audioCtxKL.currentTime;
   if (nextPlayTimeKL < now) nextPlayTimeKL = now + 0.02;
-
-  // Jika Mode Anti-Bocor aktif & user sempat memicu VAD tepat sebelum AI bicara, tutup giliran user dengan aman
-  if (!window.NEEXA_SESI.bebasPotong && userSedangBicaraVAD) {
-   userSedangBicaraVAD = false;
-   hitungFrameSuara = 0;
-  }
 
   aiSedangBicaraKL = true;
   perbaruiStatusVisualMicKL();
@@ -245,8 +267,12 @@
    const idx = activeSourcesKL.indexOf(source);
    if (idx !== -1) activeSourcesKL.splice(idx, 1);
    if (activeSourcesKL.length === 0) {
-    aiSedangBicaraKL = false;
-    perbaruiStatusVisualMicKL();
+    echoTailTimerKL = setTimeout(() => {
+     if (activeSourcesKL.length === 0) {
+      aiSedangBicaraKL = false;
+      perbaruiStatusVisualMicKL();
+     }
+    }, 180);
    }
   };
  }
@@ -281,8 +307,17 @@
   return btoa(binary);
  }
 
- function kirimChunkPcmKeWS(b64Pcm) {
+ function kirimSampelKeGemini(rawFloat, rateAsli) {
+  const sesi = window.NEEXA_SESI;
+  if (!sesi || !sesi.aktif || !setupSudahSelesaiKL) return;
   if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
+  if (micManualMuteKL) return;
+
+  // Saat Mode Aman Anti-Bocor aktif & AI sedang bicara, kirim sinyal hening murni (0) agar pantulan speaker tidak memotong AI
+  const tahanSuaraLuar = (!sesi.bebasPotong) && aiSedangBicaraKL;
+  const sampelFinal = tahanSuaraLuar ? new Float32Array(rawFloat.length) : rawFloat;
+  const b64Pcm = konversiFloat32KeBase64Pcm16k(sampelFinal, rateAsli);
+
   wsLive.send(JSON.stringify({
    realtimeInput: {
     audio: {
@@ -293,151 +328,74 @@
   }));
  }
 
- function akhiriGiliranSuaraUserVAD() {
-  if (!userSedangBicaraVAD) return;
-  userSedangBicaraVAD = false;
-  hitungFrameSuara = 0;
-  preRollBufferB64 = [];
-
-  if (wsLive && wsLive.readyState === WebSocket.OPEN) {
-   wsLive.send(JSON.stringify({
-    realtimeInput: {
-     activityEnd: {}
-    }
-   }));
-  }
+ async function aktifkanPanggilanDariKlikUser() {
   const statusTeks = document.getElementById('statusTeksInfo');
-  if (statusTeks && window.NEEXA_SESI.aktif) {
-   statusTeks.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AI sedang merespons ucapan Anda...';
-  }
- }
-
- function olahSampelMikrofonVAD(rawFloat, rateAsli) {
-  const sesi = window.NEEXA_SESI;
-  if (!sesi || !sesi.aktif || !setupSudahSelesaiKL) return;
-  if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
-  if (micManualMuteKL) return;
-  if (!sesi.bebasPotong && aiSedangBicaraKL) return;
-
-  // Hitung kekuatan volume suara (RMS)
-  let sumSq = 0;
-  for (let i = 0; i < rawFloat.length; i++) {
-   sumSq += rawFloat[i] * rawFloat[i];
-  }
-  const rms = Math.sqrt(sumSq / rawFloat.length);
-  const ambangSuara = (sesi.bebasPotong && aiSedangBicaraKL) ? 0.028 : 0.011;
-  const b64Pcm = konversiFloat32KeBase64Pcm16k(rawFloat, rateAsli);
-  const skrgMs = Date.now();
-
-  if (rms >= ambangSuara) {
-   waktuTerakhirSuaraMs = skrgMs;
-   hitungFrameSuara++;
-
-   if (!userSedangBicaraVAD && hitungFrameSuara >= 2) {
-    // Jika Mode Bebas Potong aktif & AI sedang bicara, hentikan suara AI lokal seketika
-    if (sesi.bebasPotong && aiSedangBicaraKL) {
-     hentikanAntreanSuaraAI();
-     komitTranskripKeHistory('ai');
-    }
-
-    userSedangBicaraVAD = true;
-    perbaruiStatusVisualMicKL();
-
-    // 1. Kirim sinyal resmi activityStart ke Gemini 3.8 Live
-    wsLive.send(JSON.stringify({ realtimeInput: { activityStart: {} } }));
-
-    // 2. Kirim pre-roll buffer (~350ms sebelumnya) agar suku kata pertama tidak terpotong
-    while (preRollBufferB64.length > 0) {
-     kirimChunkPcmKeWS(preRollBufferB64.shift());
-    }
-   }
-
-   if (userSedangBicaraVAD) {
-    kirimChunkPcmKeWS(b64Pcm);
-   } else {
-    preRollBufferB64.push(b64Pcm);
-    if (preRollBufferB64.length > 9) preRollBufferB64.shift();
-   }
-  } else {
-   hitungFrameSuara = 0;
-   if (userSedangBicaraVAD) {
-    // Tetap kirim ekor suara sampai hening selama 850ms, lalu kirim activityEnd
-    kirimChunkPcmKeWS(b64Pcm);
-    if (skrgMs - waktuTerakhirSuaraMs >= 850) {
-     akhiriGiliranSuaraUserVAD();
-    }
-   } else {
-    preRollBufferB64.push(b64Pcm);
-    if (preRollBufferB64.length > 9) preRollBufferB64.shift();
-   }
-  }
- }
-
- async function mulaiAliranMikrofonKL() {
-  if (mediaStreamKL && audioCtxCapture) {
-   if (audioCtxCapture.state === 'suspended') await audioCtxCapture.resume();
-   return;
-  }
-
-  mediaStreamKL = await navigator.mediaDevices.getUserMedia({
-   audio: {
-    echoCancellation: true,
-    noiseSuppression: true,
-    autoGainControl: true,
-    channelCount: 1
-   }
-  });
-
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  audioCtxCapture = new AudioContextClass();
-  if (audioCtxCapture.state === 'suspended') {
-   await audioCtxCapture.resume();
-  }
-  const rateAsli = audioCtxCapture.sampleRate;
-  sourceNodeKL = audioCtxCapture.createMediaStreamSource(mediaStreamKL);
+  sedangMenyambungKL = true;
+  perbaruiStatusVisualMicKL();
 
   try {
-   if (!audioCtxCapture.audioWorklet) throw new Error("No Worklet");
-   const kodeWorklet = `
-    class NeexaPcmProcessor extends AudioWorkletProcessor {
-     constructor() {
-      super();
-      this._buf = new Float32Array(2048);
-      this._idx = 0;
-     }
-     process(inputs) {
-      const ch = inputs[0] && inputs[0][0];
-      if (!ch) return true;
-      for (let i = 0; i < ch.length; i++) {
-       this._buf[this._idx++] = ch[i];
-       if (this._idx >= 2048) {
-        this.port.postMessage(this._buf.slice(0));
-        this._idx = 0;
-       }
-      }
-      return true;
-     }
-    }
-    registerProcessor('neexa-pcm-processor', NeexaPcmProcessor);
-   `;
-   const blob = new Blob([kodeWorklet], { type: 'application/javascript' });
-   workletUrlBlob = URL.createObjectURL(blob);
-   await audioCtxCapture.audioWorklet.addModule(workletUrlBlob);
+   // 1. Buka Speaker & Mikrofon TEPAT di dalam klik tombol (100% diizinkan semua browser HP/Laptop!)
+   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+   audioCtxKL = new AudioContextClass();
+   if (audioCtxKL.state === 'suspended') {
+    await audioCtxKL.resume();
+   }
 
-   workletNodeKL = new AudioWorkletNode(audioCtxCapture, 'neexa-pcm-processor');
-   workletNodeKL.port.onmessage = function (ev) {
-    olahSampelMikrofonVAD(ev.data, rateAsli);
-   };
-   sourceNodeKL.connect(workletNodeKL);
-  } catch (workletErr) {
-   // Cadangan otomatis jika browser memblokir Blob AudioWorklet
-   const spNode = audioCtxCapture.createScriptProcessor(2048, 1, 1);
-   spNode.onaudioprocess = function (ev) {
-    olahSampelMikrofonVAD(ev.inputBuffer.getChannelData(0), rateAsli);
-   };
-   sourceNodeKL.connect(spNode);
-   spNode.connect(audioCtxCapture.destination);
-   workletNodeKL = { port: {}, disconnect: () => { spNode.onaudioprocess = null; spNode.disconnect(); } };
+   mediaStreamKL = await navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+   });
+
+   const rateAsli = audioCtxKL.sampleRate;
+   sourceNodeKL = audioCtxKL.createMediaStreamSource(mediaStreamKL);
+
+   try {
+    if (!audioCtxKL.audioWorklet) throw new Error("FallbackSP");
+    const kodeWorklet = "class NeexaPcm extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(2048);this.i=0;}process(inp){const c=inp[0]&&inp[0][0];if(c){for(let k=0;k<c.length;k++){this.b[this.i++]=c[k];if(this.i>=2048){this.port.postMessage(this.b.slice(0));this.i=0;}}}return true;}}registerProcessor('neexa-pcm',NeexaPcm);";
+    const dataUri = "data:text/javascript;base64," + btoa(kodeWorklet);
+    await audioCtxKL.audioWorklet.addModule(dataUri);
+
+    workletNodeKL = new AudioWorkletNode(audioCtxKL, 'neexa-pcm');
+    workletNodeKL.port.onmessage = function (ev) {
+     kirimSampelKeGemini(ev.data, rateAsli);
+    };
+    sourceNodeKL.connect(workletNodeKL);
+   } catch (eWorklet) {
+    const spNode = audioCtxKL.createScriptProcessor(2048, 1, 1);
+    const silentGain = audioCtxKL.createGain();
+    silentGain.gain.value = 0;
+    spNode.onaudioprocess = function (ev) {
+     kirimSampelKeGemini(ev.inputBuffer.getChannelData(0), rateAsli);
+    };
+    sourceNodeKL.connect(spNode);
+    spNode.connect(silentGain);
+    silentGain.connect(audioCtxKL.destination);
+    workletNodeKL = {
+     disconnect: function () {
+      spNode.onaudioprocess = null;
+      try { spNode.disconnect(); silentGain.disconnect(); } catch (e) {}
+     }
+    };
+   }
+
+   panggilanSudahDimulaiKL = true;
+   sedangMenyambungKL = false;
+
+   // 2. Sambungkan WebSocket ke Gemini 3.8 Live
+   bukaKoneksiWebSocketKL(false);
+
+  } catch (errMic) {
+   sedangMenyambungKL = false;
+   panggilanSudahDimulaiKL = false;
+   if (audioCtxKL) {
+    try { audioCtxKL.close(); } catch (e) {}
+    audioCtxKL = null;
+   }
+   perbaruiStatusVisualMicKL();
+   if (statusTeks) {
+    statusTeks.innerText = "⚠️ Izin mikrofon ditolak browser. Aktifkan izin mikrofon di ikon gembok atas lalu tekan tombol lagi.";
+   }
+   alert("Gagal mengakses mikrofon (" + (errMic.name || "Error") + "). Pastikan izin mikrofon di browser sudah Diizinkan (Allow), lalu tekan tombol hijau sekali lagi.");
+   kirimBlackBox("Izin Mic KL Klik", errMic.message);
   }
  }
 
@@ -495,9 +453,6 @@
 
   setupSudahSelesaiKL = false;
   alasanErrorTerakhirKL = "";
-  userSedangBicaraVAD = false;
-  hitungFrameSuara = 0;
-  preRollBufferB64 = [];
   clearTimeout(handshakeWatchdogKL);
   perbaruiStatusVisualMicKL();
 
@@ -514,7 +469,7 @@
   });
 
   if (statusTeks) {
-   statusTeks.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Menghubungkan telepon AI Live${pakaiFallback ? ' (Jalur Cadangan)' : ''}...`;
+   statusTeks.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Menyambungkan telepon Live${pakaiFallback ? ' (Jalur Cadangan)' : ''}...`;
   }
 
   wsLive = new WebSocket(`${wsBase}/api/live-ws?${params.toString()}`);
@@ -553,35 +508,19 @@
    if (msg.neexaWsError) {
     alasanErrorTerakhirKL = `${msg.neexaWsError} (Kode ${msg.code || '-'})`;
     console.error("Detail Error Gemini Live:", alasanErrorTerakhirKL);
-    // Jika error 1008 karena API Key diblokir (blocked), jangan retry sia-sia
-    if (String(msg.neexaWsError).toLowerCase().includes('blocked')) {
+    if (String(msg.neexaWsError).toLowerCase().includes('blocked') || String(msg.neexaWsError).toLowerCase().includes('api key')) {
      sudahCobaFallbackModel = true;
     }
     return;
    }
 
-   // 1. Setup Selesai -> Nyalakan Argo 30 Detik & AI LANGSUNG MENYAPA DULUAN ("Moshi moshi...")!
+   // Setup Selesai -> Tombol Berubah MERAH BERDENYUT & Siswa Dipersilakan Bicara Duluan!
    if (msg.setupComplete !== undefined) {
     clearTimeout(handshakeWatchdogKL);
     setupSudahSelesaiKL = true;
     kirimAktivitas(pakaiFallback ? "Gemini 3.1 Flash Live (Fallback KL)" : "Gemini 3.8 Live (KL)");
     mulaiArgoWaktu30Detik();
     perbaruiStatusVisualMicKL();
-
-    const isMST = sesi.produk.includes("-MST") || sesi.produk.startsWith("KL-MST");
-    const pemicuSapaanAwal = isMST
-     ? "（オンライン面接の通話がつながりました。面接官として最初に「もしもし、聞こえますか？そこに誰かいますか？」と声をかけ、続けて受験者に最初の挨拶を促してください。）"
-     : "（電話がつながりました。最初に「もしもし！誰かいますか？聞こえますか？」のように自然な電話の第一声で話しかけ、設定された役割として最初の短い声かけをしてください。）";
-
-    wsLive.send(JSON.stringify({
-     clientContent: {
-      turns: [{
-       role: "user",
-       parts: [{ text: pemicuSapaanAwal }]
-      }],
-      turnComplete: true
-     }
-    }));
     return;
    }
 
@@ -641,6 +580,7 @@
     return;
    }
    komitSisaTranskripTertunda();
+   document.getElementById('micWrapper')?.classList.remove('is-recording');
    const stInfo = document.getElementById('statusTeksInfo');
    if (stInfo && sesi.aktif) {
     const ket = alasanErrorTerakhirKL || evt.reason || '';
@@ -650,32 +590,30 @@
  }
 
  window.MesinKL = {
-  mulai: async function (sesiConfig) {
+  mulai: function (sesiConfig) {
    pasangListenerTombolKL();
    this.hentikan();
 
    sesiConfig.seedAcak = Math.floor(Math.random() * 900000) + 100000;
    sesiConfig.selesaiResmiKL = false;
+   panggilanSudahDimulaiKL = false;
+   sedangMenyambungKL = false;
+   setupSudahSelesaiKL = false;
    menungguSalamPenutupMST_KL = false;
    sudahCobaFallbackModel = false;
    micManualMuteKL = false;
    aiSedangBicaraKL = false;
-   userSedangBicaraVAD = false;
    currentUserBubbleKL = null;
    currentUserTeksKL = "";
    currentAiBubbleKL = null;
    currentAiTeksKL = "";
-
-   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-   audioCtxPlay = new AudioContextClass({ sampleRate: 24000 });
-   audioCtxPlay.resume().catch(() => {});
    nextPlayTimeKL = 0;
 
    const totalMenitLabel = formatMenitDetik((Number(sesiConfig.maxPutaran) || 6) * 30);
    document.getElementById('activeProductDisplay').innerText = `📞 LIVE • ${sesiConfig.namaTema} (${sesiConfig.produk})`;
    document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
    document.getElementById('progressBarKaiwa').style.width = '0%';
-   document.getElementById('indikatorPutaran').innerText = `⏱️ Sisa Waktu: ${totalMenitLabel} • Argo: 0/${sesiConfig.maxPutaran} Blok`;
+   document.getElementById('indikatorPutaran').innerText = `⏱️ Siap Tersambung • Durasi Maks: ${totalMenitLabel} (${sesiConfig.maxPutaran} Blok)`;
 
    const chatContainer = document.getElementById('chatContainer');
    chatContainer.innerHTML = '';
@@ -691,28 +629,15 @@
     : "🛡️ Mode Aman Anti Suara Bocor: <b>AKTIF</b>";
 
    infoBanner.innerHTML = isMST
-    ? `📞 <b>Wawancara Live Real-Time Terhubung</b> (${labelKeamanan})<br>Dengarkan sapaan awal Direktur, lalu langsung jawab tanpa perlu menekan tombol rekam!`
-    : `📞 <b>Panggilan Kaiwa Live Aktif</b> (${labelKeamanan})<br>Dengarkan sapaan telepon dari AI Sensei, lalu langsung jawab seperti telepon biasa!`;
+    ? `📞 <b>Ruang Wawancara Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol berubah <b>Merah Berdenyut</b>, langsung ucapkan salam pembuka kepada Direktur!`
+    : `📞 <b>Ruang Percakapan Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol berubah <b>Merah Berdenyut</b>, langsung sapa AI Sensei dalam bahasa Jepang!`;
    chatContainer.appendChild(infoBanner);
 
    showView('kaiwaRoom');
-
-   // 1. Pastikan Mikrofon menyala 1x di depan sebelum membuka jalur WebSocket
-   try {
-    await mulaiAliranMikrofonKL();
-   } catch (errMic) {
-    alert("Gagal mengakses mikrofon. Pastikan izin mikrofon di browser aktif.");
-    kirimBlackBox("Izin Mic KL Live", errMic.message);
-    this.hentikan();
-    return;
-   }
-
-   // 2. Buka sambungan telepon WebSocket ke Gemini Live
-   bukaKoneksiWebSocketKL(false);
+   perbaruiStatusVisualMicKL();
   },
 
   komitAkhir: function () {
-   if (userSedangBicaraVAD) akhiriGiliranSuaraUserVAD();
    komitSisaTranskripTertunda();
   },
 
@@ -720,8 +645,10 @@
    clearInterval(timerDetikInterval);
    clearTimeout(autoTutupTimerKL);
    clearTimeout(handshakeWatchdogKL);
+   clearTimeout(echoTailTimerKL);
+   panggilanSudahDimulaiKL = false;
+   sedangMenyambungKL = false;
    setupSudahSelesaiKL = false;
-   userSedangBicaraVAD = false;
    komitSisaTranskripTertunda();
 
    if (wsLive) {
@@ -735,13 +662,9 @@
    hentikanAntreanSuaraAI();
 
    if (workletNodeKL) {
-    workletNodeKL.port.onmessage = null;
+    if (workletNodeKL.port) workletNodeKL.port.onmessage = null;
     try { workletNodeKL.disconnect(); } catch (e) {}
     workletNodeKL = null;
-   }
-   if (workletUrlBlob) {
-    try { URL.revokeObjectURL(workletUrlBlob); } catch (e) {}
-    workletUrlBlob = null;
    }
    if (sourceNodeKL) {
     try { sourceNodeKL.disconnect(); } catch (e) {}
@@ -751,13 +674,9 @@
     mediaStreamKL.getTracks().forEach(t => t.stop());
     mediaStreamKL = null;
    }
-   if (audioCtxCapture) {
-    try { audioCtxCapture.close(); } catch (e) {}
-    audioCtxCapture = null;
-   }
-   if (audioCtxPlay) {
-    try { audioCtxPlay.close(); } catch (e) {}
-    audioCtxPlay = null;
+   if (audioCtxKL) {
+    try { audioCtxKL.close(); } catch (e) {}
+    audioCtxKL = null;
    }
 
    const micWrap = document.getElementById('micWrapper');
