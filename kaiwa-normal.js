@@ -270,12 +270,17 @@
       const isMST = sesiConfig.produk.includes("-MST") || sesiConfig.produk.startsWith("MST");
       const statusTeks = document.getElementById('statusTeksInfo'); // <-- TAMBAHAN WAJIB INI!
 
-      document.getElementById('activeProductDisplay').innerText = `${sesiConfig.namaTema} (${sesiConfig.produk})`;
-      document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
-      document.getElementById('progressBarKaiwa').style.width = '0%';
-      document.getElementById('chatContainer').innerHTML = '';
-      document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${sesiConfig.maxPutaran}`;
-      resetTombolMicKN();
+   document.getElementById('activeProductDisplay').innerText = sesiConfig.namaTema;
+   document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
+   document.getElementById('progressBarKaiwa').style.width = '0%';
+   document.getElementById('chatContainer').innerHTML = '';
+   document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${sesiConfig.maxPutaran}`;
+
+   // Pastikan mode tampilan tombol kembali ke Kaiwa Normal (1 tombol mic + tombol Buat Rapor di bawah)
+   document.getElementById('micWrapper')?.classList.remove('kl-call-mode', 'kl-split-active');
+   document.getElementById('btnTelpKiriKL')?.classList.remove('arrived-disabled');
+   document.getElementById('btnSelesaiKaiwa')?.classList.remove('hidden');
+   resetTombolMicKN();
 
       if (isMST) {
         // KHUSUS WAWANCARA (MST): AI DIAM MENUNGGU KANDIDAT MENYAPA LEBIH DULU!
