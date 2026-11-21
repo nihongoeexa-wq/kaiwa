@@ -814,11 +814,67 @@
     }
     .guide-step-list li { margin-bottom: 6px; }
 
+    /* =========================================
+       CSS GRID 2 KARTU KATEGORI & ANIMASI 3 TOMBOL TELEPON LIVE
+    ========================================= */
+    .kategori-split-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 4px;
+    }
+    .kategori-card-tall {
+      background: #ffffff; border: 2px solid #e2e8f0; border-radius: 18px;
+      padding: 22px 20px; cursor: pointer; transition: all 0.2s ease;
+      display: flex; flex-direction: column; justify-content: space-between;
+      min-height: 195px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); box-sizing: border-box;
+    }
+    .kategori-card-tall:hover {
+      border-color: var(--primary); background: #f8fafc; transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(43, 59, 112, 0.08);
+    }
+    .kategori-card-tall .kat-icon-big {
+      width: 52px; height: 52px; border-radius: 14px; font-size: 26px;
+      display: flex; justify-content: center; align-items: center; margin-bottom: 14px;
+    }
+    .kategori-card-tall h3 { margin: 0 0 8px 0; font-size: 15.5px; font-weight: 800; color: var(--text-main); }
+    .kategori-card-tall p { margin: 0 0 16px 0; font-size: 12.5px; color: #64748b; line-height: 1.55; }
+    .kategori-card-tall .kat-footer-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 12px; border-top: 1px dashed #e2e8f0;
+    }
+
+    /* Animasi Membelah 3 Tombol Telepon di Ruang Kaiwa Live */
+    .side-call-btn { display: none; }
+    #micWrapper.kl-call-mode { width: 290px; height: 84px; }
+    #micWrapper.kl-call-mode .side-call-btn {
+      display: flex; justify-content: center; align-items: center;
+      position: absolute; width: 58px; height: 58px; border-radius: 50%;
+      border: none; color: #ffffff; font-size: 22px; z-index: 1;
+      opacity: 0; transform: translateX(0) scale(0.75); pointer-events: none;
+      transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, background-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    #btnTelpKiriKL {
+      background-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); cursor: default;
+    }
+    #btnTelpKananKL {
+      background-color: #ef4444; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.38); cursor: pointer;
+    }
+    #btnTelpKananKL:hover { background-color: #dc2626; }
+    #micWrapper.kl-call-mode.kl-split-active #btnTelpKiriKL {
+      opacity: 1; transform: translateX(-104px) scale(1); pointer-events: auto;
+    }
+    #micWrapper.kl-call-mode.kl-split-active #btnTelpKananKL {
+      opacity: 1; transform: translateX(104px) scale(1); pointer-events: auto;
+    }
+    #btnTelpKiriKL.arrived-disabled {
+      background-color: #cbd5e1 !important; color: #64748b !important;
+      box-shadow: none !important; cursor: not-allowed !important;
+    }
+
     @media (max-width: 768px) {
       .submenu-group.open { display: none; }
       .mobile-subnav-bar.open { display: flex; }
       .voucher-horizontal-form { max-width: 100%; width: 100%; }
       .intensif-accordion-bar { flex-direction: column; align-items: flex-start; }
+      .kategori-split-grid { grid-template-columns: 1fr; }
     }
    </style>
 </head>
@@ -1147,38 +1203,69 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- MENU 2B: LATIHAN -> PERCAKAPAN (2 KOLOM + MINI LB) -->
+        <!-- MENU 2B: LATIHAN -> PERCAKAPAN (NON-LIVE)  -->
         <!-- ========================================== -->
         <div id="tab-latihan-percakapan" class="nav-page-section" style="display: none;">
           <div class="dashboard-grid">
             
-            <!-- Kolom Kiri (70%): Daftar Kategori & Tema Percakapan -->
-            <div class="dash-left" style="text-align: left;">
+            <!-- Kolom Kiri (70%): Banner Biru + Tips + 2 Kartu Kiri-Kanan -->
+            <div class="dash-left" style="text-align: left; gap: 18px;">
               
               <!-- [LAYER 1] PILIH KATEGORI PERCAKAPAN (BLJ & MST KHUSUS KN) -->
-              <div id="modul-tujuan-view">
-                <h2 style="font-size: 20px; color: var(--text-main); margin: 0 0 6px 0;">Pilih Kategori Percakapan</h2>
-                <p style="font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 20px;">Latihan bicara interaktif berbasis giliran (Kaiwa Normal) untuk penguasaan tata bahasa &amp; wawancara kerja.</p>
+              <div id="modul-tujuan-view" style="display: flex; flex-direction: column; gap: 16px;">
 
-                <!-- A. BELAJAR (KISO) -->
-                <div class="tier-bar" onclick="bukaKategoriTujuan('blj')">
-                 <div class="tier-icon" style="background: #eff6ff;">📘</div>
-                 <div class="tier-info">
-                  <h3>BELAJAR / KISO (基礎)</h3>
-                  <p>Membiasakan bicara bahasa Jepang serta mengingat kosakata &amp; pola kalimat bertingkat.</p>
-                 </div>
-                 <div class="tier-price" style="background: #dbeafe; color: #1d4ed8;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+                <!-- Banner Biru Percakapan Interaktif -->
+                <div style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); border-radius: 18px; padding: 22px 26px; color: #fff; box-shadow: 0 8px 20px rgba(29, 78, 216, 0.18);">
+                  <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
+                    <span style="font-size: 26px; line-height: 1.1;">💬</span>
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 800; line-height: 1.25;">
+                      Percakapan Interaktif<br>
+                      <span style="font-size: 15px; font-weight: 700; opacity: 0.92;">(Latihan Bicara Bertahap)</span>
+                    </h2>
+                  </div>
+                  <p style="margin: 0; font-size: 12.5px; opacity: 0.94; line-height: 1.55;">
+                    Latih keberanian merangkai kalimat dan ketepatan tata bahasa Jepang tanpa tekanan waktu.<br>
+                    Rekam jawabanmu dengan tenang di setiap giliran hingga siap naik ke level berikutnya!
+                  </p>
                 </div>
 
-                <!-- B. WAWANCARA (MENSETSU) -->
-                <div class="tier-bar" onclick="bukaKategoriTujuan('mst')">
-                 <div class="tier-icon" style="background: #fff1f2;">💼</div>
-                 <div class="tier-info">
-                  <h3>WAWANCARA / MENSETSU (面接)</h3>
-                  <p>Simulasi wawancara kerja formal 5 Fase bersama Direktur / HRD perusahaan Jepang.</p>
-                 </div>
-                 <div class="tier-price" style="background: #ffe4e6; color: #be123c;">Uji Bahasa <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+                <!-- Kotak Tips di Bawah Banner Biru -->
+                <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 14px; padding: 13px 16px;">
+                  <div style="font-size: 11.5px; font-weight: 900; color: #1d4ed8; margin-bottom: 3px;">💡 TIPS LATIHAN MAKSIMAL</div>
+                  <div style="font-size: 12px; color: #1e3a8a; line-height: 1.45;">
+                    Selesaikan seluruh putaran percakapan hingga tuntas agar bebas pinalti tiket dan mendapatkan bonus Koin Emas penuh dari nilai rapormu.
+                  </div>
                 </div>
+
+                <!-- 2 Kartu Kotak Kiri & Kanan -->
+                <div class="kategori-split-grid">
+                  <!-- Kartu Kiri: BELAJAR (KISO) -->
+                  <div class="kategori-card-tall" onclick="bukaKategoriTujuan('blj')">
+                    <div>
+                      <div class="kat-icon-big" style="background: #eff6ff;">📘</div>
+                      <h3>BELAJAR / KISO (基礎)</h3>
+                      <p>Membiasakan bicara bahasa Jepang serta mengingat kosakata &amp; pola kalimat bertingkat sesuai kurikulum.</p>
+                    </div>
+                    <div class="kat-footer-row">
+                      <span style="font-size: 11px; font-weight: 700; color: #64748b;">Basic • Mid • Pro</span>
+                      <span class="tier-price" style="background: #dbeafe; color: #1d4ed8;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+                    </div>
+                  </div>
+
+                  <!-- Kartu Kanan: WAWANCARA (MENSETSU) -->
+                  <div class="kategori-card-tall" onclick="bukaKategoriTujuan('mst')">
+                    <div>
+                      <div class="kat-icon-big" style="background: #fff1f2;">💼</div>
+                      <h3>WAWANCARA / MENSETSU (面接)</h3>
+                      <p>Simulasi wawancara kerja formal 5 Fase bersama Direktur / HRD perusahaan Jepang di 16 bidang SSW.</p>
+                    </div>
+                    <div class="kat-footer-row">
+                      <span style="font-size: 11px; font-weight: 700; color: #64748b;">5 Fase Standar HRD</span>
+                      <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Uji Bahasa <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- [LAYER 2 - KHUSUS BELAJAR] PILIH TIER KESULITAN (BSC, MID, PRO) -->
@@ -1297,39 +1384,64 @@
         <div id="tab-latihan-live" class="nav-page-section" style="display: none;">
           <div class="dashboard-grid">
 
-            <!-- Kolom Kiri (70%): Kategori & Tema Percakapan Live (KL) -->
-            <div class="dash-left" style="text-align: left;">
-
-              <!-- Banner Peringatan Kelas Tingkat Tinggi (Argo 30 Detik) -->
-              <div style="background: linear-gradient(135deg, #0f766e, #115e59); border-radius: 18px; padding: 20px 24px; color: #fff; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);">
-                <div style="display:inline-block; background:#fef08a; color:#854d0e; font-size:10.5px; font-weight:900; padding:3px 10px; border-radius:20px; margin-bottom:8px;">
-                  ⚡ REKOMENDASI LULUSAN BLJ PRO • TERBUKA UNTUK UMUM
-                </div>
-                <h2 style="margin:0 0 6px 0; font-size:20px; font-weight:800;">📞 Percakapan Live (Telepon AI Real-Time)</h2>
-                <p style="margin:0; font-size:12.5px; opacity:0.92; line-height:1.5;">
-                  Bicara dua arah secara langsung tanpa tombol rekam menggunakan <strong>Argo Waktu per 30 Detik</strong> (tanpa denda berhenti di tengah jalan). Siapkan mental &amp; pendengaranmu sebelum mengangkat telepon!
-                </p>
-              </div>
+            <!-- Kolom Kiri (70%): Banner Hijau + Peringatan + 2 Kartu Kiri-Kanan -->
+            <div class="dash-left" style="text-align: left; gap: 18px;">
 
               <!-- [LIVE LAYER 1] PILIH KATEGORI LIVE (KL-BLJ vs KL-MST) -->
-              <div id="live-tujuan-view">
-                <div class="tier-bar" onclick="bukaKategoriLive('blj')">
-                 <div class="tier-icon" style="background: #ccfbf1;">⚡</div>
-                 <div class="tier-info">
-                  <h3>PERCAKAPAN LIVE — KISO / BELAJAR</h3>
-                  <p>Latihan telepon bahasa Jepang real-time bertingkat untuk menguji kecepatan refleks bicara.</p>
-                 </div>
-                 <div class="tier-price" style="background: #ccfbf1; color: #0f766e;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+              <div id="live-tujuan-view" style="display: flex; flex-direction: column; gap: 16px;">
+
+                <!-- Banner Hijau Percakapan Live -->
+                <div style="background: linear-gradient(135deg, #0f766e, #115e59); border-radius: 18px; padding: 22px 26px; color: #fff; box-shadow: 0 8px 20px rgba(15, 118, 110, 0.18);">
+                  <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
+                    <span style="font-size: 26px; line-height: 1.1;">📞</span>
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 800; line-height: 1.25;">
+                      Percakapan Live<br>
+                      <span style="font-size: 15px; font-weight: 700; opacity: 0.92;">(Telepon AI Real-Time)</span>
+                    </h2>
+                  </div>
+                  <p style="margin: 0; font-size: 12.5px; opacity: 0.94; line-height: 1.55;">
+                    Ngobrol langsung dua arah layaknya telepon biasa, cukup 1 kali tekan tombol.<br>
+                    Pasang telinga baik-baik dan siapkan respons sigapmu sebelum memulai!
+                  </p>
                 </div>
 
-                <div class="tier-bar" onclick="bukaKategoriLive('mst')">
-                 <div class="tier-icon" style="background: #ffe4e6;">📞</div>
-                 <div class="tier-info">
-                  <h3>WAWANCARA LIVE — MENSETSU HRD (面接)</h3>
-                  <p>Simulasi telepon/Zoom langsung bersama Direktur Jepang dengan tekanan waktu nyata.</p>
-                 </div>
-                 <div class="tier-price" style="background: #ffe4e6; color: #be123c;">Argo 30 Dtk <i class="fas fa-chevron-right" style="font-size: 10px;"></i></div>
+                <!-- Kotak PERHATIAN di Bawah Kotak Hijau -->
+                <div style="background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 14px; padding: 13px 16px;">
+                  <div style="font-size: 11.5px; font-weight: 900; color: #b45309; margin-bottom: 3px;">⚠️ PERHATIAN</div>
+                  <div style="font-size: 12px; color: #78350f; line-height: 1.45;">
+                    Fitur Live ditujukan untuk pembelajar tingkat lanjut. Selesaikan dulu mode non-live Tier PRO dengan hasil memuaskan supaya tiketmu terpakai maksimal.
+                  </div>
                 </div>
+
+                <!-- 2 Kartu Kotak Kiri & Kanan -->
+                <div class="kategori-split-grid">
+                  <!-- Kartu Kiri: PERCAKAPAN LIVE KISO -->
+                  <div class="kategori-card-tall" onclick="bukaKategoriLive('blj')">
+                    <div>
+                      <div class="kat-icon-big" style="background: #ccfbf1;">⚡</div>
+                      <h3>PERCAKAPAN LIVE — KISO / BELAJAR</h3>
+                      <p>Latihan telepon bahasa Jepang real-time bertingkat untuk menguji kecepatan refleks menyusun kalimat secara spontan.</p>
+                    </div>
+                    <div class="kat-footer-row">
+                      <span style="font-size: 11px; font-weight: 700; color: #64748b;">Basic • Mid • Pro</span>
+                      <span class="tier-price" style="background: #ccfbf1; color: #0f766e;">3 Level <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+                    </div>
+                  </div>
+
+                  <!-- Kartu Kanan: WAWANCARA LIVE MENSETSU -->
+                  <div class="kategori-card-tall" onclick="bukaKategoriLive('mst')">
+                    <div>
+                      <div class="kat-icon-big" style="background: #ffe4e6;">📞</div>
+                      <h3>WAWANCARA LIVE — MENSETSU HRD (面接)</h3>
+                      <p>Simulasi wawancara online dua arah langsung bersama Direktur Jepang dengan tekanan waktu nyata, untuk menguji respon Bahasa Jepang.</p>
+                    </div>
+                    <div class="kat-footer-row">
+                      <span style="font-size: 11px; font-weight: 700; color: #64748b;">5 Fase Real-Time</span>
+                      <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Uji Bahasa <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- [LIVE LAYER 2A] PILIH TIER BLJ LIVE -->
@@ -1343,7 +1455,7 @@
                   <h3>LIVE SHOKYU (Basic)</h3>
                   <p>Telepon kalimat dasar dengan tempo ramah bagi yang baru mencoba mode Live.</p>
                  </div>
-                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live 30 Dtk</div>
+                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live</div>
                 </div>
 
                 <div class="tier-bar" onclick="bukaDaftarTemaLive('detail-live-blj-mid')">
@@ -1352,7 +1464,7 @@
                   <h3>LIVE CHUKYU (Mid)</h3>
                   <p>Telepon setara JFT-Basic A2 / N4 untuk melatih kelancaran respons spontan.</p>
                  </div>
-                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live 30 Dtk</div>
+                 <div class="tier-price" style="background:#ccfbf1; color:#0f766e;">Live</div>
                 </div>
 
                 <div class="tier-bar" onclick="bukaDaftarTemaLive('detail-live-blj-pro')">
@@ -1370,7 +1482,7 @@
                 <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
                 <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;">
                  <h2 style="color:#0f766e;">📞 LIVE — SHOKYU (Basic)</h2>
-                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                 <p><strong>Tujuan:</strong> Melatih refleks mendengar &amp; menjawab kalimat dasar secara langsung tanpa tombol rekam.</p>
                 </div>
                 <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
                 <div id="wadah-live-blj-bsc"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
@@ -1380,7 +1492,7 @@
                 <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
                 <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;">
                  <h2 style="color:#0f766e;">📞 LIVE — CHUKYU (Mid)</h2>
-                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                 <p><strong>Tujuan:</strong> Melatih spontanitas pola kalimat JFT-Basic A2 / N4 dalam percakapan telepon nyata.</p>
                 </div>
                 <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
                 <div id="wadah-live-blj-mid"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
@@ -1390,7 +1502,7 @@
                 <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level Live</button>
                 <div class="detail-header" style="background:#f5f3ff; border-color:#ddd6fe;">
                  <h2 style="color:#6d28d9;">📞 LIVE — JOKYU (Pro)</h2>
-                 <p><strong>Sistem Biaya:</strong> Tiket Masuk + Argo per 30 Detik + 2 Tiket Rapor (Tanpa denda berhenti lebih awal).</p>
+                 <p><strong>Tujuan:</strong> Kecepatan refleks lisan &amp; ketepatan pelafalan tingkat lanjut bersama penutur AI Jepang.</p>
                 </div>
                 <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Daftar Tema Live:</h3>
                 <div id="wadah-live-blj-pro"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar tema Live...</p></div>
@@ -1400,7 +1512,7 @@
                 <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Live</button>
                 <div class="detail-header" style="background:#fff1f2; border-color:#fecdd3;">
                  <h2 style="color:#be123c;">📞 WAWANCARA LIVE — MENSETSU HRD</h2>
-                 <p><strong>Penting:</strong> Begitu tersambung, Anda wajib mengucapkan salam pembuka lebih dulu kepada Direktur Jepang!</p>
+                 <p><strong>Penting:</strong> Begitu panggilan aktif (tombol tengah merah berdenyut), ucapkan salam pembuka lebih dulu kepada Direktur Jepang!</p>
                 </div>
                 <h3 style="font-size: 15px; margin: 20px 0 10px 0;">Pilih Bidang Wawancara Live:</h3>
                 <div id="wadah-live-mst"><p style="font-size:13px; color:#94a3b8; text-align:center;">Memuat daftar wawancara Live...</p></div>
@@ -2197,10 +2309,22 @@
             <div class="kaiwa-footer">
                 <div id="statusTeksInfo" style="font-size: 13px; color: var(--primary); margin-bottom: 5px; text-align: center; font-weight: 800;">Tekan mikrofon untuk mulai.</div>
                 
-                <div class="mic-btn-wrapper" id="micWrapper">
-                    <div class="mic-pulse"></div>
-                    <button class="mic-btn" id="tombolMicUtama" style="position: relative; z-index: 2;"><i class="fas fa-microphone"></i></button>
-                </div>
+        <div class="mic-btn-wrapper" id="micWrapper">
+          <!-- Tombol Samping Kiri: Telepon Hijau yang Bergeser ke Kiri Lalu Menjadi Abu-abu (Khusus Live) -->
+          <button type="button" class="side-call-btn" id="btnTelpKiriKL" tabindex="-1" title="Panggilan Telah Tersambung">
+            <i class="fas fa-phone-alt"></i>
+          </button>
+
+          <div class="mic-pulse"></div>
+          <button class="mic-btn" id="tombolMicUtama" style="position: relative; z-index: 3;"><i class="fas fa-microphone"></i></button>
+
+          <!-- Tombol Samping Kanan: Gagang Telepon Menghadap Bawah Warna Merah -> Akhiri & Buat Rapor (Khusus Live) -->
+          <button type="button" class="side-call-btn" id="btnTelpKananKL" title="Akhiri Telepon &amp; Buat Rapor">
+            <svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor" aria-hidden="true">
+              <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.996.996 0 0 1 0-1.41C3.32 8.78 7.45 7 12 7s8.68 1.78 11.71 4.67c.39.39.39 1.02 0 1.41l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28a11.27 11.27 0 0 0-2.67-1.85.996.996 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
+            </svg>
+          </button>
+        </div>
                 
                 <div id="indikatorPutaran" style="font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Putaran: 0 / 0</div>
             </div>
@@ -2558,8 +2682,8 @@
   </div>
 
 <!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
-<script src="kaiwa-normal.js?v=20261121v5"></script>
-<script src="kaiwa-live.js?v=20261121v6"></script>
+<script src="kaiwa-normal.js?v=20261121v7"></script>
+<script src="kaiwa-live.js?v=20261121v7"></script>
 
 <script>
   // ==========================================
@@ -2773,22 +2897,33 @@
     const formTesti = document.getElementById('formTestimoniArea');
     const sudahTesti = document.getElementById('sudahTestimoniArea');
     if (formTesti && sudahTesti) {
-      if (KAIWA_USER.sudahTestimoni) {
-        formTesti.classList.add('hidden');
-        sudahTesti.classList.remove('hidden');
-      } else {
-        formTesti.classList.remove('hidden');
-        sudahTesti.classList.add('hidden');
-      }
-    }
+   if (KAIWA_USER.sudahTestimoni) {
+    formTesti.classList.add('hidden');
+    sudahTesti.classList.remove('hidden');
+   } else {
+    formTesti.classList.remove('hidden');
+    sudahTesti.classList.add('hidden');
+   }
   }
+  simpanSesiUserLokal();
+ }
 
-  function keluarAkun() {
-    if (!confirm("Yakin ingin keluar dari akun ini?")) return;
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.disableAutoSelect();
-    }
-    KAIWA_USER = {};
+ function simpanSesiUserLokal() {
+  if (KAIWA_USER && KAIWA_USER.email && KAIWA_USER.token) {
+   try { localStorage.setItem('neexa_auth_session_v1', JSON.stringify(KAIWA_USER)); } catch (e) {}
+  }
+ }
+
+ function keluarAkun() {
+  if (!confirm("Yakin ingin keluar dari akun ini?")) return;
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+   google.accounts.id.disableAutoSelect();
+  }
+  try {
+   localStorage.removeItem('neexa_auth_session_v1');
+   localStorage.removeItem('neexa_last_tab_v1');
+  } catch (e) {}
+  KAIWA_USER = {};
     dataRiwayatLokal = [];
     tutupModalProfil();
     document.getElementById('loginMsg').className = 'msg';
@@ -2883,20 +3018,26 @@
   tombolAntiBocorSedangDiedit = null;
  }
 
- // Rakitan HTML Pilihan Sensei & Tombol Terpisah (KN, KL Murni, maupun HYBRID untuk Survival KHD)
+ // Rakitan HTML Pilihan Sensei (Fumi Sensei / Ken Sensei) & Tombol Steril + Rincian 3 Baris
  function rakitIsiAksiTemaHTML(grup, modeTarget = "KN") {
   const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
   let tombolHTML = "";
   let butuhSakelarAntiBocor = false;
 
+  const labelJenisSesi = grup.kategori === "MST"
+   ? "wawancara"
+   : (grup.kategori === "KHD" ? "simulasi" : "percakapan");
+
   if ((modeTarget === "KN" || modeTarget === "HYBRID") && grup.KN) {
    const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
    tombolHTML += `
-    <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 6px;">
-     <i class="fas fa-comments"></i> Mulai Percakapan (Masuk ${grup.KN.tiketMasuk} Tiket • ${grup.KN.maxPutaran} Putaran)
+    <button class="btn btn-mulai-dinamis" data-kode="${kdKN}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="margin-bottom: 10px;">
+     <i class="fas fa-comments"></i> Mulai Percakapan
     </button>
-    <div style="font-size: 11px; color: #64748b; text-align: center; margin-bottom: 10px;">
-     Total selesai penuh: <strong>${grup.KN.hargaPenuh} Tiket</strong> (${grup.KN.tiketPerPutaran} tiket/putaran + 2 rapor)
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; font-size: 11.5px; color: #475569; text-align: center; line-height: 1.65;">
+     <div>Masuk <strong>${grup.KN.tiketMasuk} tiket</strong></div>
+     <div><strong>${grup.KN.maxPutaran}</strong> percakapan</div>
+     <div>Total <strong>${grup.KN.hargaPenuh} tiket</strong> dibutuhkan menyelesaikan 1 sesi ${labelJenisSesi}</div>
     </div>
    `;
   }
@@ -2905,14 +3046,16 @@
    butuhSakelarAntiBocor = true;
    const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
    const durasiMaksDetik = (Number(grup.KL.maxPutaran) || 6) * 30;
-   const teksMenit = durasiMaksDetik % 60 === 0 ? `${durasiMaksDetik / 60} Menit` : `${(durasiMaksDetik / 60).toFixed(1)} Menit`;
+   const teksMenit = durasiMaksDetik % 60 === 0 ? `${durasiMaksDetik / 60} menit` : `${(durasiMaksDetik / 60).toFixed(1)} menit`;
 
    tombolHTML += `
-    <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-bottom: 6px;">
-     <i class="fas fa-phone-alt"></i> Mulai Panggilan Live (Masuk ${grup.KL.tiketMasuk} Tiket • Maks ${teksMenit})
+    <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-bottom: 10px;">
+     <i class="fas fa-phone-alt"></i> Mulai Percakapan
     </button>
-    <div style="font-size: 11px; color: #0f766e; text-align: center; font-weight: 600;">
-     Argo: <strong>${grup.KL.tiketPerPutaran} Tiket / 30 detik</strong> + 2 Tiket Rapor (Maks Penuh: ${grup.KL.hargaPenuh} Tiket • Tanpa Denda)
+    <div style="background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; padding: 10px 12px; font-size: 11.5px; color: #0f766e; text-align: center; line-height: 1.65;">
+     <div>Masuk <strong>${grup.KL.tiketMasuk} tiket</strong></div>
+     <div>Durasi maks <strong>${teksMenit}</strong> (${grup.KL.tiketPerPutaran} tiket / 30 detik)</div>
+     <div>Total maksimal <strong>${grup.KL.hargaPenuh} tiket</strong> dibutuhkan menyelesaikan 1 sesi ${labelJenisSesi}</div>
     </div>
    `;
   }
@@ -2936,12 +3079,12 @@
      <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-top: 8px;">
       <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #f0f4ff; transition: 0.2s;">
        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-       <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Sensei Fumi</div>
+       <div style="font-size: 12px; font-weight: 700; color: #2b5cff;">Fumi Sensei</div>
        <div style="font-size: 10px; color: #64748b;">Suara Wanita</div>
       </div>
       <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fff; transition: 0.2s;">
        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #fff; margin-bottom: 5px;">
-       <div style="font-size: 12px; font-weight: 700; color: #475569;">Sensei Ken</div>
+       <div style="font-size: 12px; font-weight: 700; color: #475569;">Ken Sensei</div>
        <div style="font-size: 10px; color: #64748b;">Suara Pria</div>
       </div>
       <input type="hidden" class="suara-select-dinamis" value="female">
@@ -3693,9 +3836,10 @@
  }
 
  function bukaTab(namaTab) {
-  // Alias pengaman jika ada tombol lama yang memanggil 'modul' atau 'panduan'
   if (namaTab === 'modul') namaTab = 'latihan-percakapan';
   if (namaTab === 'panduan') namaTab = 'panduan-akses';
+  if (!DAFTAR_SEMUA_TAB.includes(namaTab)) namaTab = 'dashboard';
+  try { localStorage.setItem('neexa_last_tab_v1', namaTab); } catch (e) {}
 
   DAFTAR_SEMUA_TAB.forEach(t => {
    const sec = document.getElementById('tab-' + t);
@@ -4991,10 +5135,40 @@
         c.classList.remove('open');
         c.querySelector('.fa-chevron-down').style.transform = "rotate(0deg)";
       });
-      card.classList.add('open');
-      icon.style.transform = "rotate(180deg)";
-    }
+   card.classList.add('open');
+   icon.style.transform = "rotate(180deg)";
   }
+ }
+
+ // Update simpanan saldo lokal setiap kali angka tiket/koin berubah
+ ['pakaiTiket', 'simpanRaporKaiwa', 'klaimVoucher', 'tukarKoin', 'kirimTestimoni'].forEach(() => {});
+ window.addEventListener('beforeunload', () => { simpanSesiUserLokal(); });
+
+ // PULIHKAN SESI & POSISI HALAMAN OTOMATIS SAAT REFRESH (DI LUAR RUANG KAIWA)
+ (function pulihkanSesiSaatRefresh() {
+  try {
+   const rawSesi = localStorage.getItem('neexa_auth_session_v1');
+   if (!rawSesi) return;
+   const savedUser = JSON.parse(rawSesi);
+   if (!savedUser || !savedUser.email || !savedUser.token) return;
+
+   terapkanDataUserKeUI(savedUser);
+   const tabTerakhir = localStorage.getItem('neexa_last_tab_v1') || 'dashboard';
+   showView('dashboard');
+   bukaTab(tabTerakhir);
+
+   muatDaftarProduk();
+   tarikDataRiwayat();
+   muatInfoPenting();
+   muatDataLeaderboard(false);
+
+   if (!savedUser.gender) {
+    bukaModalOnboarding();
+   }
+  } catch (e) {
+   console.error("Gagal memulihkan sesi lokal:", e);
+  }
+ })();
 </script>
 </body>
 </html>
