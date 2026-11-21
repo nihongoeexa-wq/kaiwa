@@ -118,6 +118,31 @@
    perbaruiStatusVisualMicKL();
   });
 
+  const btnTutupMerah = document.getElementById('btnTelpKananKL');
+  if (btnTutupMerah) {
+   btnTutupMerah.addEventListener('click', function () {
+    const sesi = window.NEEXA_SESI;
+    if (!sesi || !sesi.aktif || sesi.modeMesin !== "KL") return;
+    if (typeof sedangProsesRapor !== 'undefined' && sedangProsesRapor) return;
+
+    komitSisaTranskripTertunda();
+
+    if (sesi.historyPercakapan.trim() === "") {
+     if (confirm("Belum ada percakapan yang terekam. Akhiri panggilan dan kembali ke halaman sebelumnya?")) {
+      sesi.aktif = false;
+      window.MesinKL.hentikan();
+      showView('dashboard');
+     }
+     return;
+    }
+
+    // Langsung akhiri telepon & otomatis membuat Rapor!
+    if (typeof prosesSelesaiSesi === 'function') {
+     prosesSelesaiSesi(false);
+    }
+   });
+  }
+
   isListenerKLAttached = true;
  }
 
@@ -389,9 +414,22 @@
   }));
  }
 
+ let timerAbuKiriKL = null;
+
  async function aktifkanPanggilanDariKlikUser() {
   const statusTeks = document.getElementById('statusTeksInfo');
   sedangMenyambungKL = true;
+
+  // Picu animasi belah: Tombol Telepon Hijau geser ke kiri (lalu abu-abu) & Tombol Tutup Merah geser ke kanan!
+  const micWrap = document.getElementById('micWrapper');
+  const btnKiri = document.getElementById('btnTelpKiriKL');
+  btnKiri?.classList.remove('arrived-disabled');
+  micWrap?.classList.add('kl-split-active');
+  clearTimeout(timerAbuKiriKL);
+  timerAbuKiriKL = setTimeout(() => {
+   btnKiri?.classList.add('arrived-disabled');
+  }, 520);
+
   perbaruiStatusVisualMicKL();
 
   try {
@@ -447,6 +485,9 @@
   } catch (errMic) {
    sedangMenyambungKL = false;
    panggilanSudahDimulaiKL = false;
+   clearTimeout(timerAbuKiriKL);
+   document.getElementById('micWrapper')?.classList.remove('kl-split-active');
+   document.getElementById('btnTelpKiriKL')?.classList.remove('arrived-disabled');
    if (audioCtxKL) {
     try { audioCtxKL.close(); } catch (e) {}
     audioCtxKL = null;
@@ -674,10 +715,18 @@
    nextPlayTimeKL = 0;
 
    const totalMenitLabel = formatMenitDetik((Number(sesiConfig.maxPutaran) || 6) * 30);
-   document.getElementById('activeProductDisplay').innerText = `📞 LIVE • ${sesiConfig.namaTema} (${sesiConfig.produk})`;
+   document.getElementById('activeProductDisplay').innerText = `📞 LIVE • ${sesiConfig.namaTema}`;
    document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
    document.getElementById('progressBarKaiwa').style.width = '0%';
    document.getElementById('indikatorPutaran').innerText = `⏱️ Siap Tersambung • Durasi Maks: ${totalMenitLabel} (${sesiConfig.maxPutaran} Blok)`;
+
+   // Siapkan panggung 3 tombol telepon Live & sembunyikan tombol Buat Rapor luar
+   clearTimeout(timerAbuKiriKL);
+   const micWrap = document.getElementById('micWrapper');
+   micWrap?.classList.add('kl-call-mode');
+   micWrap?.classList.remove('kl-split-active');
+   document.getElementById('btnTelpKiriKL')?.classList.remove('arrived-disabled');
+   document.getElementById('btnSelesaiKaiwa')?.classList.add('hidden');
 
    const chatContainer = document.getElementById('chatContainer');
    chatContainer.innerHTML = '';
@@ -693,8 +742,8 @@
     : "🛡️ Mode Aman Anti Suara Bocor: <b>AKTIF</b>";
 
    infoBanner.innerHTML = isMST
-    ? `📞 <b>Ruang Wawancara Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol berubah <b>Merah Berdenyut</b>, langsung ucapkan salam pembuka kepada Direktur!`
-    : `📞 <b>Ruang Percakapan Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol berubah <b>Merah Berdenyut</b>, langsung sapa AI Sensei dalam bahasa Jepang!`;
+    ? `📞 <b>Ruang Wawancara Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol tengah <b>Merah Berdenyut</b>, langsung ucapkan salam pembuka!`
+    : `📞 <b>Ruang Percakapan Live Siap</b> (${labelKeamanan})<br>Tekan tombol telepon hijau sekali di bawah. Saat tombol tengah <b>Merah Berdenyut</b>, langsung mulai bicara!`;
    chatContainer.appendChild(infoBanner);
 
    showView('kaiwaRoom');
