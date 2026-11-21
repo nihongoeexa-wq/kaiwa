@@ -33,6 +33,65 @@
 
  let menungguSalamPenutupMST_KL = false;
  let autoTutupTimerKL = null;
+ let timerGantung4DetikKL = null;
+ let timerHeningTotalKL = null;
+ let sudahCekHeningGiliranIni = false;
+
+ function bersihkanTimerJedaPedagogiKL() {
+  clearTimeout(timerGantung4DetikKL);
+  clearTimeout(timerHeningTotalKL);
+  timerGantung4DetikKL = null;
+  timerHeningTotalKL = null;
+ }
+
+ function jadwalkanCekGantung4Detik() {
+  clearTimeout(timerGantung4DetikKL);
+  clearTimeout(timerHeningTotalKL);
+
+  timerGantung4DetikKL = setTimeout(() => {
+   const sesi = window.NEEXA_SESI;
+   if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
+   if (aiSedangBicaraKL || currentAiTeksKL.trim() !== '') return;
+   if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
+
+   // Jika tepat 4 detik setelah kata terakhir siswa AI belum merespons (karena kalimat siswa menggantung/buntung), senggol AI sekarang!
+   if (currentUserTeksKL.trim() !== '') {
+    komitTranskripKeHistory('user');
+    wsLive.send(JSON.stringify({
+     clientContent: {
+      turns: [{
+       role: "user",
+       parts: [{ text: "（相手が発話の途中や不完全な語尾で4秒間黙って止まりました。[PROTOKOL SKENARIO 2]に従い、役割として自然に「えっ、それでどうなりましたか？」「〇〇がどうかしましたか？」のように続きを促してください。）" }]
+      }],
+      turnComplete: true
+     }
+    }));
+   }
+  }, 4000);
+ }
+
+ function jadwalkanCekHeningTotal9Detik() {
+  clearTimeout(timerHeningTotalKL);
+  if (sudahCekHeningGiliranIni || menungguSalamPenutupMST_KL) return;
+
+  timerHeningTotalKL = setTimeout(() => {
+   const sesi = window.NEEXA_SESI;
+   if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
+   if (aiSedangBicaraKL || currentUserTeksKL.trim() !== '' || currentAiTeksKL.trim() !== '') return;
+   if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
+
+   sudahCekHeningGiliranIni = true;
+   wsLive.send(JSON.stringify({
+    clientContent: {
+     turns: [{
+      role: "user",
+      parts: [{ text: "（相手がしばらく無言です。電話が聞こえているか、または質問が難しかったか、役割に合わせて短く優しく声をかけてください。）" }]
+     }],
+     turnComplete: true
+    }
+   }));
+  }, 9000);
+ }
 
  function pasangListenerTombolKL() {
   if (isListenerKLAttached) return;
@@ -256,6 +315,7 @@
   const now = audioCtxKL.currentTime;
   if (nextPlayTimeKL < now) nextPlayTimeKL = now + 0.02;
 
+  bersihkanTimerJedaPedagogiKL();
   aiSedangBicaraKL = true;
   perbaruiStatusVisualMicKL();
 
@@ -271,6 +331,7 @@
      if (activeSourcesKL.length === 0) {
       aiSedangBicaraKL = false;
       perbaruiStatusVisualMicKL();
+      jadwalkanCekHeningTotal9Detik();
      }
     }, 180);
    }
@@ -537,12 +598,15 @@
 
    const transkripInput = sc.inputTranscription || msg.inputTranscription;
    if (transkripInput && transkripInput.text) {
+    sudahCekHeningGiliranIni = false;
     if (currentAiTeksKL.trim() !== '') komitTranskripKeHistory('ai');
     tambahAtauUpdateBubbleKL('user', transkripInput.text);
+    jadwalkanCekGantung4Detik();
    }
 
    const transkripOutput = sc.outputTranscription || msg.outputTranscription;
    if (transkripOutput && transkripOutput.text) {
+    bersihkanTimerJedaPedagogiKL();
     if (currentUserTeksKL.trim() !== '') komitTranskripKeHistory('user');
     tambahAtauUpdateBubbleKL('ai', transkripOutput.text);
    }
@@ -644,6 +708,8 @@
   hentikan: function () {
    clearInterval(timerDetikInterval);
    clearTimeout(autoTutupTimerKL);
+   bersihkanTimerJedaPedagogiKL();
+   sudahCekHeningGiliranIni = false;
    clearTimeout(handshakeWatchdogKL);
    clearTimeout(echoTailTimerKL);
    panggilanSudahDimulaiKL = false;
