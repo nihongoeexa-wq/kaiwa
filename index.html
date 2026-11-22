@@ -2681,9 +2681,52 @@
    </div>
   </div>
 
+  <!-- ================= MODAL 4: POP-UP RINGKASAN SESI (KUNING PASTEL + RINCIAN TIKET) ================= -->
+  <div id="modalRingkasanSesi" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.72); z-index: 10080; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(4px); padding: 16px; box-sizing: border-box;">
+   <div id="kartuRingkasanSesi" style="background: #fefce8; border: 2.5px solid #fde047; border-radius: 22px; width: 100%; max-width: 400px; padding: 26px 22px 22px 22px; box-shadow: 0 20px 45px rgba(0,0,0,0.28); text-align: center;">
+    
+    <div id="ikonAtasRingkasan" style="font-size: 34px; margin-bottom: 6px;">🎉</div>
+    <div id="subJudulRingkasan" style="font-size: 13.5px; font-weight: 700; color: #713f12; margin-bottom: 4px;">
+     Selamat kamu telah berbicara selama
+    </div>
+
+    <!-- Angka Durasi Besar (Live) ATAU Nama Tema Besar (Normal) -->
+    <div id="highlightUtamaRingkasan" style="font-size: 34px; font-weight: 900; color: #854d0e; line-height: 1.15; margin: 6px 0 16px 0; letter-spacing: -0.5px;">
+     0,0 menit
+    </div>
+
+    <!-- Kotak Koin & Total Tiket -->
+    <div style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid #fef08a; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; text-align: left;" id="boxIntiAngkaRingkasan">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13.5px;">
+      <span style="color: #475569; font-weight: 700;">🪙 Koin yang didapatkan</span>
+      <strong id="valKoinRingkasan" style="color: #b45309; font-size: 15px; font-weight: 900;">+0 koin</strong>
+     </div>
+     <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; padding-top: 8px; border-top: 1px dashed #e2e8f0;">
+      <span style="color: #475569; font-weight: 700;">🎫 Tiket yang dipotong</span>
+      <strong id="valTiketRingkasan" style="color: var(--primary); font-size: 15px; font-weight: 900;">0 tiket</strong>
+     </div>
+    </div>
+
+    <!-- Tombol Buka/Tutup Rincian -->
+    <button type="button" onclick="toggleRincianTiketPop()" style="background: transparent; border: none; color: #a16207; font-size: 12px; font-weight: 800; cursor: pointer; padding: 4px 10px; margin-bottom: 8px; font-family: inherit;" id="btnToggleRincianPop">
+     Lihat Rincian Tiket <i class="fas fa-chevron-down" id="ikonChevRincianPop" style="font-size: 10px; transition: transform 0.2s;"></i>
+    </button>
+
+    <!-- Kotak Rincian Tersembunyi -->
+    <div id="wadahDetailRincianPop" class="hidden" style="background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; text-align: left; font-size: 12px; color: #334155; line-height: 1.75;">
+    </div>
+
+    <!-- Tombol Lihat Hasil Rapor -->
+    <button type="button" onclick="tutupModalRingkasanSesi()" class="btn" id="btnTutupRingkasanPop" style="padding: 13px; font-size: 14px; font-weight: 800; border-radius: 12px; background: var(--primary);">
+     Lihat Hasil Rapor <i class="fas fa-arrow-right"></i>
+    </button>
+
+   </div>
+  </div>
+
 <!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
-<script src="kaiwa-normal.js?v=20261121v7"></script>
-<script src="kaiwa-live.js?v=20261121v7"></script>
+<script src="kaiwa-normal.js?v=20261122v9"></script>
+<script src="kaiwa-live.js?v=20261122v9"></script>
 
 <script>
   // ==========================================
@@ -3046,7 +3089,7 @@
    butuhSakelarAntiBocor = true;
    const kdKL = escapeHtml(String(grup.KL.kode).trim().toUpperCase());
    const durasiMaksDetik = (Number(grup.KL.maxPutaran) || 6) * 30;
-   const teksMenit = durasiMaksDetik % 60 === 0 ? `${durasiMaksDetik / 60} menit` : `${(durasiMaksDetik / 60).toFixed(1)} menit`;
+   const teksMenit = durasiMaksDetik % 60 === 0 ? `${durasiMaksDetik / 60} menit` : `${(durasiMaksDetik / 60).toFixed(1).replace('.', ',')} menit`;
 
    tombolHTML += `
     <button class="btn" data-kode="${kdKL}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="background: #0d9488; margin-bottom: 10px;">
@@ -3054,8 +3097,8 @@
     </button>
     <div style="background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; padding: 10px 12px; font-size: 11.5px; color: #0f766e; text-align: center; line-height: 1.65;">
      <div>Masuk <strong>${grup.KL.tiketMasuk} tiket</strong></div>
-     <div>Durasi maks <strong>${teksMenit}</strong> (${grup.KL.tiketPerPutaran} tiket / 30 detik)</div>
-     <div>Total maksimal <strong>${grup.KL.hargaPenuh} tiket</strong> dibutuhkan menyelesaikan 1 sesi ${labelJenisSesi}</div>
+     <div>Batas bicara s/d <strong>${teksMenit}</strong> • <strong>Argo hemat sesuai durasi</strong></div>
+     <div>Maksimal <strong>${grup.KL.hargaPenuh} tiket</strong> jika dipakai penuh 1 sesi ${labelJenisSesi}</div>
     </div>
    `;
   }
@@ -3688,21 +3731,34 @@
     evalSignature: evalSig
    });
 
-      if (dataGasRapor.success && dataGasRapor.data) {
-        if (dataGasRapor.data.koin !== undefined) {
-          KAIWA_USER.koin = Number(dataGasRapor.data.koin);
-          document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
-        }
-        if (dataGasRapor.data.saldo !== undefined) {
-          KAIWA_USER.saldo = Number(dataGasRapor.data.saldo);
-          document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
-        }
-        KAIWA_USER.sesi = (Number(KAIWA_USER.sesi) || 0) + 1;
-        document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
-        alert(dataGasRapor.message);
-      } else if (!dataGasRapor.success) {
-        alert("Peringatan Database: " + dataGasRapor.message);
-      }
+   if (dataGasRapor.success && dataGasRapor.data) {
+    const koinLama = Number(KAIWA_USER.koin) || 0;
+    if (dataGasRapor.data.koin !== undefined) {
+     KAIWA_USER.koin = Number(dataGasRapor.data.koin);
+     document.getElementById('saldoKoinDisplay').innerText = KAIWA_USER.koin;
+    }
+    if (dataGasRapor.data.saldo !== undefined) {
+     KAIWA_USER.saldo = Number(dataGasRapor.data.saldo);
+     document.getElementById('saldoTiketDisplay').innerText = KAIWA_USER.saldo;
+    }
+    KAIWA_USER.sesi = (Number(KAIWA_USER.sesi) || 0) + 1;
+    document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
+    simpanSesiUserLokal();
+
+    const koinSesiIni = dataGasRapor.data.koinDidapat !== undefined
+     ? Number(dataGasRapor.data.koinDidapat)
+     : Math.max(0, KAIWA_USER.koin - koinLama);
+
+    tampilkanPopRingkasanSesi({
+     sesi: sesi,
+     koinDidapat: koinSesiIni,
+     tagihanAkhir: Number(dataGasRapor.data.tagihan) || 0,
+     isPelanggaran: isPelanggaran,
+     isSelesaiPenuh: statusSelesaiPenuh
+    });
+   } else if (!dataGasRapor.success) {
+    alert("Peringatan Database: " + dataGasRapor.message);
+   }
 
     } catch (e) {
       console.error(e);
@@ -3717,10 +3773,124 @@
     }
   }
 
-  function setLingkaran(chartId, textId, nilai) {
-    document.getElementById(textId).innerText = nilai;
-    document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
+ function setLingkaran(chartId, textId, nilai) {
+  document.getElementById(textId).innerText = nilai;
+  document.getElementById(chartId).style.background = `conic-gradient(var(--primary) ${nilai}%, #e2e8f0 0)`;
+ }
+
+ function toggleRincianTiketPop() {
+  const box = document.getElementById('wadahDetailRincianPop');
+  const chev = document.getElementById('ikonChevRincianPop');
+  if (!box) return;
+  const dibuka = box.classList.contains('hidden');
+  box.classList.toggle('hidden', !dibuka);
+  if (chev) chev.style.transform = dibuka ? 'rotate(180deg)' : 'rotate(0deg)';
+ }
+
+ function tutupModalRingkasanSesi() {
+  document.getElementById('modalRingkasanSesi')?.classList.add('hidden');
+ }
+
+ function tampilkanPopRingkasanSesi({ sesi, koinDidapat, tagihanAkhir, isPelanggaran, isSelesaiPenuh }) {
+  const modal = document.getElementById('modalRingkasanSesi');
+  const kartu = document.getElementById('kartuRingkasanSesi');
+  const ikonAtas = document.getElementById('ikonAtasRingkasan');
+  const subJudul = document.getElementById('subJudulRingkasan');
+  const highlight = document.getElementById('highlightUtamaRingkasan');
+  const boxInti = document.getElementById('boxIntiAngkaRingkasan');
+  const elKoin = document.getElementById('valKoinRingkasan');
+  const elTiket = document.getElementById('valTiketRingkasan');
+  const btnRincian = document.getElementById('btnToggleRincianPop');
+  const wadahRincian = document.getElementById('wadahDetailRincianPop');
+  const chev = document.getElementById('ikonChevRincianPop');
+  if (!modal || !kartu) return;
+
+  // Reset lipatan rincian tertutup di awal
+  wadahRincian.classList.add('hidden');
+  if (chev) chev.style.transform = 'rotate(0deg)';
+
+  const isKL = sesi.modeMesin === "KL";
+  const kenaPinalti = isPelanggaran || (!isKL && !isSelesaiPenuh);
+
+  const tiketMasuk = Number(sesi.tiketMasuk) || 0;
+  const totalTiketDipakai = tiketMasuk + tagihanAkhir;
+  const hargaMaksPenuh = Number(sesi.hargaPenuh) || totalTiketDipakai;
+  const infoProd = bedahKodeProduk(sesi.produk || '');
+  const labelTier = infoProd.kategori === 'BLJ' ? ` ${infoProd.tier}` : '';
+  const namaTemaBersih = escapeHtml(sesi.namaTema || 'Latihan');
+
+  // Hitung angka menit koma (contoh: 3,5 menit) khusus Live
+  const detikAktual = Number(sesi.detikAktualKL) || ((Number(sesi.putaranSaatIni) || 0) * 30);
+  const menitDesimal = (detikAktual / 60).toFixed(1).replace('.', ',');
+
+  // Atur tema warna: Kuning Pastel (Normal/Sukses) vs Merah Muda Pastel (Pinalti)
+  if (kenaPinalti) {
+   kartu.style.background = '#fef2f2';
+   kartu.style.borderColor = '#fca5a5';
+   boxInti.style.borderColor = '#fecaca';
+   subJudul.style.color = '#991b1b';
+   highlight.style.color = '#dc2626';
+   btnRincian.style.color = '#b91c1c';
+   ikonAtas.innerText = isPelanggaran ? '🚨' : '⚠️';
+  } else {
+   kartu.style.background = '#fefce8';
+   kartu.style.borderColor = '#fde047';
+   boxInti.style.borderColor = '#fef08a';
+   subJudul.style.color = '#713f12';
+   highlight.style.color = '#854d0e';
+   btnRincian.style.color = '#a16207';
+   ikonAtas.innerText = '🎉';
   }
+
+  // Judul & Highlight Utama Sesuai Jenis Produk
+  if (isPelanggaran) {
+   subJudul.innerText = 'Sesi dihentikan otomatis (Pelanggaran Layar)';
+   highlight.style.fontSize = '22px';
+   highlight.innerText = sesi.namaTema || 'Pinalti Penuh';
+  } else if (isKL) {
+   subJudul.innerText = 'Selamat kamu telah berbicara selama';
+   highlight.style.fontSize = '34px';
+   highlight.innerHTML = `${menitDesimal} <span style="font-size:18px; font-weight:800;">menit</span>`;
+  } else if (!isSelesaiPenuh) {
+   subJudul.innerText = 'Sesi dihentikan sebelum putaran tuntas';
+   highlight.style.fontSize = '22px';
+   highlight.innerText = sesi.namaTema || 'Latihan Kaiwa';
+  } else {
+   subJudul.innerText = 'Selamat kamu telah menyelesaikan sesi';
+   highlight.style.fontSize = '23px';
+   highlight.innerText = sesi.namaTema || 'Latihan Kaiwa';
+  }
+
+  elKoin.innerText = `+${koinDidapat.toLocaleString('id-ID')} koin`;
+  elTiket.innerText = `${totalTiketDipakai} tiket`;
+
+  // Susun Isi Kotak Rincian
+  if (isKL) {
+   const biayaRaporKL = isPelanggaran ? (tagihanAkhir) : 2;
+   const biayaArgoKL = isPelanggaran ? 0 : Math.max(0, tagihanAkhir - 2);
+   wadahRincian.innerHTML = `
+    <div style="display:flex; justify-content:space-between;"><span>Tiket masuk :</span> <strong>${tiketMasuk} tiket</strong></div>
+    <div style="display:flex; justify-content:space-between;"><span>Argo :</span> <strong>${menitDesimal} menit (${biayaArgoKL} tiket)</strong></div>
+    <div style="display:flex; justify-content:space-between;"><span>Rapor :</span> <strong>${biayaRaporKL} tiket</strong></div>
+    <div style="display:flex; justify-content:space-between; border-top:1px solid #e2e8f0; margin-top:4px; padding-top:4px; color:var(--primary);"><span>Total :</span> <strong>${totalTiketDipakai} tiket</strong></div>
+    <div style="font-size:10.5px; color:#64748b; line-height:1.45; margin-top:8px; font-style:italic;">
+     *Kamu hanya menggunakan <strong>${totalTiketDipakai} tiket</strong> dari <strong>${hargaMaksPenuh} tiket</strong> maksimal ${namaTemaBersih}${escapeHtml(labelTier)} Kaiwa Live
+    </div>
+   `;
+  } else {
+   const biayaRaporKN = isPelanggaran ? 2 : (isSelesaiPenuh ? 2 : 5);
+   const labelRaporKN = (!isPelanggaran && !isSelesaiPenuh) ? 'Rapor (Denda tengah jalan) :' : 'Rapor :';
+   const biayaPutaranKN = Math.max(0, tagihanAkhir - biayaRaporKN);
+   wadahRincian.innerHTML = `
+    <div style="display:flex; justify-content:space-between;"><span>Tiket masuk :</span> <strong>${tiketMasuk} tiket</strong></div>
+    <div style="display:flex; justify-content:space-between;"><span>Percakapan (${sesi.putaranSaatIni}x) :</span> <strong>${biayaPutaranKN} tiket</strong></div>
+    <div style="display:flex; justify-content:space-between;"><span>${labelRaporKN}</span> <strong>${biayaRaporKN} tiket</strong></div>
+    <div style="display:flex; justify-content:space-between; border-top:1px solid #e2e8f0; margin-top:4px; padding-top:4px; color:var(--primary);"><span>Total :</span> <strong>${totalTiketDipakai} tiket</strong></div>
+   `;
+  }
+
+  modal.classList.remove('hidden');
+ }
 
   document.getElementById('btnKembaliDash').addEventListener('click', () => {
     showView('dashboard');
