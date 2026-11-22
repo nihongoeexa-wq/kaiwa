@@ -36,6 +36,8 @@
  let timerGantung4DetikKL = null;
  let timerHeningTotalKL = null;
  let sudahCekHeningGiliranIni = false;
+ let aiTurnSedangBerjalanKL = false;
+ let waktuSuaraUserTerakhirMs = 0;
 
  function bersihkanTimerJedaPedagogiKL() {
   clearTimeout(timerGantung4DetikKL);
@@ -44,53 +46,89 @@
   timerHeningTotalKL = null;
  }
 
+ function apakahTeksMenggantung(teksRaw) {
+  const t = String(teksRaw || '').trim().replace(/[。、…\.\?\!？！\s]+$/g, '');
+  if (!t) return false;
+  // Deteksi partikel menggantung atau filler berpikir di ujung ucapan
+  if (/(ですが|ますけど|けど|けれど|から|ので|たら|とき|時|前に|まえに|後で|あとで|えっと|あのう|あの|うーん)$/i.test(t)) {
+   return true;
+  }
+  if (/[がはをにへとでし]$/.test(t) && !/(ました|ません|でした)$/.test(t)) {
+   return true;
+  }
+  // Deteksi kata benda / sifat-na pendek tanpa です dan tanpa だ
+  if (!/(です|ます|ました|ません|でした|だ|だった|ない|なかった|たい|しい|いい|かい|がい|らい|さい|たい|ない|った|んだ|る|う|く|ぐ|す|つ|ぬ|ぶ|む)$/.test(t)) {
+   return true;
+  }
+  return false;
+ }
+
  function jadwalkanCekGantung4Detik() {
   clearTimeout(timerGantung4DetikKL);
   clearTimeout(timerHeningTotalKL);
 
-  timerGantung4DetikKL = setTimeout(() => {
+  timerGantung4DetikKL = setTimeout(function cekUlangGantung() {
    const sesi = window.NEEXA_SESI;
    if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
-   if (aiSedangBicaraKL || currentAiTeksKL.trim() !== '') return;
+   if (aiSedangBicaraKL || aiTurnSedangBerjalanKL || currentAiTeksKL.trim() !== '') return;
    if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
 
-   // Jika tepat 4 detik setelah kata terakhir siswa AI belum merespons (karena kalimat siswa menggantung/buntung), senggol AI sekarang!
-   if (currentUserTeksKL.trim() !== '') {
+   const teksUserSkrg = currentUserTeksKL.trim();
+   if (!teksUserSkrg) return;
+
+   // Jika mulut siswa baru saja bersuara < 3.8 detik lalu, tunggu dulu agar tidak memotong kalimat!
+   const lamaDiamMs = Date.now() - waktuSuaraUserTerakhirMs;
+   if (lamaDiamMs < 3800) {
+    timerGantung4DetikKL = setTimeout(cekUlangGantung, 4000 - lamaDiamMs);
+    return;
+   }
+
+   // Hanya senggol AI jika kalimatnya benar-benar menggantung/buntung dan AI belum merespons
+   if (apakahTeksMenggantung(teksUserSkrg)) {
     komitTranskripKeHistory('user');
+    aiTurnSedangBerjalanKL = true;
     wsLive.send(JSON.stringify({
      clientContent: {
       turns: [{
        role: "user",
-       parts: [{ text: "（相手が発話の途中や不完全な語尾で4秒間黙って止まりました。[PROTOKOL SKENARIO 2]に従い、役割として自然に「えっ、それでどうなりましたか？」「〇〇がどうかしましたか？」のように続きを促してください。）" }]
+       parts: [{ text: "（相手が文の途中で4秒間止まりました。『ゆっくりで大丈夫』などの定型文は言わず、直前の言葉を受けて「えっ、〇〇がどうしましたか？」「うん、それで？」と自然に続きを聞き返してください。）" }]
       }],
       turnComplete: true
      }
     }));
    }
-  }, 4000);
+  }, 4200);
  }
 
- function jadwalkanCekHeningTotal9Detik() {
+ function jadwalkanCekHeningTotal16Detik() {
   clearTimeout(timerHeningTotalKL);
   if (sudahCekHeningGiliranIni || menungguSalamPenutupMST_KL) return;
 
-  timerHeningTotalKL = setTimeout(() => {
+  timerHeningTotalKL = setTimeout(function cekUlangHening() {
    const sesi = window.NEEXA_SESI;
    if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
-   if (aiSedangBicaraKL || currentUserTeksKL.trim() !== '' || currentAiTeksKL.trim() !== '') return;
+   if (aiSedangBicaraKL || aiTurnSedangBerjalanKL || currentUserTeksKL.trim() !== '' || currentAiTeksKL.trim() !== '') return;
    if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
 
+   // Jika siswa sempat bersuara dalam 15 detik terakhir, batalkan/undur agar tidak menyela siswa berpikir
+   const lamaHeningMs = Date.now() - waktuSuaraUserTerakhirMs;
+   if (waktuSuaraUserTerakhirMs > 0 && lamaHeningMs < 15000) {
+    timerHeningTotalKL = setTimeout(cekUlangHening, 16000 - lamaHeningMs);
+    return;
+   }
+
    sudahCekHeningGiliranIni = true;
+   aiTurnSedangBerjalanKL = true;
    wsLive.send(JSON.stringify({
     clientContent: {
      turns: [{
       role: "user",
-      parts: [{ text: "（相手がしばらく無言です。電話が聞こえているか、または質問が難しかったか、役割に合わせて短く優しく声をかけてください。）" }]
+      parts: [{ text: "（相手が16秒間無言です。「もしもし、聞こえていますか？質問が難しければもう一度言いましょうか？」と短く確認してください。）" }]
      }],
      turnComplete: true
     }
    }));
-  }, 9000);
+  }, 16000);
  }
 
  function pasangListenerTombolKL() {
@@ -295,6 +333,20 @@
   }
  }
 
+ function cekSelesaiBicaraPenuhAI() {
+  clearTimeout(echoTailTimerKL);
+  // Selama server Gemini belum mengirim turnComplete ATAU masih ada antrean audio berputar, tahan tombol tetap biru (jangan berkedip!)
+  if (aiTurnSedangBerjalanKL || activeSourcesKL.length > 0) return;
+
+  echoTailTimerKL = setTimeout(() => {
+   if (!aiTurnSedangBerjalanKL && activeSourcesKL.length === 0) {
+    aiSedangBicaraKL = false;
+    perbaruiStatusVisualMicKL();
+    jadwalkanCekHeningTotal16Detik();
+   }
+  }, 260);
+ }
+
  function hentikanAntreanSuaraAI() {
   clearTimeout(echoTailTimerKL);
   activeSourcesKL.forEach(src => {
@@ -304,6 +356,7 @@
   if (audioCtxKL) {
    nextPlayTimeKL = audioCtxKL.currentTime;
   }
+  aiTurnSedangBerjalanKL = false;
   aiSedangBicaraKL = false;
   perbaruiStatusVisualMicKL();
  }
@@ -315,6 +368,7 @@
    audioCtxKL.resume().catch(() => {});
   }
 
+  bersihkanTimerJedaPedagogiKL();
   clearTimeout(echoTailTimerKL);
 
   const binStr = atob(base64Pcm);
@@ -338,11 +392,15 @@
   source.connect(audioCtxKL.destination);
 
   const now = audioCtxKL.currentTime;
-  if (nextPlayTimeKL < now) nextPlayTimeKL = now + 0.02;
+  // Jitter Buffer 150ms pada awal kalimat agar suara AI mulus 100% tanpa tersendat-sendat!
+  if (nextPlayTimeKL <= now) {
+   nextPlayTimeKL = now + (activeSourcesKL.length === 0 ? 0.15 : 0.03);
+  }
 
-  bersihkanTimerJedaPedagogiKL();
-  aiSedangBicaraKL = true;
-  perbaruiStatusVisualMicKL();
+  if (!aiSedangBicaraKL) {
+   aiSedangBicaraKL = true;
+   perbaruiStatusVisualMicKL();
+  }
 
   source.start(nextPlayTimeKL);
   nextPlayTimeKL += audioBuffer.duration;
@@ -352,35 +410,38 @@
    const idx = activeSourcesKL.indexOf(source);
    if (idx !== -1) activeSourcesKL.splice(idx, 1);
    if (activeSourcesKL.length === 0) {
-    echoTailTimerKL = setTimeout(() => {
-     if (activeSourcesKL.length === 0) {
-      aiSedangBicaraKL = false;
-      perbaruiStatusVisualMicKL();
-      jadwalkanCekHeningTotal9Detik();
-     }
-    }, 180);
+    cekSelesaiBicaraPenuhAI();
    }
   };
  }
 
+ // Downsampler Anti-Aliasing (Boxcar Averaging) + Penguat Lembut agar konsonan ujung seperti "〜ですが" terdengar tajam!
  function konversiFloat32KeBase64Pcm16k(inputFloat32, sampleRateAsli) {
-  let sampel16k = inputFloat32;
-  if (sampleRateAsli !== 16000) {
+  let sampel16k;
+  if (sampleRateAsli === 16000) {
+   sampel16k = inputFloat32;
+  } else {
    const rasio = sampleRateAsli / 16000;
-   const panjangBaru = Math.round(inputFloat32.length / rasio);
+   const panjangBaru = Math.floor(inputFloat32.length / rasio);
    sampel16k = new Float32Array(panjangBaru);
    for (let i = 0; i < panjangBaru; i++) {
-    const pos = i * rasio;
-    const idxBawah = Math.floor(pos);
-    const idxAtas = Math.min(idxBawah + 1, inputFloat32.length - 1);
-    const fraksi = pos - idxBawah;
-    sampel16k[i] = inputFloat32[idxBawah] * (1 - fraksi) + inputFloat32[idxAtas] * fraksi;
+    const start = Math.floor(i * rasio);
+    const end = Math.min(inputFloat32.length, Math.floor((i + 1) * rasio));
+    let sum = 0;
+    let count = 0;
+    for (let k = start; k < end; k++) {
+     sum += inputFloat32[k];
+     count++;
+    }
+    sampel16k[i] = count > 0 ? (sum / count) : inputFloat32[start];
    }
   }
 
   const pcm16 = new Int16Array(sampel16k.length);
   for (let i = 0; i < sampel16k.length; i++) {
-   const s = Math.max(-1, Math.min(1, sampel16k[i]));
+   // Sedikit angkat artikulasi suara ujung kalimat (1.25x dengan pembatas anti-pecah)
+   const boosted = sampel16k[i] * 1.25;
+   const s = Math.max(-1, Math.min(1, boosted));
    pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
   }
 
@@ -399,8 +460,19 @@
   if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
   if (micManualMuteKL) return;
 
-  // Saat Mode Aman Anti-Bocor aktif & AI sedang bicara, kirim sinyal hening murni (0) agar pantulan speaker tidak memotong AI
   const tahanSuaraLuar = (!sesi.bebasPotong) && aiSedangBicaraKL;
+
+  if (!tahanSuaraLuar) {
+   let sumSq = 0;
+   for (let i = 0; i < rawFloat.length; i++) sumSq += rawFloat[i] * rawFloat[i];
+   const rms = Math.sqrt(sumSq / rawFloat.length);
+   if (rms > 0.012) {
+    waktuSuaraUserTerakhirMs = Date.now();
+    // Jika siswa kembali bersuara, batalkan timer hening agar AI tidak memotong pikiran siswa!
+    clearTimeout(timerHeningTotalKL);
+   }
+  }
+
   const sampelFinal = tahanSuaraLuar ? new Float32Array(rawFloat.length) : rawFloat;
   const b64Pcm = konversiFloat32KeBase64Pcm16k(sampelFinal, rateAsli);
 
@@ -647,12 +719,15 @@
 
    const transkripOutput = sc.outputTranscription || msg.outputTranscription;
    if (transkripOutput && transkripOutput.text) {
+    aiTurnSedangBerjalanKL = true;
     bersihkanTimerJedaPedagogiKL();
     if (currentUserTeksKL.trim() !== '') komitTranskripKeHistory('user');
     tambahAtauUpdateBubbleKL('ai', transkripOutput.text);
    }
 
    if (sc.modelTurn && Array.isArray(sc.modelTurn.parts)) {
+    aiTurnSedangBerjalanKL = true;
+    bersihkanTimerJedaPedagogiKL();
     sc.modelTurn.parts.forEach(part => {
      if (part.inlineData && part.inlineData.data && String(part.inlineData.mimeType || '').includes('audio/pcm')) {
       putarPotonganPcm24k(part.inlineData.data);
@@ -661,10 +736,11 @@
    }
 
    if (sc.turnComplete) {
+    aiTurnSedangBerjalanKL = false;
     komitTranskripKeHistory('user');
     komitTranskripKeHistory('ai');
+    cekSelesaiBicaraPenuhAI();
    }
-  };
 
   wsLive.onerror = function () {
    if (!sesi.aktif) return;
