@@ -39,25 +39,30 @@
  let aiTurnSedangBerjalanKL = false;
  let waktuSuaraUserTerakhirMs = 0;
 
+ let timerAfk45DetikKL = null;
+ let sessionResumeHandleKL = "";
+ let jumlahAutoReconnectKL = 0;
+ let sedangAutoResumeKL = false;
+
  function bersihkanTimerJedaPedagogiKL() {
   clearTimeout(timerGantung4DetikKL);
   clearTimeout(timerHeningTotalKL);
+  clearTimeout(timerAfk45DetikKL);
   timerGantung4DetikKL = null;
   timerHeningTotalKL = null;
+  timerAfk45DetikKL = null;
  }
 
  function apakahTeksMenggantung(teksRaw) {
   const t = String(teksRaw || '').trim().replace(/[。、…\.\?\!？！\s]+$/g, '');
   if (!t) return false;
-  // Deteksi partikel menggantung atau filler berpikir di ujung ucapan
   if (/(ですが|ますけど|けど|けれど|から|ので|たら|とき|時|前に|まえに|後で|あとで|えっと|あのう|あの|うーん)$/i.test(t)) {
    return true;
   }
   if (/[がはをにへとでし]$/.test(t) && !/(ました|ません|でした)$/.test(t)) {
    return true;
   }
-  // Deteksi kata benda / sifat-na pendek tanpa です dan tanpa だ
-  if (!/(です|ます|ました|ません|でした|だ|だった|ない|なかった|たい|しい|いい|かい|がい|らい|さい|たい|ない|った|んだ|る|う|く|ぐ|す|つ|ぬ|ぶ|む)$/.test(t)) {
+  if (!/(です|ます|ました|ません|でした|だ|だった|ない|なかった|たい|しい|いい|かい|がい|らい|さい|った|んだ|る|う|く|ぐ|す|つ|ぬ|ぶ|む)$/.test(t)) {
    return true;
   }
   return false;
@@ -66,6 +71,7 @@
  function jadwalkanCekGantung4Detik() {
   clearTimeout(timerGantung4DetikKL);
   clearTimeout(timerHeningTotalKL);
+  clearTimeout(timerAfk45DetikKL);
 
   timerGantung4DetikKL = setTimeout(function cekUlangGantung() {
    const sesi = window.NEEXA_SESI;
@@ -76,14 +82,12 @@
    const teksUserSkrg = currentUserTeksKL.trim();
    if (!teksUserSkrg) return;
 
-   // Jika mulut siswa baru saja bersuara < 3.8 detik lalu, tunggu dulu agar tidak memotong kalimat!
    const lamaDiamMs = Date.now() - waktuSuaraUserTerakhirMs;
    if (lamaDiamMs < 3800) {
     timerGantung4DetikKL = setTimeout(cekUlangGantung, 4000 - lamaDiamMs);
     return;
    }
 
-   // Hanya senggol AI jika kalimatnya benar-benar menggantung/buntung dan AI belum merespons
    if (apakahTeksMenggantung(teksUserSkrg)) {
     komitTranskripKeHistory('user');
     aiTurnSedangBerjalanKL = true;
@@ -100,35 +104,53 @@
   }, 4200);
  }
 
+ // Rem Pengaman Ganda: Sapaan di 16 detik hening, dan Auto-Cut di 45 detik hening jika lupa matikan mic!
  function jadwalkanCekHeningTotal16Detik() {
   clearTimeout(timerHeningTotalKL);
-  if (sudahCekHeningGiliranIni || menungguSalamPenutupMST_KL) return;
+  clearTimeout(timerAfk45DetikKL);
+  if (menungguSalamPenutupMST_KL) return;
 
-  timerHeningTotalKL = setTimeout(function cekUlangHening() {
-   const sesi = window.NEEXA_SESI;
-   if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
-   if (aiSedangBicaraKL || aiTurnSedangBerjalanKL || currentUserTeksKL.trim() !== '' || currentAiTeksKL.trim() !== '') return;
-   if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
+  if (!sudahCekHeningGiliranIni) {
+   timerHeningTotalKL = setTimeout(function cekUlangHening() {
+    const sesi = window.NEEXA_SESI;
+    if (!sesi || !sesi.aktif || !setupSudahSelesaiKL || micManualMuteKL) return;
+    if (aiSedangBicaraKL || aiTurnSedangBerjalanKL || currentUserTeksKL.trim() !== '' || currentAiTeksKL.trim() !== '') return;
+    if (!wsLive || wsLive.readyState !== WebSocket.OPEN) return;
 
-   // Jika siswa sempat bersuara dalam 15 detik terakhir, batalkan/undur agar tidak menyela siswa berpikir
-   const lamaHeningMs = Date.now() - waktuSuaraUserTerakhirMs;
-   if (waktuSuaraUserTerakhirMs > 0 && lamaHeningMs < 15000) {
-    timerHeningTotalKL = setTimeout(cekUlangHening, 16000 - lamaHeningMs);
-    return;
-   }
-
-   sudahCekHeningGiliranIni = true;
-   aiTurnSedangBerjalanKL = true;
-   wsLive.send(JSON.stringify({
-    clientContent: {
-     turns: [{
-      role: "user",
-      parts: [{ text: "（相手が16秒間無言です。「もしもし、聞こえていますか？質問が難しければもう一度言いましょうか？」と短く確認してください。）" }]
-     }],
-     turnComplete: true
+    const lamaHeningMs = Date.now() - waktuSuaraUserTerakhirMs;
+    if (waktuSuaraUserTerakhirMs > 0 && lamaHeningMs < 15000) {
+     timerHeningTotalKL = setTimeout(cekUlangHening, 16000 - lamaHeningMs);
+     return;
     }
-   }));
-  }, 16000);
+
+    sudahCekHeningGiliranIni = true;
+    aiTurnSedangBerjalanKL = true;
+    wsLive.send(JSON.stringify({
+     clientContent: {
+      turns: [{
+       role: "user",
+       parts: [{ text: "（相手が16秒間無言です。「もしもし、聞こえていますか？質問が難しければもう一度言いましょうか？」と短く確認してください。）" }]
+      }],
+      turnComplete: true
+     }
+    }));
+   }, 16000);
+  } else {
+   // Sudah pernah disapa AI tapi tetap hening 30 detik lagi (~46 detik total AFK) -> Tutup otomatis agar tiket siswa aman!
+   timerAfk45DetikKL = setTimeout(() => {
+    const sesi = window.NEEXA_SESI;
+    if (!sesi || !sesi.aktif || micManualMuteKL || aiSedangBicaraKL) return;
+    const lamaDiamTotal = Date.now() - waktuSuaraUserTerakhirMs;
+    if (waktuSuaraUserTerakhirMs > 0 && lamaDiamTotal < 28000) return;
+
+    komitSisaTranskripTertunda();
+    if (sesi.historyPercakapan.trim() !== '' && typeof prosesSelesaiSesi === 'function') {
+     const stInfo = document.getElementById('statusTeksInfo');
+     if (stInfo) stInfo.innerHTML = '🛡️ <b>Tidak ada suara selama 45 detik.</b> Panggilan ditutup otomatis demi mengamankan tiket Anda...';
+     prosesSelesaiSesi(false);
+    }
+   }, 30000);
+  }
  }
 
  function pasangListenerTombolKL() {
@@ -573,9 +595,12 @@
   }
  }
 
- function mulaiArgoWaktu30Detik() {
-  clearInterval(timerDetikInterval);
-  detikBerjalanKL = 0;
+ function mulaiArgoWaktu30Detik(resetNol = true) {
+  if (resetNol) {
+   detikBerjalanKL = 0;
+   window.NEEXA_SESI.detikAktualKL = 0;
+  }
+  if (timerDetikInterval) return; // Jangan buat interval ganda saat auto-resume menit ke-10!
 
   const sesi = window.NEEXA_SESI;
   const maxDetikTotal = Math.max(30, (Number(sesi.maxPutaran) || 6) * 30);
@@ -584,10 +609,11 @@
    const sisaDetik = Math.max(0, maxDetikTotal - detikBerjalanKL);
    const blokTerpakai = detikBerjalanKL > 0 ? Math.min(sesi.maxPutaran, Math.ceil(detikBerjalanKL / 30)) : 0;
    sesi.putaranSaatIni = blokTerpakai;
+   sesi.detikAktualKL = detikBerjalanKL;
 
    const elIndikator = document.getElementById('indikatorPutaran');
    if (elIndikator) {
-    elIndikator.innerText = `⏱️ Sisa Waktu: ${formatMenitDetik(sisaDetik)} • Argo: ${blokTerpakai}/${sesi.maxPutaran} Blok`;
+    elIndikator.innerText = `⏱️ Sisa Waktu: ${formatMenitDetik(sisaDetik)} • Durasi: ${formatMenitDetik(detikBerjalanKL)}`;
    }
    const persentase = Math.min(100, (detikBerjalanKL / maxDetikTotal) * 100);
    const bar = document.getElementById('progressBarKaiwa');
@@ -599,19 +625,25 @@
   timerDetikInterval = setInterval(() => {
    if (!window.NEEXA_SESI.aktif) {
     clearInterval(timerDetikInterval);
+    timerDetikInterval = null;
     return;
    }
+   // Jika sedang proses menyambung ulang sinyal 1 detik, tahan argo agar tidak merugikan siswa
+   if (!setupSudahSelesaiKL) return;
+
    detikBerjalanKL++;
    updateTampilanTimer();
 
    if (detikBerjalanKL >= maxDetikTotal) {
     clearInterval(timerDetikInterval);
+    timerDetikInterval = null;
     window.NEEXA_SESI.putaranSaatIni = window.NEEXA_SESI.maxPutaran;
+    window.NEEXA_SESI.detikAktualKL = maxDetikTotal;
     window.NEEXA_SESI.selesaiResmiKL = true;
     komitSisaTranskripTertunda();
 
     const stInfo = document.getElementById('statusTeksInfo');
-    if (stInfo) stInfo.innerHTML = '⏰ <b>Batas Waktu Live Tercapai!</b> Menyusun rapor evaluasi...';
+    if (stInfo) stInfo.innerHTML = '⏰ <b>Batas Waktu Maksimal Tercapai!</b> Menyusun rapor evaluasi...';
     if (typeof prosesSelesaiSesi === 'function') {
      prosesSelesaiSesi(false);
     }
@@ -619,7 +651,27 @@
   }, 1000);
  }
 
- function bukaKoneksiWebSocketKL(pakaiFallback = false) {
+ function sambungUlangSesiPanjangKL() {
+  const sesi = window.NEEXA_SESI;
+  if (!sesi || !sesi.aktif || sedangAutoResumeKL) return;
+  sedangAutoResumeKL = true;
+  setupSudahSelesaiKL = false;
+  komitSisaTranskripTertunda();
+
+  if (wsLive) {
+   wsLive.onclose = null;
+   wsLive.onerror = null;
+   try { wsLive.close(1000, "Session Resumption"); } catch (e) {}
+   wsLive = null;
+  }
+
+  setTimeout(() => {
+   sedangAutoResumeKL = false;
+   if (sesi.aktif) bukaKoneksiWebSocketKL(sudahCobaFallbackModel, true);
+  }, 350);
+ }
+
+ function bukaKoneksiWebSocketKL(pakaiFallback = false, isResumeSesi = false) {
   const sesi = window.NEEXA_SESI;
   const statusTeks = document.getElementById('statusTeksInfo');
   const emailBersih = String(KAIWA_USER.email || '').trim().toLowerCase();
@@ -631,7 +683,7 @@
   perbaruiStatusVisualMicKL();
 
   const wsBase = WORKER_URL.replace(/^http/i, 'ws').replace(/\/$/, '');
-  const params = new URLSearchParams({
+  const paramsObj = {
    auth: authToken,
    produk: sesi.produk,
    namaTema: sesi.namaTema || '',
@@ -640,20 +692,25 @@
    bargeIn: sesi.bebasPotong ? '1' : '0',
    seed: String(sesi.seedAcak || 77777),
    fallback: pakaiFallback ? '1' : '0'
-  });
-
-  if (statusTeks) {
-   statusTeks.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Menyambungkan telepon Live${pakaiFallback ? ' (Jalur Cadangan)' : ''}...`;
+  };
+  if (isResumeSesi && sessionResumeHandleKL) {
+   paramsObj.resumeHandle = sessionResumeHandleKL;
   }
 
-  wsLive = new WebSocket(`${wsBase}/api/live-ws?${params.toString()}`);
+  if (statusTeks) {
+   statusTeks.innerHTML = isResumeSesi
+    ? `<i class="fas fa-sync fa-spin"></i> Memperpanjang saluran telepon tanpa putus...`
+    : `<i class="fas fa-circle-notch fa-spin"></i> Menyambungkan telepon Live${pakaiFallback ? ' (Jalur Cadangan)' : ''}...`;
+  }
 
-  if (!pakaiFallback && !sudahCobaFallbackModel) {
+  wsLive = new WebSocket(`${wsBase}/api/live-ws?${new URLSearchParams(paramsObj).toString()}`);
+
+  if (!pakaiFallback && !sudahCobaFallbackModel && !isResumeSesi) {
    handshakeWatchdogKL = setTimeout(() => {
     if (sesi.aktif && !setupSudahSelesaiKL) {
      sudahCobaFallbackModel = true;
      try { wsLive.close(); } catch (e) {}
-     bukaKoneksiWebSocketKL(true);
+     bukaKoneksiWebSocketKL(true, false);
     }
    }, 8000);
   }
@@ -681,19 +738,39 @@
 
    if (msg.neexaWsError) {
     alasanErrorTerakhirKL = `${msg.neexaWsError} (Kode ${msg.code || '-'})`;
-    console.error("Detail Error Gemini Live:", alasanErrorTerakhirKL);
     if (String(msg.neexaWsError).toLowerCase().includes('blocked') || String(msg.neexaWsError).toLowerCase().includes('api key')) {
      sudahCobaFallbackModel = true;
     }
     return;
    }
 
-   // Setup Selesai -> Tombol Berubah MERAH BERDENYUT & Siswa Dipersilakan Bicara Duluan!
+   // Tangkap Tiket Sambung Sesi Panjang (Session Resumption Handle) dari Google!
+   if (msg.sessionResumptionUpdate && msg.sessionResumptionUpdate.newHandle) {
+    sessionResumeHandleKL = msg.sessionResumptionUpdate.newHandle;
+   }
+
+   // Tangkap Peringatan goAway (~menit ke-9) -> Sambung ulang diam-diam saat AI tidak sedang bicara!
+   if (msg.goAway !== undefined && sessionResumeHandleKL) {
+    const tungguGiliranAman = setInterval(() => {
+     if (!sesi.aktif) { clearInterval(tungguGiliranAman); return; }
+     if (!aiSedangBicaraKL && !aiTurnSedangBerjalanKL) {
+      clearInterval(tungguGiliranAman);
+      sambungUlangSesiPanjangKL();
+     }
+    }, 500);
+    return;
+   }
+
+   // Setup Selesai -> Nyalakan / Lanjutkan Argo Waktu
    if (msg.setupComplete !== undefined) {
     clearTimeout(handshakeWatchdogKL);
     setupSudahSelesaiKL = true;
-    kirimAktivitas(pakaiFallback ? "Gemini 3.1 Flash Live (Fallback KL)" : "Gemini 3.8 Live (KL)");
-    mulaiArgoWaktu30Detik();
+    jumlahAutoReconnectKL = 0;
+    waktuSuaraUserTerakhirMs = Date.now();
+    if (!isResumeSesi) {
+     kirimAktivitas(pakaiFallback ? "Gemini 3.1 Flash Live (Fallback KL)" : "Gemini 3.8 Live (KL)");
+    }
+    mulaiArgoWaktu30Detik(!isResumeSesi);
     perbaruiStatusVisualMicKL();
     return;
    }
@@ -712,6 +789,7 @@
    const transkripInput = sc.inputTranscription || msg.inputTranscription;
    if (transkripInput && transkripInput.text) {
     sudahCekHeningGiliranIni = false;
+    waktuSuaraUserTerakhirMs = Date.now();
     if (currentAiTeksKL.trim() !== '') komitTranskripKeHistory('ai');
     tambahAtauUpdateBubbleKL('user', transkripInput.text);
     jadwalkanCekGantung4Detik();
@@ -741,31 +819,41 @@
     komitTranskripKeHistory('ai');
     cekSelesaiBicaraPenuhAI();
    }
+  };
 
   wsLive.onerror = function () {
    if (!sesi.aktif) return;
-   if (!pakaiFallback && !sudahCobaFallbackModel && !setupSudahSelesaiKL) {
+   if (!pakaiFallback && !sudahCobaFallbackModel && !setupSudahSelesaiKL && !isResumeSesi) {
     clearTimeout(handshakeWatchdogKL);
     sudahCobaFallbackModel = true;
     try { wsLive.close(); } catch (e) {}
-    bukaKoneksiWebSocketKL(true);
+    bukaKoneksiWebSocketKL(true, false);
    }
   };
 
   wsLive.onclose = function (evt) {
    clearTimeout(handshakeWatchdogKL);
-   if (!sesi.aktif) return;
-   if (!pakaiFallback && !sudahCobaFallbackModel && !setupSudahSelesaiKL && evt.code !== 1000) {
+   if (!sesi.aktif || sedangAutoResumeKL) return;
+
+   // 1. Jika belum sempat tersambung di awal -> coba fallback model
+   if (!pakaiFallback && !sudahCobaFallbackModel && !setupSudahSelesaiKL && evt.code !== 1000 && !isResumeSesi) {
     sudahCobaFallbackModel = true;
-    bukaKoneksiWebSocketKL(true);
+    bukaKoneksiWebSocketKL(true, false);
     return;
    }
+
+   // 2. Jika sinyal HP kedip/putus di tengah obrolan ATAU batas 10 menit -> Auto-Reconnect pakai Resume Handle (Maks 3x berturut-turut)!
+   if (sessionResumeHandleKL && evt.code !== 1000 && jumlahAutoReconnectKL < 3) {
+    jumlahAutoReconnectKL++;
+    sambungUlangSesiPanjangKL();
+    return;
+   }
+
    komitSisaTranskripTertunda();
    document.getElementById('micWrapper')?.classList.remove('is-recording');
    const stInfo = document.getElementById('statusTeksInfo');
    if (stInfo && sesi.aktif) {
-    const ket = alasanErrorTerakhirKL || evt.reason || '';
-    stInfo.innerHTML = `⚠️ Telepon terputus${ket ? ' [' + ket + ']' : ''}. Silakan klik <b>Buat Rapor Sesi</b>.`;
+    stInfo.innerHTML = `⚠️ Sinyal telepon terputus. Tekan tombol <b>Tutup Telepon Merah (Kanan)</b> untuk melihat Rapor Anda.`;
    }
   };
  }
@@ -777,6 +865,10 @@
 
    sesiConfig.seedAcak = Math.floor(Math.random() * 900000) + 100000;
    sesiConfig.selesaiResmiKL = false;
+   sesiConfig.detikAktualKL = 0;
+   sessionResumeHandleKL = "";
+   jumlahAutoReconnectKL = 0;
+   sedangAutoResumeKL = false;
    panggilanSudahDimulaiKL = false;
    sedangMenyambungKL = false;
    setupSudahSelesaiKL = false;
@@ -832,7 +924,10 @@
 
   hentikan: function () {
    clearInterval(timerDetikInterval);
+   timerDetikInterval = null;
    clearTimeout(autoTutupTimerKL);
+   sessionResumeHandleKL = "";
+   sedangAutoResumeKL = false;
    bersihkanTimerJedaPedagogiKL();
    sudahCekHeningGiliranIni = false;
    clearTimeout(handshakeWatchdogKL);
