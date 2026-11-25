@@ -9,9 +9,17 @@
   let localStreamKN = null;
   let audioChunksKN = [];
   let isRecordingKN = false;
-  let audioPlayerKN = new Audio();
-  let isAudioUnlockedKN = false;
-  let isListenerAttached = false;
+ let audioPlayerKN = new Audio();
+ let isAudioUnlockedKN = false;
+ let isListenerAttached = false;
+
+ // Perekam Khusus Arsip Kandidat Lulus Simulasi MST (Hemat 24kbps, Privat TSK)
+ let mstAudioCtxKN = null;
+ let mstMixDestKN = null;
+ let mstRecorderKN = null;
+ let mstChunksKN = [];
+ let mstFinalBlobKN = null;
+ let mstMimeKN = 'audio/webm';
 
   function pasangListenerMicSatuKali() {
     if (isListenerAttached) return;
@@ -85,22 +93,37 @@
         if (MediaRecorder.isTypeSupported('audio/webm')) options = { mimeType: 'audio/webm' };
         else if (MediaRecorder.isTypeSupported('audio/mp4')) options = { mimeType: 'audio/mp4' };
 
-        audioChunksKN = [];
-        mediaRecorderKN = new MediaRecorder(localStreamKN, options);
-        mediaRecorderKN.start();
-        isRecordingKN = true;
+    audioChunksKN = [];
+    mediaRecorderKN = new MediaRecorder(localStreamKN, options);
+    mediaRecorderKN.start();
+    isRecordingKN = true;
 
-        document.getElementById('micWrapper').classList.add('is-recording');
-        micBtn.style.backgroundColor = "#b91c1c";
-        micBtn.innerHTML = '<i class="fas fa-stop"></i>';
-        statusTeks.innerText = "🔴 Sedang mendengarkan... (Tekan untuk stop)";
+    // Rekam jawaban kandidat ke pita arsip MST jika sedang Simulasi Penuh MST
+    let micSrcMstTemp = null;
+    try {
+     if (mstAudioCtxKN && mstMixDestKN && mstRecorderKN) {
+      if (mstAudioCtxKN.state === 'suspended') mstAudioCtxKN.resume().catch(() => {});
+      micSrcMstTemp = mstAudioCtxKN.createMediaStreamSource(localStreamKN);
+      micSrcMstTemp.connect(mstMixDestKN);
+      if (mstRecorderKN.state === 'paused') mstRecorderKN.resume();
+     }
+    } catch (eMst) {}
 
-        mediaRecorderKN.ondataavailable = e => {
-          if (e.data.size > 0) audioChunksKN.push(e.data);
-        };
+    document.getElementById('micWrapper').classList.add('is-recording');
+    micBtn.style.backgroundColor = "#b91c1c";
+    micBtn.innerHTML = '<i class="fas fa-stop"></i>';
+    statusTeks.innerText = "🔴 Sedang mendengarkan... (Tekan untuk stop)";
 
-        mediaRecorderKN.onstop = async () => {
-          document.getElementById('micWrapper').classList.remove('is-recording');
+    mediaRecorderKN.ondataavailable = e => {
+     if (e.data.size > 0) audioChunksKN.push(e.data);
+    };
+
+    mediaRecorderKN.onstop = async () => {
+     try {
+      if (mstRecorderKN && mstRecorderKN.state === 'recording') mstRecorderKN.pause();
+      if (micSrcMstTemp) micSrcMstTemp.disconnect();
+     } catch (eMstStop) {}
+     document.getElementById('micWrapper').classList.remove('is-recording');
           micBtn.style.backgroundColor = "#94a3b8";
           micBtn.disabled = true;
           statusTeks.innerText = "⏳ Mengenali suara Anda...";
@@ -267,57 +290,97 @@
       sesiConfig.seedAcak = Math.floor(Math.random() * 900000) + 100000;
       sesiConfig.menungguSalamPenutupMST = false;
 
-      const isMST = sesiConfig.produk.includes("-MST") || sesiConfig.produk.startsWith("MST");
-      const statusTeks = document.getElementById('statusTeksInfo'); // <-- TAMBAHAN WAJIB INI!
+   const isMST = sesiConfig.produk.includes("-MST") || sesiConfig.produk.startsWith("MST");
+   const isSimulasiPenuhMST = isMST && !sesiConfig.produk.includes("MST-LAT");
+   const statusTeks = document.getElementById('statusTeksInfo');
 
-   document.getElementById('activeProductDisplay').innerText = sesiConfig.namaTema;
-   document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
-   document.getElementById('progressBarKaiwa').style.width = '0%';
-   document.getElementById('chatContainer').innerHTML = '';
-   document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${sesiConfig.maxPutaran}`;
+   // Siapkan perekam arsip MST 24kbps jika Simulasi Penuh
+   this.hapusRekamanMST();
+   if (isSimulasiPenuhMST) {
+    try {
+     const AC = window.AudioContext || window.webkitAudioContext;
+     mstAudioCtxKN = new AC();
+     mstMixDestKN = mstAudioCtxKN.createMediaStreamDestination();
+     mstMimeKN = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm');
+     mstChunksKN = [];
+     mstRecorderKN = new MediaRecorder(mstMixDestKN.stream, { mimeType: mstMimeKN, audioBitsPerSecond: 24000 });
+     mstRecorderKN.ondataavailable = ev => { if (ev.data && ev.data.size > 0) mstChunksKN.push(ev.data); };
+     mstRecorderKN.start(1000);
+     mstRecorderKN.pause();
+    } catch (eInitMst) {}
+   }
 
-   // Pastikan mode tampilan tombol kembali ke Kaiwa Normal (1 tombol mic + tombol Buat Rapor di bawah)
-   document.getElementById('micWrapper')?.classList.remove('kl-call-mode', 'kl-split-active');
-   document.getElementById('btnTelpKiriKL')?.classList.remove('arrived-disabled');
-   document.getElementById('btnSelesaiKaiwa')?.classList.remove('hidden');
-   resetTombolMicKN();
+  document.getElementById('activeProductDisplay').innerText = sesiConfig.namaTema;
+  document.getElementById('namaUserDiKaiwa').innerText = KAIWA_USER.nama;
+  document.getElementById('progressBarKaiwa').style.width = '0%';
+  document.getElementById('chatContainer').innerHTML = '';
+  document.getElementById('indikatorPutaran').innerText = `Putaran: 0 / ${sesiConfig.maxPutaran}`;
 
-      if (isMST) {
-        // KHUSUS WAWANCARA (MST): AI DIAM MENUNGGU KANDIDAT MENYAPA LEBIH DULU!
-        statusTeks.innerText = "🎙️ Pewawancara menunggu salam pembuka Anda...";
-        const chatContainer = document.getElementById('chatContainer');
-        const bannerZoom = document.createElement('div');
-        bannerZoom.style.cssText = "background:#eff6ff; border:1px dashed #93c5fd; color:#1e40af; padding:12px 15px; border-radius:12px; font-size:12px; text-align:center; line-height:1.5; font-weight:600;";
-        bannerZoom.innerHTML = "💻 <b>Ruang Wawancara Online Terhubung</b><br>Pewawancara (Mensetsukan) telah hadir di layar dan menunggu Anda berbicara lebih dulu. Tekan mikrofon dan ucapkan salam pembuka wawancara online!";
-        chatContainer.appendChild(bannerZoom);
-      } else {
-        statusTeks.innerText = "Tekan mikrofon SEKALI untuk membalas.";
-        let sapaanAwal = `こんにちは！ Mari mulai latihan "${sesiConfig.namaTema}". Tekan mikrofon dan sapa saya.`;
-        if (sesiConfig.produk.includes("KHD")) {
-          sapaanAwal = `こんにちは！ Simulasi "${sesiConfig.namaTema}" dimulai. Silakan tekan mikrofon untuk memulai situasi.`;
-        }
-        setTimeout(() => {
-          if (window.NEEXA_SESI.aktif) tambahBubbleKN('ai', sapaanAwal);
-        }, 350);
-      }
+  document.getElementById('micWrapper')?.classList.remove('kl-call-mode', 'kl-split-active');
+  document.getElementById('btnTelpKiriKL')?.classList.remove('arrived-disabled');
+  document.getElementById('btnSelesaiKaiwa')?.classList.remove('hidden');
+  resetTombolMicKN();
 
-      showView('kaiwaRoom');
-    },
-
-    hentikan: function () {
-      if (isRecordingKN && mediaRecorderKN) {
-        mediaRecorderKN.onstop = null;
-        try { mediaRecorderKN.stop(); } catch (e) {}
-        isRecordingKN = false;
-      }
-      if (localStreamKN) {
-        localStreamKN.getTracks().forEach(track => track.stop());
-        localStreamKN = null;
-      }
-      const micWrap = document.getElementById('micWrapper');
-      if (micWrap) micWrap.classList.remove('is-recording');
-      audioPlayerKN.onended = null;
-      try { audioPlayerKN.pause(); } catch (e) {}
+   if (isMST) {
+    statusTeks.innerText = "🎙️ Pewawancara menunggu salam pembuka Anda...";
+    const chatContainer = document.getElementById('chatContainer');
+    const bannerZoom = document.createElement('div');
+    bannerZoom.style.cssText = "background:#eff6ff; border:1px dashed #93c5fd; color:#1e40af; padding:12px 15px; border-radius:12px; font-size:12px; text-align:center; line-height:1.5; font-weight:600;";
+    bannerZoom.innerHTML = "💻 <b>Ruang Wawancara Online Terhubung</b><br>Pewawancara (Mensetsukan) telah hadir di layar dan menunggu Anda berbicara lebih dulu. Tekan mikrofon dan ucapkan salam pembuka wawancara online!";
+    chatContainer.appendChild(bannerZoom);
+   } else {
+    statusTeks.innerText = "Tekan mikrofon SEKALI untuk membalas.";
+    let sapaanAwal = `こんにちは！ Mari mulai latihan "${sesiConfig.namaTema}". Tekan mikrofon dan sapa saya.`;
+    if (sesiConfig.produk.includes("KHD")) {
+     sapaanAwal = `こんにちは！ Simulasi "${sesiConfig.namaTema}" dimulai. Silakan tekan mikrofon untuk memulai situasi.`;
     }
-  };
+    setTimeout(() => {
+     if (window.NEEXA_SESI.aktif) tambahBubbleKN('ai', sapaanAwal);
+    }, 350);
+   }
+
+   showView('kaiwaRoom');
+  },
+
+  hentikan: function () {
+   if (isRecordingKN && mediaRecorderKN) {
+    mediaRecorderKN.onstop = null;
+    try { mediaRecorderKN.stop(); } catch (e) {}
+    isRecordingKN = false;
+   }
+   if (localStreamKN) {
+    localStreamKN.getTracks().forEach(track => track.stop());
+    localStreamKN = null;
+   }
+   if (mstRecorderKN && mstRecorderKN.state !== 'inactive') {
+    try {
+     mstRecorderKN.onstop = () => {
+      if (mstChunksKN.length > 0) mstFinalBlobKN = new Blob(mstChunksKN, { type: mstMimeKN });
+      if (mstAudioCtxKN) { try { mstAudioCtxKN.close(); } catch (e) {} mstAudioCtxKN = null; }
+     };
+     mstRecorderKN.stop();
+    } catch (e) {}
+   }
+   const micWrap = document.getElementById('micWrapper');
+   if (micWrap) micWrap.classList.remove('is-recording');
+   audioPlayerKN.onended = null;
+   try { audioPlayerKN.pause(); } catch (e) {}
+  },
+
+  ambilBlobRekamanMST: async function () {
+   await new Promise(r => setTimeout(r, 250));
+   if (!mstFinalBlobKN && mstChunksKN.length > 0) {
+    mstFinalBlobKN = new Blob(mstChunksKN, { type: mstMimeKN });
+   }
+   return mstFinalBlobKN ? { blob: mstFinalBlobKN, mimeType: mstMimeKN } : null;
+  },
+
+  hapusRekamanMST: function () {
+   mstChunksKN = [];
+   mstFinalBlobKN = null;
+   mstRecorderKN = null;
+   mstMixDestKN = null;
+   if (mstAudioCtxKN) { try { mstAudioCtxKN.close(); } catch (e) {} mstAudioCtxKN = null; }
+  }
+ };
 })();
