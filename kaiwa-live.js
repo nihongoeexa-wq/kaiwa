@@ -44,6 +44,13 @@
  let jumlahAutoReconnectKL = 0;
  let sedangAutoResumeKL = false;
 
+ // Perekam Dua Arah (Suara Direktur AI + Suara Kandidat) Khusus Simulasi Penuh KL-MST
+ let mstMixDestKL = null;
+ let mstRecorderKL = null;
+ let mstChunksKL = [];
+ let mstFinalBlobKL = null;
+ let mstMimeKL = 'audio/webm';
+
  function bersihkanTimerJedaPedagogiKL() {
   clearTimeout(timerGantung4DetikKL);
   clearTimeout(timerHeningTotalKL);
@@ -409,9 +416,10 @@
   const audioBuffer = audioCtxKL.createBuffer(1, float32.length, 24000);
   audioBuffer.getChannelData(0).set(float32);
 
-  const source = audioCtxKL.createBufferSource();
-  source.buffer = audioBuffer;
-  source.connect(audioCtxKL.destination);
+ const source = audioCtxKL.createBufferSource();
+ source.buffer = audioBuffer;
+ source.connect(audioCtxKL.destination);
+ if (mstMixDestKL) { try { source.connect(mstMixDestKL); } catch (e) {} }
 
   const now = audioCtxKL.currentTime;
   // Jitter Buffer 150ms pada awal kalimat agar suara AI mulus 100% tanpa tersendat-sendat!
@@ -538,8 +546,23 @@
     audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
    });
 
-   const rateAsli = audioCtxKL.sampleRate;
-   sourceNodeKL = audioCtxKL.createMediaStreamSource(mediaStreamKL);
+  const rateAsli = audioCtxKL.sampleRate;
+  sourceNodeKL = audioCtxKL.createMediaStreamSource(mediaStreamKL);
+
+  // Jika Simulasi Penuh KL-MST, rekam percakapan 2 arah dengan kompresi ringan 24kbps
+  const prodAktifKL = String(window.NEEXA_SESI?.produk || '').toUpperCase();
+  if (prodAktifKL.includes('MST') && !prodAktifKL.includes('MST-LAT')) {
+   try {
+    mstMixDestKL = audioCtxKL.createMediaStreamDestination();
+    sourceNodeKL.connect(mstMixDestKL);
+    mstMimeKL = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm');
+    mstChunksKL = [];
+    mstFinalBlobKL = null;
+    mstRecorderKL = new MediaRecorder(mstMixDestKL.stream, { mimeType: mstMimeKL, audioBitsPerSecond: 24000 });
+    mstRecorderKL.ondataavailable = ev => { if (ev.data && ev.data.size > 0) mstChunksKL.push(ev.data); };
+    mstRecorderKL.start(1000);
+   } catch (eRecKL) {}
+  }
 
    try {
     if (!audioCtxKL.audioWorklet) throw new Error("FallbackSP");
@@ -956,17 +979,43 @@
     try { sourceNodeKL.disconnect(); } catch (e) {}
     sourceNodeKL = null;
    }
-   if (mediaStreamKL) {
-    mediaStreamKL.getTracks().forEach(t => t.stop());
-    mediaStreamKL = null;
-   }
-   if (audioCtxKL) {
-    try { audioCtxKL.close(); } catch (e) {}
-    audioCtxKL = null;
-   }
-
-   const micWrap = document.getElementById('micWrapper');
-   if (micWrap) micWrap.classList.remove('is-recording');
+  if (mstRecorderKL && mstRecorderKL.state !== 'inactive') {
+   try {
+    mstRecorderKL.onstop = () => {
+     if (mstChunksKL.length > 0) mstFinalBlobKL = new Blob(mstChunksKL, { type: mstMimeKL });
+    };
+    mstRecorderKL.stop();
+   } catch (e) {}
   }
+  mstMixDestKL = null;
+
+  if (mediaStreamKL) {
+   mediaStreamKL.getTracks().forEach(t => t.stop());
+   mediaStreamKL = null;
+  }
+  if (audioCtxKL) {
+   const ctxLama = audioCtxKL;
+   audioCtxKL = null;
+   setTimeout(() => { try { ctxLama.close(); } catch (e) {} }, 220);
+  }
+
+  const micWrap = document.getElementById('micWrapper');
+  if (micWrap) micWrap.classList.remove('is-recording');
+ },
+
+ ambilBlobRekamanMST: async function () {
+  await new Promise(r => setTimeout(r, 260));
+  if (!mstFinalBlobKL && mstChunksKL.length > 0) {
+   mstFinalBlobKL = new Blob(mstChunksKL, { type: mstMimeKL });
+  }
+  return mstFinalBlobKL ? { blob: mstFinalBlobKL, mimeType: mstMimeKL } : null;
+ },
+
+ hapusRekamanMST: function () {
+  mstChunksKL = [];
+  mstFinalBlobKL = null;
+  mstRecorderKL = null;
+  mstMixDestKL = null;
+ }
  };
 })();
