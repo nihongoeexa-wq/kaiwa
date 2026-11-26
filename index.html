@@ -1509,7 +1509,7 @@
     <!-- ========================================== -->
     <!-- MENU PROGRES (JALUR BELAJAR TERPANDU)      -->
     <!-- ========================================== -->
-    <div id="tab-progres" class="nav-page-section" style="display: none;"
+    <div id="tab-progres" class="nav-page-section" style="display: none;">
      <div class="page-aligned-box">
       <div class="page-hero-banner" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">
        <div class="banner-text">
@@ -6463,6 +6463,7 @@
  let streamMicUji = null;
  let audioChunksUji = [];
  let audioPlayerUji = new Audio();
+ let isAudioUnlockedUji = false;
  let riwayatChatUjiAPI = [];
  let transkripLengkapUji = '';
 
@@ -6545,8 +6546,16 @@
    return;
   }
 
-  // Mode Produksi Online: Buka Mikrofon Asli -> Deepgram STT -> AI Sensei + TTS!
-  audioPlayerUji.play().catch(() => {});
+  // Mode Produksi Online: Unlock audio hening hanya 1x di awal & matikan sisa suara AI saat mulai rekam!
+  if (!isAudioUnlockedUji) {
+   audioPlayerUji.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+   audioPlayerUji.play().catch(() => {});
+   isAudioUnlockedUji = true;
+  } else {
+   audioPlayerUji.onended = null;
+   try { audioPlayerUji.pause(); } catch (e) {}
+  }
+
   if (!WIZ_STATE.sedangRekamUji) {
    try {
     streamMicUji = await navigator.mediaDevices.getUserMedia({
@@ -7667,10 +7676,38 @@
   document.body.appendChild(bar);
  }
 
- // PULIHKAN SESI & POSISI HALAMAN OTOMATIS SAAT REFRESH (DI LUAR RUANG KAIWA)
- (function pulihkanSesiSaatRefresh() {
+ // Penjaga Struktur DOM: Memastikan semua halaman menu 100% selalu berada di dalam main.main-content
+ function pastikanStrukturLayoutRapi() {
+  const mainEl = document.querySelector('#viewDashboard main.main-content');
+  if (!mainEl) return;
+  document.querySelectorAll('.nav-page-section').forEach(sec => {
+   if (sec.parentElement !== mainEl) mainEl.appendChild(sec);
+  });
+ }
+
+ function paksaResetSesiLokalKeLogin(emailLama) {
+  try {
+   localStorage.removeItem('neexa_auth_session_v1');
+   localStorage.removeItem('neexa_last_tab_v1');
+   if (emailLama) {
+    const em = String(emailLama).trim().toLowerCase();
+    localStorage.removeItem('neexa_kalibrasi_' + em);
+    localStorage.removeItem('neexa_lamaran_aktif_' + em);
+   }
+  } catch (e) {}
+  KAIWA_USER = {};
+  dataRiwayatLokal = [];
+  document.getElementById('onboardingModal')?.classList.add('hidden');
+  document.getElementById('profilModal')?.classList.add('hidden');
+  showView('login');
+ }
+
+ // PULIHKAN SESI & VERIFIKASI OTOMATIS KE DATABASE USERS SAAT REFRESH
+ (async function pulihkanSesiSaatRefresh() {
+  pastikanStrukturLayoutRapi();
   pasangPanelPreviewJikaLokal();
   if (apakahModePreviewLokal()) return;
+
   try {
    const rawSesi = localStorage.getItem('neexa_auth_session_v1');
    if (!rawSesi) return;
@@ -7682,12 +7719,27 @@
    showView('dashboard');
    bukaTab(tabTerakhir);
 
+   // Cek ke Server GAS apakah akun masih terdaftar di Sheet USERS (Otomatis Logout jika tabel USERS direset!)
+   const cekServer = await panggilGAS('cekSesiAktif', { email: savedUser.email });
+   if (!cekServer.success && cekServer.data && cekServer.data.forceLogout) {
+    paksaResetSesiLokalKeLogin(savedUser.email);
+    return;
+   }
+
+   if (cekServer.success && cekServer.data) {
+    if (cekServer.data.statusKalibrasi === 'BELUM') {
+     try { localStorage.removeItem('neexa_kalibrasi_' + String(savedUser.email).trim().toLowerCase()); } catch (e) {}
+    }
+    terapkanDataUserKeUI(Object.assign({}, savedUser, cekServer.data));
+   }
+
    muatDaftarProduk();
    tarikDataRiwayat();
    muatInfoPenting();
    muatDataLeaderboard(false);
 
-   if (!savedUser.gender) {
+   const stKal = ambilStatusKalibrasiUser();
+   if (!KAIWA_USER.gender || stKal === 'BELUM') {
     bukaModalOnboarding(false);
    }
   } catch (e) {
