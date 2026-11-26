@@ -1015,82 +1015,143 @@
     padding: 13px 14px; margin-bottom: 10px;
   }
 
-  /* 1A. Header Kartu Kategori: Ikon Lebih Besar + Judul di Sebelah Kanan Ikon */
+  /* 1A. Kartu Utama Belajar & Wawancara (Dipanjangkan Proporsional Mengisi Ruang Bawah) */
   .kat-head-inline {
-    display: flex; align-items: center; gap: 14px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
   }
-  .kategori-card-tall .kat-head-inline .kat-icon-big {
-    width: 58px; height: 58px; border-radius: 15px; font-size: 29px;
+  .kategori-card-tall.tall-main-cat {
+    min-height: 275px; padding: 28px 24px; border-radius: 20px;
+  }
+  .kategori-card-tall.tall-main-cat .kat-head-inline .kat-icon-big {
+    width: 68px; height: 68px; border-radius: 18px; font-size: 34px;
     margin-bottom: 0; flex-shrink: 0;
   }
-  .kategori-card-tall .kat-head-inline h3 {
-    margin: 0; font-size: 16.5px; font-weight: 800; line-height: 1.25; color: var(--text-main);
+  .kategori-card-tall.tall-main-cat .kat-head-inline h3 {
+    margin: 0; font-size: 20px; font-weight: 800; line-height: 1.25; color: var(--text-main);
+  }
+  .kategori-card-tall.tall-main-cat p {
+    font-size: 14px; line-height: 1.65; color: #475569; margin: 0 0 22px 0;
+  }
+  .kategori-card-tall.tall-main-cat .kat-footer-row {
+    padding-top: 16px; border-top: 1.5px dashed #cbd5e1;
+  }
+  .kategori-card-tall.tall-main-cat .kat-footer-label {
+    font-size: 13px; font-weight: 800; color: #64748b;
+  }
+  .kategori-card-tall.tall-main-cat .tier-price {
+    font-size: 13px; padding: 8px 14px; border-radius: 10px;
   }
 
-  /* 1B. Grid 3 Kartu Visual untuk Pilihan Level (BSC / MID / PRO) */
+  /* Hierarki Header Bertingkat:
+     - Utama (.page-hero-banner): padding 30px, h2 24px
+     - Pilih Level (.level-hero-banner): sedikit lebih kecil (padding 22px 26px, h2 20px)
+     - Halaman Produk (.produk-hero-banner): sedikit lebih kecil lagi (padding 17px 22px, h2 18px) */
+  .level-hero-banner {
+    border-radius: 18px; padding: 22px 26px; color: #ffffff;
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+    position: relative; overflow: hidden; margin-bottom: 18px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12); box-sizing: border-box;
+  }
+  .level-hero-banner .banner-text { position: relative; z-index: 2; max-width: 82%; text-align: left; }
+  .level-hero-banner .banner-text h2 { margin: 0 0 6px 0; font-size: 20px; font-weight: 800; color: #ffffff; line-height: 1.25; }
+  .level-hero-banner .banner-text p { margin: 0; font-size: 13px; line-height: 1.5; opacity: 0.93; color: #ffffff; }
+  .level-hero-banner .banner-watermark {
+    position: absolute; right: 20px; bottom: -14px; font-size: 64px;
+    opacity: 0.16; transform: rotate(12deg); z-index: 1; pointer-events: none;
+  }
+
+  .produk-hero-banner {
+    border-radius: 16px; padding: 17px 22px; color: #ffffff;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    position: relative; overflow: hidden; margin-bottom: 14px;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.1); box-sizing: border-box;
+  }
+  .produk-hero-banner .banner-text { position: relative; z-index: 2; max-width: 76%; text-align: left; }
+  .produk-hero-banner .banner-text h2 { margin: 0 0 4px 0; font-size: 18px; font-weight: 800; color: #ffffff; line-height: 1.25; letter-spacing: 0.3px; }
+  .produk-hero-banner .banner-text p { margin: 0; font-size: 12.5px; line-height: 1.45; opacity: 0.93; color: #ffffff; }
+  .produk-hero-banner .btn-info-peraturan {
+    position: relative; z-index: 2; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.38);
+    color: #ffffff; padding: 7px 12px; border-radius: 10px; font-size: 11.5px; font-weight: 800;
+    cursor: pointer; white-space: nowrap; transition: 0.2s;
+  }
+  .produk-hero-banner .btn-info-peraturan:hover { background: rgba(255,255,255,0.3); }
+
+  /* 1B. Grid Kartu Level (3 Kolom untuk Belajar, 2 Kolom Lebar Proporsional untuk Wawancara) */
   .tier-visual-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+  }
+  .tier-visual-grid.two-cols {
+    grid-template-columns: repeat(2, 1fr); gap: 16px;
   }
   .tier-visual-card {
-    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
-    padding: 18px 15px; cursor: pointer; transition: all 0.22s ease;
+    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 18px;
+    padding: 24px 18px 20px 18px; min-height: 265px; cursor: pointer; transition: all 0.22s ease;
     display: flex; flex-direction: column; justify-content: space-between;
     position: relative; overflow: hidden; text-align: left;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03); box-sizing: border-box;
   }
   .tier-visual-card:hover {
     transform: translateY(-4px); border-color: var(--primary);
     box-shadow: 0 12px 24px rgba(43, 59, 112, 0.1);
   }
   .tier-visual-card .tvc-top-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
   }
   .tier-visual-card .tvc-head {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; margin-top: 4px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; margin-top: 4px;
   }
   .tier-visual-card .tvc-emoji {
-    width: 44px; height: 44px; border-radius: 12px; display: flex;
-    justify-content: center; align-items: center; font-size: 23px;
+    width: 52px; height: 52px; border-radius: 14px; display: flex;
+    justify-content: center; align-items: center; font-size: 27px;
   }
   .tier-visual-card .tvc-badge {
-    font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 20px;
+    font-size: 10.5px; font-weight: 800; padding: 4px 10px; border-radius: 20px;
   }
-  .tier-visual-card h3 { margin: 0 0 5px 0; font-size: 15px; font-weight: 800; color: var(--text-main); }
-  .tier-visual-card p { margin: 0 0 14px 0; font-size: 11.5px; color: #64748b; line-height: 1.45; }
+  .tier-visual-card h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 900; color: var(--text-main); letter-spacing: 0.3px; }
+  .tier-visual-card p { margin: 0 0 16px 0; font-size: 12.5px; color: #475569; line-height: 1.58; }
   .tier-visual-card .tvc-cta {
-    font-size: 12px; font-weight: 800; padding-top: 10px; border-top: 1px dashed #e2e8f0;
+    font-size: 13px; font-weight: 800; padding-top: 12px; border-top: 1.5px dashed #e2e8f0;
     display: flex; justify-content: space-between; align-items: center;
   }
 
-  /* Katalog Grid 2 Kolom untuk Daftar Bab Buku & Bidang Wawancara */
+  /* 5B. Katalog Kartu Kotak Produk 2 Kolom (Langsung Tampil Sensei & Info Tanpa Buka-Tutup) */
   .book-filter-bar {
     display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; margin: 12px 0;
   }
   .book-chip-btn {
-    padding: 6px 13px; border-radius: 20px; border: 1.5px solid #e2e8f0;
-    background: #ffffff; font-size: 11.5px; font-weight: 800; color: #64748b;
+    padding: 7px 14px; border-radius: 20px; border: 1.5px solid #e2e8f0;
+    background: #ffffff; font-size: 12px; font-weight: 800; color: #64748b;
     cursor: pointer; white-space: nowrap; transition: 0.2s;
   }
   .book-chip-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
 
   .theme-catalog-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 12px; align-items: stretch;
   }
-  .theme-catalog-grid .theme-item {
-    margin-bottom: 0; border-radius: 14px; transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  .product-box-card {
+    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 18px;
+    padding: 20px; display: flex; flex-direction: column; justify-content: space-between;
+    gap: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: all 0.2s ease; box-sizing: border-box;
   }
-  .theme-catalog-grid .theme-item:hover { border-color: #93c5fd; transform: translateY(-2px); }
-  .theme-catalog-grid .theme-item.expanded-card {
-    grid-column: 1 / -1; border-color: #2563eb; box-shadow: 0 8px 22px rgba(37,99,235,0.1);
+  .product-box-card:hover {
+    border-color: #93c5fd; box-shadow: 0 10px 22px rgba(43, 59, 112, 0.08);
   }
-  .theme-num-pill {
-    display: inline-flex; justify-content: center; align-items: center;
-    min-width: 28px; height: 28px; padding: 0 7px; border-radius: 8px;
-    background: #eff6ff; color: #1d4ed8; font-size: 11px; font-weight: 900; margin-right: 8px; flex-shrink: 0;
+  .pbc-head-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+  .pbc-icon-box {
+    width: 42px; height: 42px; border-radius: 12px; background: #eff6ff;
+    display: flex; justify-content: center; align-items: center; font-size: 20px; flex-shrink: 0;
   }
+  .pbc-main-title { margin: 0; font-size: 15.5px; font-weight: 900; color: var(--primary); line-height: 1.25; }
+  .pbc-sub-title { margin: 3px 0 0 0; font-size: 13px; font-weight: 800; color: var(--text-main); line-height: 1.35; }
+  .pbc-desc { margin: 0; font-size: 12px; color: #475569; line-height: 1.55; }
+  .pbc-meta-box {
+    background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px;
+    padding: 10px 12px; font-size: 12px; color: #334155; display: flex; flex-direction: column; gap: 4px;
+    margin-bottom: 10px;
+  }
+  .pbc-meta-line { display: flex; justify-content: space-between; align-items: center; }
 
-  /* 2. Bursa Job: Filter Kategori, Sub-Bidang Driver & Kartu Lowongan */
+  /* 2. Bursa Job */
   .job-cards-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 16px;
   }
@@ -1114,8 +1175,11 @@
     .top-header { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
     .header-right { width: auto; justify-content: flex-end; }
     .aligned-two-col-grid { display: flex; flex-direction: column; gap: 18px; }
-    .tier-visual-grid { grid-template-columns: 1fr; }
+    .tier-visual-grid, .tier-visual-grid.two-cols { grid-template-columns: 1fr; }
     .theme-catalog-grid { grid-template-columns: 1fr; }
+    .level-hero-banner, .produk-hero-banner { flex-direction: column; align-items: flex-start; }
+    .level-hero-banner .banner-text, .produk-hero-banner .banner-text { max-width: 100%; }
+    .level-hero-banner .banner-watermark { display: none; }
   }
   </style>
 </head>
@@ -1546,329 +1610,499 @@
      </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MENU 3B: LATIHAN -> PERCAKAPAN (SEJAJAR)   -->
-    <!-- ========================================== -->
-    <div id="tab-latihan-percakapan" class="nav-page-section" style="display: none;">
-     <div class="aligned-two-col-grid">
-      <!-- Slot Banner Atas Kiri -->
-      <div class="grid-banner-slot" id="banner-percakapan-kn">
-       <div class="page-hero-banner" style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
-        <div class="banner-text">
-         <h2>Percakapan Bertahap</h2>
-         <p>Rekam jawaban bahasa Jepangmu per giliran dengan tenang tanpa tekanan waktu.</p>
-        </div>
-        <i class="fas fa-comments banner-watermark"></i>
-       </div>
+  <!-- ========================================== -->
+  <!-- MENU 3B: LATIHAN -> PERCAKAPAN BERTAHAP    -->
+  <!-- ========================================== -->
+  <div id="tab-latihan-percakapan" class="nav-page-section" style="display: none;">
+   <div class="aligned-two-col-grid">
+    <!-- Slot Banner Utama (Level 1) -->
+    <div class="grid-banner-slot" id="banner-percakapan-kn">
+     <div class="page-hero-banner" style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+      <div class="banner-text">
+       <h2>Percakapan Bertahap</h2>
+       <p>Rekam jawaban bahasa Jepangmu per giliran dengan tenang tanpa tekanan waktu.</p>
       </div>
-
-      <!-- Slot Konten Utama Kiri -->
-      <div class="grid-main-slot">
-       <div id="modul-tujuan-view">
-        <div class="kategori-split-grid" style="margin-top: 0;">
-         <!-- Kartu Belajar: Ikon Besar + Teks di Sebelahnya -->
-         <div class="kategori-card-tall" style="min-height: 155px; padding: 20px;" onclick="bukaKategoriTujuan('blj')">
-          <div>
-           <div class="kat-head-inline">
-            <div class="kat-icon-big" style="background: #eff6ff;">📘</div>
-            <h3>Belajar (基礎)</h3>
-           </div>
-           <p style="margin-bottom: 14px;">Latihan kosakata &amp; pola kalimat bertahap per bab buku.</p>
-          </div>
-          <div class="kat-footer-row">
-           <span style="font-size: 11px; font-weight: 700; color: #64748b;">Basic • Mid • Pro</span>
-           <span class="tier-price" style="background: #dbeafe; color: #1d4ed8;">Buka <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
-          </div>
-         </div>
-
-         <!-- Kartu Wawancara: Ikon Besar + Teks di Sebelahnya -->
-         <div class="kategori-card-tall" style="min-height: 155px; padding: 20px;" onclick="bukaKategoriTujuan('mst')">
-          <div>
-           <div class="kat-head-inline">
-            <div class="kat-icon-big" style="background: #fff1f2;">💼</div>
-            <h3>Wawancara (面接)</h3>
-           </div>
-           <p style="margin-bottom: 14px;">Latihan pecahan topik &amp; simulasi penuh HRD Jepang.</p>
-          </div>
-          <div class="kat-footer-row">
-           <span style="font-size: 11px; font-weight: 700; color: #64748b;">Latihan • Simulasi</span>
-           <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Buka <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
-          </div>
-         </div>
-        </div>
-       </div>
-
-       <!-- PILIH LEVEL: 3 KARTU VISUAL BERDAMPINGAN -->
-       <div id="sub-tier-blj" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <h2 style="font-size: 19px; color: var(--text-main); margin: 0 0 14px 0;">📘 Pilih Level Belajar</h2>
-
-        <div class="tier-visual-grid">
-         <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-bsc')">
-          <div class="tvc-top-bar" style="background: #10b981;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #ecfdf5;">🐣</div>
-            <span class="tvc-badge" style="background: #dcfce7; color: #15803d;">Level N5 / A1</span>
-           </div>
-           <h3>SHOKYU (Basic)</h3>
-           <p>Minna 1 Awal, Irodori Pengantar &amp; Marugoto A1.</p>
-          </div>
-          <div class="tvc-cta" style="color: #047857;">
-           <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
-          </div>
-         </div>
-
-         <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-mid')">
-          <div class="tvc-top-bar" style="background: #2563eb;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #eff6ff;">🔥</div>
-            <span class="tvc-badge" style="background: #dbeafe; color: #1d4ed8;">JFT-A2 / N4</span>
-           </div>
-           <h3>CHUKYU (Mid)</h3>
-           <p>Minna Lanjutan, Irodori Dasar 1 &amp; Marugoto A2-1.</p>
-          </div>
-          <div class="tvc-cta" style="color: #1d4ed8;">
-           <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
-          </div>
-         </div>
-
-         <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-pro')">
-          <div class="tvc-top-bar" style="background: #7c3aed;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #f5f3ff;">👑</div>
-            <span class="tvc-badge" style="background: #ede9fe; color: #6d28d9;">Siap Kerja</span>
-           </div>
-           <h3>JOKYU (Pro)</h3>
-           <p>Minna 2 Akhir, Irodori Dasar 2 &amp; Marugoto A2-2.</p>
-          </div>
-          <div class="tvc-cta" style="color: #6d28d9;">
-           <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
-          </div>
-         </div>
-        </div>
-       </div>
-
-       <!-- DAFTAR BAB DALAM KATALOG 2 KOLOM + FILTER BUKU -->
-       <div id="detail-blj-bsc" class="modul-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
-        <div class="detail-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-         <h2 style="margin:0;">🐣 SHOKYU (Basic)</h2>
-         <button onclick="bukaTab('panduan-peraturan')" style="background:none; border:none; color:#1d4ed8; font-size:11.5px; font-weight:800; cursor:pointer;">Info Peraturan &rarr;</button>
-        </div>
-        <div class="book-filter-bar">
-         <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'SEMUA', this)">Semua</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'MINNA', this)">📘 Minna</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'IRODORI', this)">🌸 Irodori</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'MARUGOTO', this)">📗 Marugoto</button>
-        </div>
-        <div id="wadah-tema-blj-bsc" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
-       </div>
-
-       <div id="detail-blj-mid" class="modul-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
-        <div class="detail-header" style="background: #fdf4ff; border-color: #f5d0fe; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-         <h2 style="color: #c026d3; margin:0;">🔥 CHUKYU (Mid)</h2>
-         <button onclick="bukaTab('panduan-peraturan')" style="background:none; border:none; color:#a21caf; font-size:11.5px; font-weight:800; cursor:pointer;">Info Peraturan &rarr;</button>
-        </div>
-        <div class="book-filter-bar">
-         <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'SEMUA', this)">Semua</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'MINNA', this)">📘 Minna</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'IRODORI', this)">🌸 Irodori</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'MARUGOTO', this)">📗 Marugoto</button>
-        </div>
-        <div id="wadah-tema-blj-mid" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
-       </div>
-
-       <div id="detail-blj-pro" class="modul-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
-        <div class="detail-header" style="background: #f5f3ff; border-color: #ddd6fe; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-         <h2 style="color: #6d28d9; margin:0;">👑 JOKYU (Pro)</h2>
-         <button onclick="bukaTab('panduan-peraturan')" style="background:none; border:none; color:#6d28d9; font-size:11.5px; font-weight:800; cursor:pointer;">Info Peraturan &rarr;</button>
-        </div>
-        <div class="book-filter-bar">
-         <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'SEMUA', this)">Semua</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'MINNA', this)">📘 Minna</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'IRODORI', this)">🌸 Irodori</button>
-         <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'MARUGOTO', this)">📗 Marugoto</button>
-        </div>
-        <div id="wadah-tema-blj-pro" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
-       </div>
-
-       <!-- WAWANCARA DALAM KATALOG GRID 2 KOLOM -->
-       <div id="detail-mst" class="modul-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <div class="detail-header" style="background: #fff1f2; border-color: #fecdd3; margin-bottom: 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-         <h2 style="color: #be123c; margin:0;">💼 Wawancara (面接)</h2>
-         <button onclick="bukaTab('panduan-peraturan')" style="background:none; border:none; color:#be123c; font-size:11.5px; font-weight:800; cursor:pointer;">Info Peraturan &rarr;</button>
-        </div>
-
-        <div class="mst-mode-switch">
-         <button type="button" class="mst-mode-btn active" id="btnSubMstLatihan" onclick="pilihSubModeMST('latihan')">🎯 1. Latihan Per Bagian</button>
-         <button type="button" class="mst-mode-btn" id="btnSubMstSimulasi" onclick="pilihSubModeMST('simulasi')">🏢 2. Simulasi Penuh HRD</button>
-        </div>
-
-        <div id="wadah-tema-mst-latihan" class="theme-catalog-grid"></div>
-        <div id="wadah-tema-mst" class="theme-catalog-grid" style="display:none;"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar simulasi...</p></div>
-       </div>
-      </div>
-
-      <!-- Slot Kanan: HANYA TOP GLOBAL -->
-      <div class="grid-side-slot">
-       <div class="widget-box" style="padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-         <h3 style="margin:0; font-size:14px;">👑 TOP GLOBAL (Super Rajin)</h3>
-         <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('global');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Lihat Semua &rarr;</button>
-        </div>
-        <div class="wadah-mini-lb-global"></div>
-       </div>
-      </div>
+      <i class="fas fa-comments banner-watermark"></i>
      </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MENU 3C: LATIHAN -> PERCAKAPAN LIVE        -->
-    <!-- ========================================== -->
-    <div id="tab-latihan-live" class="nav-page-section" style="display: none;">
-     <div class="aligned-two-col-grid">
-      <!-- Slot Banner Atas Kiri -->
-      <div class="grid-banner-slot" id="banner-percakapan-kl">
-       <div class="page-hero-banner" style="background: linear-gradient(135deg, #0f766e, #14b8a6);">
-        <div class="banner-text">
-         <h2>Percakapan Live</h2>
-         <p>Telepon dua arah real-time bersama AI Sensei layaknya bicara langsung di Jepang.</p>
-        </div>
-        <i class="fas fa-phone-volume banner-watermark"></i>
-       </div>
-      </div>
-
-      <!-- Slot Konten Utama Kiri -->
-      <div class="grid-main-slot">
-       <div id="live-tujuan-view">
-        <div class="kategori-split-grid" style="margin-top: 0;">
-         <div class="kategori-card-tall" style="min-height: 155px; padding: 20px;" onclick="bukaKategoriLive('blj')">
-          <div>
-           <div class="kat-head-inline">
-            <div class="kat-icon-big" style="background: #ccfbf1;">⚡</div>
-            <h3>Belajar Live</h3>
-           </div>
-           <p style="margin-bottom: 14px;">Uji kecepatan refleks lisan tanpa jeda tombol rekam.</p>
-          </div>
-          <div class="kat-footer-row">
-           <span style="font-size: 11px; font-weight: 700; color: #64748b;">Basic • Mid • Pro</span>
-           <span class="tier-price" style="background: #ccfbf1; color: #0f766e;">Buka <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
-          </div>
+    <!-- Slot Konten Utama Kiri -->
+    <div class="grid-main-slot">
+     <!-- PILIH KATEGORI: 2 KARTU TINGGI PROPORSIONAL -->
+     <div id="modul-tujuan-view">
+      <div class="kategori-split-grid" style="margin-top: 0;">
+       <div class="kategori-card-tall tall-main-cat" onclick="bukaKategoriTujuan('blj')">
+        <div>
+         <div class="kat-head-inline">
+          <div class="kat-icon-big" style="background: #eff6ff;">📘</div>
+          <h3>Belajar (基礎)</h3>
          </div>
+         <p>Tempat berlatih percakapan bertahap sesuai dengan modul dan bab yang sudah kamu pelajari.</p>
+        </div>
+        <div class="kat-footer-row">
+         <span class="kat-footer-label">Basic • Mid • Pro</span>
+         <span class="tier-price" style="background: #dbeafe; color: #1d4ed8;">Buka <i class="fas fa-chevron-right" style="font-size: 11px;"></i></span>
+        </div>
+       </div>
 
-         <div class="kategori-card-tall" style="min-height: 155px; padding: 20px;" onclick="bukaKategoriLive('mst')">
-          <div>
-           <div class="kat-head-inline">
-            <div class="kat-icon-big" style="background: #ffe4e6;">📞</div>
-            <h3>Wawancara Live</h3>
-           </div>
-           <p style="margin-bottom: 14px;">Telepon wawancara langsung bersama Direktur Jepang.</p>
-          </div>
-          <div class="kat-footer-row">
-           <span style="font-size: 11px; font-weight: 700; color: #64748b;">Real-Time HRD</span>
-           <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Buka <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
-          </div>
+       <div class="kategori-card-tall tall-main-cat" onclick="bukaKategoriTujuan('mst')">
+        <div>
+         <div class="kat-head-inline">
+          <div class="kat-icon-big" style="background: #fff1f2;">💼</div>
+          <h3>Wawancara (面接)</h3>
          </div>
+         <p>Tempat berlatih tanya-jawab wawancara per bagian hingga simulasi wawancara penuh bersama HRD Jepang.</p>
         </div>
-       </div>
-
-       <!-- PILIH LEVEL LIVE: 3 KARTU VISUAL BERDAMPINGAN -->
-       <div id="sub-tier-live-blj" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <h2 style="font-size: 19px; color: var(--text-main); margin: 0 0 14px 0;">⚡ Pilih Level Belajar Live</h2>
-
-        <div class="tier-visual-grid">
-         <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-bsc')">
-          <div class="tvc-top-bar" style="background: #14b8a6;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #ccfbf1;">🐣</div>
-            <span class="tvc-badge" style="background: #ccfbf1; color: #0f766e;">Tempo Ramah</span>
-           </div>
-           <h3>LIVE SHOKYU</h3>
-           <p>Pemanasan telepon kalimat dasar tanpa grogi.</p>
-          </div>
-          <div class="tvc-cta" style="color: #0f766e;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
-         </div>
-
-         <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-mid')">
-          <div class="tvc-top-bar" style="background: #0d9488;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #ccfbf1;">🔥</div>
-            <span class="tvc-badge" style="background: #ccfbf1; color: #0f766e;">JFT-A2 / N4</span>
-           </div>
-           <h3>LIVE CHUKYU</h3>
-           <p>Melatih spontanitas kalimat tingkat menengah.</p>
-          </div>
-          <div class="tvc-cta" style="color: #0f766e;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
-         </div>
-
-         <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-pro')">
-          <div class="tvc-top-bar" style="background: #7c3aed;"></div>
-          <div>
-           <div class="tvc-head">
-            <div class="tvc-emoji" style="background: #f5f3ff;">👑</div>
-            <span class="tvc-badge" style="background: #ede9fe; color: #6d28d9;">Tempo Asli</span>
-           </div>
-           <h3>LIVE JOKYU</h3>
-           <p>Kecepatan bicara natural orang Jepang asli.</p>
-          </div>
-          <div class="tvc-cta" style="color: #6d28d9;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
-         </div>
+        <div class="kat-footer-row">
+         <span class="kat-footer-label">Latihan • Simulasi</span>
+         <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Buka <i class="fas fa-chevron-right" style="font-size: 11px;"></i></span>
         </div>
-       </div>
-
-       <div id="detail-live-blj-bsc" class="live-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;"><h2 style="color:#0f766e; margin:0;">📞 LIVE — SHOKYU (Basic)</h2></div>
-        <div id="wadah-live-blj-bsc" class="theme-catalog-grid"></div>
-       </div>
-
-       <div id="detail-live-blj-mid" class="live-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <div class="detail-header" style="background:#f0fdfa; border-color:#99f6e4;"><h2 style="color:#0f766e; margin:0;">📞 LIVE — CHUKYU (Mid)</h2></div>
-        <div id="wadah-live-blj-mid" class="theme-catalog-grid"></div>
-       </div>
-
-       <div id="detail-live-blj-pro" class="live-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <div class="detail-header" style="background:#f5f3ff; border-color:#ddd6fe;"><h2 style="color:#6d28d9; margin:0;">📞 LIVE — JOKYU (Pro)</h2></div>
-        <div id="wadah-live-blj-pro" class="theme-catalog-grid"></div>
-       </div>
-
-       <div id="detail-live-mst" class="live-detail-view" style="display: none;">
-        <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali</button>
-        <div class="detail-header" style="background:#fff1f2; border-color:#fecdd3; margin-bottom:14px;">
-         <h2 style="color:#be123c; margin:0;">📞 Wawancara Live (面接)</h2>
-        </div>
-        <div class="mst-mode-switch">
-         <button type="button" class="mst-mode-btn active" id="btnSubMstLiveLatihan" onclick="pilihSubModeMSTLive('latihan')">🎯 1. Latihan Live</button>
-         <button type="button" class="mst-mode-btn" id="btnSubMstLiveSimulasi" onclick="pilihSubModeMSTLive('simulasi')">🏢 2. Simulasi Penuh Live</button>
-        </div>
-        <div id="wadah-live-mst-latihan" class="theme-catalog-grid"></div>
-        <div id="wadah-live-mst" class="theme-catalog-grid" style="display:none;"></div>
-       </div>
-      </div>
-
-      <!-- Slot Kanan: HANYA TOP MENSETSU LIVE -->
-      <div class="grid-side-slot">
-       <div class="widget-box" style="padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-         <h3 style="margin:0; font-size:14px;">📞 TOP Mensetsu LIVE</h3>
-         <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('mstLive');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Klasemen &rarr;</button>
-        </div>
-        <div class="wadah-mini-lb-mst-live"></div>
        </div>
       </div>
      </div>
+
+     <!-- PILIH LEVEL BELAJAR: HEADER LEVEL 2 + 3 KARTU TINGGI (SHOKYU / CHUKYU / JOKYU) -->
+     <div id="sub-tier-blj" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali</button>
+
+      <div class="level-hero-banner" style="background: linear-gradient(135deg, #0e7490, #0284c7);">
+       <div class="banner-text">
+        <h2>Pilih Level Belajar Percakapan</h2>
+        <p>Sesuaikan dengan modul bahasa Jepang dan bab terakhir yang sedang kamu pelajari.</p>
+       </div>
+       <i class="fas fa-layer-group banner-watermark"></i>
+      </div>
+
+      <div class="tier-visual-grid">
+       <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-bsc')">
+        <div class="tvc-top-bar" style="background: #10b981;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #ecfdf5;">🐣</div>
+          <span class="tvc-badge" style="background: #dcfce7; color: #15803d;">Level N5 / A1</span>
+         </div>
+         <h3>SHOKYU</h3>
+         <p>Ramah pemula untuk mempelajari percakapan dasar sehari-hari.<br><strong style="color:#334155;">Minna 1 Awal, Irodori Pengantar &amp; Marugoto A1.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #047857;">
+         <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-mid')">
+        <div class="tvc-top-bar" style="background: #2563eb;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #eff6ff;">🔥</div>
+          <span class="tvc-badge" style="background: #dbeafe; color: #1d4ed8;">JFT-A2 / N4</span>
+         </div>
+         <h3>CHUKYU</h3>
+         <p>Melatih kelancaran merangkai pola kalimat tingkat menengah.<br><strong style="color:#334155;">Minna Lanjutan, Irodori Dasar 1 &amp; Marugoto A2-1.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #1d4ed8;">
+         <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarTema('detail-blj-pro')">
+        <div class="tvc-top-bar" style="background: #7c3aed;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #f5f3ff;">👑</div>
+          <span class="tvc-badge" style="background: #ede9fe; color: #6d28d9;">Siap Kerja</span>
+         </div>
+         <h3>JOKYU</h3>
+         <p>Pemantapan percakapan tingkat mahir untuk kesiapan kerja di Jepang.<br><strong style="color:#334155;">Minna 2 Akhir, Irodori Dasar 2 &amp; Marugoto A2-2.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #6d28d9;">
+         <span>Buka Materi</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <!-- DAFTAR PRODUK: HEADER LEVEL 3 + KARTU KOTAK 2 KOLOM -->
+     <div id="detail-blj-bsc" class="modul-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #047857, #10b981);">
+       <div class="banner-text">
+        <h2>🐣 SHOKYU</h2>
+        <p>Percakapan dasar sesuai modul bahasa Jepang yang kamu pelajari dalam fase awal.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-bsc', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-tema-blj-bsc" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
+     </div>
+
+     <div id="detail-blj-mid" class="modul-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #86198f, #c026d3);">
+       <div class="banner-text">
+        <h2>🔥 CHUKYU</h2>
+        <p>Pengembangan pola kalimat dan kelancaran respons percakapan sesuai modul tingkat menengah.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-mid', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-tema-blj-mid" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
+     </div>
+
+     <div id="detail-blj-pro" class="modul-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #4c1d95, #7c3aed);">
+       <div class="banner-text">
+        <h2>👑 JOKYU</h2>
+        <p>Pemantapan kalimat kompleks dan ketepatan bicara sesuai modul fase mahir siap kerja.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-tema-blj-pro', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-tema-blj-pro" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar bab...</p></div>
+     </div>
+
+     <!-- PILIH KATEGORI WAWANCARA: HEADER LEVEL 2 + 2 KARTU PROPORSIONAL (LATIHAN & SIMULASI) -->
+     <div id="sub-tier-mst" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTujuan()"><i class="fas fa-arrow-left"></i> Kembali</button>
+
+      <div class="level-hero-banner" style="background: linear-gradient(135deg, #9f1239, #e11d48);">
+       <div class="banner-text">
+        <h2>Pilih Kategori Wawancara</h2>
+        <p>Mulai pemanasan per topik wawancara atau langsung uji kesiapanmu di simulasi penuh HRD.</p>
+       </div>
+       <i class="fas fa-user-tie banner-watermark"></i>
+      </div>
+
+      <div class="tier-visual-grid two-cols">
+       <div class="tier-visual-card" onclick="bukaDaftarWawancara('detail-mst-latihan')">
+        <div class="tvc-top-bar" style="background: #f59e0b;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #fef3c7;">🎯</div>
+          <span class="tvc-badge" style="background: #fef3c7; color: #b45309;">Fokus Per Topik</span>
+         </div>
+         <h3>LATIHAN</h3>
+         <p>Berlatih menjawab bagian-bagian penting wawancara secara bertahap agar tidak grogi.<br><strong style="color:#334155;">Jikoshoukai, Shibou Douki, Jiko PR, Kasus Lapangan &amp; Penutup.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #b45309;">
+         <span>Buka Latihan</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarWawancara('detail-mst')">
+        <div class="tvc-top-bar" style="background: #e11d48;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #ffe4e6;">🏢</div>
+          <span class="tvc-badge" style="background: #ffe4e6; color: #be123c;">5 Fase Standar HRD</span>
+         </div>
+         <h3>SIMULASI</h3>
+         <p>Ujian wawancara kerja utuh dari salam pembuka hingga penutup sesuai bidang kerja tujuanmu.<br><strong style="color:#334155;">17 Bidang Industri Resmi Jepang &amp; Syarat Melamar Bursa Job.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #be123c;">
+         <span>Buka Simulasi</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <!-- DAFTAR PRODUK WAWANCARA 1: KHUSUS LATIHAN PECAHAN -->
+     <div id="detail-mst-latihan" class="modul-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierMST()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Wawancara</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #b45309, #d97706);">
+       <div class="banner-text">
+        <h2>🎯 LATIHAN WAWANCARA</h2>
+        <p>Kuasai jawaban setiap bagian wawancara satu per satu dengan tenang sebelum masuk simulasi penuh.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div id="wadah-tema-mst-latihan" class="theme-catalog-grid"></div>
+     </div>
+
+     <!-- DAFTAR PRODUK WAWANCARA 2: KHUSUS SIMULASI PENUH -->
+     <div id="detail-mst" class="modul-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierMST()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Wawancara</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #881337, #e11d48);">
+       <div class="banner-text">
+        <h2>🏢 SIMULASI WAWANCARA</h2>
+        <p>Simulasi wawancara kerja resmi 5 Fase penuh bersama Direktur perusahaan Jepang sesuai bidang pilihanmu.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div id="wadah-tema-mst" class="theme-catalog-grid"><p style="font-size: 13px; color: #94a3b8; grid-column: 1/-1; text-align: center;">Memuat daftar simulasi...</p></div>
+     </div>
     </div>
+
+    <!-- Slot Kanan: HANYA TOP GLOBAL -->
+    <div class="grid-side-slot">
+     <div class="widget-box" style="padding: 20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+       <h3 style="margin:0; font-size:14px;">👑 TOP GLOBAL (Super Rajin)</h3>
+       <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('global');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Lihat Semua &rarr;</button>
+      </div>
+      <div class="wadah-mini-lb-global"></div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MENU 3C: LATIHAN -> PERCAKAPAN LIVE        -->
+  <!-- ========================================== -->
+  <div id="tab-latihan-live" class="nav-page-section" style="display: none;">
+   <div class="aligned-two-col-grid">
+    <!-- Slot Banner Atas Kiri -->
+    <div class="grid-banner-slot" id="banner-percakapan-kl">
+     <div class="page-hero-banner" style="background: linear-gradient(135deg, #0f766e, #14b8a6);">
+      <div class="banner-text">
+       <h2>Percakapan Live</h2>
+       <p>Telepon dua arah real-time bersama AI Sensei layaknya bicara langsung di Jepang.</p>
+      </div>
+      <i class="fas fa-phone-volume banner-watermark"></i>
+     </div>
+    </div>
+
+    <!-- Slot Konten Utama Kiri -->
+    <div class="grid-main-slot">
+     <div id="live-tujuan-view">
+      <div class="kategori-split-grid" style="margin-top: 0;">
+       <div class="kategori-card-tall tall-main-cat" onclick="bukaKategoriLive('blj')">
+        <div>
+         <div class="kat-head-inline">
+          <div class="kat-icon-big" style="background: #ccfbf1;">⚡</div>
+          <h3>Belajar Live</h3>
+         </div>
+         <p>Tempat berlatih telepon bahasa Jepang real-time sesuai modul dan bab yang sudah kamu pelajari.</p>
+        </div>
+        <div class="kat-footer-row">
+         <span class="kat-footer-label">Shokyu • Chukyu • Jokyu</span>
+         <span class="tier-price" style="background: #ccfbf1; color: #0f766e;">Buka <i class="fas fa-chevron-right" style="font-size: 11px;"></i></span>
+        </div>
+       </div>
+
+       <div class="kategori-card-tall tall-main-cat" onclick="bukaKategoriLive('mst')">
+        <div>
+         <div class="kat-head-inline">
+          <div class="kat-icon-big" style="background: #ffe4e6;">📞</div>
+          <h3>Wawancara Live</h3>
+         </div>
+         <p>Tempat berlatih telepon wawancara per bagian hingga simulasi penuh langsung bersama Direktur Jepang.</p>
+        </div>
+        <div class="kat-footer-row">
+         <span class="kat-footer-label">Latihan • Simulasi Live</span>
+         <span class="tier-price" style="background: #ffe4e6; color: #be123c;">Buka <i class="fas fa-chevron-right" style="font-size: 11px;"></i></span>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <!-- PILIH LEVEL LIVE -->
+     <div id="sub-tier-live-blj" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali</button>
+
+      <div class="level-hero-banner" style="background: linear-gradient(135deg, #115e59, #0d9488);">
+       <div class="banner-text">
+        <h2>Pilih Level Belajar Percakapan Live</h2>
+        <p>Sesuaikan tempo telepon real-time dengan modul bahasa Jepang yang kamu kuasai.</p>
+       </div>
+       <i class="fas fa-Layer-group fa-wave-square banner-watermark"></i>
+      </div>
+
+      <div class="tier-visual-grid">
+       <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-bsc')">
+        <div class="tvc-top-bar" style="background: #14b8a6;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #ccfbf1;">🐣</div>
+          <span class="tvc-badge" style="background: #ccfbf1; color: #0f766e;">Tempo Ramah</span>
+         </div>
+         <h3>SHOKYU</h3>
+         <p>Ramah pemula untuk membiasakan telinga dan refleks kalimat dasar.<br><strong style="color:#334155;">Minna 1 Awal, Irodori Pengantar &amp; Marugoto A1.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #0f766e;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-mid')">
+        <div class="tvc-top-bar" style="background: #0d9488;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #ccfbf1;">🔥</div>
+          <span class="tvc-badge" style="background: #ccfbf1; color: #0f766e;">JFT-A2 / N4</span>
+         </div>
+         <h3>CHUKYU</h3>
+         <p>Melatih spontanitas menjawab telepon dengan pola menengah.<br><strong style="color:#334155;">Minna Lanjutan, Irodori Dasar 1 &amp; Marugoto A2-1.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #0f766e;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarTemaLive('detail-live-blj-pro')">
+        <div class="tvc-top-bar" style="background: #7c3aed;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #f5f3ff;">👑</div>
+          <span class="tvc-badge" style="background: #ede9fe; color: #6d28d9;">Tempo Asli</span>
+         </div>
+         <h3>JOKYU</h3>
+         <p>Uji kecepatan refleks lisan setara bicara langsung di Jepang.<br><strong style="color:#334155;">Minna 2 Akhir, Irodori Dasar 2 &amp; Marugoto A2-2.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #6d28d9;"><span>Buka Live</span> <i class="fas fa-arrow-right"></i></div>
+       </div>
+      </div>
+     </div>
+
+     <div id="detail-live-blj-bsc" class="live-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #065f46, #0d9488);">
+       <div class="banner-text">
+        <h2>📞 LIVE — SHOKYU</h2>
+        <p>Telepon percakapan dasar fase awal sesuai modul bahasa Jepang yang kamu pelajari.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-live-blj-bsc', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-bsc', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-bsc', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-bsc', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-live-blj-bsc" class="theme-catalog-grid"></div>
+     </div>
+
+     <div id="detail-live-blj-mid" class="live-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #0f766e, #0284c7);">
+       <div class="banner-text">
+        <h2>📞 LIVE — CHUKYU</h2>
+        <p>Telepon spontan pengembangan pola kalimat sesuai modul tingkat menengah.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-live-blj-mid', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-mid', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-mid', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-mid', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-live-blj-mid" class="theme-catalog-grid"></div>
+     </div>
+
+     <div id="detail-live-blj-pro" class="live-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierLiveBLJ()"><i class="fas fa-arrow-left"></i> Kembali ke Level</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #4c1d95, #6d28d9);">
+       <div class="banner-text">
+        <h2>📞 LIVE — JOKYU</h2>
+        <p>Telepon kecepatan natural orang Jepang sesuai modul fase mahir siap kerja.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div class="book-filter-bar">
+       <button class="book-chip-btn active" onclick="filterBukuKatalog('wadah-live-blj-pro', 'SEMUA', this)">Semua</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-pro', 'MINNA', this)">📘 Minna</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-pro', 'IRODORI', this)">🌸 Irodori</button>
+       <button class="book-chip-btn" onclick="filterBukuKatalog('wadah-live-blj-pro', 'MARUGOTO', this)">📗 Marugoto</button>
+      </div>
+      <div id="wadah-live-blj-pro" class="theme-catalog-grid"></div>
+     </div>
+
+     <!-- PILIH KATEGORI WAWANCARA LIVE: HEADER LEVEL 2 + 2 KARTU PROPORSIONAL -->
+     <div id="sub-tier-live-mst" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTujuanLive()"><i class="fas fa-arrow-left"></i> Kembali</button>
+
+      <div class="level-hero-banner" style="background: linear-gradient(135deg, #881337, #be123c);">
+       <div class="banner-text">
+        <h2>Pilih Kategori Wawancara Live</h2>
+        <p>Latih respons spontan telepon per topik atau hadapi simulasi telepon penuh bersama Direktur Jepang.</p>
+       </div>
+       <i class="fas fa-headset banner-watermark"></i>
+      </div>
+
+      <div class="tier-visual-grid two-cols">
+       <div class="tier-visual-card" onclick="bukaDaftarWawancaraLive('detail-live-mst-latihan')">
+        <div class="tvc-top-bar" style="background: #d97706;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #fef3c7;">🎯</div>
+          <span class="tvc-badge" style="background: #fef3c7; color: #b45309;">Pemanasan Live</span>
+         </div>
+         <h3>LATIHAN LIVE</h3>
+         <p>Telepon singkat fokus per bagian wawancara untuk melatih refleks mendengar pertanyaan HRD.<br><strong style="color:#334155;">Jikoshoukai, Shibou Douki, Jiko PR, Kasus &amp; Penutup.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #b45309;">
+         <span>Buka Latihan Live</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+
+       <div class="tier-visual-card" onclick="bukaDaftarWawancaraLive('detail-live-mst')">
+        <div class="tvc-top-bar" style="background: #be123c;"></div>
+        <div>
+         <div class="tvc-head">
+          <div class="tvc-emoji" style="background: #ffe4e6;">🏢</div>
+          <span class="tvc-badge" style="background: #ffe4e6; color: #be123c;">5 Fase Real-Time</span>
+         </div>
+         <h3>SIMULASI LIVE</h3>
+         <p>Simulasi wawancara online dua arah utuh dengan tekanan waktu nyata bersama Direktur Jepang.<br><strong style="color:#334155;">17 Bidang Industri Resmi &amp; Klasemen HRD Live.</strong></p>
+        </div>
+        <div class="tvc-cta" style="color: #be123c;">
+         <span>Buka Simulasi Live</span> <i class="fas fa-arrow-right"></i>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <!-- DAFTAR PRODUK WAWANCARA LIVE 1: KHUSUS LATIHAN PECAHAN -->
+     <div id="detail-live-mst-latihan" class="live-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierLiveMST()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Wawancara Live</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #b45309, #d97706);">
+       <div class="banner-text">
+        <h2>🎯 LIVE — LATIHAN WAWANCARA</h2>
+        <p>Telepon pemanasan fokus satu bagian wawancara secara langsung tanpa jeda tombol rekam.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div id="wadah-live-mst-latihan" class="theme-catalog-grid"></div>
+     </div>
+
+     <!-- DAFTAR PRODUK WAWANCARA LIVE 2: KHUSUS SIMULASI PENUH -->
+     <div id="detail-live-mst" class="live-detail-view" style="display: none;">
+      <button class="btn-back" onclick="kembaliKeTierLiveMST()"><i class="fas fa-arrow-left"></i> Kembali ke Kategori Wawancara Live</button>
+      <div class="produk-hero-banner" style="background: linear-gradient(135deg, #881337, #be123c);">
+       <div class="banner-text">
+        <h2>🏢 LIVE — SIMULASI WAWANCARA</h2>
+        <p>Ucapkan salam pembuka begitu tersambung dan jalani wawancara 5 Fase penuh bersama Direktur Jepang.</p>
+       </div>
+       <button onclick="bukaTab('panduan-peraturan')" class="btn-info-peraturan">Info Peraturan &rarr;</button>
+      </div>
+      <div id="wadah-live-mst" class="theme-catalog-grid"></div>
+     </div>
+    </div>
+
+    <!-- Slot Kanan: HANYA TOP MENSETSU LIVE -->
+    <div class="grid-side-slot">
+     <div class="widget-box" style="padding: 20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+       <h3 style="margin:0; font-size:14px;">📞 TOP Mensetsu LIVE</h3>
+       <button onclick="bukaTab('leaderboard'); pilihKategoriLeaderboard('mstLive');" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Klasemen &rarr;</button>
+      </div>
+      <div class="wadah-mini-lb-mst-live"></div>
+     </div>
+    </div>
+   </div>
+  </div>
 
     <!-- ========================================== -->
     <!-- MENU 4: SURVIVAL (CLEAN UI & RINGKAS)      -->
@@ -3052,33 +3286,39 @@
      </div>
     </div>
 
-    <!-- STEP 4: LAYAR HASIL DIAGNOSIS & KLAIM TIKET GRATIS -->
-    <div id="wizStep4" class="hidden" style="text-align:center;">
-     <div id="ikonHasilDiagnosis" style="font-size:38px; margin-bottom:6px;">🎉</div>
-     <h3 style="margin:0 0 4px 0; font-size:19px; font-weight:800; color:var(--text-main);">Hasil Uji Kemampuan</h3>
-     <div id="badgePangkatDiagnosis" class="rank-pill-header" style="margin-bottom:14px; font-size:12px;">📘 Senpai</div>
+  <!-- STEP 4: LAYAR HASIL DIAGNOSIS, ALASAN REKOMENDASI & KLAIM TIKET -->
+  <div id="wizStep4" class="hidden" style="text-align:center;">
+   <div id="ikonHasilDiagnosis" style="font-size:38px; margin-bottom:6px;">🎉</div>
+   <h3 id="judulAtasDiagnosis" style="margin:0 0 6px 0; font-size:18.5px; font-weight:800; color:var(--text-main); line-height:1.3;">Selamat! Kemampuanmu Sesuai Pilihanmu</h3>
+   <div id="badgePangkatDiagnosis" class="rank-pill-header" style="margin-bottom:14px; font-size:12px;">📘 Senpai</div>
 
-     <!-- Kartu Rekomendasi Titik Mulai -->
-     <div style="background:#eff6ff; border:2px solid #93c5fd; border-radius:16px; padding:16px; text-align:left; margin-bottom:14px;">
-      <div class="badge-rekomendasi" style="margin-bottom:6px;">★ REKOMENDASI UNTUKMU</div>
-      <div id="judulRekomendasiDiagnosis" style="font-size:16px; font-weight:800; color:#1e3a8a; margin-bottom:3px;">Belajar — Chukyu (Mid)</div>
-      <div id="ketRekomendasiDiagnosis" style="font-size:12px; color:#334155; line-height:1.45;">Mulai dari tahap ini di menu Progres agar kemampuanmu naik bertahap.</div>
-     </div>
+   <!-- Kartu Rekomendasi Titik Mulai -->
+   <div id="kotakRekomendasiDiagnosis" style="background:#eff6ff; border:2px solid #93c5fd; border-radius:16px; padding:15px 16px; text-align:left; margin-bottom:10px;">
+    <div class="badge-rekomendasi" style="margin-bottom:6px;">★ REKOMENDASI UNTUKMU</div>
+    <div id="judulRekomendasiDiagnosis" style="font-size:16px; font-weight:800; color:#1e3a8a; margin-bottom:3px;">Belajar — CHUKYU</div>
+    <div id="ketRekomendasiDiagnosis" style="font-size:12px; color:#334155; line-height:1.45;">Mulai dari tahap ini di menu Progres agar kemampuanmu meningkat secara terarah.</div>
+   </div>
 
-     <!-- Kotak Klaim Tiket (SUARA) vs Info Tahan Tiket (CHAT) -->
-     <div id="boxRewardSuara" style="background:#fefce8; border:2px solid #fde047; border-radius:14px; padding:14px; margin-bottom:16px;">
-      <div style="font-size:13px; font-weight:800; color:#854d0e;">🎫 Tiket Gratis Siap Digunakan!</div>
-      <div style="font-size:11.5px; color:#713f12; margin-top:2px;">Verifikasi suara selesai (Centang Biru aktif di profilmu).</div>
-     </div>
+   <!-- Kotak Alasan / Dasar Rekomendasi Sistem (Tepat di Bawah Kotak Rekomendasi) -->
+   <div id="kotakAlasanDiagnosis" style="background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:14px; padding:12px 14px; text-align:left; margin-bottom:14px;">
+    <div style="font-size:11px; font-weight:800; color:var(--primary); text-transform:uppercase; margin-bottom:4px;">📌 Dasar Rekomendasi Sistem</div>
+    <div id="teksAlasanDiagnosis" style="font-size:12px; color:#334155; line-height:1.55;">-</div>
+   </div>
 
-     <div id="boxInfoTahanChat" class="hidden" style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:14px; padding:12px; margin-bottom:16px; font-size:12px; color:#92400e;">
-      📖 Selesaikan <strong>Uji Kemampuan (Suara)</strong> kapan saja dari Beranda untuk mencairkan Tiket Gratis.
-     </div>
+   <!-- Kotak Klaim Tiket (SUARA) vs Info Tahan Tiket (CHAT) -->
+   <div id="boxRewardSuara" style="background:#fefce8; border:2px solid #fde047; border-radius:14px; padding:13px 14px; margin-bottom:16px;">
+    <div style="font-size:13px; font-weight:800; color:#854d0e;">🎫 Tiket Gratis Siap Digunakan!</div>
+    <div style="font-size:11.5px; color:#713f12; margin-top:2px;">Verifikasi suara selesai (Centang Biru aktif di profilmu).</div>
+   </div>
 
-     <button type="button" onclick="tutupDiagnosisMasukProgres()" class="btn" style="padding:13px; font-size:14px;">
-      Mulai Belajar Sekarang <i class="fas fa-arrow-right"></i>
-     </button>
-    </div>
+   <div id="boxInfoTahanChat" class="hidden" style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:14px; padding:12px; margin-bottom:16px; font-size:12px; color:#92400e;">
+    📖 Selesaikan <strong>Uji Kemampuan (Suara)</strong> kapan saja dari Beranda untuk mencairkan Tiket Gratis.
+   </div>
+
+   <button type="button" onclick="tutupDiagnosisMasukProgres()" class="btn" style="padding:13px; font-size:14px;">
+    Mulai Belajar Sekarang <i class="fas fa-arrow-right"></i>
+   </button>
+  </div>
 
    </div>
   </div>
@@ -3347,13 +3587,42 @@
     <div id="wadahDetailRincianPop" class="hidden" style="background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; text-align: left; font-size: 12px; color: #334155; line-height: 1.75;">
     </div>
 
-    <!-- Tombol Lihat Hasil Rapor -->
-    <button type="button" onclick="tutupModalRingkasanSesi()" class="btn" id="btnTutupRingkasanPop" style="padding: 13px; font-size: 14px; font-weight: 800; border-radius: 12px; background: var(--primary);">
-     Lihat Hasil Rapor <i class="fas fa-arrow-right"></i>
-    </button>
+  <!-- Tombol Lihat Hasil Rapor -->
+  <button type="button" onclick="tutupModalRingkasanSesi()" class="btn" id="btnTutupRingkasanPop" style="padding: 13px; font-size: 14px; font-weight: 800; border-radius: 12px; background: var(--primary);">
+   Lihat Hasil Rapor <i class="fas fa-arrow-right"></i>
+  </button>
 
-   </div>
   </div>
+ </div>
+
+ <!-- ================= MODAL 5: POP-UP MERAH PENOLAKAN AKSES & LAMAR BURSA JOB ================= -->
+ <div id="modalPenolakanJob" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.74); z-index: 10085; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(4px); padding: 16px; box-sizing: border-box;">
+  <div style="background: #fef2f2; border: 2.5px solid #fca5a5; border-radius: 22px; width: 100%; max-width: 410px; padding: 26px 22px 22px 22px; box-shadow: 0 20px 45px rgba(0,0,0,0.3); text-align: center;">
+
+   <div id="ikonTolakJob" style="font-size: 36px; margin-bottom: 6px;">🔒</div>
+   <div id="subJudulTolakJob" style="font-size: 13.5px; font-weight: 700; color: #991b1b; margin-bottom: 4px;">
+    Akses Belum Terbuka
+   </div>
+   <div id="highlightTolakJob" style="font-size: 22px; font-weight: 900; color: #dc2626; line-height: 1.25; margin: 6px 0 16px 0;">
+    Detail Lowongan Terkunci
+   </div>
+
+   <!-- Kotak Rincian Syarat / Status (Gaya Sama Persis dengan Kotak Putih Koin/Tiket) -->
+   <div id="kotakRincianTolakJob" style="background: rgba(255, 255, 255, 0.92); border: 1.5px solid #fecaca; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; text-align: left; font-size: 12.5px; color: #334155; line-height: 1.6;">
+   </div>
+
+   <!-- Tombol Aksi Utama + Tombol Tutup -->
+   <div style="display: flex; flex-direction: column; gap: 8px;">
+    <button type="button" id="btnAksiUtamaTolakJob" class="btn" style="padding: 13px; font-size: 13.5px; font-weight: 800; border-radius: 12px; background: #dc2626;">
+     Penuhi Syarat Sekarang <i class="fas fa-arrow-right"></i>
+    </button>
+    <button type="button" onclick="tutupPopPenolakanJob()" style="background: transparent; border: none; color: #991b1b; font-size: 12.5px; font-weight: 800; cursor: pointer; padding: 6px; font-family: inherit;">
+     Tutup
+    </button>
+   </div>
+
+  </div>
+ </div>
 
 <!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
 <script src="kaiwa-normal.js?v=20261124v10"></script>
@@ -3959,122 +4228,109 @@
  }
 
  async function muatDaftarProduk() {
-  const idWadahKN = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-mst'];
-  const idWadahKL = ['wadah-live-blj-bsc', 'wadah-live-blj-mid', 'wadah-live-blj-pro', 'wadah-live-mst'];
+ const idWadahKN = ['wadah-tema-blj-bsc', 'wadah-tema-blj-mid', 'wadah-tema-blj-pro', 'wadah-tema-mst-latihan', 'wadah-tema-mst'];
+ const idWadahKL = ['wadah-live-blj-bsc', 'wadah-live-blj-mid', 'wadah-live-blj-pro', 'wadah-live-mst-latihan', 'wadah-live-mst'];
 
-  try {
-   const hasil = await panggilGAS("getProduk", {});
-   if (!hasil.success || !Array.isArray(hasil.data)) return;
+ try {
+  const hasil = await panggilGAS("getProduk", {});
+  if (!hasil.success || !Array.isArray(hasil.data)) return;
 
-   KATALOG_PRODUK_MAP = {};
-   CACHE_GRUP_KHD = [];
-   const grupTemaMap = new Map();
+  KATALOG_PRODUK_MAP = {};
+  CACHE_GRUP_KHD = [];
+  const grupTemaMap = new Map();
 
-   hasil.data.forEach(item => {
-    const infoKode = bedahKodeProduk(item.kode);
-    KATALOG_PRODUK_MAP[infoKode.kodePenuh] = item;
+  hasil.data.forEach(item => {
+   const infoKode = bedahKodeProduk(item.kode);
+   KATALOG_PRODUK_MAP[infoKode.kodePenuh] = item;
 
-    if (!grupTemaMap.has(infoKode.kunciGrup)) {
-     grupTemaMap.set(infoKode.kunciGrup, {
-      kunciGrup: infoKode.kunciGrup,
-      nama: item.nama,
-      deskripsi: item.deskripsi,
-      kategori: infoKode.kategori,
-      tier: infoKode.tier,
-      levelKHD: infoKode.levelKHD,
-      urutSesiKHD: infoKode.urutSesiKHD,
-      KN: null,
-      KL: null
-     });
+   if (!grupTemaMap.has(infoKode.kunciGrup)) {
+    grupTemaMap.set(infoKode.kunciGrup, {
+     kunciGrup: infoKode.kunciGrup,
+     nama: item.nama,
+     deskripsi: item.deskripsi,
+     kategori: infoKode.kategori,
+     tier: infoKode.tier,
+     levelKHD: infoKode.levelKHD,
+     urutSesiKHD: infoKode.urutSesiKHD,
+     KN: null,
+     KL: null
+    });
+   }
+   const grup = grupTemaMap.get(infoKode.kunciGrup);
+   if (!grup.nama && item.nama) grup.nama = item.nama;
+   if (!grup.deskripsi && item.deskripsi) grup.deskripsi = item.deskripsi;
+   grup[infoKode.mode] = item;
+  });
+
+  [...idWadahKN, ...idWadahKL].forEach(id => {
+   const el = document.getElementById(id);
+   if (el) el.innerHTML = "";
+  });
+
+  grupTemaMap.forEach(grup => {
+   if (grup.kategori === "KHD") {
+    CACHE_GRUP_KHD.push(grup);
+    return;
+   }
+
+   // Deteksi ketat agar produk Latihan Pecahan (MST-LAT) TIDAK PERNAH bercampur dengan Simulasi Penuh (MST)!
+   const isPecahanMST = grup.kunciGrup.includes("MST-LAT") || grup.kunciGrup.includes("LAT[");
+   const namaAtas = String(grup.nama || '').toUpperCase();
+   let ikonTema = "📘";
+   if (grup.kategori === "MST") ikonTema = isPecahanMST ? "🎯" : "🏢";
+   else if (namaAtas.includes("PERKENALAN") || namaAtas.includes("BAB 1 ")) ikonTema = "👋";
+
+   // 1. Render Kartu Kotak 2 Kolom ke wadah Non-Live (KN) yang sesuai
+   if (grup.KN) {
+    const kartuKotakKN = rakitKartuKotakProdukHTML(grup, "KN", ikonTema);
+    let targetKN = "wadah-tema-blj-bsc";
+    if (grup.kategori === "MST") {
+     targetKN = isPecahanMST ? "wadah-tema-mst-latihan" : "wadah-tema-mst";
+    } else if (grup.tier === "PRO") {
+     targetKN = "wadah-tema-blj-pro";
+    } else if (grup.tier === "MID") {
+     targetKN = "wadah-tema-blj-mid";
     }
-    const grup = grupTemaMap.get(infoKode.kunciGrup);
-    if (!grup.nama && item.nama) grup.nama = item.nama;
-    if (!grup.deskripsi && item.deskripsi) grup.deskripsi = item.deskripsi;
-    grup[infoKode.mode] = item;
-   });
+    document.getElementById(targetKN)?.insertAdjacentHTML('beforeend', kartuKotakKN);
+   }
 
-   [...idWadahKN, ...idWadahKL].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
-   });
-
-   grupTemaMap.forEach(grup => {
-    // Khusus KHD ditangani oleh Peta 7 Level Ber-gembok (Hybrid KN/KL)
-    if (grup.kategori === "KHD") {
-     CACHE_GRUP_KHD.push(grup);
-     return;
+   // 2. Render Kartu Kotak 2 Kolom ke wadah Live (KL) yang sesuai
+   if (grup.KL) {
+    const ikonKL = grup.kategori === "MST" ? (isPecahanMST ? "🎯" : "🏢") : "📞";
+    const kartuKotakKL = rakitKartuKotakProdukHTML(grup, "KL", ikonKL);
+    let targetKL = "wadah-live-blj-bsc";
+    if (grup.kategori === "MST") {
+     targetKL = isPecahanMST ? "wadah-live-mst-latihan" : "wadah-live-mst";
+    } else if (grup.tier === "PRO") {
+     targetKL = "wadah-live-blj-pro";
+    } else if (grup.tier === "MID") {
+     targetKL = "wadah-live-blj-mid";
     }
+    document.getElementById(targetKL)?.insertAdjacentHTML('beforeend', kartuKotakKL);
+   }
+  });
 
-    const namaAtas = String(grup.nama || '').toUpperCase();
-    let ikonTema = "💬";
-    if (grup.kategori === "MST") ikonTema = "👔";
-    else if (namaAtas.includes("PABRIK") || namaAtas.includes("MANUFAKTUR")) ikonTema = "🏭";
-    else if (namaAtas.includes("DOKTER") || namaAtas.includes("KLINIK")) ikonTema = "🏥";
-    else if (namaAtas.includes("PERKENALAN") || namaAtas.includes("JIKOSHOUKAI")) ikonTema = "👋";
+  // Jika baris MST-LAT belum ditempel di Sheet PRODUK, isi dengan daftar latihan bawaan (tidak akan dobel jika sudah ada di Sheet)
+  isiContohLatihanPecahanMST();
 
-    // 1. Render ke menu LATIHAN -> PERCAKAPAN jika ada produk KN
-    const isiAksiKN = rakitIsiAksiTemaHTML(grup, "KN");
-    if (isiAksiKN) {
-     const kartuKN = `
-      <div class="theme-item">
-       <div class="theme-header" onclick="toggleTema(this)">
-        <span>${ikonTema} ${escapeHtml(grup.nama || 'Tema Latihan')}</span>
-        <i class="fas fa-chevron-down chevron-icon"></i>
-       </div>
-       <div class="theme-body">
-        <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Tidak ada deskripsi khusus untuk tema ini.')}</p>
-        ${isiAksiKN}
-       </div>
-      </div>
-     `;
-     let targetKN = "wadah-tema-blj-bsc";
-     if (grup.kategori === "MST") targetKN = "wadah-tema-mst";
-     else if (grup.tier === "PRO") targetKN = "wadah-tema-blj-pro";
-     else if (grup.tier === "MID") targetKN = "wadah-tema-blj-mid";
-     document.getElementById(targetKN)?.insertAdjacentHTML('beforeend', kartuKN);
-    }
+  idWadahKN.forEach(id => {
+   const el = document.getElementById(id);
+   if (el && el.innerHTML.trim() === "") {
+    el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px; grid-column:1/-1;'>Belum ada produk KN pada kategori ini di Sheet PRODUK.</p>";
+   }
+  });
 
-    // 2. Render ke menu LATIHAN -> PERCAKAPAN LIVE jika ada produk KL
-    const isiAksiKL = rakitIsiAksiTemaHTML(grup, "KL");
-    if (isiAksiKL) {
-     const kartuKL = `
-      <div class="theme-item">
-       <div class="theme-header" onclick="toggleTema(this)">
-        <span>📞 ${escapeHtml(grup.nama || 'Tema Live')}</span>
-        <i class="fas fa-chevron-down chevron-icon"></i>
-       </div>
-       <div class="theme-body">
-        <p class="theme-desc">${escapeHtml(grup.deskripsi || 'Simulasi telepon suara real-time bersama AI.')}</p>
-        ${isiAksiKL}
-       </div>
-      </div>
-     `;
-     let targetKL = "wadah-live-blj-bsc";
-     if (grup.kategori === "MST") targetKL = "wadah-live-mst";
-     else if (grup.tier === "PRO") targetKL = "wadah-live-blj-pro";
-     else if (grup.tier === "MID") targetKL = "wadah-live-blj-mid";
-     document.getElementById(targetKL)?.insertAdjacentHTML('beforeend', kartuKL);
-    }
-   });
+  idWadahKL.forEach(id => {
+   const el = document.getElementById(id);
+   if (el && el.innerHTML.trim() === "") {
+    el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px; grid-column:1/-1;'>Belum ada produk berkode <b>KL-...</b> pada kategori ini di Sheet PRODUK.</p>";
+   }
+  });
 
-   idWadahKN.forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.innerHTML.trim() === "") {
-     el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada tema KN pada kategori ini di Sheet PRODUK.</p>";
-    }
-   });
-
-   idWadahKL.forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.innerHTML.trim() === "") {
-     el.innerHTML = "<p style='text-align:center; color:#94a3b8; font-size:13px;'>Belum ada produk berkode <b>KL-...</b> pada kategori ini di Sheet PRODUK.</p>";
-    }
-   });
-
-   sinkronkanPetaKhdDanGelar();
-  } catch (err) {
-   console.error("Gagal memuat katalog produk:", err);
-  }
+  sinkronkanPetaKhdDanGelar();
+ } catch (err) {
+  console.error("Gagal memuat katalog produk:", err);
+ }
  }
 
  // =========================================================
@@ -6043,41 +6299,140 @@
   if (wSim) wSim.style.display = (sub === 'simulasi') ? 'block' : 'none';
  }
 
+ // Pemecah Nama Produk Otomatis -> Judul Utama ("Minna no Nihongo BAB 1") & Sub Judul ("Perkenalan Diri & Identitas")
+ function pecahJudulProdukKotak(namaRaw, kategori = 'BLJ', isLive = false) {
+  const s = String(namaRaw || 'Latihan Percakapan').trim();
+
+  // 1. Format Minna: "Minna Bab 1 — Perkenalan Diri & Identitas"
+  const mMinna = s.match(/^Minna(?:\s+no\s+Nihongo)?\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
+  if (mMinna) return { judul: `Minna no Nihongo BAB ${mMinna[1]}`, sub: mMinna[2].trim() };
+
+  // 2. Format Irodori: "Irodori Pengantar Bab 1 — ..." / "Irodori Dasar 1 Bab 5 — ..."
+  const mIrodori = s.match(/^(Irodori(?:\s+[^—\-–]+?)?)\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
+  if (mIrodori) return { judul: `${mIrodori[1].trim()} BAB ${mIrodori[2]}`, sub: mIrodori[3].trim() };
+
+  // 3. Format Marugoto: "Marugoto A1 Bab 2 — ..."
+  const mMarugoto = s.match(/^(Marugoto(?:\s+[^—\-–]+?)?)\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
+  if (mMarugoto) return { judul: `${mMarugoto[1].trim()} BAB ${mMarugoto[2]}`, sub: mMarugoto[3].trim() };
+
+  // 4. Format Pecahan MST: "1. Salam Online & Jikoshoukai"
+  const mPecahan = s.match(/^(\d+)\.\s*(.+)$/);
+  if (mPecahan) return { judul: `Latihan Wawancara Bagian ${mPecahan[1]}`, sub: mPecahan[2].trim() };
+
+  // 5. Format Simulasi Wawancara: "Wawancara — Perawatan Lansia (Kaigo)"
+  const mWawancara = s.match(/^Wawancara(?:\s+Live)?\s*[—\-–:]\s*(.+)$/i);
+  if (mWawancara) return { judul: isLive ? 'Simulasi Wawancara Live' : 'Simulasi Wawancara HRD', sub: mWawancara[1].trim() };
+
+  // 6. Format Umum dengan pemisah "—"
+  const splitDash = s.split(/\s*[—–]\s*/);
+  if (splitDash.length >= 2) return { judul: splitDash[0].trim(), sub: splitDash.slice(1).join(' — ').trim() };
+
+  return {
+   judul: s,
+   sub: kategori === 'MST' ? 'Simulasi Wawancara 5 Fase Standar Jepang' : 'Latihan Percakapan Terarah'
+  };
+ }
+
+ // Rakit Kartu Kotak Produk (Setara 3 Baris, Sensei & Info Kuota/Tiket Tampil Langsung)
+ function rakitKartuKotakProdukHTML(grup, modeTarget = "KN", ikon = "📘") {
+  const isKL = (modeTarget === "KL");
+  const dataProd = isKL ? grup.KL : grup.KN;
+  if (!dataProd) return "";
+
+  const infoJudul = pecahJudulProdukKotak(grup.nama || dataProd.nama, grup.kategori, isKL);
+  const namaAman = escapeHtml(grup.nama || dataProd.nama || 'Latihan');
+  const kdAman = escapeHtml(String(dataProd.kode || '').trim().toUpperCase());
+  const deskAman = escapeHtml(grup.deskripsi || dataProd.deskripsi || 'Latihan percakapan terarah bersama AI Sensei.');
+  const maxPut = Number(dataProd.maxPutaran) || 7;
+  const totTiket = Number(dataProd.hargaPenuh) || (3 + maxPut + 2);
+
+  let metaBaris1 = `<div class="pbc-meta-line"><span>💬 Jumlah percakapan :</span> <strong>${maxPut} percakapan</strong></div>`;
+  let metaBaris2 = `<div class="pbc-meta-line"><span>🎫 Tiket yang dibutuhkan :</span> <strong style="color:var(--primary);">${totTiket} tiket</strong></div>`;
+
+  if (isKL) {
+   const mntTotal = (maxPut * 30) / 60;
+   const labelMnt = Number.isInteger(mntTotal) ? `${mntTotal} menit` : `${mntTotal.toFixed(1).replace('.', ',')} menit`;
+   metaBaris1 = `<div class="pbc-meta-line"><span>⏱️ Batas durasi bicara :</span> <strong>${labelMnt} (argo 30 dtk)</strong></div>`;
+   metaBaris2 = `<div class="pbc-meta-line"><span>🎫 Tiket yang dibutuhkan :</span> <strong style="color:#0f766e;">Maks. ${totTiket} tiket</strong></div>`;
+  }
+
+  const sakelarLive = isKL ? `
+   <div style="margin-bottom: 10px;">
+    <button type="button" onclick="klikSakelarAntiBocor(this)" style="width:100%; padding:8px 11px; border-radius:10px; border:1.5px solid #86efac; background:#f0fdf4; color:#15803d; font-size:11px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit;">
+     <span>🛡️ Anti Suara Bocor: <b>AKTIF</b></span>
+     <span style="font-size:10px; text-decoration:underline;">Ubah</span>
+    </button>
+    <input type="hidden" class="barge-in-select-dinamis" value="0">
+   </div>` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
+
+  const bgIkon = grup.kategori === 'MST' ? '#fff1f2' : (isKL ? '#ccfbf1' : '#eff6ff');
+  const warnaBtn = isKL ? '#0d9488' : (grup.kategori === 'MST' ? '#be123c' : 'var(--primary)');
+  const ikonBtn = isKL ? 'fa-phone-alt' : 'fa-comments';
+  const teksBtn = isKL ? 'Mulai Telepon Live' : 'Mulai Percakapan';
+
+  return `
+   <div class="theme-item product-box-card">
+    <div>
+     <div class="pbc-head-row">
+      <div class="pbc-icon-box" style="background:${bgIkon};">${ikon}</div>
+      <div>
+       <h4 class="pbc-main-title">${escapeHtml(infoJudul.judul)}</h4>
+       <div class="pbc-sub-title">${escapeHtml(infoJudul.sub)}</div>
+      </div>
+     </div>
+     <p class="pbc-desc">${deskAman}</p>
+    </div>
+
+    <div class="theme-action" style="padding: 12px; background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 14px;">
+     <div class="pbc-meta-box">
+      ${metaBaris1}
+      ${metaBaris2}
+     </div>
+
+     <div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Pilih Suara Tutor:</div>
+     <div class="sensei-selection-container" style="display: flex; gap: 8px; margin-bottom: 10px;">
+      <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #f0f4ff;">
+       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #fff; flex-shrink: 0;">
+       <div style="font-size: 11.5px; font-weight: 800; color: #2b5cff;">Fumi Sensei</div>
+      </div>
+      <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #fff;">
+       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #fff; flex-shrink: 0;">
+       <div style="font-size: 11.5px; font-weight: 800; color: #475569;">Ken Sensei</div>
+      </div>
+      <input type="hidden" class="suara-select-dinamis" value="female">
+      <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+     </div>
+
+     ${sakelarLive}
+     <button class="btn btn-mulai-dinamis" data-kode="${kdAman}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="padding: 11px; font-size: 13px; background: ${warnaBtn};">
+      <i class="fas ${ikonBtn}"></i> ${teksBtn}
+     </button>
+    </div>
+   </div>
+  `;
+ }
+
  function isiContohLatihanPecahanMST() {
   const daftarPecahan = [
-   { judul: "1. Salam Online & Jikoshoukai", ket: "Latihan pembukaan Zoom & perkenalan diri singkat (5 Giliran).", kodeKN: "KN-MST-LAT[JIKOSHOUKAI]", putaran: 5, tiket: 10 },
-   { judul: "2. Alasan ke Jepang & Shibou Douki", ket: "Latihan menjawab motivasi kerja & alasan memilih bidang (6 Giliran).", kodeKN: "KN-MST-LAT[DOUKI]", putaran: 6, tiket: 11 },
-   { judul: "3. Chousho, Tansho & Jiko PR", ket: "Latihan menjelaskan kelebihan, kekurangan & promosi diri (6 Giliran).", kodeKN: "KN-MST-LAT[PR]", putaran: 6, tiket: 11 },
-   { judul: "4. Pengalaman & Kasus Lapangan", ket: "Latihan menjawab studi kasus kejutan & Hourensou (6 Giliran).", kodeKN: "KN-MST-LAT[KASUS]", putaran: 6, tiket: 11 },
-   { judul: "5. Gyakushitsumon & Salam Penutup", ket: "Latihan bertanya balik ke Direktur & etika menutup wawancara (4 Giliran).", kodeKN: "KN-MST-LAT[PENUTUP]", putaran: 4, tiket: 9 }
+   { judul: "1. Salam Online & Jikoshoukai", ket: "Latihan etika pembukaan wawancara Zoom dan perkenalan diri singkat yang tepat sasaran.", kodeKN: "KN-MST-LAT[JIKOSHOUKAI]", putaran: 5, tiket: 11 },
+   { judul: "2. Alasan ke Jepang & Shibou Douki", ket: "Latihan menjawab motivasi kerja di Jepang serta alasan memilih bidang perusahaan.", kodeKN: "KN-MST-LAT[DOUKI]", putaran: 6, tiket: 12 },
+   { judul: "3. Chousho, Tansho & Jiko PR", ket: "Latihan menjelaskan kelebihan diri, cara mengatasi kekurangan, dan promosi diri.", kodeKN: "KN-MST-LAT[PR]", putaran: 6, tiket: 12 },
+   { judul: "4. Pengalaman & Kasus Lapangan", ket: "Latihan menjawab perbedaan pengalaman kerja serta studi kasus kejutan (Hourensou).", kodeKN: "KN-MST-LAT[KASUS]", putaran: 6, tiket: 12 },
+   { judul: "5. Gyakushitsumon & Salam Penutup", ket: "Latihan mengajukan pertanyaan balik ke Direktur dan etika menutup wawancara online.", kodeKN: "KN-MST-LAT[PENUTUP]", putaran: 4, tiket: 10 }
   ];
   const wKN = document.getElementById('wadah-tema-mst-latihan');
   const wKL = document.getElementById('wadah-live-mst-latihan');
   if (wKN && wKN.innerHTML.trim() === '') {
-   wKN.innerHTML = daftarPecahan.map(p => `
-    <div class="theme-item">
-     <div class="theme-header" onclick="toggleTema(this)">
-      <span>🎯 ${escapeHtml(p.judul)}</span>
-      <i class="fas fa-chevron-down chevron-icon"></i>
-     </div>
-     <div class="theme-body">
-      <p class="theme-desc">${escapeHtml(p.ket)}</p>
-      ${rakitIsiAksiTemaHTML({ nama: p.judul, kategori: 'MST', KN: { kode: p.kodeKN, maxPutaran: p.putaran, hargaPenuh: p.tiket } }, 'KN')}
-     </div>
-    </div>`).join('');
+   wKN.innerHTML = daftarPecahan.map(p => rakitKartuKotakProdukHTML({
+    nama: p.judul, deskripsi: p.ket, kategori: 'MST',
+    KN: { kode: p.kodeKN, maxPutaran: p.putaran, hargaPenuh: p.tiket }
+   }, 'KN', '🎯')).join('');
   }
   if (wKL && wKL.innerHTML.trim() === '') {
-   wKL.innerHTML = daftarPecahan.map(p => `
-    <div class="theme-item">
-     <div class="theme-header" onclick="toggleTema(this)">
-      <span>📞 ${escapeHtml(p.judul)} (Live)</span>
-      <i class="fas fa-chevron-down chevron-icon"></i>
-     </div>
-     <div class="theme-body">
-      <p class="theme-desc">${escapeHtml(p.ket)}</p>
-      ${rakitIsiAksiTemaHTML({ nama: p.judul, kategori: 'MST', KL: { kode: p.kodeKN.replace('KN-','KL-'), maxPutaran: 6, hargaPenuh: 14 } }, 'KL')}
-     </div>
-    </div>`).join('');
+   wKL.innerHTML = daftarPecahan.map(p => rakitKartuKotakProdukHTML({
+    nama: p.judul, deskripsi: p.ket, kategori: 'MST',
+    KL: { kode: p.kodeKN.replace('KN-', 'KL-'), maxPutaran: 6, hargaPenuh: 16 }
+   }, 'KL', '📞')).join('');
   }
  }
 
@@ -6693,15 +7048,19 @@
    return;
   }
 
-  // GILIRAN KE-3 SELESAI -> HITUNG SKOR EVALUASI!
+  // GILIRAN KE-3 SELESAI -> 1) ANALISIS SKOR DULU, 2) AI BALAS PENUTUP SESUAI HASIL, 3) PINDAH KE DIAGNOSIS!
   transkripLengkapUji += `Siswa: ${teksUser}\n`;
-  document.getElementById('indikatorGiliranUji').innerText = 'Menganalisis...';
-  if (st) st.innerText = '⏳ Menghitung hasil Uji Kemampuanmu...';
+  document.getElementById('indikatorGiliranUji').innerText = 'Menilai...';
+  if (st) st.innerText = '⏳ Sensei menilai & menyiapkan tanggapan akhir...';
 
+  let detailEvalUji = { kosaKata: 74, polaKalimat: 72, kelancaran: 74, perbaikan: '' };
   if (apakahModePreviewLokal()) {
    const k = String(KAIWA_USER.konteksKalibrasi || '');
+   const isPendekAtauLemah = String(teksUser || '').length < 6;
    const levelAtas = /N3|N2|N1|A2|4Q|3Q|Bab (2[5-9]|[3-4]\d|50)|Dasar 2/i.test(k);
-   WIZ_STATE.skorVN = levelAtas ? 84 : 72;
+   const sSim = isPendekAtauLemah ? 54 : (levelAtas ? 84 : 74);
+   WIZ_STATE.skorVN = sSim;
+   detailEvalUji = { kosaKata: sSim, polaKalimat: sSim, kelancaran: sSim, perbaikan: '' };
   } else {
    try {
     const resEv = await fetch(WORKER_URL + 'api/evaluasi', {
@@ -6714,19 +7073,161 @@
     });
     const dEv = await resEv.json();
     const parsed = JSON.parse(String(dEv.choices?.[0]?.message?.content || '{}').replace(/```json|```/gi, '').trim());
-    WIZ_STATE.skorVN = Math.round(((Number(parsed.kosaKata) || 65) + (Number(parsed.polaKalimat) || 65) + (Number(parsed.kelancaran) || 65)) / 3);
+    detailEvalUji = {
+     kosaKata: Number(parsed.kosaKata) || 65,
+     polaKalimat: Number(parsed.polaKalimat) || 65,
+     kelancaran: Number(parsed.kelancaran) || 65,
+     perbaikan: String(parsed.perbaikan || '').trim()
+    };
+    WIZ_STATE.skorVN = Math.round((detailEvalUji.kosaKata + detailEvalUji.polaKalimat + detailEvalUji.kelancaran) / 3);
    } catch (eEv) {
     WIZ_STATE.skorVN = 72;
    }
   }
 
-  document.getElementById('indikatorGiliranUji').innerText = `Skor: ${WIZ_STATE.skorVN}/100`;
-  if (WIZ_STATE.modeUji === 'SUARA' && WIZ_STATE.skorVN >= 80) {
-   document.getElementById('kontrolSuaraUji').classList.add('hidden');
-   document.getElementById('boxTawaranLive30d').classList.remove('hidden');
-  } else {
-   tampilkanHasilDiagnosisAkhir(false);
+  WIZ_STATE.detailEvalUji = detailEvalUji;
+  const diagAwal = hitungKeputusanDiagnosisUji(WIZ_STATE.skorVN, false, detailEvalUji);
+
+  // Minta AI Sensei membalas ucapan terakhir + memberi komentar penutup (Melebihi / Sesuai / Di Bawah)
+  let teksPenutupAI = "ありがとうございます！今のレベルがしっかり身についていますね。お疲れ様でした。";
+  if (diagAwal.statusKesesuaian === 'MELEBIHI') {
+   teksPenutupAI = "素晴らしいですね！あなたが選んだレベルよりも高い日本語の力がありますよ。お疲れ様でした！";
+  } else if (diagAwal.statusKesesuaian === 'DIBAWAH') {
+   teksPenutupAI = "最後まで頑張ってくれてありがとうございます。少し難しい部分もありましたので、無理のない基礎レベルから少しずつ練習しましょうね。";
   }
+
+  let audioPenutupB64 = null;
+  if (!apakahModePreviewLokal()) {
+   try {
+    const endpointPenutup = (WIZ_STATE.modeUji === 'SUARA') ? 'api/chat-tts' : 'api/chat';
+    const kodeProdukUji = WIZ_STATE.tujuanKode === 'C' ? 'KN-KHD[UJI]' : (WIZ_STATE.tujuanKode === 'B' ? 'KN-MST-LAT[UJI]' : 'KN-BLJ[UJI]MID');
+    const resClose = await fetch(WORKER_URL + endpointPenutup, {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json', ...getWorkerAuthHeader() },
+     body: JSON.stringify({
+      message: teksUser,
+      history: riwayatChatUjiAPI,
+      produk: kodeProdukUji,
+      namaTema: KAIWA_USER.konteksKalibrasi || 'Umum',
+      isLastTurn: true,
+      isClosingUji: true,
+      statusKesesuaianUji: diagAwal.statusKesesuaian,
+      gender: 'female',
+      genderSiswa: KAIWA_USER.gender || ''
+     })
+    });
+    const dClose = await resClose.json();
+    if (dClose.choices?.[0]?.message?.content) teksPenutupAI = dClose.choices[0].message.content;
+    if (dClose.audioContent) audioPenutupB64 = dClose.audioContent;
+   } catch (eCl) {}
+  }
+
+  tambahChatMiniUji('ai', teksPenutupAI);
+  document.getElementById('indikatorGiliranUji').innerText = `Selesai • Skor ${WIZ_STATE.skorVN}/100`;
+
+  const lanjutSetelahPenutupAI = () => {
+   if (WIZ_STATE.modeUji === 'SUARA' && WIZ_STATE.skorVN >= 80) {
+    document.getElementById('kontrolSuaraUji').classList.add('hidden');
+    document.getElementById('boxTawaranLive30d').classList.remove('hidden');
+   } else {
+    tampilkanHasilDiagnosisAkhir(false);
+   }
+  };
+
+  if (WIZ_STATE.modeUji === 'SUARA' && audioPenutupB64) {
+   if (st) st.innerText = '🔊 Dengarkan tanggapan akhir Sensei...';
+   audioPlayerUji.src = 'data:audio/mp3;base64,' + audioPenutupB64;
+   audioPlayerUji.onended = () => setTimeout(lanjutSetelahPenutupAI, 1100);
+   audioPlayerUji.play().catch(() => setTimeout(lanjutSetelahPenutupAI, 2200));
+  } else {
+   if (st) st.innerText = '✅ Uji selesai! Menyiapkan rekomendasi belajarmu...';
+   setTimeout(lanjutSetelahPenutupAI, 2500);
+  }
+ }
+
+ // Hitung Perbandingan Level Pilihan Awal vs Kemampuan Aktual + Susun Alasan Rekomendasi
+ function hitungKeputusanDiagnosisUji(skorRaw, lolosLive, detailEv) {
+  const skor = Number(skorRaw) || 70;
+  const k = String(KAIWA_USER.konteksKalibrasi || 'Pilihan awal');
+
+  // Petakan tingkat klaim awal user: 1 (Dasar/SHOKYU), 2 (Menengah/CHUKYU), 3 (Mahir/Wawancara/Terbang)
+  let rankKlaim = 1;
+  if (WIZ_STATE.tujuanKode === 'C' || (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) || /N3|N2|N1|3Q|2Q|1Q|Bab (3[6-9]|4\d|50)|Dasar 2|A2-2/i.test(k)) {
+   rankKlaim = 3;
+  } else if (/N4|A2|4Q|Bab (19|2\d|3[0-5])|Dasar 1|A2-1/i.test(k)) {
+   rankKlaim = 2;
+  }
+
+  let statusKesesuaian = 'SESUAI'; // 'MELEBIHI' | 'SESUAI' | 'DIBAWAH'
+  let rekKode = 'BLJ-BSC';
+  let rekLabel = 'Belajar — SHOKYU';
+
+  if (lolosLive) {
+   statusKesesuaian = 'MELEBIHI';
+   rekKode = 'LIVE';
+   rekLabel = (WIZ_STATE.tujuanKode === 'B') ? 'Wawancara Live (Real-Time HRD)' : 'Percakapan Live — JOKYU';
+  } else if (skor < 62) {
+   // Kemampuan aktual masih lemah -> Turunkan ke level fondasi yang aman
+   if (rankKlaim >= 2 || skor < 55) statusKesesuaian = 'DIBAWAH';
+   if (rankKlaim === 3 && skor >= 52) {
+    rekKode = (WIZ_STATE.tujuanKode === 'B') ? 'BLJ-MID' : 'BLJ-MID';
+    rekLabel = 'Belajar — CHUKYU';
+   } else {
+    rekKode = 'BLJ-BSC';
+    rekLabel = 'Belajar — SHOKYU';
+   }
+  } else if (WIZ_STATE.tujuanKode === 'C') {
+   if (skor < 68) {
+    statusKesesuaian = 'DIBAWAH';
+    rekKode = 'BLJ-MID';
+    rekLabel = 'Belajar — CHUKYU';
+   } else {
+    statusKesesuaian = skor >= 86 ? 'MELEBIHI' : 'SESUAI';
+    rekKode = 'KHD';
+    rekLabel = 'Survival Kehidupan Jepang';
+   }
+  } else if (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) {
+   if (skor < 68) {
+    statusKesesuaian = 'DIBAWAH';
+    rekKode = 'MST-LAT';
+    rekLabel = 'Latihan Wawancara (Per Bagian)';
+   } else if (skor >= 80) {
+    statusKesesuaian = skor >= 88 ? 'MELEBIHI' : 'SESUAI';
+    rekKode = 'MST-SIM';
+    rekLabel = 'Simulasi Wawancara Penuh HRD';
+   } else {
+    statusKesesuaian = 'SESUAI';
+    rekKode = 'MST-LAT';
+    rekLabel = 'Latihan Wawancara (Per Bagian)';
+   }
+  } else {
+   // Jalur Belajar Bahasa (atau Wawancara belum punya sertifikat)
+   if (rankKlaim === 1) {
+    if (skor >= 85) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
+   } else if (rankKlaim === 2) {
+    if (skor >= 88) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
+    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+   } else {
+    if (skor < 72) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
+   }
+  }
+
+  const rincianSkorTeks = detailEv
+   ? `Skor Uji: ${skor}/100 (Kosa Kata ${detailEv.kosaKata}, Tata Bahasa ${detailEv.polaKalimat}, Kelancaran ${detailEv.kelancaran})`
+   : `Skor Uji: ${skor}/100`;
+
+  let alasanTeks = '';
+  if (statusKesesuaian === 'DIBAWAH') {
+   alasanTeks = `${rincianSkorTeks}. Ketepatan susunan kalimat dan responsmu saat ini belum mencapai standar untuk langsung masuk ke pilihan awalmu (${k}). Sistem menyarankan mulai dari "${rekLabel}" agar fondasi partikel dan kelancaranmu kuat lebih dulu tanpa membuang tiket sia-sia.`;
+  } else if (statusKesesuaian === 'MELEBIHI') {
+   alasanTeks = `${rincianSkorTeks}. Struktur kalimat, pilihan kosakata, dan keutuhan akhiran kalimatmu melampaui target awal (${k}), sehingga kamu layak langsung mulai dari "${rekLabel}" agar progres belajarmu lebih cepat.`;
+  } else {
+   alasanTeks = `${rincianSkorTeks}. Penguasaan kosakata dan struktur kalimatmu sudah selaras dengan profil yang kamu pilih (${k}), menjadikan "${rekLabel}" sebagai titik mulai paling tepat untukmu.`;
+  }
+
+  return { statusKesesuaian, rekKode, rekLabel, alasanTeks };
  }
 
  function jalankanSimulasiLive30d() {
@@ -6754,37 +7255,37 @@
   document.getElementById('wizStep3').classList.add('hidden');
   document.getElementById('wizStep4').classList.remove('hidden');
 
-  const k = String(KAIWA_USER.konteksKalibrasi || '');
   const skor = Number(WIZ_STATE.skorVN) || 70;
-  let rekKode = 'BLJ-BSC';
-  let rekLabel = 'Belajar — Shokyu (Basic)';
-
-  if (lolosLive) {
-   rekKode = 'LIVE';
-   rekLabel = (WIZ_STATE.tujuanKode === 'B') ? 'Wawancara Live (Real-Time HRD)' : 'Percakapan Live — Jokyu (Pro)';
-  } else if (WIZ_STATE.tujuanKode === 'C') {
-   rekKode = 'KHD';
-   rekLabel = 'Survival Kehidupan Jepang';
-  } else if (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) {
-   rekKode = skor >= 78 ? 'MST-SIM' : 'MST-LAT';
-   rekLabel = skor >= 78 ? 'Simulasi Wawancara Penuh HRD' : 'Latihan Wawancara (Per Bagian)';
-  } else if (skor >= 82 || /N3|N2|N1|Bab (3[6-9]|4\d|50)|Dasar 2/i.test(k)) {
-   rekKode = 'BLJ-PRO';
-   rekLabel = 'Belajar — Jokyu (Pro)';
-  } else if (skor >= 68 || /N4|A2|4Q|Bab (19|2\d|3[0-5])|Dasar 1/i.test(k)) {
-   rekKode = 'BLJ-MID';
-   rekLabel = 'Belajar — Chukyu (Mid)';
-  }
+  const kep = hitungKeputusanDiagnosisUji(skor, lolosLive, WIZ_STATE.detailEvalUji);
 
   KAIWA_USER.statusKalibrasi = WIZ_STATE.modeUji;
-  KAIWA_USER.rekomendasiMulai = rekKode;
-  KAIWA_USER.labelRekomendasi = rekLabel;
+  KAIWA_USER.rekomendasiMulai = kep.rekKode;
+  KAIWA_USER.labelRekomendasi = kep.rekLabel;
 
-  document.getElementById('judulRekomendasiDiagnosis').innerText = rekLabel;
+  // Sesuaikan Ikon & Ucapan (Selamat vs Luar Biasa vs Permohonan Maaf Sopan)
+  const elIkon = document.getElementById('ikonHasilDiagnosis');
+  const elJudulAtas = document.getElementById('judulAtasDiagnosis');
+  const boxRek = document.getElementById('kotakRekomendasiDiagnosis');
+
+  if (kep.statusKesesuaian === 'DIBAWAH') {
+   if (elIkon) elIkon.innerText = '🙏';
+   if (elJudulAtas) elJudulAtas.innerText = 'Mohon Maaf, Hasilmu Belum Sesuai Pilihan Awal';
+   if (boxRek) { boxRek.style.background = '#fffbeb'; boxRek.style.borderColor = '#fcd34d'; }
+  } else if (kep.statusKesesuaian === 'MELEBIHI') {
+   if (elIkon) elIkon.innerText = '🌟';
+   if (elJudulAtas) elJudulAtas.innerText = 'Luar Biasa! Kemampuanmu Melampaui Pilihanmu!';
+   if (boxRek) { boxRek.style.background = '#f0fdf4'; boxRek.style.borderColor = '#86efac'; }
+  } else {
+   if (elIkon) elIkon.innerText = '🎉';
+   if (elJudulAtas) elJudulAtas.innerText = 'Selamat! Kemampuanmu Sesuai Pilihanmu';
+   if (boxRek) { boxRek.style.background = '#eff6ff'; boxRek.style.borderColor = '#93c5fd'; }
+  }
+
+  document.getElementById('judulRekomendasiDiagnosis').innerText = kep.rekLabel;
+  document.getElementById('teksAlasanDiagnosis').innerText = kep.alasanTeks;
   document.getElementById('boxRewardSuara').classList.toggle('hidden', WIZ_STATE.modeUji !== 'SUARA');
   document.getElementById('boxInfoTahanChat').classList.toggle('hidden', WIZ_STATE.modeUji !== 'CHAT');
 
-  // Simpan ke Server GAS (Sekaligus Mencairkan Tiket Promo & Masuk TOP GLOBAL jika mode SUARA!)
   if (!apakahModePreviewLokal() && KAIWA_USER.token) {
    try {
     const resKal = await panggilGAS('simpanHasilUjiKemampuan', {
@@ -6795,8 +7296,8 @@
      deviceId: deviceId,
      tujuan: WIZ_STATE.tujuanKode === 'B' ? 'Mencari Job Kerja di Jepang' : (WIZ_STATE.tujuanKode === 'C' ? 'Persiapan Terbang ke Jepang' : 'Belajar Berbicara Bahasa Jepang'),
      statusKalibrasi: WIZ_STATE.modeUji,
-     rekomendasiMulai: rekKode,
-     labelRekomendasi: rekLabel,
+     rekomendasiMulai: kep.rekKode,
+     labelRekomendasi: kep.rekLabel,
      konteksKalibrasi: KAIWA_USER.konteksKalibrasi,
      skorKalibrasi: skor
     });
@@ -6807,8 +7308,8 @@
      }
      if (resKal.data.tiketBaruCair > 0) {
       document.getElementById('boxRewardSuara').innerHTML = `
-       <div style="font-size:14px; font-weight:900; color:#854d0e;">🎉 Selamat! +${resKal.data.tiketBaruCair} Tiket Gratis Telah Cair!</div>
-       <div style="font-size:11.5px; color:#713f12; margin-top:2px;">Skor pembukamu (${skor}) juga telah masuk ke TOP GLOBAL Leaderboard.</div>
+       <div style="font-size:14px; font-weight:900; color:#854d0e;">🎉 +${resKal.data.tiketBaruCair} Tiket Gratis Telah Cair ke Akunmu!</div>
+       <div style="font-size:11.5px; color:#713f12; margin-top:2px;">Skor pembukamu (${skor}) juga telah tercatat di TOP GLOBAL Leaderboard.</div>
       `;
      }
      muatDataLeaderboard(true);
@@ -6819,8 +7320,8 @@
   try {
    localStorage.setItem('neexa_kalibrasi_' + KAIWA_USER.email, JSON.stringify({
     statusKalibrasi: KAIWA_USER.statusKalibrasi,
-    rekomendasiMulai: rekKode,
-    labelRekomendasi: rekLabel,
+    rekomendasiMulai: kep.rekKode,
+    labelRekomendasi: kep.rekLabel,
     konteksKalibrasi: KAIWA_USER.konteksKalibrasi
    }));
   } catch (e) {}
@@ -6854,97 +7355,107 @@
 
  function muatContohDataPreviewLokal() {
   const contohTema = [
-   { nama: 'Minna Bab 6 — Ajakan & Makan Bersama', ket: 'Pola kalimat Kata Kerja を + 〜ませんか / 〜ましょう (6 Giliran).', tier: 'bsc', putaran: 6, tiket: 11 },
-   { nama: 'Minna Bab 14 — Meminta Tolong (Bentuk-Te)', ket: 'Pola kalimat 〜てください & 〜ています dasar (8 Giliran).', tier: 'bsc', putaran: 8, tiket: 13 },
-   { nama: 'Minna Bab 24 — Memberi & Menerima Bantuan', ket: 'Pola kalimat 〜てあげます / 〜てもらいます / 〜てくれます (12 Giliran).', tier: 'mid', putaran: 12, tiket: 17 },
-   { nama: 'Irodori A2-1 Bab 9 — Pengalaman & Hobi', ket: 'Pola kalimat 〜たことがあります & bercerita pengalaman (12 Giliran).', tier: 'mid', putaran: 12, tiket: 17 },
-   { nama: 'Minna Bab 40 — Laporan & Konfirmasi Kerja', ket: 'Pola kalimat 〜かどうかわかりません & Hourensou pabrik (16 Giliran).', tier: 'pro', putaran: 16, tiket: 21 }
+   { nama: 'Minna Bab 1 — Perkenalan Diri & Identitas', ket: 'Latihan perkenalan diri, profesi, afiliasi (の), kalimat nominal positif/negatif/tanya (です・じゃありません・ですか), dan partikel も.', tier: 'bsc', putaran: 6, tiket: 11 },
+   { nama: 'Minna Bab 6 — Aktivitas & Ajakan Bersama', ket: 'Latihan kata kerja berobjek (を), keterangan tempat aksi (で), serta mengajak teman dengan ～ませんか dan ～ましょう.', tier: 'bsc', putaran: 8, tiket: 13 },
+   { nama: 'Minna Bab 24 — Memberi & Menerima Bantuan', ket: 'Latihan kata kerja pemberian (くれます) serta memberi dan menerima bantuan/kebaikan (～てあげます・～てもらいます・～てくれます).', tier: 'mid', putaran: 12, tiket: 19 },
+   { nama: 'Irodori Dasar 1 Bab 9 — Pengalaman & Hobi', ket: 'Latihan pola kalimat ～たことがあります serta menceritakan pengalaman menarik di masa lalu.', tier: 'mid', putaran: 11, tiket: 18 },
+   { nama: 'Minna Bab 40 — Laporan & Konfirmasi Kerja', ket: 'Latihan pola kalimat ～かどうかわかりません dan pelaporan kerja (Hourensou) di pabrik Jepang.', tier: 'pro', putaran: 15, tiket: 25 }
   ];
   ['bsc', 'mid', 'pro'].forEach(t => {
    const wKN = document.getElementById('wadah-tema-blj-' + t);
    const wKL = document.getElementById('wadah-live-blj-' + t);
    const items = contohTema.filter(x => x.tier === t);
-   if (wKN) wKN.innerHTML = items.map(x => `
-    <div class="theme-item"><div class="theme-header" onclick="toggleTema(this)"><span>📘 ${x.nama}</span><i class="fas fa-chevron-down chevron-icon"></i></div>
-    <div class="theme-body"><p class="theme-desc">${x.ket}</p>${rakitIsiAksiTemaHTML({ nama: x.nama, kategori: 'BLJ', KN: { kode: 'KN-BLJ', maxPutaran: x.putaran, hargaPenuh: x.tiket } }, 'KN')}</div></div>`).join('');
-   if (wKL) wKL.innerHTML = items.map(x => `
-    <div class="theme-item"><div class="theme-header" onclick="toggleTema(this)"><span>📞 ${x.nama}</span><i class="fas fa-chevron-down chevron-icon"></i></div>
-    <div class="theme-body"><p class="theme-desc">${x.ket}</p>${rakitIsiAksiTemaHTML({ nama: x.nama, kategori: 'BLJ', KL: { kode: 'KL-BLJ', maxPutaran: 10, hargaPenuh: 15 } }, 'KL')}</div></div>`).join('');
+   if (wKN) wKN.innerHTML = items.map(x => rakitKartuKotakProdukHTML({
+    nama: x.nama, deskripsi: x.ket, kategori: 'BLJ',
+    KN: { kode: 'KN-BLJ', maxPutaran: x.putaran, hargaPenuh: x.tiket }
+   }, 'KN', '📘')).join('');
+   if (wKL) wKL.innerHTML = items.map(x => rakitKartuKotakProdukHTML({
+    nama: x.nama, deskripsi: x.ket, kategori: 'BLJ',
+    KL: { kode: 'KL-BLJ', maxPutaran: 10, hargaPenuh: 17 }
+   }, 'KL', '📞')).join('');
   });
 
   const wMst = document.getElementById('wadah-tema-mst');
-  if (wMst) wMst.innerHTML = ['Perawatan Lansia (Kaigo)', 'Pengolahan Makanan', 'Manufaktur / Pabrik', 'Pelayanan Restoran'].map(b => `
-   <div class="theme-item"><div class="theme-header" onclick="toggleTema(this)"><span>🏢 Simulasi Penuh — ${b}</span><i class="fas fa-chevron-down chevron-icon"></i></div>
-   <div class="theme-body"><p class="theme-desc">Wawancara 5 Fase penuh bersama Direktur Jepang bidang ${b}.</p>${rakitIsiAksiTemaHTML({ nama: b, kategori: 'MST', KN: { kode: 'KN-MST', maxPutaran: 38, hargaPenuh: 43 } }, 'KN')}</div></div>`).join('');
+  const daftarSimMst = ['Perawatan Lansia (Kaigo)', 'Pengolahan Makanan', 'Peternakan (Chikusan)', 'Manufaktur / Pabrik'];
+  if (wMst) wMst.innerHTML = daftarSimMst.map(b => rakitKartuKotakProdukHTML({
+   nama: `Wawancara — ${b}`,
+   deskripsi: `Simulasi wawancara kerja resmi 5 Fase penuh bersama Direktur Jepang bidang ${b}.`,
+   kategori: 'MST',
+   KN: { kode: 'KN-MST', maxPutaran: 38, hargaPenuh: 48 }
+  }, 'KN', '🏢')).join('');
 
   CACHE_GRUP_KHD = [
-   { kunciGrup: 'KHD[L1S1_IMIGRASI]', nama: '1.1 Meja Pemeriksaan Imigrasi', deskripsi: 'Pemeriksaan paspor, COE & sidik jari di bandara Jepang.', kategori: 'KHD', levelKHD: 1, urutSesiKHD: 1, KN: { kode: 'KN-KHD[L1S1_IMIGRASI]', maxPutaran: 6, hargaPenuh: 11 } },
-   { kunciGrup: 'KHD[L1S2_BEACUKAI]', nama: '1.2 Bagasi & Bea Cukai', deskripsi: 'Mengambil koper & pemeriksaan barang bawaan.', kategori: 'KHD', levelKHD: 1, urutSesiKHD: 2, KN: { kode: 'KN-KHD[L1S2_BEACUKAI]', maxPutaran: 7, hargaPenuh: 12 } }
+   { kunciGrup: 'KHD[L1S1_IMIGRASI]', nama: '1.1 Meja Pemeriksaan Imigrasi', deskripsi: 'Pemeriksaan paspor, COE & sidik jari di bandara Jepang.', kategori: 'KHD', levelKHD: 1, urutSesiKHD: 1, KN: { kode: 'KN-KHD[L1S1_IMIGRASI]', maxPutaran: 6, hargaPenuh: 12 } },
+   { kunciGrup: 'KHD[L1S2_BEACUKAI]', nama: '1.2 Bagasi & Bea Cukai', deskripsi: 'Mengambil koper & pemeriksaan barang bawaan.', kategori: 'KHD', levelKHD: 1, urutSesiKHD: 2, KN: { kode: 'KN-KHD[L1S2_BEACUKAI]', maxPutaran: 7, hargaPenuh: 13 } }
   ];
   sinkronkanPetaKhdDanGelar();
-  perbaruiSimbolVerifikasiDanBanner();
 
- const wInfo = document.getElementById('wadahInfoPenting');
- if (wInfo) wInfo.innerHTML = `<div class="info-item-card"><div class="info-item-top"><span class="info-kat-badge">FITUR BARU</span><span style="font-size:10px; color:#94a3b8;">Hari Ini</span></div><div style="font-size:13px; font-weight:800;">Jalur Belajar Progres & Uji Kemampuan</div><div style="font-size:12px; color:#475569;">Kurikulum kini tersusun otomatis sesuai bab buku & kemampuanmu!</div></div>`;
+  const wInfo = document.getElementById('wadahInfoPenting');
+  if (wInfo) wInfo.innerHTML = `<div class="info-item-card"><div class="info-item-top"><span class="info-kat-badge">FITUR BARU</span><span style="font-size:10px; color:#94a3b8;">Hari Ini</span></div><div style="font-size:13px; font-weight:800;">Jalur Belajar Progres & Uji Kemampuan</div><div style="font-size:12px; color:#475569;">Kurikulum kini tersusun otomatis sesuai bab buku & kemampuanmu!</div></div>`;
 
- // Isi contoh Leaderboard saat Preview Lokal agar semua kotak kanan tampil penuh
- CACHE_MY_UID_TAG = 'UID_ME_PREVIEW';
- CACHE_LEADERBOARD = {
-  global: [
-   { uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2 • SSW Kaigo', totalSesi: 16, skorKumulatif: 1324 },
-   { uidTag: 'U2', nama: 'Rayno Bima', jobReady: true, kualifikasi: 'JLPT N4', totalSesi: 5, skorKumulatif: 396 },
-   { uidTag: 'U3', nama: 'Okikvenda', jobReady: false, kualifikasi: '', totalSesi: 5, skorKumulatif: 389 },
-   { uidTag: 'U4', nama: 'Na***', jobReady: false, kualifikasi: '', totalSesi: 4, skorKumulatif: 354 },
-   { uidTag: 'U5', nama: 'Ba***', jobReady: false, kualifikasi: '', totalSesi: 4, skorKumulatif: 325 }
-  ],
-  blj: {
-   BSC: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kategori: 'Shokyu (BSC) • Minna Bab 14', nilaiTertinggi: 90, rataRata: 86 }],
-   MID: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kategori: 'Chukyu (MID) • Minna Bab 24', nilaiTertinggi: 88, rataRata: 84 }],
-   PRO: [{ uidTag: 'U2', nama: 'Rayno Bima', jobReady: true, kategori: 'Jokyu (PRO) • Minna Bab 40', nilaiTertinggi: 85, rataRata: 82 }]
-  },
-  bljLive: { BSC: [], MID: [], PRO: [] },
-  mst: [
-   { uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2', learn: 3, growth: 'UP', max: 86, min: 74, pts: 9 },
-   { uidTag: 'U2', nama: 'Dw***', jobReady: true, kualifikasi: 'JLPT N4', learn: 1, growth: 'STUCK', max: 78, min: 78, pts: 3 }
-  ],
-  mstLive: [
-   { uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2', learn: 2, growth: 'UP', max: 84, min: 76, pts: 6 }
-  ],
-  khd: [
-   { uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kastaOrder: 2, kastaLabel: '🐣 Anak Bawang', totalMain: 4, totalSkor: 332 }
-  ]
- };
- renderTabelLeaderboardAktif();
- renderMiniLeaderboardDashboard();
+  CACHE_MY_UID_TAG = 'UID_ME_PREVIEW';
+  CACHE_LEADERBOARD = {
+   global: [
+    { uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2 • SSW Kaigo', totalSesi: 16, skorKumulatif: 1324 },
+    { uidTag: 'U2', nama: 'Rayno Bima', jobReady: true, kualifikasi: 'JLPT N4', totalSesi: 5, skorKumulatif: 396 },
+    { uidTag: 'U3', nama: 'Okikvenda', jobReady: false, kualifikasi: '', totalSesi: 5, skorKumulatif: 389 }
+   ],
+   blj: {
+    BSC: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kategori: 'Shokyu (BSC) • Minna Bab 14', nilaiTertinggi: 90, rataRata: 86 }],
+    MID: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kategori: 'Chukyu (MID) • Minna Bab 24', nilaiTertinggi: 88, rataRata: 84 }],
+    PRO: []
+   },
+   bljLive: { BSC: [], MID: [], PRO: [] },
+   mst: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2', learn: 3, growth: 'UP', max: 86, min: 74, pts: 9 }],
+   mstLive: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kualifikasi: 'JFT-Basic A2', learn: 2, growth: 'UP', max: 84, min: 76, pts: 6 }],
+   khd: [{ uidTag: 'UID_ME_PREVIEW', nama: 'Hafidz', jobReady: true, kastaOrder: 2, kastaLabel: '🐣 Anak Bawang', totalMain: 4, totalSkor: 332 }]
+  };
+  renderTabelLeaderboardAktif();
+  renderMiniLeaderboardDashboard();
  }
 
- // --- SINKRONISASI BANNER GRID, LB DINAMIS RIWAYAT & WIDGET PROGRES DI LEADERBOARD ---
+ // --- SINKRONISASI NAVIGASI 3 LAPIS SERAGAM (BELAJAR & WAWANCARA, NON-LIVE & LIVE) ---
  bukaKategoriTujuan = function(kodeTujuan) {
   document.getElementById('banner-percakapan-kn')?.classList.add('hidden');
   document.getElementById('modul-tujuan-view').style.display = 'none';
   document.getElementById('sub-tier-blj').style.display = 'none';
+  document.getElementById('sub-tier-mst') && (document.getElementById('sub-tier-mst').style.display = 'none');
   document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
 
   if (kodeTujuan === 'blj') document.getElementById('sub-tier-blj').style.display = 'block';
+  else if (kodeTujuan === 'mst') document.getElementById('sub-tier-mst').style.display = 'block';
   else if (kodeTujuan === 'khd') document.getElementById('detail-khd').style.display = 'block';
-  else if (kodeTujuan === 'mst') document.getElementById('detail-mst').style.display = 'block';
  };
 
  kembaliKeTujuan = function() {
   document.getElementById('banner-percakapan-kn')?.classList.remove('hidden');
   document.getElementById('sub-tier-blj').style.display = 'none';
+  document.getElementById('sub-tier-mst') && (document.getElementById('sub-tier-mst').style.display = 'none');
   document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
   document.getElementById('modul-tujuan-view').style.display = 'block';
  };
+
+ function bukaDaftarWawancara(idDetailMst) {
+  document.getElementById('sub-tier-mst').style.display = 'none';
+  document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+  const el = document.getElementById(idDetailMst);
+  if (el) el.style.display = 'block';
+ }
+
+ function kembaliKeTierMST() {
+  document.querySelectorAll('.modul-detail-view').forEach(el => el.style.display = 'none');
+  document.getElementById('sub-tier-mst').style.display = 'block';
+ }
 
  bukaKategoriLive = function(kode) {
   document.getElementById('banner-percakapan-kl')?.classList.add('hidden');
   document.getElementById('live-tujuan-view').style.display = 'none';
   document.getElementById('sub-tier-live-blj').style.display = 'none';
+  document.getElementById('sub-tier-live-mst') && (document.getElementById('sub-tier-live-mst').style.display = 'none');
   document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
 
   if (kode === 'blj') document.getElementById('sub-tier-live-blj').style.display = 'block';
-  else if (kode === 'mst') document.getElementById('detail-live-mst').style.display = 'block';
+  else if (kode === 'mst') document.getElementById('sub-tier-live-mst').style.display = 'block';
  };
 
  kembaliKeTujuanLive = function() {
@@ -6952,9 +7463,22 @@
   if (!v) return;
   document.getElementById('banner-percakapan-kl')?.classList.remove('hidden');
   document.getElementById('sub-tier-live-blj').style.display = 'none';
+  document.getElementById('sub-tier-live-mst') && (document.getElementById('sub-tier-live-mst').style.display = 'none');
   document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
   v.style.display = 'block';
  };
+
+ function bukaDaftarWawancaraLive(idDetailLiveMst) {
+  document.getElementById('sub-tier-live-mst').style.display = 'none';
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+  const el = document.getElementById(idDetailLiveMst);
+  if (el) el.style.display = 'block';
+ }
+
+ function kembaliKeTierLiveMST() {
+  document.querySelectorAll('.live-detail-view').forEach(el => el.style.display = 'none');
+  document.getElementById('sub-tier-live-mst').style.display = 'block';
+ }
 
  filterTierRiwayat = function(tier, btnEl) {
   tierFilterAktif = tier;
@@ -7106,22 +7630,13 @@
   }
  };
 
+ // Pintasan dari Progres / Leaderboard / Bursa Job otomatis masuk ke halaman Latihan atau Simulasi yang tepat!
  pilihSubModeMST = function(sub) {
-  document.getElementById('btnSubMstLatihan')?.classList.toggle('active', sub === 'latihan');
-  document.getElementById('btnSubMstSimulasi')?.classList.toggle('active', sub === 'simulasi');
-  const wLat = document.getElementById('wadah-tema-mst-latihan');
-  const wSim = document.getElementById('wadah-tema-mst');
-  if (wLat) wLat.style.display = (sub === 'latihan') ? 'grid' : 'none';
-  if (wSim) wSim.style.display = (sub === 'simulasi') ? 'grid' : 'none';
+  bukaDaftarWawancara(sub === 'latihan' ? 'detail-mst-latihan' : 'detail-mst');
  };
 
  pilihSubModeMSTLive = function(sub) {
-  document.getElementById('btnSubMstLiveLatihan')?.classList.toggle('active', sub === 'latihan');
-  document.getElementById('btnSubMstLiveSimulasi')?.classList.toggle('active', sub === 'simulasi');
-  const wLat = document.getElementById('wadah-live-mst-latihan');
-  const wSim = document.getElementById('wadah-live-mst');
-  if (wLat) wLat.style.display = (sub === 'latihan') ? 'grid' : 'none';
-  if (wSim) wSim.style.display = (sub === 'simulasi') ? 'grid' : 'none';
+  bukaDaftarWawancaraLive(sub === 'latihan' ? 'detail-live-mst-latihan' : 'detail-live-mst');
  };
 
  function filterBukuKatalog(idWadah, kataBuku, btnEl) {
@@ -7155,7 +7670,6 @@
     paketAudio = await window.MesinKN.ambilBlobRekamanMST();
    }
    if (!paketAudio || !paketAudio.blob || paketAudio.blob.size < 1000) return;
-   // Pengaman ukuran maks ~4.5 MB agar aman masuk payload GAS
    if (paketAudio.blob.size > 4800000) return;
 
    const b64Audio = await new Promise((resolve, reject) => {
@@ -7289,9 +7803,6 @@
  let filterSubDriverAktif = 'SEMUA';
  let jobSedangDibuka = null;
 
- // ATURAN RESMI:
- // - Klik Detail Job: Cukup 1x Simulasi Wawancara ATAU 5x sesi (BLJ + MST Pecahan). Tanpa syarat nilai!
- // - Tombol Lamar: Wajib punya Simulasi Wawancara Penuh dengan Nilai >= 75 + tidak sedang masa kunci H+1.
  function hitungProgresSyaratJobUser() {
   let jmlSimulasiPenuhMST = 0;
   let nilaiMaxSimulasiMST = 0;
@@ -7300,7 +7811,7 @@
   dataRiwayatLokal.forEach(r => {
    const kd = String(r.produk || '').toUpperCase();
    const skor = Number(r.nilaiTotal) || 0;
-   if (kd.startsWith('UJI-')) return; // Jangan hitung sesi gratis 3 giliran sebagai sesi penuh
+   if (kd.startsWith('UJI-')) return;
    const isPecahanMST = kd.includes('MST-LAT') || kd.includes('LAT[');
    const inf = bedahKodeProduk(kd);
 
@@ -7466,48 +7977,122 @@
   }).join('');
  }
 
+ function tampilkanPopPenolakanJob({ ikon, subJudul, highlight, rincianHTML, teksTombolAksi, fungsiAksi }) {
+  const modal = document.getElementById('modalPenolakanJob');
+  if (!modal) return;
+  document.getElementById('ikonTolakJob').innerText = ikon || '🔒';
+  document.getElementById('subJudulTolakJob').innerText = subJudul || 'Akses Ditolak';
+  document.getElementById('highlightTolakJob').innerText = highlight || 'Belum Memenuhi Syarat';
+  document.getElementById('kotakRincianTolakJob').innerHTML = rincianHTML || '';
+
+  const btnAksi = document.getElementById('btnAksiUtamaTolakJob');
+  if (teksTombolAksi && typeof fungsiAksi === 'function') {
+   btnAksi.classList.remove('hidden');
+   btnAksi.innerHTML = `${teksTombolAksi} <i class="fas fa-arrow-right"></i>`;
+   btnAksi.onclick = function () {
+    tutupPopPenolakanJob();
+    fungsiAksi();
+   };
+  } else {
+   btnAksi.classList.add('hidden');
+  }
+  modal.classList.remove('hidden');
+ }
+
+ function tutupPopPenolakanJob() {
+  document.getElementById('modalPenolakanJob')?.classList.add('hidden');
+ }
+
+ function cekDanProsesKlikLamarJob() {
+  const job = jobSedangDibuka;
+  if (!job) return;
+  const st = hitungProgresSyaratJobUser();
+  const kunciLamaran = cekStatusKunciLamaranAktif();
+
+  if (kunciLamaran.terkunci) {
+   const isLolos = String(KAIWA_USER.statusRekrutmen || '').toUpperCase() === 'LOLOS_JOB';
+   tampilkanPopPenolakanJob({
+    ikon: isLolos ? '🎉' : '⏳',
+    subJudul: isLolos ? 'Pendaftaran Ditutup untuk Akunmu' : 'Batas 1 Lamaran Aktif',
+    highlight: isLolos ? 'Status: Sudah Lolos Job' : 'Menunggu H+1 Wawancara',
+    rincianHTML: `<div style="color:#991b1b; font-weight:700; line-height:1.55;">${escapeHtml(kunciLamaran.alasan)}</div>`,
+    teksTombolAksi: '',
+    fungsiAksi: null
+   });
+   return;
+  }
+
+  if (!st.lulusNilaiMst75) {
+   tampilkanPopPenolakanJob({
+    ikon: '🚨',
+    subJudul: 'Belum Memenuhi Kualifikasi Lamar Job',
+    highlight: 'Minimal Skor Wawancara 75',
+    rincianHTML: `
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="color:#475569; font-weight:700;">🏢 Syarat Skor Simulasi :</span>
+      <strong style="color:#15803d; font-size:14px;">Minimal 75</strong>
+     </div>
+     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px dashed #fecaca;">
+      <span style="color:#475569; font-weight:700;">📊 Skor Terbaikmu Saat Ini :</span>
+      <strong style="color:#dc2626; font-size:14px;">${st.nilaiMaxSimulasiMST ? (st.nilaiMaxSimulasiMST + ' / 100') : 'Belum Tes'}</strong>
+     </div>
+     <div style="margin-top:10px; font-size:11.5px; color:#7f1d1d;">
+      Selesaikan <strong>Simulasi Wawancara</strong> dengan nilai minimal 75 terlebih dahulu agar siap menghadapi wawancara TSK sesungguhnya!
+     </div>
+    `,
+    teksTombolAksi: 'Ikuti Simulasi Wawancara',
+    fungsiAksi: function () {
+     bukaTab('latihan-percakapan');
+     bukaKategoriTujuan('mst');
+     bukaDaftarWawancara('detail-mst');
+    }
+   });
+   return;
+  }
+
+  eksekusiLamarJobTSK();
+ }
+
  function klikKartuBursaJob(kodeJob) {
   const job = DAFTAR_BURSA_JOB.find(x => x.kode === kodeJob);
   if (!job) return;
   const st = hitungProgresSyaratJobUser();
 
   if (!st.bolehBukaDetail) {
-   alert(`🔒 Detail Lowongan Belum Terbuka!\n\nUntuk melihat rincian penuh "${job.bidangPerusahaan}", selesaikan salah satu syarat berikut (tanpa minimal nilai):\n• 1x Simulasi Wawancara Penuh (Progresmu: ${st.jmlSimulasiPenuhMST}/1), ATAU\n• 5x Sesi Belajar BLJ / Latihan Wawancara Pecahan (Progresmu: ${st.jmlBljDanMstPecahan}/5).`);
+   tampilkanPopPenolakanJob({
+    ikon: '🔒',
+    subJudul: 'Akses Rincian Lowongan Ditolak',
+    highlight: job.bidangPerusahaan,
+    rincianHTML: `
+     <div style="font-size:12px; color:#7f1d1d; font-weight:700; margin-bottom:10px;">
+      Penuhi <strong>salah satu</strong> target latihan berikut untuk membuka rincian seluruh lowongan (tanpa syarat nilai):
+     </div>
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="color:#475569; font-weight:700;">🏢 Simulasi Wawancara :</span>
+      <strong style="color:#dc2626;">${st.jmlSimulasiPenuhMST} / 1 sesi</strong>
+     </div>
+     <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px dashed #fecaca;">
+      <span style="color:#475569; font-weight:700;">📘 Belajar / Latihan MST :</span>
+      <strong style="color:#dc2626;">${st.jmlBljDanMstPecahan} / 5 sesi</strong>
+     </div>
+    `,
+    teksTombolAksi: 'Mulai Latihan Sekarang',
+    fungsiAksi: function () {
+     bukaTab('latihan-percakapan');
+    }
+   });
    return;
   }
 
   jobSedangDibuka = job;
-  const kunciLamaran = cekStatusKunciLamaranAktif();
   const jenisJobTeks = job.jenisJob || 'Tokutei Ginou 1';
   const metodeStr = job.jenisWawancara || job.metode || 'Online';
   const gajiKotorStr = job.gajiKotor || job.gaji || '-';
   const gajiBersihStr = (job.gajiBersih && String(job.gajiBersih).trim() !== '') ? job.gajiBersih : '- (Menyesuaikan / Dijelaskan saat wawancara)';
 
-  let blokTombolLamar = '';
-  if (kunciLamaran.terkunci) {
-   blokTombolLamar = `<div style="background:#fef2f2; border:1.5px solid #fecaca; color:#991b1b; padding:14px 16px; border-radius:14px; font-size:13px; font-weight:700; line-height:1.5;">${escapeHtml(kunciLamaran.alasan)}</div>`;
-  } else if (!st.lulusNilaiMst75) {
-   blokTombolLamar = `
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-     <div style="font-size:12.5px; color:#92400e; font-weight:700;">
-      ⚠️ <strong>Syarat Melamar Job:</strong> Selesaikan Simulasi Wawancara Penuh dengan <strong>Nilai minimal 75</strong> (Nilai terbaikmu saat ini: <strong>${st.nilaiMaxSimulasiMST || 0}</strong>).
-     </div>
-     <button type="button" onclick="bukaTab('latihan-percakapan'); bukaKategoriTujuan('mst'); pilihSubModeMST('simulasi');" class="btn" style="width:auto; padding:12px 20px; font-size:13px; background:#be123c;">
-      💼 Kejar Nilai ≥ 75 Sekarang &rarr;
-     </button>
-    </div>`;
-  } else {
-   blokTombolLamar = `
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
-     <div>
-      <div style="font-size:13.5px; font-weight:800; color:#15803d;">✅ Kualifikasi Nilai Wawancara Terpenuhi (Skor Terbaik: ${st.nilaiMaxSimulasiMST}/100)</div>
-      <div style="font-size:11.5px; color:#64748b; margin-top:2px;">*Hanya dapat melamar 1 lowongan aktif hingga H+1 tanggal wawancara selesai.</div>
-     </div>
-     <button type="button" id="btnLamarWaTSK" onclick="eksekusiLamarJobTSK()" class="btn" style="width:auto; padding:13px 24px; font-size:14px; background:#16a34a;">
-      <i class="fab fa-whatsapp" style="font-size:18px;"></i> Lamar Sekarang via WhatsApp TSK
-     </button>
-    </div>`;
-  }
+  const infoSyaratBawah = st.lulusNilaiMst75
+   ? `<div style="font-size:13.5px; font-weight:800; color:#15803d;">✅ Kualifikasi Nilai Wawancara Terpenuhi (Skor Terbaik: ${st.nilaiMaxSimulasiMST}/100)</div>`
+   : `<div style="font-size:13px; font-weight:800; color:#b91c1c;">🎯 Syarat Melamar: Nilai Simulasi Wawancara minimal 75 (Skor terbaikmu: ${st.nilaiMaxSimulasiMST || 'Belum tes'})</div>`;
 
   const wadahFull = document.getElementById('wadahFullDetailJob');
   wadahFull.innerHTML = `
@@ -7521,7 +8106,7 @@
     <div style="font-size:14px; opacity:0.92; font-weight:600;">7. Posisi yang Dibutuhkan: <strong>${escapeHtml(job.posisi || '-')}</strong> • 9. Penempatan: <strong>${escapeHtml(job.penempatan)}</strong></div>
    </div>
 
-   <!-- Grid Informasi Utama (Poin 1 s/d 5 & 9) -->
+   <!-- Grid Informasi Utama (Poin 1 s/d 5) -->
    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px; margin-bottom:16px;">
     <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:14px; padding:14px 16px;">
      <div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase;">1. Jenis Program / Visa</div>
@@ -7541,10 +8126,8 @@
     </div>
    </div>
 
-   <!-- Poin 6 (Kuota Kandidat Tes vs Diambil) & Poin 10 (Gaji Kotor vs Bersih) -->
+   <!-- Poin 6 (Kebutuhan Kandidat) & Poin 9-10 (Penempatan & Gaji) -->
    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:16px; margin-bottom:16px;">
-
-    <!-- 6. Kebutuhan Kandidat -->
     <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:18px 20px;">
      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:6px;">
       <h3 style="margin:0; font-size:14.5px; font-weight:800; color:var(--primary);">6. Kebutuhan Kandidat</h3>
@@ -7564,7 +8147,6 @@
      </div>
     </div>
 
-    <!-- 10. Estimasi Gaji & 9. Penempatan -->
     <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:18px 20px; display:flex; flex-direction:column; justify-content:space-between;">
      <div>
       <h3 style="margin:0 0 12px 0; font-size:14.5px; font-weight:800; color:#15803d;">9 &amp; 10. Penempatan &amp; Estimasi Gaji</h3>
@@ -7581,10 +8163,9 @@
       </div>
      </div>
     </div>
-
    </div>
 
-   <!-- Poin 7 & 8: Posisi & Persyaratan Kualifikasi -->
+   <!-- Poin 7 & 8: Posisi & Persyaratan -->
    <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:18px 20px; margin-bottom:16px;">
     <h3 style="margin:0 0 12px 0; font-size:14.5px; font-weight:800; color:var(--primary);">7 &amp; 8. Posisi &amp; Persyaratan Pelamar</h3>
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
@@ -7607,21 +8188,27 @@
     </div>
    </div>
 
-   <!-- Poin 11: Deskripsi Perusahaan (Tanpa Nama Perusahaan) & Jam Kerja -->
+   <!-- Poin 11: Deskripsi Perusahaan -->
    <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:18px 20px; margin-bottom:16px;">
     <h3 style="margin:0 0 8px 0; font-size:14.5px; font-weight:800; color:var(--primary);">11. Deskripsi Perusahaan, Jam Kerja &amp; Hari Libur</h3>
     <p style="margin:0; font-size:13.5px; color:#334155; line-height:1.65; white-space:pre-line;">${escapeHtml(job.deskripsiPerusahaan || job.tugas || '-')}</p>
    </div>
 
-   <!-- Poin 12: Catatan Tambahan (Potongan, Bonus, dll.) -->
+   <!-- Poin 12: Catatan Tambahan -->
    <div style="background:#fffbeb; border:2px solid #fde68a; border-radius:16px; padding:18px 20px; margin-bottom:20px;">
     <h3 style="margin:0 0 8px 0; font-size:14.5px; font-weight:800; color:#92400e;">12. Catatan Tambahan (Potongan, Tunjangan &amp; Bonus)</h3>
     <p style="margin:0; font-size:13.5px; color:#78350f; line-height:1.65; white-space:pre-line;">${escapeHtml(job.catatanTambahan || job.fasilitas || '-')}</p>
    </div>
 
-   <!-- Panel Aksi Lamar di Bagian Bawah Halaman -->
-   <div style="background:#ffffff; border:2px solid #cbd5e1; border-radius:18px; padding:20px 24px; margin-bottom:20px; box-shadow:0 8px 20px rgba(0,0,0,0.04);">
-    ${blokTombolLamar}
+   <!-- Panel Tombol Lamar (Jika belum lulus >=75 atau terkunci H+1, klik tombol ini memicu Pop-Up Merah menarik!) -->
+   <div style="background:#ffffff; border:2px solid #cbd5e1; border-radius:18px; padding:20px 24px; margin-bottom:20px; box-shadow:0 8px 20px rgba(0,0,0,0.04); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+    <div>
+     ${infoSyaratBawah}
+     <div style="font-size:11.5px; color:#64748b; margin-top:3px;">*Hanya dapat melamar 1 lowongan aktif hingga H+1 tanggal wawancara selesai.</div>
+    </div>
+    <button type="button" id="btnLamarWaTSK" onclick="cekDanProsesKlikLamarJob()" class="btn" style="width:auto; padding:13px 24px; font-size:14px; background:#16a34a;">
+     <i class="fab fa-whatsapp" style="font-size:18px;"></i> Lamar Sekarang via WhatsApp TSK
+    </button>
    </div>
   `;
 
@@ -7629,7 +8216,6 @@
   document.getElementById('bursaJobDetailView').classList.remove('hidden');
   document.querySelector('.main-content')?.scrollTo({ top: 0, behavior: 'smooth' });
  }
-
  async function eksekusiLamarJobTSK() {
   const job = jobSedangDibuka;
   if (!job) return;
