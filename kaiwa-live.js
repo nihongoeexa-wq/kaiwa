@@ -798,8 +798,21 @@
     return;
    }
 
-   if (msg.usageMetadata && msg.usageMetadata.totalTokenCount) {
-    sesi.totalTokenSesi = Math.max(sesi.totalTokenSesi, Number(msg.usageMetadata.totalTokenCount) || 0);
+   if (msg.usageMetadata) {
+    if (!sesi.apiUsage) {
+     sesi.apiUsage = { sttDetik: 0, chatInput: 0, chatOutput: 0, chatTotal: 0, ttsChars: 0, evalInput: 0, evalOutput: 0, evalTotal: 0, liveInput: 0, liveOutput: 0, liveTotal: 0 };
+    }
+    const u = msg.usageMetadata;
+    const lIn = Number(u.promptTokenCount) || 0;
+    const lOutRaw = (Number(u.responseTokenCount) || Number(u.candidatesTokenCount) || 0) + (Number(u.thoughtsTokenCount) || 0);
+    const lTotRaw = Number(u.totalTokenCount) || (lIn + lOutRaw);
+    const lOut = lOutRaw > 0 ? lOutRaw : Math.max(0, lTotRaw - lIn);
+    const lTot = lIn + lOut;
+
+    sesi.apiUsage.liveInput = (sesi.apiUsage.liveInput || 0) + lIn;
+    sesi.apiUsage.liveOutput = (sesi.apiUsage.liveOutput || 0) + lOut;
+    sesi.apiUsage.liveTotal = (sesi.apiUsage.liveTotal || 0) + lTot;
+    sesi.totalTokenSesi = sesi.apiUsage.liveTotal;
    }
 
    const sc = msg.serverContent || {};
