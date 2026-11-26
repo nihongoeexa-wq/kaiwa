@@ -3625,8 +3625,8 @@
  </div>
 
 <!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
-<script src="kaiwa-normal.js?v=20261124v10"></script>
-<script src="kaiwa-live.js?v=20261124v10"></script>
+<script src="kaiwa-normal.js?v=20261126v11"></script>
+<script src="kaiwa-live.js?v=20261126v11"></script>
 
 <script>
   // ==========================================
@@ -3640,7 +3640,17 @@
   let KATALOG_PRODUK_MAP = {}; // Menyimpan data dinamis produk dari Sheet berdasarkan Kode
   let deviceId = "";
 
-  // Objek Sesi Terpusat (Dibaca oleh MesinKN maupun MesinKL nanti)
+  function buatObjekApiUsageKosong() {
+    return {
+      sttDetik: 0,
+      chatInput: 0, chatOutput: 0, chatTotal: 0,
+      ttsChars: 0,
+      evalInput: 0, evalOutput: 0, evalTotal: 0,
+      liveInput: 0, liveOutput: 0, liveTotal: 0
+    };
+  }
+
+  // Objek Sesi Terpusat (Dibaca oleh MesinKN maupun MesinKL)
   window.NEEXA_SESI = {
     aktif: false,
     modeMesin: "",       // "KN" atau "KL"
@@ -3654,6 +3664,7 @@
     hargaPenuh: 26,
     putaranSaatIni: 0,
     totalTokenSesi: 0,
+    apiUsage: buatObjekApiUsageKosong(),
     historyPercakapan: ""
   };
 
@@ -4397,8 +4408,9 @@
     hargaPenuh: Number(data.data.hargaPenuh) || 26,
     putaranSaatIni: 0,
     totalTokenSesi: 0,
+    apiUsage: buatObjekApiUsageKosong(),
     historyPercakapan: ""
-   };
+    };
 
    jumlahPeringatanLayar = 0;
    sedangProsesRapor = false;
@@ -4512,10 +4524,14 @@
     if (rawData.engine) activeEngineEvaluator = rawData.engine;
     if (rawData.error) throw new Error("Evaluator Error: " + rawData.error);
 
-    tokenUntukDisimpan = (Number(rawData.tokens) || 0) + (Number(sesi.totalTokenSesi) || 0);
     // PENTING: evalSignature dari Worker menggunakan rawData.tokens, maka kirimkan angka yang sama persis ke GAS!
     tokenUntukDisimpan = Number(rawData.tokens) || 0;
     evalSig = rawData.evalSignature || "";
+
+    if (!sesi.apiUsage) sesi.apiUsage = buatObjekApiUsageKosong();
+    sesi.apiUsage.evalInput = Number(rawData.tokenInput) || 0;
+    sesi.apiUsage.evalOutput = Number(rawData.tokenOutput) || 0;
+    sesi.apiUsage.evalTotal = tokenUntukDisimpan || (sesi.apiUsage.evalInput + sesi.apiUsage.evalOutput);
 
     const jsonContent = rawData.choices[0].message.content.replace(/```json/gi, '').replace(/```/g, '').trim();
     raporData = JSON.parse(jsonContent);
@@ -4578,6 +4594,7 @@
     rekomendasi: raporData.rekomendasi,
     history: historyUntukDisimpan,
     totalToken: tokenUntukDisimpan,
+    apiUsage: sesi.apiUsage || buatObjekApiUsageKosong(),
     putaranTerpakai: sesi.putaranSaatIni,
     isSelesaiPenuh: statusSelesaiPenuh,
     isPelanggaran: isPelanggaran,
@@ -6841,6 +6858,7 @@
   WIZ_STATE.menungguSapaanAwal = true;
   WIZ_STATE.giliranUji = 0;
   WIZ_STATE.sedangRekamUji = false;
+  WIZ_STATE.apiUsage = buatObjekApiUsageKosong();
   riwayatChatUjiAPI = [];
   transkripLengkapUji = '';
 
@@ -6937,6 +6955,10 @@
        body: blob
       });
       const dStt = await resStt.json();
+      if (!WIZ_STATE.apiUsage) WIZ_STATE.apiUsage = buatObjekApiUsageKosong();
+      if (dStt.neexaSttSec) {
+       WIZ_STATE.apiUsage.sttDetik = Math.round(((WIZ_STATE.apiUsage.sttDetik || 0) + Number(dStt.neexaSttSec)) * 100) / 100;
+      }
       const teks = dStt.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
       if (!teks) {
        st.innerText = '⚠️ Suara kurang terdengar jelas, klik mikrofon dan coba lagi.';
@@ -6976,6 +6998,7 @@
   const btnMic = document.getElementById('btnMicUji');
   const st = document.getElementById('statusSuaraUji');
   const soalFallback = susunPertanyaanUji3Giliran();
+  if (!WIZ_STATE.apiUsage) WIZ_STATE.apiUsage = buatObjekApiUsageKosong();
 
   const adalahSapaan0 = WIZ_STATE.menungguSapaanAwal;
   if (adalahSapaan0) {
@@ -7020,6 +7043,14 @@
      })
     });
     const dAi = await resAi.json();
+    const uIn = Number(dAi.tokenInput) || 0;
+    const uOut = Number(dAi.tokenOutput) || 0;
+    const uTot = Number(dAi.tokens) || (uIn + uOut);
+    WIZ_STATE.apiUsage.chatInput += uIn;
+    WIZ_STATE.apiUsage.chatOutput += uOut;
+    WIZ_STATE.apiUsage.chatTotal += uTot;
+    WIZ_STATE.apiUsage.ttsChars += (Number(dAi.ttsChars) || 0);
+
     const teksAI = dAi.choices?.[0]?.message?.content || soalFallback[WIZ_STATE.giliranUji] || soalFallback[0];
 
     riwayatChatUjiAPI.push({ role: 'user', parts: [{ text: teksUser }] });
@@ -7090,6 +7121,14 @@
     });
     if (resKilat.ok) {
      const dK = await resKilat.json();
+     const kIn = Number(dK.tokenInput) || 0;
+     const kOut = Number(dK.tokenOutput) || 0;
+     const kTot = Number(dK.tokens) || (kIn + kOut);
+     WIZ_STATE.apiUsage.chatInput += kIn;
+     WIZ_STATE.apiUsage.chatOutput += kOut;
+     WIZ_STATE.apiUsage.chatTotal += kTot;
+     WIZ_STATE.apiUsage.ttsChars += (Number(dK.ttsChars) || 0);
+
      detailEvalUji = {
       kosaKata: Number(dK.kosaKata) || 70,
       polaKalimat: Number(dK.polaKalimat) || 70,
@@ -7197,7 +7236,6 @@
    ? `Hasil Evaluasi: ${skor}/100 (Kosa Kata: ${detailEv.kosaKata} • Tata Bahasa: ${detailEv.polaKalimat} • Kelancaran: ${detailEv.kelancaran}).`
    : `Hasil Evaluasi: ${skor}/100.`;
 
-  // Ambil ringkasan catatan koreksi asli dari AI Evaluator (maks 220 karakter agar tetap rapi di kotak)
   let kutipanKoreksi = '';
   if (detailEv && detailEv.perbaikan && detailEv.perbaikan !== '-') {
    const bersih = detailEv.perbaikan.replace(/\s+/g, ' ').trim();
@@ -7216,7 +7254,6 @@
     (kutipanKoreksi && skor < 80 ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '');
   }
 
-  // Pastikan kotak alasan selalu tampil dan mendukung baris baru (\n) dengan rapi
   const elAlasan = document.getElementById('teksAlasanDiagnosis');
   if (elAlasan) elAlasan.style.whiteSpace = 'pre-line';
   document.getElementById('kotakAlasanDiagnosis')?.classList.remove('hidden');
@@ -7256,7 +7293,6 @@
   KAIWA_USER.rekomendasiMulai = kep.rekKode;
   KAIWA_USER.labelRekomendasi = kep.rekLabel;
 
-  // Sesuaikan Ikon & Ucapan (Selamat vs Luar Biasa vs Permohonan Maaf Sopan)
   const elIkon = document.getElementById('ikonHasilDiagnosis');
   const elJudulAtas = document.getElementById('judulAtasDiagnosis');
   const boxRek = document.getElementById('kotakRekomendasiDiagnosis');
@@ -7293,7 +7329,8 @@
      rekomendasiMulai: kep.rekKode,
      labelRekomendasi: kep.rekLabel,
      konteksKalibrasi: KAIWA_USER.konteksKalibrasi,
-     skorKalibrasi: skor
+     skorKalibrasi: skor,
+     apiUsage: WIZ_STATE.apiUsage || buatObjekApiUsageKosong()
     });
     if (resKal.success && resKal.data) {
      if (resKal.data.saldo !== undefined) {
