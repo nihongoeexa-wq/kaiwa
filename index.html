@@ -6303,8 +6303,8 @@
  function pecahJudulProdukKotak(namaRaw, kategori = 'BLJ', isLive = false) {
   const s = String(namaRaw || 'Latihan Percakapan').trim();
 
-  // 1. Format Minna: "Minna Bab 1 — Perkenalan Diri & Identitas"
-  const mMinna = s.match(/^Minna(?:\s+no\s+Nihongo)?\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
+  // 1. Format Minna (Tunggal maupun Gabungan "Minna Bab 1–3 — ..."):
+  const mMinna = s.match(/^Minna(?:\s+no\s+Nihongo)?\s+Bab\s+([\d\-–]+)\s*[—\-–:]\s*(.+)$/i);
   if (mMinna) return { judul: `Minna no Nihongo BAB ${mMinna[1]}`, sub: mMinna[2].trim() };
 
   // 2. Format Irodori: "Irodori Pengantar Bab 1 — ..." / "Irodori Dasar 1 Bab 5 — ..."
@@ -6720,10 +6720,12 @@
   let opsiHTML = '';
 
   if (kodeBuku === 'MINNA') {
-   for (let b = 1; b <= 50; b++) {
+   opsiHTML += `<option value="Minna Bab 3" data-bab="3">Minna 1 — Gabungan Bab 1–3 (Dasar Awal)</option>`;
+   for (let b = 4; b <= 50; b++) {
     const jilid = b <= 25 ? 'Minna 1' : 'Minna 2';
     opsiHTML += `<option value="Minna Bab ${b}" data-bab="${b}">${jilid} — Sampai Bab ${b}</option>`;
    }
+  }
   } else if (kodeBuku === 'IRODORI') {
    for (let b = 1; b <= 18; b++) opsiHTML += `<option value="Irodori Pengantar Bab ${b}" data-bab="${b}">Irodori Pengantar (A1) — Bab ${b}</option>`;
    for (let b = 1; b <= 18; b++) opsiHTML += `<option value="Irodori Dasar 1 Bab ${b}" data-bab="${18 + b}">Irodori Dasar 1 (A2-1) — Bab ${b}</option>`;
