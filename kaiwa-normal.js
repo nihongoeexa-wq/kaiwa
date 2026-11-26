@@ -171,6 +171,12 @@
       if (!resSTT.ok) throw new Error("Gagal memproses STT.");
 
       const dataSTT = await resSTT.json();
+      if (!sesi.apiUsage) {
+        sesi.apiUsage = { sttDetik: 0, chatInput: 0, chatOutput: 0, chatTotal: 0, ttsChars: 0, evalInput: 0, evalOutput: 0, evalTotal: 0, liveInput: 0, liveOutput: 0, liveTotal: 0 };
+      }
+      if (dataSTT.neexaSttSec) {
+        sesi.apiUsage.sttDetik = Math.round(((sesi.apiUsage.sttDetik || 0) + Number(dataSTT.neexaSttSec)) * 100) / 100;
+      }
       const teksSiswa = dataSTT.results?.channels?.[0]?.alternatives?.[0]?.transcript;
 
       if (!teksSiswa) {
@@ -210,7 +216,14 @@
       if (!sesi.aktif) return;
 
       if (dataChat.engine) activeEngineTracker = dataChat.engine;
-      if (dataChat.tokens) sesi.totalTokenSesi += Number(dataChat.tokens);
+      const cIn = Number(dataChat.tokenInput) || 0;
+      const cOut = Number(dataChat.tokenOutput) || 0;
+      const cTot = Number(dataChat.tokens) || (cIn + cOut);
+      sesi.apiUsage.chatInput = (sesi.apiUsage.chatInput || 0) + cIn;
+      sesi.apiUsage.chatOutput = (sesi.apiUsage.chatOutput || 0) + cOut;
+      sesi.apiUsage.chatTotal = (sesi.apiUsage.chatTotal || 0) + cTot;
+      sesi.apiUsage.ttsChars = (sesi.apiUsage.ttsChars || 0) + (Number(dataChat.ttsChars) || 0);
+      sesi.totalTokenSesi = sesi.apiUsage.chatTotal;
 
       const teksAI = dataChat.choices[0].message.content;
       kirimAktivitas(activeEngineTracker + " (KN Chat+TTS)");
