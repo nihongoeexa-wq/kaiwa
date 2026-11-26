@@ -7048,80 +7048,65 @@
    return;
   }
 
-  // GILIRAN KE-3 SELESAI -> 1) ANALISIS SKOR DULU, 2) AI BALAS PENUTUP SESUAI HASIL, 3) PINDAH KE DIAGNOSIS!
+  // GILIRAN KE-3 SELESAI -> PANGGIL JALUR KILAT 3-IN-1 (/api/uji-selesai: Evaluasi + Balasan + Suara Sekaligus < 4 Detik!)
   transkripLengkapUji += `Siswa: ${teksUser}\n`;
   document.getElementById('indikatorGiliranUji').innerText = 'Menilai...';
-  if (st) st.innerText = '⏳ Sensei menilai & menyiapkan tanggapan akhir...';
+  if (st) st.innerText = '⏳ Sensei menyiapkan tanggapan & hasil evaluasi...';
 
   let detailEvalUji = { kosaKata: 74, polaKalimat: 72, kelancaran: 74, perbaikan: '' };
+  let teksPenutupAI = "ありがとうございます！今のレベルがしっかり身についていますね。お疲れ様でした。";
+  let audioPenutupB64 = null;
+
   if (apakahModePreviewLokal()) {
    const k = String(KAIWA_USER.konteksKalibrasi || '');
    const isPendekAtauLemah = String(teksUser || '').length < 6;
    const levelAtas = /N3|N2|N1|A2|4Q|3Q|Bab (2[5-9]|[3-4]\d|50)|Dasar 2/i.test(k);
    const sSim = isPendekAtauLemah ? 54 : (levelAtas ? 84 : 74);
    WIZ_STATE.skorVN = sSim;
-   detailEvalUji = { kosaKata: sSim, polaKalimat: sSim, kelancaran: sSim, perbaikan: '' };
+   detailEvalUji = {
+    kosaKata: sSim, polaKalimat: sSim, kelancaran: sSim,
+    perbaikan: isPendekAtauLemah ? 'Kalimat masih terlalu pendek dan belum membentuk pola lengkap.' : ''
+   };
+   const cekSim = hitungKeputusanDiagnosisUji(sSim, false, detailEvalUji);
+   if (cekSim.statusKesesuaian === 'MELEBIHI') {
+    teksPenutupAI = "素晴らしいですね！あなたが選んだレベルよりも高い日本語の力がありますよ。お疲れ様でした！";
+   } else if (cekSim.statusKesesuaian === 'DIBAWAH') {
+    teksPenutupAI = "最後まで頑張ってくれてありがとうございます。まずは無理のない基礎レベルから少しずつ練習しましょうね。";
+   }
   } else {
    try {
-    const resEv = await fetch(WORKER_URL + 'api/evaluasi', {
+    const resKilat = await fetch(WORKER_URL + 'api/uji-selesai', {
      method: 'POST',
      headers: { 'Content-Type': 'application/json', ...getWorkerAuthHeader() },
      body: JSON.stringify({
-      history: transkripLengkapUji,
-      produk: `UJI-KEMAMPUAN[${KAIWA_USER.konteksKalibrasi || 'UMUM'}]`
+      lastMessage: teksUser,
+      historyChat: riwayatChatUjiAPI,
+      transkripPenuh: transkripLengkapUji,
+      konteks: KAIWA_USER.konteksKalibrasi || 'Umum',
+      pakaiSuara: (WIZ_STATE.modeUji === 'SUARA'),
+      gender: 'female'
      })
     });
-    const dEv = await resEv.json();
-    const parsed = JSON.parse(String(dEv.choices?.[0]?.message?.content || '{}').replace(/```json|```/gi, '').trim());
-    detailEvalUji = {
-     kosaKata: Number(parsed.kosaKata) || 65,
-     polaKalimat: Number(parsed.polaKalimat) || 65,
-     kelancaran: Number(parsed.kelancaran) || 65,
-     perbaikan: String(parsed.perbaikan || '').trim()
-    };
-    WIZ_STATE.skorVN = Math.round((detailEvalUji.kosaKata + detailEvalUji.polaKalimat + detailEvalUji.kelancaran) / 3);
-   } catch (eEv) {
+    if (resKilat.ok) {
+     const dK = await resKilat.json();
+     detailEvalUji = {
+      kosaKata: Number(dK.kosaKata) || 70,
+      polaKalimat: Number(dK.polaKalimat) || 70,
+      kelancaran: Number(dK.kelancaran) || 70,
+      perbaikan: String(dK.perbaikan || '').trim()
+     };
+     WIZ_STATE.skorVN = Math.round((detailEvalUji.kosaKata + detailEvalUji.polaKalimat + detailEvalUji.kelancaran) / 3);
+     if (dK.balasanPenutupJP) teksPenutupAI = dK.balasanPenutupJP;
+     if (dK.audioContent) audioPenutupB64 = dK.audioContent;
+    } else {
+     WIZ_STATE.skorVN = 72;
+    }
+   } catch (eK) {
     WIZ_STATE.skorVN = 72;
    }
   }
 
   WIZ_STATE.detailEvalUji = detailEvalUji;
-  const diagAwal = hitungKeputusanDiagnosisUji(WIZ_STATE.skorVN, false, detailEvalUji);
-
-  // Minta AI Sensei membalas ucapan terakhir + memberi komentar penutup (Melebihi / Sesuai / Di Bawah)
-  let teksPenutupAI = "ありがとうございます！今のレベルがしっかり身についていますね。お疲れ様でした。";
-  if (diagAwal.statusKesesuaian === 'MELEBIHI') {
-   teksPenutupAI = "素晴らしいですね！あなたが選んだレベルよりも高い日本語の力がありますよ。お疲れ様でした！";
-  } else if (diagAwal.statusKesesuaian === 'DIBAWAH') {
-   teksPenutupAI = "最後まで頑張ってくれてありがとうございます。少し難しい部分もありましたので、無理のない基礎レベルから少しずつ練習しましょうね。";
-  }
-
-  let audioPenutupB64 = null;
-  if (!apakahModePreviewLokal()) {
-   try {
-    const endpointPenutup = (WIZ_STATE.modeUji === 'SUARA') ? 'api/chat-tts' : 'api/chat';
-    const kodeProdukUji = WIZ_STATE.tujuanKode === 'C' ? 'KN-KHD[UJI]' : (WIZ_STATE.tujuanKode === 'B' ? 'KN-MST-LAT[UJI]' : 'KN-BLJ[UJI]MID');
-    const resClose = await fetch(WORKER_URL + endpointPenutup, {
-     method: 'POST',
-     headers: { 'Content-Type': 'application/json', ...getWorkerAuthHeader() },
-     body: JSON.stringify({
-      message: teksUser,
-      history: riwayatChatUjiAPI,
-      produk: kodeProdukUji,
-      namaTema: KAIWA_USER.konteksKalibrasi || 'Umum',
-      isLastTurn: true,
-      isClosingUji: true,
-      statusKesesuaianUji: diagAwal.statusKesesuaian,
-      gender: 'female',
-      genderSiswa: KAIWA_USER.gender || ''
-     })
-    });
-    const dClose = await resClose.json();
-    if (dClose.choices?.[0]?.message?.content) teksPenutupAI = dClose.choices[0].message.content;
-    if (dClose.audioContent) audioPenutupB64 = dClose.audioContent;
-   } catch (eCl) {}
-  }
-
   tambahChatMiniUji('ai', teksPenutupAI);
   document.getElementById('indikatorGiliranUji').innerText = `Selesai • Skor ${WIZ_STATE.skorVN}/100`;
 
@@ -7137,20 +7122,20 @@
   if (WIZ_STATE.modeUji === 'SUARA' && audioPenutupB64) {
    if (st) st.innerText = '🔊 Dengarkan tanggapan akhir Sensei...';
    audioPlayerUji.src = 'data:audio/mp3;base64,' + audioPenutupB64;
-   audioPlayerUji.onended = () => setTimeout(lanjutSetelahPenutupAI, 1100);
-   audioPlayerUji.play().catch(() => setTimeout(lanjutSetelahPenutupAI, 2200));
+   audioPlayerUji.onended = () => setTimeout(lanjutSetelahPenutupAI, 600);
+   audioPlayerUji.play().catch(() => setTimeout(lanjutSetelahPenutupAI, 1400));
   } else {
-   if (st) st.innerText = '✅ Uji selesai! Menyiapkan rekomendasi belajarmu...';
-   setTimeout(lanjutSetelahPenutupAI, 2500);
+   if (st) st.innerText = '✅ Uji selesai! Membuka rekomendasi...';
+   setTimeout(lanjutSetelahPenutupAI, 1600);
   }
  }
 
- // Hitung Perbandingan Level Pilihan Awal vs Kemampuan Aktual + Susun Alasan Rekomendasi
+ // Hitung Perbandingan Level Pilihan Awal vs Kemampuan Aktual + Susun Alasan Spesifik
  function hitungKeputusanDiagnosisUji(skorRaw, lolosLive, detailEv) {
   const skor = Number(skorRaw) || 70;
   const k = String(KAIWA_USER.konteksKalibrasi || 'Pilihan awal');
 
-  // Petakan tingkat klaim awal user: 1 (Dasar/SHOKYU), 2 (Menengah/CHUKYU), 3 (Mahir/Wawancara/Terbang)
+  // Petakan tingkat klaim awal user: 1 (SHOKYU), 2 (CHUKYU), 3 (JOKYU / Wawancara / Terbang)
   let rankKlaim = 1;
   if (WIZ_STATE.tujuanKode === 'C' || (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) || /N3|N2|N1|3Q|2Q|1Q|Bab (3[6-9]|4\d|50)|Dasar 2|A2-2/i.test(k)) {
    rankKlaim = 3;
@@ -7166,66 +7151,74 @@
    statusKesesuaian = 'MELEBIHI';
    rekKode = 'LIVE';
    rekLabel = (WIZ_STATE.tujuanKode === 'B') ? 'Wawancara Live (Real-Time HRD)' : 'Percakapan Live — JOKYU';
-  } else if (skor < 62) {
-   // Kemampuan aktual masih lemah -> Turunkan ke level fondasi yang aman
-   if (rankKlaim >= 2 || skor < 55) statusKesesuaian = 'DIBAWAH';
-   if (rankKlaim === 3 && skor >= 52) {
-    rekKode = (WIZ_STATE.tujuanKode === 'B') ? 'BLJ-MID' : 'BLJ-MID';
-    rekLabel = 'Belajar — CHUKYU';
-   } else {
-    rekKode = 'BLJ-BSC';
-    rekLabel = 'Belajar — SHOKYU';
-   }
   } else if (WIZ_STATE.tujuanKode === 'C') {
-   if (skor < 68) {
+   if (skor < 70) {
     statusKesesuaian = 'DIBAWAH';
-    rekKode = 'BLJ-MID';
-    rekLabel = 'Belajar — CHUKYU';
+    rekKode = skor < 58 ? 'BLJ-BSC' : 'BLJ-MID';
+    rekLabel = skor < 58 ? 'Belajar — SHOKYU' : 'Belajar — CHUKYU';
    } else {
     statusKesesuaian = skor >= 86 ? 'MELEBIHI' : 'SESUAI';
     rekKode = 'KHD';
     rekLabel = 'Survival Kehidupan Jepang';
    }
   } else if (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) {
-   if (skor < 68) {
+   if (skor < 65) {
     statusKesesuaian = 'DIBAWAH';
+    rekKode = skor < 55 ? 'BLJ-BSC' : 'BLJ-MID';
+    rekLabel = skor < 55 ? 'Belajar — SHOKYU' : 'Belajar — CHUKYU';
+   } else if (skor < 78) {
+    statusKesesuaian = skor < 70 ? 'DIBAWAH' : 'SESUAI';
     rekKode = 'MST-LAT';
     rekLabel = 'Latihan Wawancara (Per Bagian)';
-   } else if (skor >= 80) {
+   } else {
     statusKesesuaian = skor >= 88 ? 'MELEBIHI' : 'SESUAI';
     rekKode = 'MST-SIM';
     rekLabel = 'Simulasi Wawancara Penuh HRD';
-   } else {
-    statusKesesuaian = 'SESUAI';
-    rekKode = 'MST-LAT';
-    rekLabel = 'Latihan Wawancara (Per Bagian)';
    }
   } else {
-   // Jalur Belajar Bahasa (atau Wawancara belum punya sertifikat)
+   // Jalur Belajar Bahasa (atau Wawancara belum bersertifikat) — KKM Tegas!
    if (rankKlaim === 1) {
     if (skor >= 85) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+    else if (skor < 60) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
     else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
    } else if (rankKlaim === 2) {
-    if (skor >= 88) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
+    if (skor < 70) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
+    else if (skor >= 88) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
     else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
    } else {
-    if (skor < 72) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+    if (skor < 60) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
+    else if (skor < 75) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
     else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
    }
   }
 
   const rincianSkorTeks = detailEv
-   ? `Skor Uji: ${skor}/100 (Kosa Kata ${detailEv.kosaKata}, Tata Bahasa ${detailEv.polaKalimat}, Kelancaran ${detailEv.kelancaran})`
-   : `Skor Uji: ${skor}/100`;
+   ? `Hasil Evaluasi: ${skor}/100 (Kosa Kata: ${detailEv.kosaKata} • Tata Bahasa: ${detailEv.polaKalimat} • Kelancaran: ${detailEv.kelancaran}).`
+   : `Hasil Evaluasi: ${skor}/100.`;
+
+  // Ambil ringkasan catatan koreksi asli dari AI Evaluator (maks 220 karakter agar tetap rapi di kotak)
+  let kutipanKoreksi = '';
+  if (detailEv && detailEv.perbaikan && detailEv.perbaikan !== '-') {
+   const bersih = detailEv.perbaikan.replace(/\s+/g, ' ').trim();
+   kutipanKoreksi = bersih.length > 220 ? (bersih.substring(0, 217) + '...') : bersih;
+  }
 
   let alasanTeks = '';
   if (statusKesesuaian === 'DIBAWAH') {
-   alasanTeks = `${rincianSkorTeks}. Ketepatan susunan kalimat dan responsmu saat ini belum mencapai standar untuk langsung masuk ke pilihan awalmu (${k}). Sistem menyarankan mulai dari "${rekLabel}" agar fondasi partikel dan kelancaranmu kuat lebih dulu tanpa membuang tiket sia-sia.`;
+   alasanTeks = `${rincianSkorTeks} Jawaban lisanmu belum mencapai batas minimal kelulusan untuk pilihan awalmu (${k}).` +
+    (kutipanKoreksi ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '') +
+    `\n\nOleh karena itu, sistem merekomendasikan mulai dari "${rekLabel}" agar dasar pola kalimatmu matang lebih dulu dan tiketmu terpakai efektif.`;
   } else if (statusKesesuaian === 'MELEBIHI') {
-   alasanTeks = `${rincianSkorTeks}. Struktur kalimat, pilihan kosakata, dan keutuhan akhiran kalimatmu melampaui target awal (${k}), sehingga kamu layak langsung mulai dari "${rekLabel}" agar progres belajarmu lebih cepat.`;
+   alasanTeks = `${rincianSkorTeks} Ketepatan kosakata, tata bahasa, dan keutuhan akhiran kalimatmu melampaui pilihan awal (${k}). Kamu direkomendasikan langsung naik ke "${rekLabel}" agar progres belajarmu lebih cepat!`;
   } else {
-   alasanTeks = `${rincianSkorTeks}. Penguasaan kosakata dan struktur kalimatmu sudah selaras dengan profil yang kamu pilih (${k}), menjadikan "${rekLabel}" sebagai titik mulai paling tepat untukmu.`;
+   alasanTeks = `${rincianSkorTeks} Kemampuan merangkai kalimatmu sudah sesuai dengan level yang kamu pilih (${k}), sehingga "${rekLabel}" adalah titik mulai paling tepat untukmu.` +
+    (kutipanKoreksi && skor < 80 ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '');
   }
+
+  // Pastikan kotak alasan selalu tampil dan mendukung baris baru (\n) dengan rapi
+  const elAlasan = document.getElementById('teksAlasanDiagnosis');
+  if (elAlasan) elAlasan.style.whiteSpace = 'pre-line';
+  document.getElementById('kotakAlasanDiagnosis')?.classList.remove('hidden');
 
   return { statusKesesuaian, rekKode, rekLabel, alasanTeks };
  }
