@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Neexa Kaiwa - AI Tutor</title>
     
     <!-- Pustaka Font & Ikon Asli -->
@@ -941,18 +944,79 @@
     .page-hero-banner .banner-watermark { display: none; }
   }
 
-  /* Kartu Jalur Belajar di Menu PROGRES */
-  .progres-step-card {
-    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
-    padding: 18px 20px; margin-bottom: 14px; transition: 0.2s; position: relative;
-  }
-  .progres-step-card.rekomendasi-utama {
-    border-color: #2563eb; background: linear-gradient(180deg, #eff6ff 0%, #ffffff 65%);
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
-  }
+  /* Kartu Jalur Belajar Produk Langsung di Menu PROGRES + Freeze Header */
   .badge-rekomendasi {
     display: inline-flex; align-items: center; gap: 5px; background: #facc15; color: #713f12;
-    font-size: 10.5px; font-weight: 900; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.3px;
+    font-size: 11px; font-weight: 900; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.4px;
+  }
+  .progres-freeze-header-wrap {
+    position: sticky; top: -40px; z-index: 25;
+    margin-top: -20px; padding-top: 20px; padding-bottom: 14px;
+    background: linear-gradient(180deg, #F7F9FA 88%, rgba(247, 249, 250, 0));
+  }
+  .progres-hero-sticky {
+    border-radius: 20px; padding: 24px 28px 20px 28px; color: #ffffff;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    position: relative; overflow: hidden;
+    box-shadow: 0 10px 22px rgba(30, 64, 175, 0.18); box-sizing: border-box;
+    display: flex; flex-direction: column; justify-content: space-between; min-height: 132px;
+  }
+  .progres-hero-sticky h2 { margin: 0 0 6px 0; font-size: 23px; font-weight: 800; color: #ffffff; }
+  .progres-hero-sticky p { margin: 0; font-size: 13.5px; line-height: 1.5; opacity: 0.94; color: #ffffff; max-width: 78%; }
+  .progres-hero-bottom-right {
+    display: flex; justify-content: flex-end; align-items: center; gap: 10px;
+    margin-top: 14px; position: relative; z-index: 2;
+  }
+  .progres-hero-bottom-right .label-pergi {
+    font-size: 12px; font-weight: 700; color: rgba(255, 255, 255, 0.92);
+  }
+  .btn-latihan-umum-kecil {
+    background: #fef08a; color: #854d0e; border: none; padding: 8px 15px; border-radius: 10px;
+    font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+  }
+  .btn-latihan-umum-kecil:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.18); }
+
+  /* Kotak Produk Ringkas (Sudah Dikerjakan = Abu-abu | Belum = Putih) */
+  .progres-step-card {
+    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
+    padding: 16px 20px; margin-bottom: 12px; transition: 0.2s; position: relative;
+  }
+  .progres-step-card.sudah-dikerjakan {
+    background: #f1f5f9; border-color: #cbd5e1;
+  }
+  .progres-step-card.sudah-dikerjakan h3 { color: #475569 !important; }
+  .progres-step-card.sudah-dikerjakan p { color: #64748b !important; }
+
+  /* Kotak Produk REKOMENDASI Besar (Setara 2 Kotak + Garis Luar Kuning) */
+  .progres-rek-card-besar {
+    background: #ffffff; border: 2.5px solid #eab308; border-radius: 20px;
+    padding: 22px; margin: 14px 0 16px 0; position: relative;
+    box-shadow: 0 10px 26px rgba(234, 179, 8, 0.14); box-sizing: border-box;
+  }
+
+  /* Lencana Skor Pojok Kanan Atas (Merah 0-59, Biru 60-74, Hijau 75-100) */
+  .product-box-card { position: relative; }
+  .score-corner-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 26px; padding: 0 9px; border-radius: 10px;
+    font-size: 13px; font-weight: 900; letter-spacing: -0.2px; flex-shrink: 0;
+  }
+  .score-corner-abs { position: absolute; top: 14px; right: 14px; z-index: 3; }
+  .skor-merah { background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; }
+  .skor-biru  { background: #eff6ff; color: #2563eb; border: 1.5px solid #bfdbfe; }
+  .skor-hijau { background: #f0fdf4; color: #16a34a; border: 1.5px solid #bbf7d0; }
+
+  /* Kotak Grafik Perkembangan Nilai */
+  .score-chart-card {
+    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
+    padding: 20px 22px; box-shadow: 0 4px 8px rgba(0,0,0,0.02); box-sizing: border-box;
+  }
+  .score-chart-svg-wrap { width: 100%; overflow: hidden; margin-top: 8px; }
+
+  @media (max-width: 768px) {
+    .progres-freeze-header-wrap { top: -20px; }
+    .progres-hero-sticky { padding: 20px; }
+    .progres-hero-sticky p { max-width: 100%; }
   }
 
   /* Sub-Tab MST (Latihan Per Bagian vs Simulasi Penuh) */
@@ -1454,6 +1518,20 @@
          </div>
         </div>
        </div>
+
+       <!-- 4. Grafik Perkembangan Nilai (Dashboard) -->
+       <div class="score-chart-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+         <div>
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-line" style="color:var(--primary); margin-right:5px;"></i> Grafik Perkembangan Nilai</h3>
+          <p style="margin:2px 0 0 0; font-size:11.5px; color:#64748b;">Tren skor rapor dari sesi ke sesi (Garis hijau = Batas Lulus 75)</p>
+         </div>
+         <span id="labelInfoGrafikDash" style="font-size:11px; font-weight:800; background:#eff6ff; color:#1d4ed8; padding:4px 10px; border-radius:20px;">0 Sesi</span>
+        </div>
+        <div id="wadahGrafikNilaiDashboard" class="score-chart-svg-wrap">
+         <div style="text-align:center; padding:26px 10px; font-size:12.5px; color:#94a3b8;">Belum ada riwayat nilai untuk ditampilkan.</div>
+        </div>
+       </div>
       </div>
 
       <!-- Area Kanan Dashboard (30%) -->
@@ -1571,22 +1649,44 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MENU PROGRES (JALUR BELAJAR TERPANDU)      -->
+    <!-- MENU PROGRES (PETA PRODUK LANGSUNG + GRAFIK)-->
     <!-- ========================================== -->
     <div id="tab-progres" class="nav-page-section" style="display: none;">
-     <div class="page-aligned-box">
-      <div class="page-hero-banner" style="background: linear-gradient(135deg, #1e40af, #3b82f6);">
-       <div class="banner-text">
-        <h2>Progres Belajar Kamu</h2>
-        <p id="subInfoProgresKalibrasi">Ikuti urutan belajar dari tahap rekomendasimu hingga siap berangkat ke Jepang.</p>
+     <div class="dashboard-grid" style="align-items: flex-start;">
+
+      <!-- Sisi Kiri (70%): Freeze Header Biru + Peta Produk Langsung -->
+      <div class="dash-left" style="gap: 0; min-width: 0; text-align: left;">
+       <div class="progres-freeze-header-wrap" id="headerStickyProgres">
+        <div class="progres-hero-sticky">
+         <div style="position: relative; z-index: 2;">
+          <h2>Progres Belajar Kamu</h2>
+          <p id="subInfoProgresKalibrasi">Peta latihan bicara terarah yang selaras dengan materi belajarmu dari tahap ke tahap.</p>
+         </div>
+         <div class="progres-hero-bottom-right">
+          <span class="label-pergi">Pergi ke latihan umum</span>
+          <button onclick="bukaTab('latihan-percakapan')" class="btn-latihan-umum-kecil">Latihan Umum &rarr;</button>
+         </div>
+         <i class="fas fa-route banner-watermark" style="position:absolute; right:22px; bottom:-18px; font-size:76px; opacity:0.15; transform:rotate(12deg); pointer-events:none;"></i>
+        </div>
        </div>
-       <div class="banner-action-z">
-        <button onclick="bukaTab('latihan-percakapan')" class="btn-banner" style="padding: 10px 18px; font-size: 13px;">Pilih Bebas &rarr;</button>
-       </div>
-       <i class="fas fa-route banner-watermark"></i>
+
+       <div id="wadahJalurProgres" style="padding-top: 6px;"></div>
       </div>
 
-      <div id="wadahJalurProgres"></div>
+      <!-- Sisi Kanan (30% Sticky): Grafik Perkembangan Nilai -->
+      <div class="dash-right" style="position: sticky; top: 0;">
+       <div class="score-chart-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; gap:6px;">
+         <h3 style="margin:0; font-size:14.5px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-line" style="color:var(--primary); margin-right:5px;"></i> Grafik Nilai</h3>
+         <span id="labelInfoGrafikProgres" style="font-size:10.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; padding:3px 9px; border-radius:20px;">0 Sesi</span>
+        </div>
+        <p style="margin:0 0 6px 0; font-size:11.5px; color:#64748b; line-height:1.4;">Naik-turun skor latihanmu (Target lulus &ge; 75)</p>
+        <div id="wadahGrafikNilaiProgres" class="score-chart-svg-wrap">
+         <div style="text-align:center; padding:24px 8px; font-size:12px; color:#94a3b8;">Belum ada riwayat nilai.</div>
+        </div>
+       </div>
+      </div>
+
      </div>
     </div>
 
@@ -3625,8 +3725,8 @@
  </div>
 
 <!-- MEMUAT MESIN KAIWA NORMAL & KAIWA LIVE (EKSTERNAL DENGAN PEMECAH CACHE) -->
-<script src="kaiwa-normal.js?v=20261126v11"></script>
-<script src="kaiwa-live.js?v=20261126v11"></script>
+<script src="kaiwa-normal.js?v=20261127v12"></script>
+<script src="kaiwa-live.js?v=20261127v12"></script>
 
 <script>
   // ==========================================
@@ -4373,6 +4473,7 @@
   const wrapper = elemenTombol.closest('.theme-action');
   const suaraDipilih = wrapper.querySelector('.suara-select-dinamis').value;
   const fotoDipilih = wrapper.querySelector('.foto-sensei-terpilih').value;
+  const peranDipilih = wrapper.querySelector('.peran-sensei-terpilih')?.value || '';
   const bebasPotongDipilih = wrapper.querySelector('.barge-in-select-dinamis')?.value === '1';
 
   const teksAsli = elemenTombol.innerHTML;
@@ -4399,6 +4500,7 @@
     produk: kodeProduk,
     namaTema: namaTema,
     suaraTutor: suaraDipilih,
+    peranTutor: peranDipilih,
     fotoTutor: fotoDipilih,
     bebasPotong: bebasPotongDipilih,
     selesaiResmiKL: false,
@@ -4622,6 +4724,7 @@
   tampilkanPopRingkasanSesi({
    sesi: sesi,
    koinDidapat: koinSesiIni,
+   isPengulanganLulus: Boolean(dataGasRapor.data.isPengulanganLulus),
    tagihanAkhir: Number(dataGasRapor.data.tagihan) || 0,
    isPelanggaran: isPelanggaran,
    isSelesaiPenuh: statusSelesaiPenuh
@@ -4739,7 +4842,9 @@
    highlight.innerText = sesi.namaTema || 'Latihan Kaiwa';
   }
 
-  elKoin.innerText = `+${koinDidapat.toLocaleString('id-ID')} koin`;
+  elKoin.innerText = (arguments[0]?.isPengulanganLulus)
+   ? `+0 koin (Ulang Lulus)`
+   : `+${koinDidapat.toLocaleString('id-ID')} koin`;
   elTiket.innerText = `${totalTiketDipakai} tiket`;
 
   // Susun Isi Kotak Rincian
@@ -6031,16 +6136,20 @@
       kartu.classList.remove('selected');
       kartu.style.borderColor = '#e2e8f0';
       kartu.style.background = '#fff';
-      kartu.querySelector('div').style.color = '#475569';
+      const labelEl = kartu.querySelector('.nama-peran-tutor') || kartu.querySelector('div');
+      if (labelEl) labelEl.style.color = '#475569';
     });
 
     kartuDiklik.classList.add('selected');
     kartuDiklik.style.borderColor = '#2b5cff';
     kartuDiklik.style.background = '#f0f4ff';
-    kartuDiklik.querySelector('div').style.color = '#2b5cff';
+    const labelAktif = kartuDiklik.querySelector('.nama-peran-tutor') || kartuDiklik.querySelector('div');
+    if (labelAktif) labelAktif.style.color = '#2b5cff';
 
     container.querySelector('.suara-select-dinamis').value = genderSuara;
     container.querySelector('.foto-sensei-terpilih').value = kartuDiklik.querySelector('img').src;
+    const inputPeran = container.querySelector('.peran-sensei-terpilih');
+    if (inputPeran) inputPeran.value = kartuDiklik.dataset.peran || '';
   }
 
   function pilihTabRapor(namaTab, fokusKoreksi = 'umum') {
@@ -6086,7 +6195,10 @@
 
       if (hasil.success) {
         dataRiwayatLokal = hasil.data || [];
-        sinkronkanPetaKhdDanGelar(); // Hitung ulang gembok KHD & Gelar Siswa!
+        sinkronkanPetaKhdDanGelar(); // Hitung ulang gembok KHD, Gelar, Progres & Lencana Skor!
+        perbaruiSemuaLencanaSkorKatalog();
+        renderSemuaGrafikNilai();
+        renderHalamanProgres();
         if (wadah) renderRiwayatCards();
 
         const elRataRata = document.getElementById('rataRataNilaiDisplay');
@@ -6243,11 +6355,79 @@
   return String(KAIWA_USER.statusKalibrasi || 'BELUM').toUpperCase();
  }
 
- // Override kartu aksi agar bersih dari tumpukan teks harga/denda (dipindah ke Peraturan)
+ // Helper Warna Lencana Nilai Terbaru (0-59 Merah, 60-74 Biru, 75-100 Hijau)
+ function kelasWarnaSkorProduk(nilai) {
+  const n = Number(nilai) || 0;
+  if (n >= 75) return 'skor-hijau';
+  if (n >= 60) return 'skor-biru';
+  return 'skor-merah';
+ }
+
+ function buatPetaRiwayatPerKodeProduk() {
+  const map = {};
+  // dataRiwayatLokal dari server urut kronologis; pastikan yang terakhir adalah skor terbaru
+  const urutKronologis = [...dataRiwayatLokal].sort((a, b) => (Number(a.idBaris) || 0) - (Number(b.idBaris) || 0));
+  urutKronologis.forEach(r => {
+   const kd = String(r.produk || '').trim().toUpperCase();
+   if (!kd || kd === 'UMUM' || kd.startsWith('UJI-')) return;
+   const nilai = Math.round(Number(r.nilaiTotal) || 0);
+   const inf = bedahKodeProduk(kd);
+   const detailKat = KATALOG_PRODUK_MAP[inf.kodePenuh];
+   const targetPut = Number(detailKat?.maxPutaran) || 6;
+   const rawChat = String(r.rekamanChat || '');
+   const jmlChat = (rawChat.match(/Siswa:/g) || []).length;
+   const sahTuntas = inf.mode === 'KL'
+    ? (/\[STATUS:\s*TUNTAS\]/i.test(rawChat) || jmlChat >= 3)
+    : (jmlChat >= targetPut || rawChat === '');
+
+   if (!map[inf.kodePenuh]) {
+    map[inf.kodePenuh] = { latestScore: nilai, maxScore: nilai, pernahLulusSah: false, count: 0 };
+   }
+   const st = map[inf.kodePenuh];
+   st.latestScore = nilai;
+   if (nilai > st.maxScore) st.maxScore = nilai;
+   if (nilai >= 75 && sahTuntas) st.pernahLulusSah = true;
+   st.count++;
+  });
+  return map;
+ }
+
+ function perbaruiSemuaLencanaSkorKatalog() {
+  const petaSkor = buatPetaRiwayatPerKodeProduk();
+  document.querySelectorAll('.product-box-card[data-kode-produk]').forEach(card => {
+   const kd = String(card.dataset.kodeProduk || '').trim().toUpperCase();
+   const lama = card.querySelector('.score-corner-abs');
+   if (lama) lama.remove();
+   const info = petaSkor[kd];
+   if (info && info.count > 0) {
+    const pill = document.createElement('span');
+    pill.className = `score-corner-pill score-corner-abs ${kelasWarnaSkorProduk(info.latestScore)}`;
+    pill.title = `Nilai terakhir: ${info.latestScore}/100`;
+    pill.textContent = info.latestScore;
+    card.appendChild(pill);
+   }
+  });
+ }
+
+ // Ekstrak Label Peran Wanita & Pria (Kolom G & H Sheet PRODUK, atau Default Fumi/Ken Sensei)
+ function ambilPasanganPeranProduk(dataProd) {
+  const rawW = String(dataProd?.peranWanita || '').trim();
+  const rawP = String(dataProd?.peranPria || '').trim();
+  return {
+   labelWanita: rawW || 'Fumi Sensei',
+   peranWanitaAI: rawW || '',
+   labelPria: rawP || 'Ken Sensei',
+   peranPriaAI: rawP || ''
+  };
+ }
+
+ // Override kartu aksi untuk Survival KHD agar mendukung Peran Kolom G & H
  rakitIsiAksiTemaHTML = function(grup, modeTarget = "KN") {
   const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
   let tombolHTML = "";
   let butuhSakelarAntiBocor = false;
+  const prodAcuan = (modeTarget === "KL" ? grup.KL : (grup.KN || grup.KL)) || {};
+  const peran = ambilPasanganPeranProduk(prodAcuan);
 
   if ((modeTarget === "KN" || modeTarget === "HYBRID") && grup.KN) {
    const kdKN = escapeHtml(String(grup.KN.kode).trim().toUpperCase());
@@ -6269,33 +6449,38 @@
 
   if (!tombolHTML) return "";
 
-  const htmlSakelarBocor = butuhSakelarAntiBocor ? `
-   <div style="margin-bottom: 10px;">
-    <button type="button" onclick="klikSakelarAntiBocor(this)" style="width:100%; padding:8px 12px; border-radius:10px; border:1.5px solid #86efac; background:#f0fdf4; color:#15803d; font-size:11px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit;">
-     <span>🛡️ Anti Suara Bocor: <b>AKTIF</b></span>
-     <span style="font-size:10px; text-decoration:underline;">Ubah</span>
-    </button>
-    <input type="hidden" class="barge-in-select-dinamis" value="0">
-   </div>` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
+  const htmlSakelarBocor = butuhSakelarBocorHTML(butuhSakelarAntiBocor);
 
   return `
    <div class="theme-action">
     <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-bottom: 10px;">
-     <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 8px; text-align: center; cursor: pointer; background: #f0f4ff;">
+     <div class="sensei-card selected" data-peran="${escapeHtml(peran.peranWanitaAI)}" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 12px; padding: 8px; text-align: center; cursor: pointer; background: #f0f4ff;">
       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #fff;">
-      <div style="font-size: 11.5px; font-weight: 800; color: #2b5cff;">Fumi Sensei</div>
+      <div class="nama-peran-tutor" style="font-size: 11.5px; font-weight: 800; color: #2b5cff;">${escapeHtml(peran.labelWanita)}</div>
      </div>
-     <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 8px; text-align: center; cursor: pointer; background: #fff;">
+     <div class="sensei-card" data-peran="${escapeHtml(peran.peranPriaAI)}" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 8px; text-align: center; cursor: pointer; background: #fff;">
       <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #fff;">
-      <div style="font-size: 11.5px; font-weight: 800; color: #475569;">Ken Sensei</div>
+      <div class="nama-peran-tutor" style="font-size: 11.5px; font-weight: 800; color: #475569;">${escapeHtml(peran.labelPria)}</div>
      </div>
      <input type="hidden" class="suara-select-dinamis" value="female">
+     <input type="hidden" class="peran-sensei-terpilih" value="${escapeHtml(peran.peranWanitaAI)}">
      <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
     </div>
     ${htmlSakelarBocor}
     ${tombolHTML}
    </div>`;
  };
+
+ function butuhSakelarBocorHTML(butuh) {
+  return butuh ? `
+   <div style="margin-bottom: 10px;">
+    <button type="button" onclick="klikSakelarAntiBocor(this)" style="width:100%; padding:8px 11px; border-radius:10px; border:1.5px solid #86efac; background:#f0fdf4; color:#15803d; font-size:11px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit;">
+     <span>🛡️ Anti Suara Bocor: <b>AKTIF</b></span>
+     <span style="font-size:10px; text-decoration:underline;">Ubah</span>
+    </button>
+    <input type="hidden" class="barge-in-select-dinamis" value="0">
+   </div>` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
+ }
 
  // Sub-mode MST: 1. Latihan Per Bagian vs 2. Simulasi Penuh
  function pilihSubModeMST(sub) {
@@ -6316,31 +6501,25 @@
   if (wSim) wSim.style.display = (sub === 'simulasi') ? 'block' : 'none';
  }
 
- // Pemecah Nama Produk Otomatis -> Judul Utama ("Minna no Nihongo BAB 1") & Sub Judul ("Perkenalan Diri & Identitas")
+ // Pemecah Nama Produk Otomatis -> Judul Utama ("Minna no Nihongo BAB 1") & Sub Judul
  function pecahJudulProdukKotak(namaRaw, kategori = 'BLJ', isLive = false) {
   const s = String(namaRaw || 'Latihan Percakapan').trim();
 
-  // 1. Format Minna (Tunggal maupun Gabungan "Minna Bab 1–3 — ..."):
   const mMinna = s.match(/^Minna(?:\s+no\s+Nihongo)?\s+Bab\s+([\d\-–]+)\s*[—\-–:]\s*(.+)$/i);
   if (mMinna) return { judul: `Minna no Nihongo BAB ${mMinna[1]}`, sub: mMinna[2].trim() };
 
-  // 2. Format Irodori: "Irodori Pengantar Bab 1 — ..." / "Irodori Dasar 1 Bab 5 — ..."
   const mIrodori = s.match(/^(Irodori(?:\s+[^—\-–]+?)?)\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
   if (mIrodori) return { judul: `${mIrodori[1].trim()} BAB ${mIrodori[2]}`, sub: mIrodori[3].trim() };
 
-  // 3. Format Marugoto: "Marugoto A1 Bab 2 — ..."
   const mMarugoto = s.match(/^(Marugoto(?:\s+[^—\-–]+?)?)\s+Bab\s+(\d+)\s*[—\-–:]\s*(.+)$/i);
   if (mMarugoto) return { judul: `${mMarugoto[1].trim()} BAB ${mMarugoto[2]}`, sub: mMarugoto[3].trim() };
 
-  // 4. Format Pecahan MST: "1. Salam Online & Jikoshoukai"
   const mPecahan = s.match(/^(\d+)\.\s*(.+)$/);
   if (mPecahan) return { judul: `Latihan Wawancara Bagian ${mPecahan[1]}`, sub: mPecahan[2].trim() };
 
-  // 5. Format Simulasi Wawancara: "Wawancara — Perawatan Lansia (Kaigo)"
   const mWawancara = s.match(/^Wawancara(?:\s+Live)?\s*[—\-–:]\s*(.+)$/i);
   if (mWawancara) return { judul: isLive ? 'Simulasi Wawancara Live' : 'Simulasi Wawancara HRD', sub: mWawancara[1].trim() };
 
-  // 6. Format Umum dengan pemisah "—"
   const splitDash = s.split(/\s*[—–]\s*/);
   if (splitDash.length >= 2) return { judul: splitDash[0].trim(), sub: splitDash.slice(1).join(' — ').trim() };
 
@@ -6350,7 +6529,7 @@
   };
  }
 
- // Rakit Kartu Kotak Produk (Setara 3 Baris, Sensei & Info Kuota/Tiket Tampil Langsung)
+ // Rakit Kartu Kotak Produk (Katalog Percakapan & Live + Lencana Nilai Pojok Kanan Atas + Peran Kolom G-H)
  function rakitKartuKotakProdukHTML(grup, modeTarget = "KN", ikon = "📘") {
   const isKL = (modeTarget === "KL");
   const dataProd = isKL ? grup.KL : grup.KN;
@@ -6358,10 +6537,18 @@
 
   const infoJudul = pecahJudulProdukKotak(grup.nama || dataProd.nama, grup.kategori, isKL);
   const namaAman = escapeHtml(grup.nama || dataProd.nama || 'Latihan');
-  const kdAman = escapeHtml(String(dataProd.kode || '').trim().toUpperCase());
+  const kdUpper = String(dataProd.kode || '').trim().toUpperCase();
+  const kdAman = escapeHtml(kdUpper);
   const deskAman = escapeHtml(grup.deskripsi || dataProd.deskripsi || 'Latihan percakapan terarah bersama AI Sensei.');
   const maxPut = Number(dataProd.maxPutaran) || 7;
   const totTiket = Number(dataProd.hargaPenuh) || (3 + maxPut + 2);
+  const peran = ambilPasanganPeranProduk(dataProd);
+
+  const petaSkor = buatPetaRiwayatPerKodeProduk();
+  const stSkor = petaSkor[kdUpper];
+  const badgeSkorHTML = (stSkor && stSkor.count > 0)
+   ? `<span class="score-corner-pill score-corner-abs ${kelasWarnaSkorProduk(stSkor.latestScore)}" title="Nilai terakhir: ${stSkor.latestScore}/100">${stSkor.latestScore}</span>`
+   : '';
 
   let metaBaris1 = `<div class="pbc-meta-line"><span>💬 Jumlah percakapan :</span> <strong>${maxPut} percakapan</strong></div>`;
   let metaBaris2 = `<div class="pbc-meta-line"><span>🎫 Tiket yang dibutuhkan :</span> <strong style="color:var(--primary);">${totTiket} tiket</strong></div>`;
@@ -6373,23 +6560,16 @@
    metaBaris2 = `<div class="pbc-meta-line"><span>🎫 Tiket yang dibutuhkan :</span> <strong style="color:#0f766e;">Maks. ${totTiket} tiket</strong></div>`;
   }
 
-  const sakelarLive = isKL ? `
-   <div style="margin-bottom: 10px;">
-    <button type="button" onclick="klikSakelarAntiBocor(this)" style="width:100%; padding:8px 11px; border-radius:10px; border:1.5px solid #86efac; background:#f0fdf4; color:#15803d; font-size:11px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit;">
-     <span>🛡️ Anti Suara Bocor: <b>AKTIF</b></span>
-     <span style="font-size:10px; text-decoration:underline;">Ubah</span>
-    </button>
-    <input type="hidden" class="barge-in-select-dinamis" value="0">
-   </div>` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
-
+  const sakelarLive = butuhSakelarBocorHTML(isKL);
   const bgIkon = grup.kategori === 'MST' ? '#fff1f2' : (isKL ? '#ccfbf1' : '#eff6ff');
   const warnaBtn = isKL ? '#0d9488' : (grup.kategori === 'MST' ? '#be123c' : 'var(--primary)');
   const ikonBtn = isKL ? 'fa-phone-alt' : 'fa-comments';
   const teksBtn = isKL ? 'Mulai Telepon Live' : 'Mulai Percakapan';
 
   return `
-   <div class="theme-item product-box-card">
-    <div>
+   <div class="theme-item product-box-card" data-kode-produk="${kdAman}">
+    ${badgeSkorHTML}
+    <div style="${badgeSkorHTML ? 'padding-right: 42px;' : ''}">
      <div class="pbc-head-row">
       <div class="pbc-icon-box" style="background:${bgIkon};">${ikon}</div>
       <div>
@@ -6408,15 +6588,16 @@
 
      <div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Pilih Suara Tutor:</div>
      <div class="sensei-selection-container" style="display: flex; gap: 8px; margin-bottom: 10px;">
-      <div class="sensei-card selected" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #f0f4ff;">
+      <div class="sensei-card selected" data-peran="${escapeHtml(peran.peranWanitaAI)}" onclick="pilihSensei(this, 'female')" style="flex: 1; border: 2px solid #2b5cff; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #f0f4ff;">
        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #fff; flex-shrink: 0;">
-       <div style="font-size: 11.5px; font-weight: 800; color: #2b5cff;">Fumi Sensei</div>
+       <div class="nama-peran-tutor" style="font-size: 11.5px; font-weight: 800; color: #2b5cff;">${escapeHtml(peran.labelWanita)}</div>
       </div>
-      <div class="sensei-card" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #fff;">
+      <div class="sensei-card" data-peran="${escapeHtml(peran.peranPriaAI)}" onclick="pilihSensei(this, 'male')" style="flex: 1; border: 2px solid #e2e8f0; border-radius: 10px; padding: 7px 8px; display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; background: #fff;">
        <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #fff; flex-shrink: 0;">
-       <div style="font-size: 11.5px; font-weight: 800; color: #475569;">Ken Sensei</div>
+       <div class="nama-peran-tutor" style="font-size: 11.5px; font-weight: 800; color: #475569;">${escapeHtml(peran.labelPria)}</div>
       </div>
       <input type="hidden" class="suara-select-dinamis" value="female">
+      <input type="hidden" class="peran-sensei-terpilih" value="${escapeHtml(peran.peranWanitaAI)}">
       <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
      </div>
 
@@ -6437,12 +6618,17 @@
    { judul: "4. Pengalaman & Kasus Lapangan", ket: "Latihan menjawab perbedaan pengalaman kerja serta studi kasus kejutan (Hourensou).", kodeKN: "KN-MST-LAT[KASUS]", putaran: 6, tiket: 12 },
    { judul: "5. Gyakushitsumon & Salam Penutup", ket: "Latihan mengajukan pertanyaan balik ke Direktur dan etika menutup wawancara online.", kodeKN: "KN-MST-LAT[PENUTUP]", putaran: 4, tiket: 10 }
   ];
+  daftarPecahan.forEach(p => {
+   if (!KATALOG_PRODUK_MAP[p.kodeKN]) {
+    KATALOG_PRODUK_MAP[p.kodeKN] = { kode: p.kodeKN, nama: p.judul, deskripsi: p.ket, tiketMasuk: 3, tiketPerPutaran: 1, maxPutaran: p.putaran, hargaPenuh: p.tiket };
+   }
+  });
   const wKN = document.getElementById('wadah-tema-mst-latihan');
   const wKL = document.getElementById('wadah-live-mst-latihan');
   if (wKN && wKN.innerHTML.trim() === '') {
    wKN.innerHTML = daftarPecahan.map(p => rakitKartuKotakProdukHTML({
     nama: p.judul, deskripsi: p.ket, kategori: 'MST',
-    KN: { kode: p.kodeKN, maxPutaran: p.putaran, hargaPenuh: p.tiket }
+    KN: KATALOG_PRODUK_MAP[p.kodeKN]
    }, 'KN', '🎯')).join('');
   }
   if (wKL && wKL.innerHTML.trim() === '') {
@@ -6453,7 +6639,256 @@
   }
  }
 
- // Simbol Verifikasi Profil (✓ Biru / 📖 Buku / ✕ Silang) & Pangkat 2 Lapis
+ // =========================================================
+ // MESIN GRAFIK GARIS PERKEMBANGAN NILAI (DASHBOARD & PROGRES)
+ // =========================================================
+ function buatGrafikNilaiSvgHTML(points, tinggiSvg = 155) {
+  if (!points || points.length === 0) {
+   return `<div style="text-align:center; padding:26px 8px; font-size:12px; color:#94a3b8;">Selesaikan minimal 1 sesi latihan untuk melihat grafik perkembangan nilaimu.</div>`;
+  }
+
+  const lebar = 460;
+  const padL = 32, padR = 16, padT = 18, padB = 26;
+  const wPlot = lebar - padL - padR;
+  const hPlot = tinggiSvg - padT - padB;
+  const yDariSkor = (s) => padT + hPlot - ((Math.min(100, Math.max(0, s)) / 100) * hPlot);
+  const xDariIdx = (i) => points.length === 1 ? (padL + wPlot / 2) : (padL + (i / (points.length - 1)) * wPlot);
+
+  const y75 = yDariSkor(75);
+  const y50 = yDariSkor(50);
+  const y100 = yDariSkor(100);
+  const y0 = yDariSkor(0);
+
+  const koordinat = points.map((p, i) => ({ x: xDariIdx(i), y: yDariSkor(p.skor), skor: p.skor, label: p.label }));
+  const garisPoints = koordinat.map(k => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(' ');
+  const areaPoints = `${koordinat[0].x.toFixed(1)},${y0.toFixed(1)} ${garisPoints} ${koordinat[koordinat.length - 1].x.toFixed(1)},${y0.toFixed(1)}`;
+
+  const titikHTML = koordinat.map((k, idx) => {
+   const warnaTitik = k.skor >= 75 ? '#16a34a' : (k.skor >= 60 ? '#2563eb' : '#dc2626');
+   const tampilAngka = points.length <= 10 || idx === 0 || idx === koordinat.length - 1 || idx % 2 === 0;
+   return `
+    <g>
+     <title>Sesi #${idx + 1} (${escapeHtml(k.label)}): ${k.skor}</title>
+     <circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="4.5" fill="${warnaTitik}" stroke="#ffffff" stroke-width="2"></circle>
+     ${tampilAngka ? `<text x="${k.x.toFixed(1)}" y="${Math.max(11, k.y - 8).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="${warnaTitik}">${k.skor}</text>` : ''}
+     <text x="${k.x.toFixed(1)}" y="${(tinggiSvg - 7).toFixed(1)}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#94a3b8">#${idx + 1}</text>
+    </g>
+   `;
+  }).join('');
+
+  return `
+   <svg viewBox="0 0 ${lebar} ${tinggiSvg}" style="width:100%; height:auto; display:block; overflow:visible;">
+    <defs>
+     <linearGradient id="gradAreaNeexa" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
+     </linearGradient>
+    </defs>
+    <line x1="${padL}" y1="${y100}" x2="${lebar - padR}" y2="${y100}" stroke="#f1f5f9" stroke-width="1"/>
+    <line x1="${padL}" y1="${y50}" x2="${lebar - padR}" y2="${y50}" stroke="#f1f5f9" stroke-width="1"/>
+    <line x1="${padL}" y1="${y0}" x2="${lebar - padR}" y2="${y0}" stroke="#e2e8f0" stroke-width="1.2"/>
+    <line x1="${padL}" y1="${y75}" x2="${lebar - padR}" y2="${y75}" stroke="#22c55e" stroke-width="1.3" stroke-dasharray="4,4"/>
+    <text x="${padL - 6}" y="${y100 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">100</text>
+    <text x="${padL - 6}" y="${y75 + 3}" text-anchor="end" font-size="9.5" font-weight="800" fill="#16a34a">75</text>
+    <text x="${padL - 6}" y="${y50 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">50</text>
+    <text x="${padL - 6}" y="${y0 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">0</text>
+    ${koordinat.length >= 2 ? `<polygon points="${areaPoints}" fill="url(#gradAreaNeexa)"/>` : ''}
+    ${koordinat.length >= 2 ? `<polyline fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" points="${garisPoints}"/>` : ''}
+    ${titikHTML}
+   </svg>
+  `;
+ }
+
+ function renderSemuaGrafikNilai() {
+  const urut = [...dataRiwayatLokal]
+   .filter(r => !String(r.produk || '').toUpperCase().startsWith('UJI-'))
+   .sort((a, b) => (Number(a.idBaris) || 0) - (Number(b.idBaris) || 0));
+
+  const data12Terakhir = urut.slice(-12).map(r => ({
+   skor: Math.round(Number(r.nilaiTotal) || 0),
+   label: String(r.produk || 'Latihan')
+  }));
+
+  const teksJml = urut.length > 12 ? `12 Sesi Terakhir` : `${urut.length} Sesi`;
+  const elLblDash = document.getElementById('labelInfoGrafikDash');
+  const elLblProg = document.getElementById('labelInfoGrafikProgres');
+  if (elLblDash) elLblDash.innerText = teksJml;
+  if (elLblProg) elLblProg.innerText = teksJml;
+
+  const wDash = document.getElementById('wadahGrafikNilaiDashboard');
+  const wProg = document.getElementById('wadahGrafikNilaiProgres');
+  if (wDash) wDash.innerHTML = buatGrafikNilaiSvgHTML(data12Terakhir, 160);
+  if (wProg) wProg.innerHTML = buatGrafikNilaiSvgHTML(data12Terakhir, 175);
+ }
+
+ // =========================================================
+ // MESIN KURIKULUM PRODUK LANGSUNG & AUTO-SYNC PROGRES
+ // =========================================================
+ function ekstrakNomorUrutBabProduk(item) {
+  const kd = String(item.kode || '').toUpperCase();
+  const nm = String(item.nama || '');
+  if (kd.includes('MINNA_01_03')) return 3;
+  const mKd = kd.match(/(?:MINNA|IRODORI_[A-Z0-9]+|MARUGOTO_[A-Z0-9]+)_(\d+)/);
+  if (mKd) return parseInt(mKd[1], 10) || 1;
+  const mNm = nm.match(/Bab\s+(\d+)/i);
+  if (mNm) return parseInt(mNm[1], 10) || 1;
+  return 999;
+ }
+
+ function deteksiJalurBukuUser() {
+  const k = String(KAIWA_USER.konteksKalibrasi || '').toUpperCase();
+  const rek = String(KAIWA_USER.rekomendasiMulai || '').toUpperCase();
+  if (k.includes('IRODORI') || rek.includes('IRODORI')) return 'IRODORI';
+  if (k.includes('MARUGOTO') || rek.includes('MARUGOTO')) return 'MARUGOTO';
+  return 'MINNA';
+ }
+
+ function susunDaftarProdukProgresUser() {
+  const semuaKN = Object.values(KATALOG_PRODUK_MAP).filter(p => !String(p.kode || '').toUpperCase().startsWith('KL-'));
+  const bukuPilihan = deteksiJalurBukuUser();
+
+  // 1. Produk BLJ sesuai buku user (jika buku Irodori/Marugoto belum ada di Sheet PRODUK, otomatis setara ke MINNA!)
+  let bljSemua = semuaKN.filter(p => bedahKodeProduk(p.kode).kategori === 'BLJ');
+  let bljBuku = bljSemua.filter(p => String(p.kode).includes(bukuPilihan) || String(p.nama).toUpperCase().includes(bukuPilihan));
+  if (bljBuku.length === 0) {
+   bljBuku = bljSemua.filter(p => String(p.kode).includes('MINNA') || String(p.nama).toUpperCase().includes('MINNA'));
+  }
+  if (bljBuku.length === 0) bljBuku = bljSemua;
+
+  const bobotTier = { BSC: 100, MID: 200, PRO: 300 };
+  bljBuku.sort((a, b) => {
+   const uA = ekstrakNomorUrutBabProduk(a);
+   const uB = ekstrakNomorUrutBabProduk(b);
+   if (uA !== uB) return uA - uB;
+   return (bobotTier[bedahKodeProduk(a.kode).tier] || 100) - (bobotTier[bedahKodeProduk(b.kode).tier] || 100);
+  });
+
+  // 2. Produk Latihan Wawancara Per Bagian (MST-LAT 1 s/d 5)
+  const urutanLat = ['JIKOSHOUKAI', 'DOUKI', 'PR', 'KASUS', 'PENUTUP'];
+  const mstLat = semuaKN
+   .filter(p => String(p.kode).includes('MST-LAT') || String(p.kode).includes('LAT['))
+   .sort((a, b) => {
+    const idxA = urutanLat.findIndex(k => String(a.kode).includes(k));
+    const idxB = urutanLat.findIndex(k => String(b.kode).includes(k));
+    return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+   });
+
+  // 3. Produk Simulasi Wawancara Penuh HRD (Utamakan yang cocok dengan bidang/tujuan user di urutan depan)
+  const konteksUser = String(KAIWA_USER.konteksKalibrasi || KAIWA_USER.sertifikatSsw || '').toUpperCase();
+  const mstSim = semuaKN
+   .filter(p => {
+    const inf = bedahKodeProduk(p.kode);
+    return inf.kategori === 'MST' && !String(p.kode).includes('MST-LAT') && !String(p.kode).includes('LAT[');
+   })
+   .sort((a, b) => {
+    const cocokA = konteksUser && (konteksUser.includes(a.nama.toUpperCase()) || a.nama.toUpperCase().split(/\s+/).some(w => w.length > 4 && konteksUser.includes(w))) ? 0 : 1;
+    const cocokB = konteksUser && (konteksUser.includes(b.nama.toUpperCase()) || b.nama.toUpperCase().split(/\s+/).some(w => w.length > 4 && konteksUser.includes(w))) ? 0 : 1;
+    return cocokA - cocokB;
+   });
+
+  // 4. Produk Survival Kehidupan Jepang (KHD urut Level & Sesi)
+  const khdList = semuaKN
+   .filter(p => bedahKodeProduk(p.kode).kategori === 'KHD')
+   .sort((a, b) => {
+    const iA = bedahKodeProduk(a.kode), iB = bedahKodeProduk(b.kode);
+    return (iA.levelKHD - iB.levelKHD) || (iA.urutSesiKHD - iB.urutSesiKHD);
+   });
+
+  return [...bljBuku, ...mstLat, ...mstSim, ...khdList];
+ }
+
+ // Konversi Teks Konteks / Kode Lama Siswa (Tanpa Harus Mengulang Tes!) ke Angka Bab Setara Minna
+ function hitungBabJangkarDariKonteks(teksKonteks) {
+  const s = String(teksKonteks || '').trim();
+  const mMinna = s.match(/Minna\s+Bab\s+(\d+)/i);
+  if (mMinna) return parseInt(mMinna[1], 10) || 1;
+
+  const mIro1 = s.match(/Irodori\s+Pengantar\s+Bab\s+(\d+)/i);
+  if (mIro1) return Math.max(1, Math.min(18, parseInt(mIro1[1], 10) || 1));
+  const mIro2 = s.match(/Irodori\s+Dasar\s*1\s+Bab\s+(\d+)/i);
+  if (mIro2) return 18 + Math.min(17, parseInt(mIro2[1], 10) || 1);
+  const mIro3 = s.match(/Irodori\s+Dasar\s*2\s+Bab\s+(\d+)/i);
+  if (mIro3) return 35 + Math.min(15, parseInt(mIro3[1], 10) || 1);
+
+  const mMar1 = s.match(/Marugoto\s+A1\s+Bab\s+(\d+)/i);
+  if (mMar1) return Math.max(1, Math.min(18, parseInt(mMar1[1], 10) || 1));
+  const mMar2 = s.match(/Marugoto\s+A2(?:-1|-2)?\s+Bab\s+(\d+)/i);
+  if (mMar2) return 18 + Math.min(20, parseInt(mMar2[1], 10) || 1);
+
+  const mBabUmum = s.match(/Bab\s+(\d+)/i);
+  if (mBabUmum) return parseInt(mBabUmum[1], 10) || 1;
+
+  if (/N3|N2|N1|3Q|2Q|1Q/i.test(s)) return 50;
+  if (/JFT|A2|N4|4Q/i.test(s)) return 38;
+  if (/N5|5Q/i.test(s)) return 25;
+  return 1;
+ }
+
+ // Mencari Indeks Produk Rekomendasi Aktif Saat Ini (Auto-Sync Profil Lama + Auto-Naik Saat Lulus / Lompat!)
+ function tentukanIndeksRekomendasiAktif(jalurProduk, petaSkor) {
+  if (!jalurProduk || jalurProduk.length === 0) return 0;
+
+  const rekSimpan = String(KAIWA_USER.rekomendasiMulai || '').trim().toUpperCase();
+  const konteks = String(KAIWA_USER.konteksKalibrasi || '');
+
+  // 1. Tentukan titik mulai dasar dari hasil Uji Kemampuan (mendukung kode produk spesifik maupun kode kategori lama)
+  let idxDasar = jalurProduk.findIndex(p => String(p.kode).toUpperCase() === rekSimpan);
+
+  if (idxDasar === -1) {
+   if (rekSimpan === 'KHD' || /Persiapan Terbang/i.test(konteks)) {
+    idxDasar = jalurProduk.findIndex(p => bedahKodeProduk(p.kode).kategori === 'KHD');
+   } else if (rekSimpan === 'MST-SIM') {
+    idxDasar = jalurProduk.findIndex(p => bedahKodeProduk(p.kode).kategori === 'MST' && !String(p.kode).includes('MST-LAT'));
+   } else if (rekSimpan === 'MST-LAT') {
+    idxDasar = jalurProduk.findIndex(p => String(p.kode).includes('MST-LAT'));
+   } else {
+    const targetBab = rekSimpan === 'BLJ-PRO' ? 36 : (rekSimpan === 'BLJ-MID' ? 19 : hitungBabJangkarDariKonteks(konteks));
+    const listBljIdx = [];
+    jalurProduk.forEach((p, idx) => {
+     if (bedahKodeProduk(p.kode).kategori === 'BLJ') {
+      listBljIdx.push({ idx, bab: ekstrakNomorUrutBabProduk(p) });
+     }
+    });
+    if (listBljIdx.length > 0) {
+     // Cari bab yang sama persis atau bab terdekat yang tersedia di Sheet PRODUK
+     const pasAtauAtas = listBljIdx.find(x => x.bab >= targetBab);
+     idxDasar = pasAtauAtas ? pasAtauAtas.idx : listBljIdx[listBljIdx.length - 1].idx;
+    }
+   }
+  }
+  if (idxDasar < 0) idxDasar = 0;
+
+  // 2. Deteksi Lompat / Kelulusan Terbaru dari Riwayat Rapor (Nilai >= 75)!
+  let idxLulusTertinggi = -1;
+  jalurProduk.forEach((prod, idx) => {
+   const kd = String(prod.kode).toUpperCase();
+   const st = petaSkor[kd];
+   if (st && (st.pernahLulusSah || st.maxScore >= 75)) {
+    if (idx > idxLulusTertinggi) idxLulusTertinggi = idx;
+   }
+  });
+
+  let idxRekomendasi = Math.max(idxDasar, idxLulusTertinggi + 1);
+  // Jika pada titik idxRekomendasi ternyata juga sudah lulus >=75, geser terus ke produk pertama yang belum lulus
+  while (idxRekomendasi < jalurProduk.length - 1) {
+   const kdCek = String(jalurProduk[idxRekomendasi].kode).toUpperCase();
+   if (petaSkor[kdCek] && petaSkor[kdCek].maxScore >= 75) idxRekomendasi++;
+   else break;
+  }
+
+  return Math.min(idxRekomendasi, jalurProduk.length - 1);
+ }
+
+ // Buka/Tutup Pilihan Sensei Langsung pada Produk Non-Rekomendasi di Halaman Progres
+ function toggleMulaiProdukProgres(idDrawer) {
+  const el = document.getElementById(idDrawer);
+  if (!el) return;
+  const sedangTerbuka = !el.classList.contains('hidden');
+  document.querySelectorAll('.progres-inline-drawer').forEach(d => d.classList.add('hidden'));
+  if (!sedangTerbuka) el.classList.remove('hidden');
+ }
+
+ // Simbol Verifikasi Profil & Sinkronisasi Pangkat + Banner Rekomendasi Spesifik Produk
  function perbaruiSimbolVerifikasiDanBanner() {
   const st = ambilStatusKalibrasiUser();
   const badge = document.getElementById('badgeVerifProfil');
@@ -6474,33 +6909,36 @@
     badge.title = 'Belum Uji Kemampuan';
    }
   }
-  if (barChat) {
-   barChat.classList.toggle('hidden', st !== 'CHAT');
-  }
+  if (barChat) barChat.classList.toggle('hidden', st !== 'CHAT');
 
-  // Hitung Pangkat Utama (Nama Ringkas V3)
-  const rekKode = KAIWA_USER.rekomendasiMulai || 'BLJ-BSC';
+  isiContohLatihanPecahanMST();
+  const jalur = susunDaftarProdukProgresUser();
+  const petaSkor = buatPetaRiwayatPerKodeProduk();
+  const idxAktif = tentukanIndeksRekomendasiAktif(jalur, petaSkor);
+  const prodAktif = jalur[idxAktif] || null;
+  const infAktif = prodAktif ? bedahKodeProduk(prodAktif.kode) : { kategori: 'BLJ', tier: 'BSC' };
+
   let pangkat = '😴 Tamu Baru';
   let subPangkat = 'Selesaikan Uji Kemampuan Suara';
   let bgP = '#f1f5f9', colP = '#475569', brdP = '#cbd5e1';
 
   if (st === 'SUARA') {
-   if (rekKode === 'LIVE') {
+   if (String(KAIWA_USER.rekomendasiMulai || '').toUpperCase() === 'LIVE') {
     pangkat = '👑 Master'; subPangkat = 'Siap tempur di Percakapan Live';
     bgP = '#fef9c3'; colP = '#a16207'; brdP = '#fde047';
-   } else if (rekKode === 'KHD') {
+   } else if (infAktif.kategori === 'KHD') {
     pangkat = '✈️ Elite'; subPangkat = 'Fokus Survival Kehidupan Jepang';
     bgP = '#dcfce7'; colP = '#047857'; brdP = '#6ee7b7';
-   } else if (rekKode === 'MST-SIM') {
+   } else if (infAktif.kategori === 'MST' && !String(prodAktif?.kode || '').includes('MST-LAT')) {
     pangkat = '💼 Kandidat'; subPangkat = 'Fokus Simulasi Wawancara HRD';
     bgP = '#ffe4e6'; colP = '#be123c'; brdP = '#fda4af';
-   } else if (rekKode === 'MST-LAT') {
+   } else if (infAktif.kategori === 'MST') {
     pangkat = '🎯 Pejuang'; subPangkat = 'Latihan Wawancara Kerja Jepang';
     bgP = '#fce7f3'; colP = '#9d174d'; brdP = '#f9a8d4';
-   } else if (rekKode === 'BLJ-PRO') {
+   } else if (infAktif.tier === 'PRO') {
     pangkat = '⚡ Dai Senpai'; subPangkat = 'Level Mahir Jokyu (Pro)';
     bgP = '#ede9fe'; colP = '#6d28d9'; brdP = '#c4b5fd';
-   } else if (rekKode === 'BLJ-MID') {
+   } else if (infAktif.tier === 'MID') {
     pangkat = '📘 Senpai'; subPangkat = 'Aktif di jalur Chukyu (Mid)';
     bgP = '#dbeafe'; colP = '#1d4ed8'; brdP = '#93c5fd';
    } else {
@@ -6521,60 +6959,168 @@
   const elMG = document.getElementById('profilModalGelar');
   if (elMG) { elMG.innerText = pangkat; elMG.style.color = colP; }
 
-  const labelRek = KAIWA_USER.labelRekomendasi || 'Belajar — Shokyu (Basic)';
+  const judulTarget = prodAktif
+   ? pecahJudulProdukKotak(prodAktif.nama, infAktif.kategori, false).judul
+   : (KAIWA_USER.labelRekomendasi || 'Minna no Nihongo BAB 1–3');
+
   const elJudulMisi = document.getElementById('dashJudulMisi');
   const elSubMisi = document.getElementById('dashSubMisi');
   const elBdgRek = document.getElementById('dashBadgeRekomendasi');
-  if (elBdgRek) elBdgRek.innerText = '★ MULAI DARI: ' + labelRek.toUpperCase();
+  if (elBdgRek) elBdgRek.innerText = '★ REKOMENDASI: ' + judulTarget.toUpperCase();
   if (elJudulMisi) elJudulMisi.innerText = 'Lanjutkan Progres Belajarmu!';
-  if (elSubMisi) elSubMisi.innerText = `Tahap aktifmu saat ini: ${labelRek}.`;
+  if (elSubMisi) elSubMisi.innerText = prodAktif ? `${prodAktif.nama}` : 'Ikuti peta produk yang selaras dengan materimu.';
 
-  isiContohLatihanPecahanMST();
   renderHalamanProgres();
   renderMiniProgresLeaderboard();
+  renderSemuaGrafikNilai();
  }
 
- // Render Menu PROGRES dengan Alur: 1. Belajar -> 2. Wawancara -> 3. Survival -> Live
+ // Render Halaman PROGRES: Produk Langsung + Selesai Abu-abu + Rekomendasi Besar Kuning + Auto-Scroll Space 1 Produk
  function renderHalamanProgres() {
   const wadah = document.getElementById('wadahJalurProgres');
   if (!wadah) return;
 
-  const KURIKULUM_URUT = [
-   { kode: 'BLJ-BSC', ikon: '🐣', judul: 'Tahap 1: Belajar — Shokyu (Basic)', ket: 'Minna no Nihongo 1 (Bab 1–18) • Irodori Pengantar • Marugoto A1', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-bsc');" },
-   { kode: 'BLJ-MID', ikon: '🔥', judul: 'Tahap 2: Belajar — Chukyu (Mid)', ket: 'Minna no Nihongo (Bab 19–35) • Irodori A2-1 • Marugoto A2-1', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-mid');" },
-   { kode: 'BLJ-PRO', ikon: '👑', judul: 'Tahap 3: Belajar — Jokyu (Pro)', ket: 'Minna no Nihongo 2 (Bab 36–50) • Irodori A2-2 • Marugoto A2-2', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-pro');" },
-   { kode: 'MST-LAT', ikon: '🎯', judul: 'Tahap 4: Latihan Wawancara (Per Bagian)', ket: 'Pemanasan Jikoshoukai, Shibou Douki, Kasus Lapangan & Gyakushitsumon', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('mst'); pilihSubModeMST('latihan');" },
-   { kode: 'MST-SIM', ikon: '🏢', judul: 'Tahap 5: Simulasi Wawancara Penuh HRD', ket: 'Ujian 5 Fase penuh bersama Direktur Perusahaan Jepang (16 Bidang SSW)', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('mst'); pilihSubModeMST('simulasi');" },
-   { kode: 'KHD',     ikon: '✈️', judul: 'Tahap 6: Survival Kehidupan Jepang', ket: 'Persiapan terbang: Imigrasi Bandara, Balai Kota, Bank, Supermarket & Asrama', aksi: "bukaTab('survival');" },
-   { kode: 'LIVE',    ikon: '📞', judul: 'Tahap Puncak: Percakapan & Wawancara LIVE', ket: 'Telepon dua arah real-time tanpa tombol rekam untuk refleks sempurna', aksi: "bukaTab('latihan-live');" }
-  ];
-
-  const rekAktif = KAIWA_USER.rekomendasiMulai || 'BLJ-BSC';
-  let idxMulai = KURIKULUM_URUT.findIndex(k => k.kode === rekAktif);
-  if (idxMulai < 0) idxMulai = 0;
-
-  const subInfo = document.getElementById('subInfoProgresKalibrasi');
-  if (subInfo && KAIWA_USER.konteksKalibrasi) {
-   subInfo.innerText = `Disusun dari profilmu (${KAIWA_USER.konteksKalibrasi}). Buka menu Latihan jika ingin melompat bebas.`;
+  isiContohLatihanPecahanMST();
+  const jalur = susunDaftarProdukProgresUser();
+  if (jalur.length === 0) {
+   wadah.innerHTML = `<div style="background:#fff; border:2px dashed #cbd5e1; border-radius:16px; padding:28px; text-align:center; color:#94a3b8; font-size:13px;">Memuat peta produk belajarmu...</div>`;
+   return;
   }
 
-  const daftarTampil = KURIKULUM_URUT.slice(idxMulai);
-  wadah.innerHTML = daftarTampil.map((item, i) => {
-   const isUtama = (i === 0);
-   return `
-    <div class="progres-step-card ${isUtama ? 'rekomendasi-utama' : ''}">
-     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-      <div style="flex:1; min-width:210px;">
-       ${isUtama ? `<div class="badge-rekomendasi" style="margin-bottom:6px;">★ REKOMENDASI UNTUKMU — MULAI DI SINI</div>` : `<div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Tahap Selanjutnya</div>`}
-       <h3 style="margin:0 0 4px 0; font-size:16px; font-weight:800; color:var(--text-main);">${item.ikon} ${escapeHtml(item.judul)}</h3>
-       <p style="margin:0; font-size:12.5px; color:#475569;">${escapeHtml(item.ket)}</p>
+  const petaSkor = buatPetaRiwayatPerKodeProduk();
+  const idxRek = tentukanIndeksRekomendasiAktif(jalur, petaSkor);
+
+  wadah.innerHTML = jalur.map((prod, idx) => {
+   const kdUpper = String(prod.kode || '').trim().toUpperCase();
+   const kdAman = escapeHtml(kdUpper);
+   const inf = bedahKodeProduk(kdUpper);
+   const infoJudul = pecahJudulProdukKotak(prod.nama, inf.kategori, false);
+   const namaAman = escapeHtml(prod.nama || infoJudul.judul);
+   const deskAman = escapeHtml(prod.deskripsi || 'Latihan percakapan terarah bersama AI Sensei.');
+   const stSkor = petaSkor[kdUpper];
+   const sudahPernah = Boolean(stSkor && stSkor.count > 0);
+   const peran = ambilPasanganPeranProduk(prod);
+   const maxPut = Number(prod.maxPutaran) || 7;
+   const totTiket = Number(prod.hargaPenuh) || (3 + maxPut + 2);
+
+   let ikonItem = '📘';
+   if (inf.kategori === 'KHD') ikonItem = '✈️';
+   else if (inf.kategori === 'MST') ikonItem = kdUpper.includes('MST-LAT') ? '🎯' : '🏢';
+   else if (String(prod.nama).toUpperCase().includes('PERKENALAN')) ikonItem = '👋';
+
+   const badgeNilaiHTML = sudahPernah
+    ? `<span class="score-corner-pill ${kelasWarnaSkorProduk(stSkor.latestScore)}" title="Nilai terakhir: ${stSkor.latestScore}/100">${stSkor.latestScore}</span>`
+    : '';
+
+   // 1. KOTAK PRODUK REKOMENDASI UTAMA (Diperbesar Setara 2 Kotak + Border Kuning + Isi Persis Foto 2)
+   if (idx === idxRek) {
+    return `
+     <div class="progres-rek-card-besar" id="kartuProgresIdx_${idx}">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px;">
+       <span class="badge-rekomendasi">REKOMENDASI</span>
+       ${badgeNilaiHTML}
       </div>
-      <button type="button" class="btn" onclick="${item.aksi}" style="width:auto; padding:10px 18px; font-size:12.5px; background:${isUtama ? '#2563eb' : 'var(--primary)'};">
-       ${isUtama ? 'Mulai Sekarang' : 'Buka'} &rarr;
-      </button>
+
+      <div class="pbc-head-row" style="margin-bottom:10px;">
+       <div class="pbc-icon-box" style="background:#fef9c3; width:46px; height:46px; font-size:22px;">${ikonItem}</div>
+       <div>
+        <h3 class="pbc-main-title" style="font-size:17px;">${escapeHtml(infoJudul.judul)}</h3>
+        <div class="pbc-sub-title" style="font-size:13.5px;">${escapeHtml(infoJudul.sub)}</div>
+       </div>
+      </div>
+
+      <p class="pbc-desc" style="font-size:12.5px; margin-bottom:14px;">${deskAman}</p>
+
+      <div class="theme-action" style="padding:14px; background:#ffffff; border:1.5px dashed #cbd5e1; border-radius:14px;">
+       <div class="pbc-meta-box">
+        <div class="pbc-meta-line"><span>💬 Jumlah percakapan :</span> <strong>${maxPut} percakapan</strong></div>
+        <div class="pbc-meta-line"><span>🎫 Tiket yang dibutuhkan :</span> <strong style="color:var(--primary);">${totTiket} tiket</strong></div>
+       </div>
+
+       <div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:6px;">Pilih Suara Tutor:</div>
+       <div class="sensei-selection-container" style="display:flex; gap:8px; margin-bottom:10px;">
+        <div class="sensei-card selected" data-peran="${escapeHtml(peran.peranWanitaAI)}" onclick="pilihSensei(this, 'female')" style="flex:1; border:2px solid #2b5cff; border-radius:10px; padding:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#f0f4ff;">
+         <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#fff; flex-shrink:0;">
+         <div class="nama-peran-tutor" style="font-size:12px; font-weight:800; color:#2b5cff;">${escapeHtml(peran.labelWanita)}</div>
+        </div>
+        <div class="sensei-card" data-peran="${escapeHtml(peran.peranPriaAI)}" onclick="pilihSensei(this, 'male')" style="flex:1; border:2px solid #e2e8f0; border-radius:10px; padding:8px; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#fff;">
+         <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width:32px; height:32px; border-radius:50%; object-fit:cover; background:#fff; flex-shrink:0;">
+         <div class="nama-peran-tutor" style="font-size:12px; font-weight:800; color:#475569;">${escapeHtml(peran.labelPria)}</div>
+        </div>
+        <input type="hidden" class="suara-select-dinamis" value="female">
+        <input type="hidden" class="peran-sensei-terpilih" value="${escapeHtml(peran.peranWanitaAI)}">
+        <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+       </div>
+
+       <input type="hidden" class="barge-in-select-dinamis" value="0">
+       <button class="btn btn-mulai-dinamis" data-kode="${kdAman}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="padding:12px; font-size:13.5px;">
+        <i class="fas fa-comments"></i> Mulai Percakapan
+       </button>
+      </div>
+     </div>`;
+   }
+
+   // 2. KOTAK PRODUK RINGKAS (Sudah Dikerjakan = Abu-abu + Angka Nilai | Belum Dikerjakan = Putih Bersih + Tombol "Mulai")
+   const idDrawer = `drawerProg_${idx}`;
+   const labelAtasKecil = sudahPernah ? 'SUDAH DIKERJAKAN' : 'TAHAP SELANJUTNYA';
+
+   return `
+    <div class="progres-step-card ${sudahPernah ? 'sudah-dikerjakan' : ''}" id="kartuProgresIdx_${idx}">
+     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div style="flex:1; min-width:200px;">
+       <div style="font-size:10px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:3px;">${labelAtasKecil}</div>
+       <h3 style="margin:0 0 3px 0; font-size:15px; font-weight:800; color:var(--text-main);">${ikonItem} ${escapeHtml(infoJudul.judul)} — ${escapeHtml(infoJudul.sub)}</h3>
+       <p style="margin:0; font-size:12px; color:#64748b;">${maxPut} percakapan • ${totTiket} tiket</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+       ${badgeNilaiHTML}
+       <button type="button" class="btn" onclick="toggleMulaiProdukProgres('${idDrawer}')" style="width:auto; padding:9px 18px; font-size:12.5px; background:${sudahPernah ? '#64748b' : 'var(--primary)'};">
+        Mulai
+       </button>
+      </div>
+     </div>
+
+     <!-- Laci Pilihan Tutor Langsung Saat Tombol Mulai Diklik (Tanpa Pindah Halaman!) -->
+     <div id="${idDrawer}" class="progres-inline-drawer hidden" style="margin-top:12px; padding-top:12px; border-top:1.5px dashed #cbd5e1;">
+      <div class="theme-action" style="padding:12px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;">
+       <p style="margin:0 0 10px 0; font-size:12px; color:#475569;">${deskAman}</p>
+       <div class="sensei-selection-container" style="display:flex; gap:8px; margin-bottom:10px;">
+        <div class="sensei-card selected" data-peran="${escapeHtml(peran.peranWanitaAI)}" onclick="pilihSensei(this, 'female')" style="flex:1; border:2px solid #2b5cff; border-radius:10px; padding:7px; display:flex; align-items:center; justify-content:center; gap:7px; cursor:pointer; background:#f0f4ff;">
+         <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png" style="width:28px; height:28px; border-radius:50%; object-fit:cover; background:#fff;">
+         <div class="nama-peran-tutor" style="font-size:11.5px; font-weight:800; color:#2b5cff;">${escapeHtml(peran.labelWanita)}</div>
+        </div>
+        <div class="sensei-card" data-peran="${escapeHtml(peran.peranPriaAI)}" onclick="pilihSensei(this, 'male')" style="flex:1; border:2px solid #e2e8f0; border-radius:10px; padding:7px; display:flex; align-items:center; justify-content:center; gap:7px; cursor:pointer; background:#fff;">
+         <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20laki%20laki.png" style="width:28px; height:28px; border-radius:50%; object-fit:cover; background:#fff;">
+         <div class="nama-peran-tutor" style="font-size:11.5px; font-weight:800; color:#475569;">${escapeHtml(peran.labelPria)}</div>
+        </div>
+        <input type="hidden" class="suara-select-dinamis" value="female">
+        <input type="hidden" class="peran-sensei-terpilih" value="${escapeHtml(peran.peranWanitaAI)}">
+        <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
+       </div>
+       <input type="hidden" class="barge-in-select-dinamis" value="0">
+       <button class="btn btn-mulai-dinamis" data-kode="${kdAman}" data-nama="${namaAman}" onclick="mulaiSesiDispatcher(this)" style="padding:10px; font-size:12.5px;">
+        <i class="fas fa-comments"></i> Mulai Percakapan (${totTiket} 🎫)
+       </button>
+      </div>
      </div>
     </div>`;
   }).join('');
+
+  // Auto-posisikan scroll agar 1 produk sebelum rekomendasi tetap tampak tepat di bawah Freeze Header Biru!
+  const tabProg = document.getElementById('tab-progres');
+  if (tabProg && tabProg.style.display !== 'none' && idxRek > 0) {
+   requestAnimationFrame(() => {
+    const idxJangkarAtas = Math.max(0, idxRek - 1);
+    const elJangkar = document.getElementById(`kartuProgresIdx_${idxJangkarAtas}`);
+    const mainScroll = document.querySelector('#viewDashboard main.main-content');
+    const hdrSticky = document.getElementById('headerStickyProgres');
+    if (elJangkar && mainScroll && hdrSticky) {
+     const tinggiHeader = hdrSticky.offsetHeight || 165;
+     const targetScroll = Math.max(0, elJangkar.offsetTop - tinggiHeader - 10);
+     mainScroll.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
+   });
+  }
  }
 
  // --- LOGIKA INTERAKTIF WIZARD CABANG A / B / C (DENGAN KARTU MELEBAR-TENGAH) ---
@@ -7133,6 +7679,7 @@
       kosaKata: Number(dK.kosaKata) || 70,
       polaKalimat: Number(dK.polaKalimat) || 70,
       kelancaran: Number(dK.kelancaran) || 70,
+      estimasiLevelBab: Number(dK.estimasiLevelBab) || 0,
       perbaikan: String(dK.perbaikan || '').trim()
      };
      WIZ_STATE.skorVN = Math.round((detailEvalUji.kosaKata + detailEvalUji.polaKalimat + detailEvalUji.kelancaran) / 3);
@@ -7151,7 +7698,7 @@
   document.getElementById('indikatorGiliranUji').innerText = `Selesai • Skor ${WIZ_STATE.skorVN}/100`;
 
   const lanjutSetelahPenutupAI = () => {
-   if (WIZ_STATE.modeUji === 'SUARA' && WIZ_STATE.skorVN >= 80) {
+   if (WIZ_STATE.modeUji === 'SUARA' && WIZ_STATE.skorVN >= 75) {
     document.getElementById('kontrolSuaraUji').classList.add('hidden');
     document.getElementById('boxTawaranLive30d').classList.remove('hidden');
    } else {
@@ -7170,65 +7717,90 @@
   }
  }
 
- // Hitung Perbandingan Level Pilihan Awal vs Kemampuan Aktual + Susun Alasan Spesifik
+ // Hitung Rekomendasi Produk Spesifik (Gabungan Deteksi Pola Kalimat AI + Tabel Penurunan Bab)
  function hitungKeputusanDiagnosisUji(skorRaw, lolosLive, detailEv) {
   const skor = Number(skorRaw) || 70;
   const k = String(KAIWA_USER.konteksKalibrasi || 'Pilihan awal');
+  const babKlaim = hitungBabJangkarDariKonteks(k);
+  const isMidAtauPro = babKlaim >= 19;
+  const estimasiBabAI = Number(detailEv?.estimasiLevelBab) || 0;
 
-  // Petakan tingkat klaim awal user: 1 (SHOKYU), 2 (CHUKYU), 3 (JOKYU / Wawancara / Terbang)
-  let rankKlaim = 1;
-  if (WIZ_STATE.tujuanKode === 'C' || (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) || /N3|N2|N1|3Q|2Q|1Q|Bab (3[6-9]|4\d|50)|Dasar 2|A2-2/i.test(k)) {
-   rankKlaim = 3;
-  } else if (/N4|A2|4Q|Bab (19|2\d|3[0-5])|Dasar 1|A2-1/i.test(k)) {
-   rankKlaim = 2;
+  // Rumus Tabel Penurunan Bab Berdasarkan Skor
+  let babDariSkor = babKlaim;
+  if (skor >= 75) {
+   babDariSkor = babKlaim; // Tetap di bab yang dipilih (tidak melompat ke atasnya)
+  } else if (skor >= 70) {
+   babDariSkor = Math.max(1, babKlaim - 1);
+  } else if (skor >= 65) {
+   babDariSkor = Math.max(1, babKlaim - 3);
+  } else if (skor >= 60) {
+   babDariSkor = Math.max(1, babKlaim - 5);
+  } else if (skor >= 40) {
+   babDariSkor = isMidAtauPro ? Math.max(1, babKlaim - 15) : 1;
+  } else {
+   babDariSkor = isMidAtauPro ? Math.max(1, babKlaim - 20) : 1;
   }
 
-  let statusKesesuaian = 'SESUAI'; // 'MELEBIHI' | 'SESUAI' | 'DIBAWAH'
-  let rekKode = 'BLJ-BSC';
-  let rekLabel = 'Belajar — SHOKYU';
+  // Gabungkan dengan Deteksi Pola Kalimat Aktual AI (Jika pola kalimat jauh di bawah klaim, ikuti bab pola kalimatnya!)
+  let babFinalTarget = babDariSkor;
+  let turunKarenaPola = false;
+  if (estimasiBabAI > 0 && estimasiBabAI < babFinalTarget && (babKlaim - estimasiBabAI >= 3)) {
+   babFinalTarget = Math.max(1, estimasiBabAI);
+   turunKarenaPola = true;
+  }
 
-  if (lolosLive) {
-   statusKesesuaian = 'MELEBIHI';
-   rekKode = 'LIVE';
-   rekLabel = (WIZ_STATE.tujuanKode === 'B') ? 'Wawancara Live (Real-Time HRD)' : 'Percakapan Live — JOKYU';
-  } else if (WIZ_STATE.tujuanKode === 'C') {
-   if (skor < 70) {
-    statusKesesuaian = 'DIBAWAH';
-    rekKode = skor < 58 ? 'BLJ-BSC' : 'BLJ-MID';
-    rekLabel = skor < 58 ? 'Belajar — SHOKYU' : 'Belajar — CHUKYU';
+  isiContohLatihanPecahanMST();
+  const jalur = susunDaftarProdukProgresUser();
+  const cariProdukBljTerdekat = (targetB) => {
+   const blj = jalur.filter(p => bedahKodeProduk(p.kode).kategori === 'BLJ');
+   if (blj.length === 0) return null;
+   const cocok = blj.find(p => ekstrakNomorUrutBabProduk(p) >= targetB);
+   return cocok || blj[blj.length - 1];
+  };
+
+  let statusKesesuaian = 'SESUAI';
+  let rekKode = 'KN-BLJ[MINNA_01_03]BSC';
+  let rekLabel = 'Minna no Nihongo BAB 1–3';
+
+  if (WIZ_STATE.tujuanKode === 'C') {
+   if (skor >= 75 && !turunKarenaPola) {
+    const prodKhd = jalur.find(p => bedahKodeProduk(p.kode).kategori === 'KHD');
+    rekKode = prodKhd ? prodKhd.kode : 'KHD';
+    rekLabel = prodKhd ? prodKhd.nama : 'Survival Kehidupan Jepang';
+    statusKesesuaian = lolosLive ? 'MELEBIHI' : 'SESUAI';
    } else {
-    statusKesesuaian = skor >= 86 ? 'MELEBIHI' : 'SESUAI';
-    rekKode = 'KHD';
-    rekLabel = 'Survival Kehidupan Jepang';
+    statusKesesuaian = 'DIBAWAH';
+    const prodTurun = cariProdukBljTerdekat(babFinalTarget);
+    if (prodTurun) { rekKode = prodTurun.kode; rekLabel = pecahJudulProdukKotak(prodTurun.nama, 'BLJ', false).judul + ' — ' + pecahJudulProdukKotak(prodTurun.nama, 'BLJ', false).sub; }
    }
   } else if (WIZ_STATE.tujuanKode === 'B' && WIZ_STATE.punyaSertif) {
-   if (skor < 65) {
+   if (skor >= 75 && !turunKarenaPola) {
+    const prodSim = jalur.find(p => bedahKodeProduk(p.kode).kategori === 'MST' && !String(p.kode).includes('MST-LAT'));
+    rekKode = prodSim ? prodSim.kode : 'MST-SIM';
+    rekLabel = prodSim ? prodSim.nama : 'Simulasi Wawancara Penuh HRD';
+    statusKesesuaian = lolosLive ? 'MELEBIHI' : 'SESUAI';
+   } else if (skor >= 65 && (!turunKarenaPola || babFinalTarget >= 18)) {
     statusKesesuaian = 'DIBAWAH';
-    rekKode = skor < 55 ? 'BLJ-BSC' : 'BLJ-MID';
-    rekLabel = skor < 55 ? 'Belajar — SHOKYU' : 'Belajar — CHUKYU';
-   } else if (skor < 78) {
-    statusKesesuaian = skor < 70 ? 'DIBAWAH' : 'SESUAI';
-    rekKode = 'MST-LAT';
-    rekLabel = 'Latihan Wawancara (Per Bagian)';
+    const prodLat1 = jalur.find(p => String(p.kode).includes('MST-LAT'));
+    rekKode = prodLat1 ? prodLat1.kode : 'KN-MST-LAT[JIKOSHOUKAI]';
+    rekLabel = prodLat1 ? prodLat1.nama : '1. Salam Online & Jikoshoukai';
    } else {
-    statusKesesuaian = skor >= 88 ? 'MELEBIHI' : 'SESUAI';
-    rekKode = 'MST-SIM';
-    rekLabel = 'Simulasi Wawancara Penuh HRD';
+    statusKesesuaian = 'DIBAWAH';
+    const prodBlj = cariProdukBljTerdekat(babFinalTarget);
+    if (prodBlj) { rekKode = prodBlj.kode; rekLabel = pecahJudulProdukKotak(prodBlj.nama, 'BLJ', false).judul + ' — ' + pecahJudulProdukKotak(prodBlj.nama, 'BLJ', false).sub; }
    }
   } else {
-   // Jalur Belajar Bahasa (atau Wawancara belum bersertifikat) — KKM Tegas!
-   if (rankKlaim === 1) {
-    if (skor >= 85) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
-    else if (skor < 60) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
-    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
-   } else if (rankKlaim === 2) {
-    if (skor < 70) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
-    else if (skor >= 88) { statusKesesuaian = 'MELEBIHI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
-    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
+   // Jalur Belajar Bicara (dan Wawancara yang belum bersertifikat) -> Kunci ke Produk Bab Spesifik!
+   const prodTarget = cariProdukBljTerdekat(babFinalTarget);
+   if (prodTarget) {
+    rekKode = prodTarget.kode;
+    const infJ = pecahJudulProdukKotak(prodTarget.nama, 'BLJ', false);
+    rekLabel = `${infJ.judul} — ${infJ.sub}`;
+   }
+   if (babFinalTarget < babKlaim && !(babKlaim <= 3 && babFinalTarget <= 3 && skor >= 75)) {
+    statusKesesuaian = 'DIBAWAH';
    } else {
-    if (skor < 60) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-BSC'; rekLabel = 'Belajar — SHOKYU'; }
-    else if (skor < 75) { statusKesesuaian = 'DIBAWAH'; rekKode = 'BLJ-MID'; rekLabel = 'Belajar — CHUKYU'; }
-    else { statusKesesuaian = 'SESUAI'; rekKode = 'BLJ-PRO'; rekLabel = 'Belajar — JOKYU'; }
+    statusKesesuaian = lolosLive ? 'MELEBIHI' : 'SESUAI';
    }
   }
 
@@ -7242,16 +7814,18 @@
    kutipanKoreksi = bersih.length > 220 ? (bersih.substring(0, 217) + '...') : bersih;
   }
 
+  const infoLiveTambahan = lolosLive ? ` Kamu juga lolos uji respons cepat sehingga fitur Percakapan Live siap kamu jajal kapan saja!` : '';
   let alasanTeks = '';
   if (statusKesesuaian === 'DIBAWAH') {
-   alasanTeks = `${rincianSkorTeks} Jawaban lisanmu belum mencapai batas minimal kelulusan untuk pilihan awalmu (${k}).` +
+   const sebabTurun = turunKarenaPola
+    ? `Pola kalimat yang kamu gunakan dalam 3 percakapan tadi terdeteksi masih berada di kisaran materi dasar (setara Bab ${babFinalTarget}), belum memakai struktur ${k}.`
+    : `Skor evaluasi lisanmu berada di bawah batas 75 untuk pilihan awalmu (${k}).`;
+   alasanTeks = `${rincianSkorTeks} ${sebabTurun}` +
     (kutipanKoreksi ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '') +
-    `\n\nOleh karena itu, sistem merekomendasikan mulai dari "${rekLabel}" agar dasar pola kalimatmu matang lebih dulu dan tiketmu terpakai efektif.`;
-  } else if (statusKesesuaian === 'MELEBIHI') {
-   alasanTeks = `${rincianSkorTeks} Ketepatan kosakata, tata bahasa, dan keutuhan akhiran kalimatmu melampaui pilihan awal (${k}). Kamu direkomendasikan langsung naik ke "${rekLabel}" agar progres belajarmu lebih cepat!`;
+    `\n\nSistem menyesuaikan titik mulaimu ke "${rekLabel}" agar fondasi bicaramu kuat lebih dulu.`;
   } else {
-   alasanTeks = `${rincianSkorTeks} Kemampuan merangkai kalimatmu sudah sesuai dengan level yang kamu pilih (${k}), sehingga "${rekLabel}" adalah titik mulai paling tepat untukmu.` +
-    (kutipanKoreksi && skor < 80 ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '');
+   alasanTeks = `${rincianSkorTeks} Pola kalimat dan kelancaranmu sudah selaras dengan pilihanmu (${k}), sehingga kamu langsung direkomendasikan mulai tepat di produk "${rekLabel}".${infoLiveTambahan}` +
+    (kutipanKoreksi && skor < 82 ? `\n\nCatatan Penguji: "${kutipanKoreksi}"` : '');
   }
 
   const elAlasan = document.getElementById('teksAlasanDiagnosis');
@@ -7604,40 +8178,35 @@
   const wadah = document.getElementById('wadahMiniProgresLb');
   if (!wadah) return;
 
-  const DAFTAR_RINGKAS = [
-   { kode: 'BLJ-BSC', ikon: '🐣', judul: 'Belajar — Shokyu (Basic)', sub: 'Fondasi kosakata & kalimat dasar', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-bsc');" },
-   { kode: 'BLJ-MID', ikon: '🔥', judul: 'Belajar — Chukyu (Mid)', sub: 'Pola kalimat menengah A2 / N4', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-mid');" },
-   { kode: 'BLJ-PRO', ikon: '👑', judul: 'Belajar — Jokyu (Pro)', sub: 'Refleks & ketepatan mahir', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('blj'); bukaDaftarTema('detail-blj-pro');" },
-   { kode: 'MST-LAT', ikon: '🎯', judul: 'Latihan Wawancara', sub: 'Pemanasan Jikoshoukai & HRD', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('mst'); pilihSubModeMST('latihan');" },
-   { kode: 'MST-SIM', ikon: '🏢', judul: 'Simulasi Penuh HRD', sub: 'Wawancara resmi 5 Fase SSW', aksi: "bukaTab('latihan-percakapan'); bukaKategoriTujuan('mst'); pilihSubModeMST('simulasi');" },
-   { kode: 'KHD',     ikon: '✈️', judul: 'Survival Kehidupan', sub: 'Simulasi bandara, bank & asrama', aksi: "bukaTab('survival');" },
-   { kode: 'LIVE',    ikon: '📞', judul: 'Percakapan & HRD Live', sub: 'Telepon real-time dua arah', aksi: "bukaTab('latihan-live');" }
-  ];
+  isiContohLatihanPecahanMST();
+  const jalur = susunDaftarProdukProgresUser();
+  if (jalur.length === 0) return;
 
-  const rek = KAIWA_USER.rekomendasiMulai || 'BLJ-BSC';
-  let idx = DAFTAR_RINGKAS.findIndex(x => x.kode === rek);
-  if (idx < 0) idx = 0;
+  const petaSkor = buatPetaRiwayatPerKodeProduk();
+  const idxRek = tentukanIndeksRekomendasiAktif(jalur, petaSkor);
+  const tampil = jalur.slice(idxRek, idxRek + 4);
 
-  const tampil = DAFTAR_RINGKAS.slice(idx, idx + 4);
-  wadah.innerHTML = tampil.map((it, i) => {
+  wadah.innerHTML = tampil.map((prod, i) => {
+   const inf = bedahKodeProduk(prod.kode);
+   const jdl = pecahJudulProdukKotak(prod.nama, inf.kategori, false);
    if (i === 0) {
     return `
-     <div class="mini-progres-card aktif-utama" onclick="${it.aksi}">
-      <div class="badge-rekomendasi" style="font-size:9.5px; padding:3px 8px; margin-bottom:6px;">★ LANJUTKAN SEKARANG</div>
+     <div class="mini-progres-card aktif-utama" onclick="bukaTab('progres')">
+      <div class="badge-rekomendasi" style="font-size:9.5px; padding:3px 8px; margin-bottom:6px;">REKOMENDASI</div>
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
        <div>
-        <div style="font-size:13.5px; font-weight:800; color:#1e3a8a;">${it.ikon} ${escapeHtml(it.judul)}</div>
-        <div style="font-size:11px; color:#334155; margin-top:2px;">${escapeHtml(it.sub)}</div>
+        <div style="font-size:13px; font-weight:800; color:#1e3a8a;">${escapeHtml(jdl.judul)}</div>
+        <div style="font-size:11px; color:#334155; margin-top:2px;">${escapeHtml(jdl.sub)}</div>
        </div>
        <i class="fas fa-arrow-circle-right" style="font-size:18px; color:#2563eb; flex-shrink:0;"></i>
       </div>
      </div>`;
    }
    return `
-    <div class="mini-progres-card" onclick="${it.aksi}" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+    <div class="mini-progres-card" onclick="bukaTab('progres')" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
      <div>
-      <div style="font-size:12px; font-weight:800; color:var(--text-main);">${it.ikon} ${escapeHtml(it.judul)}</div>
-      <div style="font-size:10.5px; color:#64748b;">Tahap berikutnya</div>
+      <div style="font-size:12px; font-weight:800; color:var(--text-main);">${escapeHtml(jdl.judul)}</div>
+      <div style="font-size:10.5px; color:#64748b;">${escapeHtml(jdl.sub)}</div>
      </div>
      <i class="fas fa-chevron-right" style="font-size:11px; color:#94a3b8;"></i>
     </div>`;
