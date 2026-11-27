@@ -711,6 +711,7 @@
    produk: sesi.produk,
    namaTema: sesi.namaTema || '',
    gender: sesi.suaraTutor || 'female',
+   peran: sesi.peranTutor || '',
    genderSiswa: KAIWA_USER.gender || '',
    bargeIn: sesi.bebasPotong ? '1' : '0',
    seed: String(sesi.seedAcak || 77777),
