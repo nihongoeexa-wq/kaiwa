@@ -355,20 +355,27 @@
         .voucher-widget button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .voucher-widget button:hover { background: var(--primary-hover); }
 
-        /* MANTRA HP (RESPONSIVE) */
+        /* MANTRA HP (RESPONSIVE + FREEZE HEADER SEMPURNA) */
         @media (max-width: 768px) {
-            .dashboard-wrapper { flex-direction: column; overflow-y: auto; height: auto; min-height: 100vh;}
-            .sidebar { width: 100%; border-right: none; border-bottom: 2px solid #E5E5E5; padding: 15px; }
-            .sidebar-header { margin-bottom: 15px; }
-            .sidebar-menu { flex-direction: row; overflow-x: auto; padding-bottom: 5px; gap: 10px; }
-            .menu-item { padding: 10px 15px; font-size: 12px; white-space: nowrap; }
+            .dashboard-wrapper { flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+            .sidebar { width: 100%; flex-shrink: 0; border-right: none; border-bottom: 1.5px solid #E5E5E5; padding: 8px 12px; }
+            .sidebar-header { margin-bottom: 6px; gap: 8px; }
+            .sidebar-logo { width: 28px; }
+            .sidebar-title { display: flex; gap: 4px; align-items: center; }
+            .sidebar-title h2 { font-size: 13px; }
+            .sidebar-menu { flex-direction: row; overflow-x: auto; padding-bottom: 3px; gap: 8px; }
+            .menu-item { padding: 8px 12px; font-size: 12px; white-space: nowrap; }
             .sidebar-footer { display: none; }
+            .mobile-subnav-bar { flex-shrink: 0; padding: 7px 12px; }
             
-            .main-area { height: auto; overflow: visible; }
-            .top-header { padding: 15px; flex-direction: column; gap: 15px; align-items: flex-start; }
-            .header-right { width: 100%; justify-content: space-between; overflow-x: auto;}
+            .main-area { flex: 1; min-height: 0; height: auto; overflow: hidden; display: flex; flex-direction: column; }
+            .top-header { flex-shrink: 0; padding: 8px 14px; gap: 8px; }
+            .top-header .profile-avatar { width: 38px !important; height: 38px !important; }
+            .top-header .welcome-text { font-size: 14.5px; }
+            .top-header .stat-badge { padding: 6px 10px !important; font-size: 12px; }
+            .header-right { width: auto; justify-content: flex-end; overflow-x: auto; }
             
-            .main-content { padding: 20px 15px; }
+            .main-content { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 14px 30px 14px; }
             .dashboard-grid { flex-direction: column; }
             .stats-cards-container { flex-direction: column; }
             .banner-text { max-width: 100%; }
@@ -1006,17 +1013,50 @@
   .skor-biru  { background: #eff6ff; color: #2563eb; border: 1.5px solid #bfdbfe; }
   .skor-hijau { background: #f0fdf4; color: #16a34a; border: 1.5px solid #bbf7d0; }
 
-  /* Kotak Grafik Perkembangan Nilai */
+  /* Kotak Grafik Perkembangan Nilai, Sakelar Batang/Garis & Halaman Grafik Riwayat */
   .score-chart-card {
     background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px;
-    padding: 20px 22px; box-shadow: 0 4px 8px rgba(0,0,0,0.02); box-sizing: border-box;
+    padding: 18px 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.02); box-sizing: border-box;
   }
   .score-chart-svg-wrap { width: 100%; overflow: hidden; margin-top: 8px; }
+  .progres-side-sticky { position: sticky; top: 0; }
+
+  .chart-mode-switch {
+    display: inline-flex; background: #f1f5f9; padding: 3px; border-radius: 9px; border: 1px solid #e2e8f0; gap: 2px;
+  }
+  .chart-mode-btn {
+    border: none; background: transparent; color: #64748b; font-size: 11px; font-weight: 800;
+    padding: 4px 9px; border-radius: 7px; cursor: pointer; font-family: inherit; transition: 0.15s;
+  }
+  .chart-mode-btn.active { background: #ffffff; color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  .riwayat-view-switcher {
+    display: inline-flex; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px;
+    padding: 4px; gap: 4px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+  .riwayat-switch-btn {
+    border: none; background: transparent; color: #64748b; font-size: 13px; font-weight: 800;
+    padding: 9px 18px; border-radius: 10px; cursor: pointer; font-family: inherit; transition: 0.2s;
+  }
+  .riwayat-switch-btn.active { background: var(--primary); color: #ffffff; }
+
+  .riwayat-kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px;
+  }
+  .riwayat-kpi-box {
+    background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 16px 18px; text-align: left;
+  }
+  .riwayat-kpi-box .kpi-lbl { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+  .riwayat-kpi-box .kpi-val { font-size: 22px; font-weight: 900; color: var(--text-main); }
 
   @media (max-width: 768px) {
-    .progres-freeze-header-wrap { top: -20px; }
-    .progres-hero-sticky { padding: 20px; }
-    .progres-hero-sticky p { max-width: 100%; }
+    .progres-freeze-header-wrap { top: -14px; margin-top: -14px; padding-top: 14px; padding-bottom: 10px; }
+    .progres-hero-sticky { padding: 14px 16px; min-height: auto; border-radius: 16px; }
+    .progres-hero-sticky h2 { font-size: 18px; margin-bottom: 4px; }
+    .progres-hero-sticky p { font-size: 12px; max-width: 100%; }
+    .progres-hero-bottom-right { margin-top: 10px; }
+    .progres-side-sticky { position: static; margin-top: 10px; }
+    .riwayat-kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   }
 
   /* Sub-Tab MST (Latihan Per Bagian vs Simulasi Penuh) */
@@ -1523,16 +1563,21 @@
        <div class="score-chart-card">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
          <div>
-          <h3 style="margin:0; font-size:15px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-line" style="color:var(--primary); margin-right:5px;"></i> Grafik Perkembangan Nilai</h3>
-          <p style="margin:2px 0 0 0; font-size:11.5px; color:#64748b;">Tren skor rapor dari sesi ke sesi (Garis hijau = Batas Lulus 75)</p>
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-bar" style="color:var(--primary); margin-right:5px;"></i> Grafik Perkembangan Nilai</h3>
+          <p style="margin:2px 0 0 0; font-size:11.5px; color:#64748b;">Tren skor latihanmu • <button onclick="bukaHalamanGrafikRiwayat()" style="background:none; border:none; color:var(--primary); font-weight:800; font-size:11.5px; cursor:pointer; padding:0; text-decoration:underline;">Lihat Grafik Besar &rarr;</button></p>
          </div>
-         <span id="labelInfoGrafikDash" style="font-size:11px; font-weight:800; background:#eff6ff; color:#1d4ed8; padding:4px 10px; border-radius:20px;">0 Sesi</span>
+         <div style="display:flex; align-items:center; gap:6px;">
+          <div class="chart-mode-switch">
+           <button type="button" class="chart-mode-btn btn-tipe-batang active" onclick="ubahTipeGrafikNilai('batang')">📊 Batang</button>
+           <button type="button" class="chart-mode-btn btn-tipe-garis" onclick="ubahTipeGrafikNilai('garis')">📈 Garis</button>
+          </div>
+          <span id="labelInfoGrafikDash" style="font-size:11px; font-weight:800; background:#eff6ff; color:#1d4ed8; padding:4px 10px; border-radius:20px;">0 Sesi</span>
+         </div>
         </div>
         <div id="wadahGrafikNilaiDashboard" class="score-chart-svg-wrap">
          <div style="text-align:center; padding:26px 10px; font-size:12.5px; color:#94a3b8;">Belum ada riwayat nilai untuk ditampilkan.</div>
         </div>
        </div>
-      </div>
 
       <!-- Area Kanan Dashboard (30%) -->
       <div class="dash-right">
@@ -1673,14 +1718,20 @@
        <div id="wadahJalurProgres" style="padding-top: 6px;"></div>
       </div>
 
-      <!-- Sisi Kanan (30% Sticky): Grafik Perkembangan Nilai -->
-      <div class="dash-right" style="position: sticky; top: 0;">
+      <!-- Sisi Kanan (30% Sticky di Laptop): Grafik Perkembangan Nilai -->
+      <div class="dash-right progres-side-sticky">
        <div class="score-chart-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; gap:6px;">
-         <h3 style="margin:0; font-size:14.5px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-line" style="color:var(--primary); margin-right:5px;"></i> Grafik Nilai</h3>
-         <span id="labelInfoGrafikProgres" style="font-size:10.5px; font-weight:800; background:#eff6ff; color:#1d4ed8; padding:3px 9px; border-radius:20px;">0 Sesi</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:6px; flex-wrap:wrap;">
+         <h3 style="margin:0; font-size:14px; font-weight:800; color:var(--text-main);"><i class="fas fa-chart-bar" style="color:var(--primary); margin-right:4px;"></i> Grafik Nilai</h3>
+         <div class="chart-mode-switch">
+          <button type="button" class="chart-mode-btn btn-tipe-batang active" onclick="ubahTipeGrafikNilai('batang')">📊</button>
+          <button type="button" class="chart-mode-btn btn-tipe-garis" onclick="ubahTipeGrafikNilai('garis')">📈</button>
+         </div>
         </div>
-        <p style="margin:0 0 6px 0; font-size:11.5px; color:#64748b; line-height:1.4;">Naik-turun skor latihanmu (Target lulus &ge; 75)</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+         <span id="labelInfoGrafikProgres" style="font-size:10.5px; font-weight:800; color:#64748b;">0 Sesi (Lulus &ge; 75)</span>
+         <button onclick="bukaHalamanGrafikRiwayat()" style="background:none; border:none; color:var(--primary); font-size:11px; font-weight:800; cursor:pointer; padding:0;">Perbesar &nearr;</button>
+        </div>
         <div id="wadahGrafikNilaiProgres" class="score-chart-svg-wrap">
          <div style="text-align:center; padding:24px 8px; font-size:12px; color:#94a3b8;">Belum ada riwayat nilai.</div>
         </div>
@@ -2226,10 +2277,22 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MENU 5: RIWAYAT (SEJAJAR FILTER + DINAMIS) -->
+    <!-- MENU 5: RIWAYAT (DAFTAR SESI + GRAFIK BESAR)-->
     <!-- ========================================== -->
     <div id="tab-riwayat" class="nav-page-section" style="display: none;">
-     <div class="aligned-two-col-grid">
+
+     <!-- Sakelar Sub-Halaman Riwayat -->
+     <div class="riwayat-view-switcher">
+      <button type="button" class="riwayat-switch-btn active" id="btnSubRiwayatDaftar" onclick="pilihSubHalamanRiwayat('daftar')">
+       <i class="fas fa-list-ul"></i> Daftar Riwayat Sesi
+      </button>
+      <button type="button" class="riwayat-switch-btn" id="btnSubRiwayatGrafik" onclick="pilihSubHalamanRiwayat('grafik')">
+       <i class="fas fa-chart-bar"></i> Grafik &amp; Analisis Progres
+      </button>
+     </div>
+
+     <!-- [SUB-HALAMAN 1] DAFTAR RIWAYAT SESI -->
+     <div id="subViewDaftarRiwayat" class="aligned-two-col-grid">
       <!-- Slot Banner Atas Kiri -->
       <div class="grid-banner-slot">
        <div class="page-hero-banner" style="background: linear-gradient(135deg, #4338ca, #6366f1);">
@@ -2268,7 +2331,7 @@
        </div>
       </div>
 
-      <!-- Slot Kanan: Leaderboard Dinamis Mengikuti Tombol Filter (Sejajar Kotak Filter!) -->
+      <!-- Slot Kanan: Leaderboard Dinamis Mengikuti Tombol Filter -->
       <div class="grid-side-slot">
        <div class="widget-box" style="padding: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px;">
@@ -2281,6 +2344,81 @@
        </div>
       </div>
      </div>
+
+     <!-- [SUB-HALAMAN 2] HALAMAN KHUSUS GRAFIK & ANALISIS PROGRES PROPORSIONAL -->
+     <div id="subViewGrafikRiwayat" class="hidden page-aligned-box" style="max-width: 960px;">
+      <div class="page-hero-banner" style="background: linear-gradient(135deg, #1e3a8a, #2563eb);">
+       <div class="banner-text">
+        <h2>Grafik &amp; Analisis Progres Nilai</h2>
+        <p>Visualisasi lengkap perkembangan skor bicara, tingkat kelulusan, dan kekuatan aspek bahasa Jepangmu.</p>
+       </div>
+       <div class="banner-action-z">
+        <button onclick="tarikDataRiwayat()" class="btn-banner" style="padding: 10px 16px; font-size: 12.5px;"><i class="fas fa-sync-alt"></i> Segarkan</button>
+       </div>
+       <i class="fas fa-chart-line banner-watermark"></i>
+      </div>
+
+      <!-- 4 Kartu KPI Proporsional -->
+      <div class="riwayat-kpi-grid">
+       <div class="riwayat-kpi-box">
+        <div class="kpi-lbl">Total Latihan</div>
+        <div class="kpi-val" id="kpiGrafikTotalSesi">0 Sesi</div>
+       </div>
+       <div class="riwayat-kpi-box">
+        <div class="kpi-lbl">Rata-rata Skor</div>
+        <div class="kpi-val" id="kpiGrafikRataRata" style="color:#2563eb;">0</div>
+       </div>
+       <div class="riwayat-kpi-box">
+        <div class="kpi-lbl">Skor Tertinggi</div>
+        <div class="kpi-val" id="kpiGrafikTertinggi" style="color:#16a34a;">0</div>
+       </div>
+       <div class="riwayat-kpi-box">
+        <div class="kpi-lbl">Sesi Lulus (&ge;75)</div>
+        <div class="kpi-val" id="kpiGrafikLulus" style="color:#047857;">0%</div>
+       </div>
+      </div>
+
+      <!-- Panel Utama Grafik Lebar & Proporsional -->
+      <div class="score-chart-card" style="padding: 24px; margin-bottom: 18px;">
+       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; padding-bottom:14px; border-bottom:1.5px solid #f1f5f9;">
+        <div id="grupFilterGrafikBesar" style="display:flex; gap:8px; overflow-x:auto;">
+         <button class="tier-tab-btn active" onclick="pilihFilterGrafikBesar('SEMUA', this)">Semua</button>
+         <button class="tier-tab-btn" onclick="pilihFilterGrafikBesar('BLJ', this)">📘 Belajar</button>
+         <button class="tier-tab-btn" onclick="pilihFilterGrafikBesar('MST', this)">💼 Wawancara</button>
+         <button class="tier-tab-btn" onclick="pilihFilterGrafikBesar('KHD', this)">🏪 Survival</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+         <select id="selectJumlahSesiGrafik" onchange="renderHalamanGrafikRiwayatBesar()" style="padding:7px 12px; border:1.5px solid #cbd5e1; border-radius:10px; font-size:12px; font-weight:700; color:#475569; background:#f8fafc; cursor:pointer;">
+          <option value="12">12 Sesi Terakhir</option>
+          <option value="25">25 Sesi Terakhir</option>
+          <option value="999">Semua Sesi</option>
+         </select>
+         <div class="chart-mode-switch">
+          <button type="button" class="chart-mode-btn btn-tipe-batang active" onclick="ubahTipeGrafikNilai('batang')">📊 Batang</button>
+          <button type="button" class="chart-mode-btn btn-tipe-garis" onclick="ubahTipeGrafikNilai('garis')">📈 Garis</button>
+         </div>
+        </div>
+       </div>
+
+       <div id="wadahGrafikBesarRiwayat" style="width:100%; overflow-x:auto;">
+        <div style="text-align:center; padding:45px 15px; color:#94a3b8; font-size:13.5px;">Belum ada data sesi latihan pada kategori ini.</div>
+       </div>
+
+       <div style="display:flex; justify-content:center; gap:18px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0; font-size:11.5px; font-weight:700; color:#64748b;">
+        <span><span style="display:inline-block; width:10px; height:10px; border-radius:3px; background:#16a34a; margin-right:5px;"></span>Lulus (&ge;75)</span>
+        <span><span style="display:inline-block; width:10px; height:10px; border-radius:3px; background:#2563eb; margin-right:5px;"></span>Cukup (60–74)</span>
+        <span><span style="display:inline-block; width:10px; height:10px; border-radius:3px; background:#dc2626; margin-right:5px;"></span>Perlu Ulang (&lt;60)</span>
+       </div>
+      </div>
+
+      <!-- Rincian Rata-rata 3 Aspek Kemampuan -->
+      <div class="score-chart-card" style="padding: 22px 24px;">
+       <h3 style="margin:0 0 14px 0; font-size:15px; font-weight:800; color:var(--text-main);"><i class="fas fa-sliders-h" style="color:var(--primary); margin-right:6px;"></i> Rata-rata Penguasaan 3 Aspek Bicara</h3>
+       <div id="wadahBarAspekRiwayat" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;"></div>
+      </div>
+     </div>
+
     </div>
 
     <!-- ========================================== -->
@@ -4717,6 +4855,23 @@
     document.getElementById('totalSesiDisplay').innerText = KAIWA_USER.sesi;
     simpanSesiUserLokal();
 
+    // Sisipkan hasil sesi terbaru langsung ke memori lokal agar Progres & Lencana Nilai langsung berubah tanpa jeda!
+    dataRiwayatLokal.push({
+     idBaris: Date.now(),
+     produk: sesi.produk,
+     waktu: new Date().toLocaleString('id-ID'),
+     nilaiTotal: skorRata,
+     nilaiKosaKata: Number(raporData.kosaKata) || 0,
+     nilaiBunpou: Number(raporData.polaKalimat) || 0,
+     nilaiKelancaran: Number(raporData.kelancaran) || 0,
+     koreksi: raporData.perbaikan,
+     rekomendasi: raporData.rekomendasi,
+     rekamanChat: (sesi.modeMesin === 'KL' && statusSelesaiPenuh ? '[STATUS: TUNTAS]\n' : '') + sesi.historyPercakapan
+    });
+    perbaruiSemuaLencanaSkorKatalog();
+    renderSemuaGrafikNilai();
+    renderHalamanProgres();
+
     const koinSesiIni = dataGasRapor.data.koinDidapat !== undefined
      ? Number(dataGasRapor.data.koinDidapat)
      : Math.max(0, KAIWA_USER.koin - koinLama);
@@ -6363,33 +6518,73 @@
   return 'skor-merah';
  }
 
+ // Pencocok Cerdas Kode Riwayat <-> Katalog (Menangani kode utuh, kode lama terpotong kurung siku, lintas KN/KL, & alias MINNA_01_03)
+ function normalisasiKunciIntiModul(kodeRaw) {
+  let s = String(kodeRaw || '').trim().toUpperCase();
+  s = s.replace(/^(?:KN|KL)[-_\s]*/, '');
+  const mBracket = s.match(/^([A-Z\-]+)\[([^\]]+)/);
+  if (mBracket) {
+   let kat = mBracket[1];
+   let isi = mBracket[2].trim();
+   if (isi === 'MINNA_01' || isi === 'MINNA_02' || isi === 'MINNA_03') isi = 'MINNA_01_03';
+   return `${kat}[${isi}]`;
+  }
+  return s;
+ }
+
  function buatPetaRiwayatPerKodeProduk() {
-  const map = {};
-  // dataRiwayatLokal dari server urut kronologis; pastikan yang terakhir adalah skor terbaru
+  const byKode = {};
+  const byInti = {};
   const urutKronologis = [...dataRiwayatLokal].sort((a, b) => (Number(a.idBaris) || 0) - (Number(b.idBaris) || 0));
+
   urutKronologis.forEach(r => {
-   const kd = String(r.produk || '').trim().toUpperCase();
-   if (!kd || kd === 'UMUM' || kd.startsWith('UJI-')) return;
+   const kdAsli = String(r.produk || '').trim().toUpperCase();
+   if (!kdAsli || kdAsli === 'UMUM' || kdAsli.startsWith('UJI-')) return;
    const nilai = Math.round(Number(r.nilaiTotal) || 0);
-   const inf = bedahKodeProduk(kd);
-   const detailKat = KATALOG_PRODUK_MAP[inf.kodePenuh];
+   const mode = (kdAsli.startsWith('KL-') || kdAsli.startsWith('KL_')) ? 'KL' : 'KN';
+   const kunciInti = normalisasiKunciIntiModul(kdAsli);
+
+   // Cari kode katalog resmi yang cocok jika kdAsli sempat terpotong (misal "KN-BLJ[MINNA_13")
+   let kodeResmi = kdAsli;
+   if (!KATALOG_PRODUK_MAP[kodeResmi]) {
+    const kandidat = Object.keys(KATALOG_PRODUK_MAP).find(k => {
+     const kMode = k.startsWith('KL') ? 'KL' : 'KN';
+     return kMode === mode && normalisasiKunciIntiModul(k) === kunciInti;
+    });
+    if (kandidat) kodeResmi = kandidat;
+   }
+
+   const detailKat = KATALOG_PRODUK_MAP[kodeResmi];
    const targetPut = Number(detailKat?.maxPutaran) || 6;
    const rawChat = String(r.rekamanChat || '');
    const jmlChat = (rawChat.match(/Siswa:/g) || []).length;
-   const sahTuntas = inf.mode === 'KL'
+   const sahTuntas = mode === 'KL'
     ? (/\[STATUS:\s*TUNTAS\]/i.test(rawChat) || jmlChat >= 3)
     : (jmlChat >= targetPut || rawChat === '');
 
-   if (!map[inf.kodePenuh]) {
-    map[inf.kodePenuh] = { latestScore: nilai, maxScore: nilai, pernahLulusSah: false, count: 0 };
-   }
-   const st = map[inf.kodePenuh];
-   st.latestScore = nilai;
-   if (nilai > st.maxScore) st.maxScore = nilai;
-   if (nilai >= 75 && sahTuntas) st.pernahLulusSah = true;
-   st.count++;
+   [ [byKode, kodeResmi], [byInti, kunciInti] ].forEach(([bucket, key]) => {
+    if (!key) return;
+    if (!bucket[key]) bucket[key] = { latestScore: nilai, maxScore: nilai, pernahLulusSah: false, count: 0 };
+    const st = bucket[key];
+    st.latestScore = nilai;
+    if (nilai > st.maxScore) st.maxScore = nilai;
+    if (nilai >= 75 && sahTuntas) st.pernahLulusSah = true;
+    st.count++;
+   });
   });
-  return map;
+
+  byKode._byInti = byInti;
+  return byKode;
+ }
+
+ function ambilStatusSkorProduk(petaSkor, kodeProduk, gabungLintasMode = false) {
+  const kd = String(kodeProduk || '').trim().toUpperCase();
+  if (petaSkor[kd] && petaSkor[kd].count > 0) return petaSkor[kd];
+  if (gabungLintasMode && petaSkor._byInti) {
+   const inti = normalisasiKunciIntiModul(kd);
+   if (petaSkor._byInti[inti] && petaSkor._byInti[inti].count > 0) return petaSkor._byInti[inti];
+  }
+  return null;
  }
 
  function perbaruiSemuaLencanaSkorKatalog() {
@@ -6398,7 +6593,7 @@
    const kd = String(card.dataset.kodeProduk || '').trim().toUpperCase();
    const lama = card.querySelector('.score-corner-abs');
    if (lama) lama.remove();
-   const info = petaSkor[kd];
+   const info = ambilStatusSkorProduk(petaSkor, kd, false);
    if (info && info.count > 0) {
     const pill = document.createElement('span');
     pill.className = `score-corner-pill score-corner-abs ${kelasWarnaSkorProduk(info.latestScore)}`;
@@ -6421,7 +6616,6 @@
   };
  }
 
- // Override kartu aksi untuk Survival KHD agar mendukung Peran Kolom G & H
  rakitIsiAksiTemaHTML = function(grup, modeTarget = "KN") {
   const namaAman = escapeHtml(grup.nama || 'Tema Latihan');
   let tombolHTML = "";
@@ -6449,8 +6643,6 @@
 
   if (!tombolHTML) return "";
 
-  const htmlSakelarBocor = butuhSakelarBocorHTML(butuhSakelarAntiBocor);
-
   return `
    <div class="theme-action">
     <div class="sensei-selection-container" style="display: flex; gap: 10px; margin-bottom: 10px;">
@@ -6466,7 +6658,7 @@
      <input type="hidden" class="peran-sensei-terpilih" value="${escapeHtml(peran.peranWanitaAI)}">
      <input type="hidden" class="foto-sensei-terpilih" value="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/a3548d155f1e99eede55b0239d88db73a5664ba4/sensei%20perempuan.png">
     </div>
-    ${htmlSakelarBocor}
+    ${butuhSakelarBocorHTML(butuhSakelarAntiBocor)}
     ${tombolHTML}
    </div>`;
  };
@@ -6482,7 +6674,6 @@
    </div>` : `<input type="hidden" class="barge-in-select-dinamis" value="0">`;
  }
 
- // Sub-mode MST: 1. Latihan Per Bagian vs 2. Simulasi Penuh
  function pilihSubModeMST(sub) {
   document.getElementById('btnSubMstLatihan')?.classList.toggle('active', sub === 'latihan');
   document.getElementById('btnSubMstSimulasi')?.classList.toggle('active', sub === 'simulasi');
@@ -6501,7 +6692,6 @@
   if (wSim) wSim.style.display = (sub === 'simulasi') ? 'block' : 'none';
  }
 
- // Pemecah Nama Produk Otomatis -> Judul Utama ("Minna no Nihongo BAB 1") & Sub Judul
  function pecahJudulProdukKotak(namaRaw, kategori = 'BLJ', isLive = false) {
   const s = String(namaRaw || 'Latihan Percakapan').trim();
 
@@ -6529,7 +6719,6 @@
   };
  }
 
- // Rakit Kartu Kotak Produk (Katalog Percakapan & Live + Lencana Nilai Pojok Kanan Atas + Peran Kolom G-H)
  function rakitKartuKotakProdukHTML(grup, modeTarget = "KN", ikon = "📘") {
   const isKL = (modeTarget === "KL");
   const dataProd = isKL ? grup.KL : grup.KN;
@@ -6545,7 +6734,7 @@
   const peran = ambilPasanganPeranProduk(dataProd);
 
   const petaSkor = buatPetaRiwayatPerKodeProduk();
-  const stSkor = petaSkor[kdUpper];
+  const stSkor = ambilStatusSkorProduk(petaSkor, kdUpper, false);
   const badgeSkorHTML = (stSkor && stSkor.count > 0)
    ? `<span class="score-corner-pill score-corner-abs ${kelasWarnaSkorProduk(stSkor.latestScore)}" title="Nilai terakhir: ${stSkor.latestScore}/100">${stSkor.latestScore}</span>`
    : '';
@@ -6640,85 +6829,240 @@
  }
 
  // =========================================================
- // MESIN GRAFIK GARIS PERKEMBANGAN NILAI (DASHBOARD & PROGRES)
+ // MESIN GRAFIK BATANG & GARIS + HALAMAN GRAFIK RIWAYAT BESAR
  // =========================================================
- function buatGrafikNilaiSvgHTML(points, tinggiSvg = 155) {
+ let tipeGrafikNilaiAktif = localStorage.getItem('neexa_chart_type') || 'batang';
+ let filterKategoriGrafikBesar = 'SEMUA';
+
+ function ubahTipeGrafikNilai(tipe) {
+  tipeGrafikNilaiAktif = (tipe === 'garis') ? 'garis' : 'batang';
+  try { localStorage.setItem('neexa_chart_type', tipeGrafikNilaiAktif); } catch (e) {}
+  document.querySelectorAll('.btn-tipe-batang').forEach(b => b.classList.toggle('active', tipeGrafikNilaiAktif === 'batang'));
+  document.querySelectorAll('.btn-tipe-garis').forEach(b => b.classList.toggle('active', tipeGrafikNilaiAktif === 'garis'));
+  renderSemuaGrafikNilai();
+ }
+
+ function pilihSubHalamanRiwayat(mode) {
+  const isGrafik = (mode === 'grafik');
+  document.getElementById('btnSubRiwayatDaftar')?.classList.toggle('active', !isGrafik);
+  document.getElementById('btnSubRiwayatGrafik')?.classList.toggle('active', isGrafik);
+  const vDaftar = document.getElementById('subViewDaftarRiwayat');
+  const vGrafik = document.getElementById('subViewGrafikRiwayat');
+  if (vDaftar) vDaftar.style.display = isGrafik ? 'none' : '';
+  if (vGrafik) vGrafik.classList.toggle('hidden', !isGrafik);
+  if (isGrafik) renderHalamanGrafikRiwayatBesar();
+ }
+
+ function bukaHalamanGrafikRiwayat() {
+  bukaTab('riwayat');
+  pilihSubHalamanRiwayat('grafik');
+ }
+
+ function pilihFilterGrafikBesar(kat, btnEl) {
+  filterKategoriGrafikBesar = kat;
+  document.querySelectorAll('#grupFilterGrafikBesar .tier-tab-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  renderHalamanGrafikRiwayatBesar();
+ }
+
+ function singkatkanLabelModulGrafik(kodeRaw, idx) {
+  const s = String(kodeRaw || '').toUpperCase();
+  const mMinna = s.match(/MINNA_(\d+(?:_\d+)?)/);
+  if (mMinna) return 'Bab ' + mMinna[1].replace('01_03', '1-3').replace(/^0/, '');
+  const mIro = s.match(/IRODORI_[A-Z0-9]+_(\d+)/);
+  if (mIro) return 'Iro ' + parseInt(mIro[1], 10);
+  const mMar = s.match(/MARUGOTO_[A-Z0-9]+_(\d+)/);
+  if (mMar) return 'Mar ' + parseInt(mMar[1], 10);
+  if (s.includes('MST-LAT')) return 'Lat MST';
+  if (s.includes('MST')) return 'Sim MST';
+  if (s.includes('KHD')) return 'Survival';
+  return '#' + (idx + 1);
+ }
+
+ function buatGrafikNilaiSvgHTML(points, tinggiSvg = 155, lebarSvg = 460, tampilLabelModul = false) {
   if (!points || points.length === 0) {
-   return `<div style="text-align:center; padding:26px 8px; font-size:12px; color:#94a3b8;">Selesaikan minimal 1 sesi latihan untuk melihat grafik perkembangan nilaimu.</div>`;
+   return `<div style="text-align:center; padding:28px 10px; font-size:12.5px; color:#94a3b8;">Selesaikan minimal 1 sesi latihan untuk melihat grafik perkembangan nilaimu.</div>`;
   }
 
-  const lebar = 460;
-  const padL = 32, padR = 16, padT = 18, padB = 26;
-  const wPlot = lebar - padL - padR;
+  const padL = 34, padR = 16, padT = 22, padB = tampilLabelModul ? 34 : 26;
+  const wPlot = lebarSvg - padL - padR;
   const hPlot = tinggiSvg - padT - padB;
   const yDariSkor = (s) => padT + hPlot - ((Math.min(100, Math.max(0, s)) / 100) * hPlot);
-  const xDariIdx = (i) => points.length === 1 ? (padL + wPlot / 2) : (padL + (i / (points.length - 1)) * wPlot);
 
-  const y75 = yDariSkor(75);
-  const y50 = yDariSkor(50);
-  const y100 = yDariSkor(100);
-  const y0 = yDariSkor(0);
+  const y100 = yDariSkor(100), y75 = yDariSkor(75), y50 = yDariSkor(50), y0 = yDariSkor(0);
+  const n = points.length;
 
-  const koordinat = points.map((p, i) => ({ x: xDariIdx(i), y: yDariSkor(p.skor), skor: p.skor, label: p.label }));
-  const garisPoints = koordinat.map(k => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(' ');
-  const areaPoints = `${koordinat[0].x.toFixed(1)},${y0.toFixed(1)} ${garisPoints} ${koordinat[koordinat.length - 1].x.toFixed(1)},${y0.toFixed(1)}`;
+  let isiPlotHTML = '';
 
-  const titikHTML = koordinat.map((k, idx) => {
-   const warnaTitik = k.skor >= 75 ? '#16a34a' : (k.skor >= 60 ? '#2563eb' : '#dc2626');
-   const tampilAngka = points.length <= 10 || idx === 0 || idx === koordinat.length - 1 || idx % 2 === 0;
-   return `
-    <g>
-     <title>Sesi #${idx + 1} (${escapeHtml(k.label)}): ${k.skor}</title>
-     <circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="4.5" fill="${warnaTitik}" stroke="#ffffff" stroke-width="2"></circle>
-     ${tampilAngka ? `<text x="${k.x.toFixed(1)}" y="${Math.max(11, k.y - 8).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="${warnaTitik}">${k.skor}</text>` : ''}
-     <text x="${k.x.toFixed(1)}" y="${(tinggiSvg - 7).toFixed(1)}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#94a3b8">#${idx + 1}</text>
-    </g>
+  if (tipeGrafikNilaiAktif === 'batang') {
+   const slotW = wPlot / Math.max(1, n);
+   const barW = Math.max(10, Math.min(38, slotW * 0.62));
+
+   isiPlotHTML = points.map((p, idx) => {
+    const cx = padL + slotW * idx + slotW / 2;
+    const xBar = cx - barW / 2;
+    const yTop = yDariSkor(p.skor);
+    const hBar = Math.max(3, y0 - yTop);
+    const warna = p.skor >= 75 ? '#16a34a' : (p.skor >= 60 ? '#2563eb' : '#dc2626');
+    const bgLembut = p.skor >= 75 ? '#dcfce7' : (p.skor >= 60 ? '#dbeafe' : '#fee2e2');
+    const tampilTeksAtas = n <= 16 || idx % 2 === 0 || idx === n - 1;
+    const lblBawah = tampilLabelModul ? singkatkanLabelModulGrafik(p.label, idx) : `#${idx + 1}`;
+    const tampilLblBawah = n <= 14 || idx % 2 === 0 || idx === n - 1;
+
+    return `
+     <g>
+      <title>Sesi #${idx + 1} • ${escapeHtml(p.label)} (${escapeHtml(p.waktu || '')}): Skor ${p.skor}</title>
+      <rect x="${xBar.toFixed(1)}" y="${padT}" width="${barW.toFixed(1)}" height="${hPlot}" rx="5" fill="#f8fafc"></rect>
+      <rect x="${xBar.toFixed(1)}" y="${yTop.toFixed(1)}" width="${barW.toFixed(1)}" height="${hBar.toFixed(1)}" rx="5" fill="${warna}" stroke="${bgLembut}" stroke-width="1"></rect>
+      ${tampilTeksAtas ? `<text x="${cx.toFixed(1)}" y="${Math.max(12, yTop - 6).toFixed(1)}" text-anchor="middle" font-size="${tampilLabelModul ? '11' : '10'}" font-weight="800" fill="${warna}">${p.skor}</text>` : ''}
+      ${tampilLblBawah ? `<text x="${cx.toFixed(1)}" y="${(tinggiSvg - 9).toFixed(1)}" text-anchor="middle" font-size="${tampilLabelModul ? '10' : '9.5'}" font-weight="700" fill="#64748b">${escapeHtml(lblBawah)}</text>` : ''}
+     </g>`;
+   }).join('');
+
+  } else {
+   const xDariIdx = (i) => n === 1 ? (padL + wPlot / 2) : (padL + (i / (n - 1)) * wPlot);
+   const koordinat = points.map((p, i) => ({ x: xDariIdx(i), y: yDariSkor(p.skor), skor: p.skor, label: p.label, waktu: p.waktu }));
+   const garisPoints = koordinat.map(k => `${k.x.toFixed(1)},${k.y.toFixed(1)}`).join(' ');
+   const areaPoints = `${koordinat[0].x.toFixed(1)},${y0.toFixed(1)} ${garisPoints} ${koordinat[n - 1].x.toFixed(1)},${y0.toFixed(1)}`;
+
+   const titikHTML = koordinat.map((k, idx) => {
+    const warnaTitik = k.skor >= 75 ? '#16a34a' : (k.skor >= 60 ? '#2563eb' : '#dc2626');
+    const tampilAngka = n <= 14 || idx === 0 || idx === n - 1 || idx % 2 === 0;
+    const lblBawah = tampilLabelModul ? singkatkanLabelModulGrafik(k.label, idx) : `#${idx + 1}`;
+    return `
+     <g>
+      <title>Sesi #${idx + 1} • ${escapeHtml(k.label)} (${escapeHtml(k.waktu || '')}): Skor ${k.skor}</title>
+      <circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="${tampilLabelModul ? '5.2' : '4.5'}" fill="${warnaTitik}" stroke="#ffffff" stroke-width="2"></circle>
+      ${tampilAngka ? `<text x="${k.x.toFixed(1)}" y="${Math.max(12, k.y - 8).toFixed(1)}" text-anchor="middle" font-size="${tampilLabelModul ? '11' : '10'}" font-weight="800" fill="${warnaTitik}">${k.skor}</text>` : ''}
+      ${tampilAngka ? `<text x="${k.x.toFixed(1)}" y="${(tinggiSvg - 9).toFixed(1)}" text-anchor="middle" font-size="${tampilLabelModul ? '10' : '9.5'}" font-weight="700" fill="#64748b">${escapeHtml(lblBawah)}</text>` : ''}
+     </g>`;
+   }).join('');
+
+   isiPlotHTML = `
+    ${n >= 2 ? `<polygon points="${areaPoints}" fill="url(#gradAreaNeexa)"/>` : ''}
+    ${n >= 2 ? `<polyline fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" points="${garisPoints}"/>` : ''}
+    ${titikHTML}
    `;
-  }).join('');
+  }
 
   return `
-   <svg viewBox="0 0 ${lebar} ${tinggiSvg}" style="width:100%; height:auto; display:block; overflow:visible;">
+   <svg viewBox="0 0 ${lebarSvg} ${tinggiSvg}" style="width:100%; height:auto; display:block; overflow:visible;">
     <defs>
      <linearGradient id="gradAreaNeexa" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.24"/>
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.22"/>
       <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
      </linearGradient>
     </defs>
-    <line x1="${padL}" y1="${y100}" x2="${lebar - padR}" y2="${y100}" stroke="#f1f5f9" stroke-width="1"/>
-    <line x1="${padL}" y1="${y50}" x2="${lebar - padR}" y2="${y50}" stroke="#f1f5f9" stroke-width="1"/>
-    <line x1="${padL}" y1="${y0}" x2="${lebar - padR}" y2="${y0}" stroke="#e2e8f0" stroke-width="1.2"/>
-    <line x1="${padL}" y1="${y75}" x2="${lebar - padR}" y2="${y75}" stroke="#22c55e" stroke-width="1.3" stroke-dasharray="4,4"/>
+    <line x1="${padL}" y1="${y100}" x2="${lebarSvg - padR}" y2="${y100}" stroke="#f1f5f9" stroke-width="1"/>
+    <line x1="${padL}" y1="${y50}" x2="${lebarSvg - padR}" y2="${y50}" stroke="#f1f5f9" stroke-width="1"/>
+    <line x1="${padL}" y1="${y0}" x2="${lebarSvg - padR}" y2="${y0}" stroke="#cbd5e1" stroke-width="1.2"/>
+    ${isiPlotHTML}
+    <line x1="${padL}" y1="${y75}" x2="${lebarSvg - padR}" y2="${y75}" stroke="#16a34a" stroke-width="1.4" stroke-dasharray="5,4"/>
     <text x="${padL - 6}" y="${y100 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">100</text>
     <text x="${padL - 6}" y="${y75 + 3}" text-anchor="end" font-size="9.5" font-weight="800" fill="#16a34a">75</text>
     <text x="${padL - 6}" y="${y50 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">50</text>
     <text x="${padL - 6}" y="${y0 + 3}" text-anchor="end" font-size="9.5" font-weight="700" fill="#94a3b8">0</text>
-    ${koordinat.length >= 2 ? `<polygon points="${areaPoints}" fill="url(#gradAreaNeexa)"/>` : ''}
-    ${koordinat.length >= 2 ? `<polyline fill="none" stroke="#2563eb" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" points="${garisPoints}"/>` : ''}
-    ${titikHTML}
    </svg>
   `;
  }
 
+ function renderHalamanGrafikRiwayatBesar() {
+  const wSvg = document.getElementById('wadahGrafikBesarRiwayat');
+  const wAspek = document.getElementById('wadahBarAspekRiwayat');
+  if (!wSvg) return;
+
+  let semua = [...dataRiwayatLokal]
+   .filter(r => !String(r.produk || '').toUpperCase().startsWith('UJI-'))
+   .sort((a, b) => (Number(a.idBaris) || 0) - (Number(b.idBaris) || 0));
+
+  if (filterKategoriGrafikBesar !== 'SEMUA') {
+   semua = semua.filter(r => bedahKodeProduk(r.produk || '').kategori === filterKategoriGrafikBesar);
+  }
+
+  const jmlTotal = semua.length;
+  let sumTot = 0, maxSkor = 0, jmlLulus = 0, sumKosa = 0, sumBunpo = 0, sumLancar = 0;
+  semua.forEach(r => {
+   const s = Math.round(Number(r.nilaiTotal) || 0);
+   sumTot += s;
+   if (s > maxSkor) maxSkor = s;
+   if (s >= 75) jmlLulus++;
+   sumKosa += Number(r.nilaiKosaKata) || 0;
+   sumBunpo += Number(r.nilaiBunpou) || 0;
+   sumLancar += Number(r.nilaiKelancaran) || 0;
+  });
+
+  const rata = jmlTotal > 0 ? Math.round(sumTot / jmlTotal) : 0;
+  const persenLulus = jmlTotal > 0 ? Math.round((jmlLulus / jmlTotal) * 100) : 0;
+
+  const elTot = document.getElementById('kpiGrafikTotalSesi');
+  const elAvg = document.getElementById('kpiGrafikRataRata');
+  const elMax = document.getElementById('kpiGrafikTertinggi');
+  const elPass = document.getElementById('kpiGrafikLulus');
+  if (elTot) elTot.innerText = `${jmlTotal} Sesi`;
+  if (elAvg) elAvg.innerText = jmlTotal > 0 ? `${rata} / 100` : '-';
+  if (elMax) elMax.innerText = jmlTotal > 0 ? `${maxSkor}` : '-';
+  if (elPass) elPass.innerText = jmlTotal > 0 ? `${persenLulus}% (${jmlLulus}x)` : '0%';
+
+  const limit = parseInt(document.getElementById('selectJumlahSesiGrafik')?.value || '12', 10) || 12;
+  const potong = semua.slice(-limit).map(r => ({
+   skor: Math.round(Number(r.nilaiTotal) || 0),
+   label: String(r.produk || 'Latihan'),
+   waktu: String(r.waktu || '')
+  }));
+
+  wSvg.innerHTML = buatGrafikNilaiSvgHTML(potong, 265, 820, true);
+
+  if (wAspek) {
+   const avgKosa = jmlTotal > 0 ? Math.round(sumKosa / jmlTotal) : 0;
+   const avgBunpo = jmlTotal > 0 ? Math.round(sumBunpo / jmlTotal) : 0;
+   const avgLancar = jmlTotal > 0 ? Math.round(sumLancar / jmlTotal) : 0;
+   const aspekArr = [
+    { judul: 'Kosa Kata (語彙)', nilai: avgKosa },
+    { judul: 'Pola Kalimat / Bunpou (文法)', nilai: avgBunpo },
+    { judul: 'Kelancaran & Pelafalan (流暢さ)', nilai: avgLancar }
+   ];
+   wAspek.innerHTML = aspekArr.map(a => {
+    const col = a.nilai >= 75 ? '#16a34a' : (a.nilai >= 60 ? '#2563eb' : '#dc2626');
+    return `
+     <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:13px 15px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12.5px; font-weight:800;">
+       <span style="color:#334155;">${a.judul}</span>
+       <span style="color:${col}; font-size:14px;">${jmlTotal > 0 ? a.nilai : '-'}</span>
+      </div>
+      <div style="width:100%; height:8px; background:#e2e8f0; border-radius:8px; overflow:hidden;">
+       <div style="width:${a.nilai}%; height:100%; background:${col}; border-radius:8px; transition:width 0.4s ease;"></div>
+      </div>
+     </div>`;
+   }).join('');
+  }
+ }
+
  function renderSemuaGrafikNilai() {
+  document.querySelectorAll('.btn-tipe-batang').forEach(b => b.classList.toggle('active', tipeGrafikNilaiAktif === 'batang'));
+  document.querySelectorAll('.btn-tipe-garis').forEach(b => b.classList.toggle('active', tipeGrafikNilaiAktif === 'garis'));
+
   const urut = [...dataRiwayatLokal]
    .filter(r => !String(r.produk || '').toUpperCase().startsWith('UJI-'))
    .sort((a, b) => (Number(a.idBaris) || 0) - (Number(b.idBaris) || 0));
 
-  const data12Terakhir = urut.slice(-12).map(r => ({
+  const data10Terakhir = urut.slice(-10).map(r => ({
    skor: Math.round(Number(r.nilaiTotal) || 0),
-   label: String(r.produk || 'Latihan')
+   label: String(r.produk || 'Latihan'),
+   waktu: String(r.waktu || '')
   }));
 
-  const teksJml = urut.length > 12 ? `12 Sesi Terakhir` : `${urut.length} Sesi`;
+  const teksJml = urut.length > 10 ? `10 Sesi Terakhir` : `${urut.length} Sesi`;
   const elLblDash = document.getElementById('labelInfoGrafikDash');
   const elLblProg = document.getElementById('labelInfoGrafikProgres');
   if (elLblDash) elLblDash.innerText = teksJml;
-  if (elLblProg) elLblProg.innerText = teksJml;
+  if (elLblProg) elLblProg.innerText = `${teksJml} (Lulus ≥ 75)`;
 
   const wDash = document.getElementById('wadahGrafikNilaiDashboard');
   const wProg = document.getElementById('wadahGrafikNilaiProgres');
-  if (wDash) wDash.innerHTML = buatGrafikNilaiSvgHTML(data12Terakhir, 160);
-  if (wProg) wProg.innerHTML = buatGrafikNilaiSvgHTML(data12Terakhir, 175);
+  if (wDash) wDash.innerHTML = buatGrafikNilaiSvgHTML(data10Terakhir, 155, 460, false);
+  if (wProg) wProg.innerHTML = buatGrafikNilaiSvgHTML(data10Terakhir, 165, 340, false);
+
+  renderHalamanGrafikRiwayatBesar();
  }
 
  // =========================================================
@@ -6747,7 +7091,6 @@
   const semuaKN = Object.values(KATALOG_PRODUK_MAP).filter(p => !String(p.kode || '').toUpperCase().startsWith('KL-'));
   const bukuPilihan = deteksiJalurBukuUser();
 
-  // 1. Produk BLJ sesuai buku user (jika buku Irodori/Marugoto belum ada di Sheet PRODUK, otomatis setara ke MINNA!)
   let bljSemua = semuaKN.filter(p => bedahKodeProduk(p.kode).kategori === 'BLJ');
   let bljBuku = bljSemua.filter(p => String(p.kode).includes(bukuPilihan) || String(p.nama).toUpperCase().includes(bukuPilihan));
   if (bljBuku.length === 0) {
@@ -6763,7 +7106,6 @@
    return (bobotTier[bedahKodeProduk(a.kode).tier] || 100) - (bobotTier[bedahKodeProduk(b.kode).tier] || 100);
   });
 
-  // 2. Produk Latihan Wawancara Per Bagian (MST-LAT 1 s/d 5)
   const urutanLat = ['JIKOSHOUKAI', 'DOUKI', 'PR', 'KASUS', 'PENUTUP'];
   const mstLat = semuaKN
    .filter(p => String(p.kode).includes('MST-LAT') || String(p.kode).includes('LAT['))
@@ -6773,7 +7115,6 @@
     return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
    });
 
-  // 3. Produk Simulasi Wawancara Penuh HRD (Utamakan yang cocok dengan bidang/tujuan user di urutan depan)
   const konteksUser = String(KAIWA_USER.konteksKalibrasi || KAIWA_USER.sertifikatSsw || '').toUpperCase();
   const mstSim = semuaKN
    .filter(p => {
@@ -6786,7 +7127,6 @@
     return cocokA - cocokB;
    });
 
-  // 4. Produk Survival Kehidupan Jepang (KHD urut Level & Sesi)
   const khdList = semuaKN
    .filter(p => bedahKodeProduk(p.kode).kategori === 'KHD')
    .sort((a, b) => {
@@ -6797,7 +7137,6 @@
   return [...bljBuku, ...mstLat, ...mstSim, ...khdList];
  }
 
- // Konversi Teks Konteks / Kode Lama Siswa (Tanpa Harus Mengulang Tes!) ke Angka Bab Setara Minna
  function hitungBabJangkarDariKonteks(teksKonteks) {
   const s = String(teksKonteks || '').trim();
   const mMinna = s.match(/Minna\s+Bab\s+(\d+)/i);
@@ -6824,15 +7163,13 @@
   return 1;
  }
 
- // Mencari Indeks Produk Rekomendasi Aktif Saat Ini (Auto-Sync Profil Lama + Auto-Naik Saat Lulus / Lompat!)
  function tentukanIndeksRekomendasiAktif(jalurProduk, petaSkor) {
   if (!jalurProduk || jalurProduk.length === 0) return 0;
 
   const rekSimpan = String(KAIWA_USER.rekomendasiMulai || '').trim().toUpperCase();
   const konteks = String(KAIWA_USER.konteksKalibrasi || '');
 
-  // 1. Tentukan titik mulai dasar dari hasil Uji Kemampuan (mendukung kode produk spesifik maupun kode kategori lama)
-  let idxDasar = jalurProduk.findIndex(p => String(p.kode).toUpperCase() === rekSimpan);
+  let idxDasar = jalurProduk.findIndex(p => String(p.kode).toUpperCase() === rekSimpan || normalisasiKunciIntiModul(p.kode) === normalisasiKunciIntiModul(rekSimpan));
 
   if (idxDasar === -1) {
    if (rekSimpan === 'KHD' || /Persiapan Terbang/i.test(konteks)) {
@@ -6850,7 +7187,6 @@
      }
     });
     if (listBljIdx.length > 0) {
-     // Cari bab yang sama persis atau bab terdekat yang tersedia di Sheet PRODUK
      const pasAtauAtas = listBljIdx.find(x => x.bab >= targetBab);
      idxDasar = pasAtauAtas ? pasAtauAtas.idx : listBljIdx[listBljIdx.length - 1].idx;
     }
@@ -6858,28 +7194,25 @@
   }
   if (idxDasar < 0) idxDasar = 0;
 
-  // 2. Deteksi Lompat / Kelulusan Terbaru dari Riwayat Rapor (Nilai >= 75)!
+  // Cek kelulusan tertinggi (>= 75 baik dari KN maupun KL) agar otomatis melangkah maju!
   let idxLulusTertinggi = -1;
   jalurProduk.forEach((prod, idx) => {
-   const kd = String(prod.kode).toUpperCase();
-   const st = petaSkor[kd];
+   const st = ambilStatusSkorProduk(petaSkor, prod.kode, true);
    if (st && (st.pernahLulusSah || st.maxScore >= 75)) {
     if (idx > idxLulusTertinggi) idxLulusTertinggi = idx;
    }
   });
 
   let idxRekomendasi = Math.max(idxDasar, idxLulusTertinggi + 1);
-  // Jika pada titik idxRekomendasi ternyata juga sudah lulus >=75, geser terus ke produk pertama yang belum lulus
   while (idxRekomendasi < jalurProduk.length - 1) {
-   const kdCek = String(jalurProduk[idxRekomendasi].kode).toUpperCase();
-   if (petaSkor[kdCek] && petaSkor[kdCek].maxScore >= 75) idxRekomendasi++;
+   const stCek = ambilStatusSkorProduk(petaSkor, jalurProduk[idxRekomendasi].kode, true);
+   if (stCek && stCek.maxScore >= 75) idxRekomendasi++;
    else break;
   }
 
   return Math.min(idxRekomendasi, jalurProduk.length - 1);
  }
 
- // Buka/Tutup Pilihan Sensei Langsung pada Produk Non-Rekomendasi di Halaman Progres
  function toggleMulaiProdukProgres(idDrawer) {
   const el = document.getElementById(idDrawer);
   if (!el) return;
@@ -6888,7 +7221,6 @@
   if (!sedangTerbuka) el.classList.remove('hidden');
  }
 
- // Simbol Verifikasi Profil & Sinkronisasi Pangkat + Banner Rekomendasi Spesifik Produk
  function perbaruiSimbolVerifikasiDanBanner() {
   const st = ambilStatusKalibrasiUser();
   const badge = document.getElementById('badgeVerifProfil');
@@ -6975,7 +7307,6 @@
   renderSemuaGrafikNilai();
  }
 
- // Render Halaman PROGRES: Produk Langsung + Selesai Abu-abu + Rekomendasi Besar Kuning + Auto-Scroll Space 1 Produk
  function renderHalamanProgres() {
   const wadah = document.getElementById('wadahJalurProgres');
   if (!wadah) return;
@@ -6997,8 +7328,11 @@
    const infoJudul = pecahJudulProdukKotak(prod.nama, inf.kategori, false);
    const namaAman = escapeHtml(prod.nama || infoJudul.judul);
    const deskAman = escapeHtml(prod.deskripsi || 'Latihan percakapan terarah bersama AI Sensei.');
-   const stSkor = petaSkor[kdUpper];
+   const stSkor = ambilStatusSkorProduk(petaSkor, kdUpper, true);
    const sudahPernah = Boolean(stSkor && stSkor.count > 0);
+   const adalahMateriSebelumnya = (idx < idxRek);
+   const tampilAbuAbu = sudahPernah || adalahMateriSebelumnya;
+
    const peran = ambilPasanganPeranProduk(prod);
    const maxPut = Number(prod.maxPutaran) || 7;
    const totTiket = Number(prod.hargaPenuh) || (3 + maxPut + 2);
@@ -7012,7 +7346,7 @@
     ? `<span class="score-corner-pill ${kelasWarnaSkorProduk(stSkor.latestScore)}" title="Nilai terakhir: ${stSkor.latestScore}/100">${stSkor.latestScore}</span>`
     : '';
 
-   // 1. KOTAK PRODUK REKOMENDASI UTAMA (Diperbesar Setara 2 Kotak + Border Kuning + Isi Persis Foto 2)
+   // 1. KOTAK PRODUK REKOMENDASI UTAMA (Besar + Garis Luar Kuning)
    if (idx === idxRek) {
     return `
      <div class="progres-rek-card-besar" id="kartuProgresIdx_${idx}">
@@ -7060,12 +7394,14 @@
      </div>`;
    }
 
-   // 2. KOTAK PRODUK RINGKAS (Sudah Dikerjakan = Abu-abu + Angka Nilai | Belum Dikerjakan = Putih Bersih + Tombol "Mulai")
+   // 2. KOTAK PRODUK RINGKAS (Sudah Dikerjakan / Materi Sebelumnya 0..idxRek-1 = Abu-abu | Tahap Berikutnya = Putih)
    const idDrawer = `drawerProg_${idx}`;
-   const labelAtasKecil = sudahPernah ? 'SUDAH DIKERJAKAN' : 'TAHAP SELANJUTNYA';
+   const labelAtasKecil = sudahPernah
+    ? 'SUDAH DIKERJAKAN'
+    : (adalahMateriSebelumnya ? 'MATERI SEBELUMNYA' : 'TAHAP SELANJUTNYA');
 
    return `
-    <div class="progres-step-card ${sudahPernah ? 'sudah-dikerjakan' : ''}" id="kartuProgresIdx_${idx}">
+    <div class="progres-step-card ${tampilAbuAbu ? 'sudah-dikerjakan' : ''}" id="kartuProgresIdx_${idx}">
      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
       <div style="flex:1; min-width:200px;">
        <div style="font-size:10px; font-weight:800; color:#64748b; text-transform:uppercase; margin-bottom:3px;">${labelAtasKecil}</div>
@@ -7074,13 +7410,12 @@
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
        ${badgeNilaiHTML}
-       <button type="button" class="btn" onclick="toggleMulaiProdukProgres('${idDrawer}')" style="width:auto; padding:9px 18px; font-size:12.5px; background:${sudahPernah ? '#64748b' : 'var(--primary)'};">
+       <button type="button" class="btn" onclick="toggleMulaiProdukProgres('${idDrawer}')" style="width:auto; padding:9px 18px; font-size:12.5px; background:${tampilAbuAbu ? '#64748b' : 'var(--primary)'};">
         Mulai
        </button>
       </div>
      </div>
 
-     <!-- Laci Pilihan Tutor Langsung Saat Tombol Mulai Diklik (Tanpa Pindah Halaman!) -->
      <div id="${idDrawer}" class="progres-inline-drawer hidden" style="margin-top:12px; padding-top:12px; border-top:1.5px dashed #cbd5e1;">
       <div class="theme-action" style="padding:12px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;">
        <p style="margin:0 0 10px 0; font-size:12px; color:#475569;">${deskAman}</p>
@@ -7106,20 +7441,22 @@
     </div>`;
   }).join('');
 
-  // Auto-posisikan scroll agar 1 produk sebelum rekomendasi tetap tampak tepat di bawah Freeze Header Biru!
+  // Auto-posisikan scroll secara presisi (Laptop & HP) agar 1 kartu abu-abu (idxRek - 1) muncul tepat di bawah Freeze Header Biru!
   const tabProg = document.getElementById('tab-progres');
   if (tabProg && tabProg.style.display !== 'none' && idxRek > 0) {
-   requestAnimationFrame(() => {
+   setTimeout(() => {
     const idxJangkarAtas = Math.max(0, idxRek - 1);
     const elJangkar = document.getElementById(`kartuProgresIdx_${idxJangkarAtas}`);
     const mainScroll = document.querySelector('#viewDashboard main.main-content');
     const hdrSticky = document.getElementById('headerStickyProgres');
     if (elJangkar && mainScroll && hdrSticky) {
-     const tinggiHeader = hdrSticky.offsetHeight || 165;
-     const targetScroll = Math.max(0, elJangkar.offsetTop - tinggiHeader - 10);
-     mainScroll.scrollTo({ top: targetScroll, behavior: 'smooth' });
+     const rectMain = mainScroll.getBoundingClientRect();
+     const rectJangkar = elJangkar.getBoundingClientRect();
+     const tinggiHeader = hdrSticky.getBoundingClientRect().height || 145;
+     const targetScroll = mainScroll.scrollTop + (rectJangkar.top - rectMain.top) - tinggiHeader - 6;
+     mainScroll.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
     }
-   });
+   }, 65);
   }
  }
 
