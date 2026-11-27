@@ -205,6 +205,7 @@
           namaTema: sesi.namaTema,
           isLastTurn: statusLastTurn,
           gender: sesi.suaraTutor || "female",
+          peranTutor: sesi.peranTutor || "",
           seedAcak: sesi.seedAcak || 77777,
           isClosingReply: sedangBalasPenutupMST,
           genderSiswa: KAIWA_USER.gender || ""
