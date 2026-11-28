@@ -32,6 +32,7 @@
  let currentAiTeksKL = "";
 
  let menungguSalamPenutupMST_KL = false;
+ let sudahKirimSinyal1MenitKL = false;
  let autoTutupTimerKL = null;
  let timerGantung4DetikKL = null;
  let timerHeningTotalKL = null;
@@ -657,6 +658,26 @@
    detikBerjalanKL++;
    updateTampilanTimer();
 
+   // ABA-ABA PAMITAN ALAMI 1 MENIT TERAKHIR (Agar percakapan tidak menggantung saat waktu habis!)
+   const sisaDetikSkrg = maxDetikTotal - detikBerjalanKL;
+   const batasMulaiPamit = maxDetikTotal >= 210 ? 60 : Math.max(30, Math.floor(maxDetikTotal * 0.3));
+   if (!sudahKirimSinyal1MenitKL && !menungguSalamPenutupMST_KL && sisaDetikSkrg <= batasMulaiPamit && sisaDetikSkrg > 15) {
+    if (!aiSedangBicaraKL && !aiTurnSedangBerjalanKL && wsLive && wsLive.readyState === WebSocket.OPEN) {
+     sudahKirimSinyal1MenitKL = true;
+     const isMSTLive = sesi.produk.includes("-MST") || sesi.produk.startsWith("KL-MST");
+     const pesanSistem1Menit = isMSTLive
+      ? "（システム通知：残り時間が約1分になりました。次の返答では、相手の答えに短く反応したあと、面接を自然に締めくくり「それでは、本日の面接はこれで終了いたします。今日はお疲れ様でした。」と伝えてください。）"
+      : "（システム通知：通話の残り時間が1分になりました。次のあなたの返答では、まず相手の話に自然に答えたあと、「あ、ごめんなさい、もうすぐ時間がないですね。まだ何か聞きたいことがあったら早めに言ってくださいね。なければ、またあとで話しましょう！」のように自然な締めくくりの一言を添えてください。）";
+
+     wsLive.send(JSON.stringify({
+      clientContent: {
+       turns: [{ role: "user", parts: [{ text: pesanSistem1Menit }] }],
+       turnComplete: false
+      }
+     }));
+    }
+   }
+
    if (detikBerjalanKL >= maxDetikTotal) {
     clearInterval(timerDetikInterval);
     timerDetikInterval = null;
@@ -910,6 +931,7 @@
    sedangMenyambungKL = false;
    setupSudahSelesaiKL = false;
    menungguSalamPenutupMST_KL = false;
+   sudahKirimSinyal1MenitKL = false;
    sudahCobaFallbackModel = false;
    micManualMuteKL = false;
    aiSedangBicaraKL = false;
