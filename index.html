@@ -59,138 +59,137 @@
            (Versi Clean & Responsive Lock)
         ========================================= */
         
-        /* --- 1. AREA LOGO & TEKS SAMPING --- */
-        .landing-header { 
-            text-align: center; 
-            /* Bantalan diperkecil agar header lebih rapat ke atas tanpa butuh joystick */
-            padding: 20px 0 10px 0; 
-            margin-bottom: 0px; 
-            
-            /* Menahan agar kelompok logo & teks PASTI tepat di tengah layar */
-            display: flex;
-            justify-content: center; 
+        /* --- 1. STRUKTUR LANDING PAGE FULL 1 LAYAR (PAS DI ZOOM 100%) --- */
+        #viewLogin {
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; flex-direction: column; justify-content: space-between;
+            background-color: var(--bg-color); box-sizing: border-box;
+        }
+
+        .landing-header {
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
+            border-bottom: 1.5px solid #e2e8f0; padding: 12px 28px;
+            position: sticky; top: 0; z-index: 50;
+        }
+
+        .landing-topbar-inner {
+            max-width: 1120px; margin: 0 auto; width: 100%;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
 
         .header-content {
-            display: flex;
-            align-items: center; 
-            gap: 15px; 
-            
-            /* Fitur Joystick dinolkan agar fungsi 'Center' di atas bekerja sempurna */
-            position: relative;
-            left: 0px; 
-            top: 0px; 
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
         }
-
-        .header-content img { 
-            /* Ukuran terkunci sesuai pilihan Anda */
-            max-width: 80px; 
-            height: auto; 
-        }
-
-        .header-text {
-            text-align: left; 
-            display: flex;
-            flex-direction: column;
-        }
-
+        .header-content img { max-width: 46px; height: auto; }
+        .header-text { text-align: left; display: flex; flex-direction: column; }
         .header-text h2 {
-            margin: 0; color: var(--text-main); font-weight: 800; line-height: 1.1; 
-            font-size: 24px; /* Ukuran terkunci */
+            margin: 0; color: var(--text-main); font-weight: 800; line-height: 1.15; font-size: 18px !important;
         }
 
-        .header-text p {
-            margin: 5px 0 0 0; color: var(--text-muted); font-weight: 600; 
-            font-size: 13px; /* Ukuran terkunci */
+        .lp-nav-links { display: flex; align-items: center; gap: 8px; }
+        .lp-nav-btn {
+            background: transparent; border: 1.5px solid transparent; color: #475569;
+            font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 15px;
+            border-radius: 10px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        .lp-nav-btn:hover { background: #eef2ff; color: var(--primary); }
+        .lp-nav-btn.active { background: #e0e7ff; color: var(--primary); border-color: #c7d2fe; font-weight: 800; }
+
+        /* --- 2. BUNGKUSAN TENGAH HERO --- */
+        .lp-middle-stage {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 16px 24px; box-sizing: border-box;
         }
 
-        /* --- 2. BUNGKUSAN UTAMA (KIRI & KANAN) --- */
         .landing-container {
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; margin: 0 auto; padding: 20px; 
-            max-width: 1100px; gap: 40px; 
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; margin: 0 auto; padding: 0;
+            max-width: 1060px; width: 100%; gap: 28px;
         }
 
-        /* Aturan KHUSUS layar Laptop/Desktop (Mobile Lock) */
         @media (min-width: 768px) {
-            .landing-container { flex-direction: row; padding: 20px 40px; gap: 60px; }
+            .landing-container { flex-direction: row; padding: 0 16px; gap: 54px; }
             .hero-image-box, .hero-text-box { flex: 1; }
-            
-            .hero-text-box {
-                text-align: left; 
-                align-items: flex-start;
-            }
-            
-            /* Posisi geser Anda dipindah ke sini agar tidak merusak tampilan HP */
-            .hero-image-box img { left: -30px; }
-            .hero-text-box { left: -20px; }
+            .hero-text-box { text-align: left; align-items: flex-start; }
         }
 
-        /* --- 3. AREA ILUSTRASI (KOTAK KUNING) --- */
-        .hero-image-box { text-align: center; }
+        /* --- 3. AREA ILUSTRASI PROPORSIONAL --- */
+        .hero-image-box { text-align: center; display: flex; justify-content: center; }
         .hero-image-box img {
-            width: 100%; 
-            /* Ukuran terkunci sesuai pilihan Anda */
-            max-width: 520px; 
-            
-            position: relative;
-            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
-            top: 0px; 
-            /* Left dikendalikan oleh @media di atas agar aman di HP */
-            left: 0px; 
-            
-            animation: float-anim 4s ease-in-out infinite; 
+            width: 100%; max-width: 400px; max-height: 48vh; object-fit: contain;
+            animation: float-anim 4s ease-in-out infinite;
         }
 
         @keyframes float-anim {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); } 
+            50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
-        /* --- 4. AREA TEKS & TOMBOL (KOTAK HIJAU) --- */
+        /* --- 4. AREA TEKS CTA & TOMBOL --- */
         .hero-text-box {
-            text-align: center; display: flex; flex-direction: column; 
-            margin: 0 auto; gap: 18px; max-width: 420px; 
-            
-            position: relative;
-            /* Top dinolkan untuk membasmi ruang kosong di bawah layar */
-            top: 0px; 
-            /* Left dikendalikan oleh @media di atas agar aman di HP */
-            left: 0px; 
+            text-align: center; display: flex; flex-direction: column;
+            margin: 0 auto; gap: 14px; max-width: 450px;
         }
-
         .hero-text-box h1 {
-            color: var(--text-main); font-weight: 800; line-height: 1.3; margin-bottom: 10px; 
-            font-size: 32px; 
-            position: relative; left: 0px; top: 0px; 
+            color: var(--text-main); font-weight: 800; line-height: 1.28; margin: 0; font-size: 28px;
+        }
+        .lp-hero-sub {
+            margin: 0 0 4px 0; font-size: 14.5px; color: #475569; line-height: 1.58; font-weight: 500;
+        }
+        @media (min-width: 768px) {
+            .hero-text-box { text-align: left; }
         }
 
         /* --- 5. TOMBOL 3D --- */
         .btn-3d {
-            display: block; width: 100%; padding: 16px; font-size: 15px; 
-            font-weight: 800; text-align: center; text-decoration: none; 
-            border-radius: 16px; cursor: pointer; text-transform: uppercase; 
-            letter-spacing: 1px; transition: all 0.1s; border: none; box-sizing: border-box;
+            display: block; width: 100%; padding: 15px 18px; font-size: 15px;
+            font-weight: 800; text-align: center; text-decoration: none;
+            border-radius: 14px; cursor: pointer;
+            letter-spacing: 0.4px; transition: all 0.1s; border: none; box-sizing: border-box;
         }
-        .btn-mulai { background-color: var(--primary); color: #FFFFFF; box-shadow: 0 6px 0 var(--primary-hover); }
-        .btn-mulai:active { transform: translateY(6px); box-shadow: 0 0px 0 var(--primary-hover); }
-        
-        .btn-belum-akun { background-color: #FFFFFF; color: var(--primary); border: 2px solid #E5E5E5; box-shadow: 0 4px 0 #E5E5E5; }
-        .btn-belum-akun:active { transform: translateY(4px); box-shadow: 0 0px 0 #E5E5E5; }
+        .btn-mulai { background-color: var(--primary); color: #FFFFFF; box-shadow: 0 5px 0 var(--primary-hover); }
+        .btn-mulai:active { transform: translateY(5px); box-shadow: 0 0px 0 var(--primary-hover); }
 
-        /* --- 6. FOOTER --- */
+        /* --- 6. SUB-HALAMAN PUBLIK (TENTANG KAMI & TESTIMONI DI LANDING PAGE) --- */
+        .lp-subpage-box {
+            max-width: 940px; width: 100%; margin: 8px auto 16px auto; text-align: left;
+        }
+        .lp-pilar-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 18px;
+        }
+        .lp-pilar-card {
+            background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 18px;
+        }
+
+        /* --- 7. FOOTER PROFESIONAL + KONTAK LANGSUNG --- */
         .support-footer {
-            /* Margin ekstrem dihapus, menggunakan jarak normal yang rapi ke atas */
-            margin-top: 40px; 
-            padding: 10px 20px; border-top: 2px solid #E5E5E5; 
-            text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600;
-
-            position: relative;
-            left: 0px; 
-            top: 0px; 
+            margin-top: 0; padding: 12px 28px; background: #ffffff; border-top: 1.5px solid #e2e8f0;
+            color: #64748b; font-size: 12px; font-weight: 600;
         }
-        .support-footer p { margin: 5px 0; }
+        .support-footer-inner {
+            max-width: 1120px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+        }
+        .footer-contact-links {
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        }
+        .footer-contact-links a {
+            color: #475569; text-decoration: none; font-weight: 700; font-size: 12px;
+            display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;
+        }
+        .footer-contact-links a:hover { color: var(--primary); }
+
+        @media (max-width: 767px) {
+            .landing-header { padding: 10px 16px; }
+            .header-text h2 { font-size: 15px !important; }
+            .lp-nav-btn { padding: 7px 10px; font-size: 12px; }
+            .hero-image-box img { max-width: 270px; max-height: 34vh; }
+            .hero-text-box h1 { font-size: 23px; }
+            .lp-hero-sub { font-size: 13.5px; }
+            .support-footer-inner { flex-direction: column; text-align: center; justify-content: center; }
+            .footer-contact-links { justify-content: center; gap: 10px; }
+        }
 
         /* =========================================
            CSS ASLI ANDA (DIPERTAHANKAN UNTUK BAGIAN DALAM)
@@ -1294,41 +1293,124 @@
         #viewLogin:not(.hidden) + .container { display: none; }
     </style>
 
- <!-- ================= VIEW 1: LANDING PAGE (1 TOMBOL GOOGLE) ================= -->
+ <!-- ================= VIEW 1: LANDING PAGE PROFESIONAL (PAS 100% ZOOM) ================= -->
  <div id="viewLogin">
-  <div class="landing-header">
-   <div class="header-content">
-    <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
-    <div class="header-text">
-     <h2>Smart AI<br>Conversation</h2>
+  <!-- Header Atas: Logo Kiri + 2 Tombol Navigasi Kanan -->
+  <header class="landing-header">
+   <div class="landing-topbar-inner">
+    <div class="header-content" onclick="bukaSubLandingPage('home')" title="Kembali ke Halaman Utama">
+     <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LOGO%20NEEXA.png" alt="NEEXA System Logo">
+     <div class="header-text">
+      <h2>Smart AI<br>Conversation</h2>
+     </div>
+    </div>
+
+    <nav class="lp-nav-links">
+     <button type="button" class="lp-nav-btn" id="btnLpAbout" onclick="bukaSubLandingPage('about')">Tentang Kami</button>
+     <button type="button" class="lp-nav-btn" id="btnLpTesti" onclick="bukaSubLandingPage('testimoni')">Testimoni</button>
+    </nav>
+   </div>
+  </header>
+
+  <!-- Panggung Tengah -->
+  <div class="lp-middle-stage">
+
+   <!-- [1] TAMPILAN UTAMA LOGIN (DEFAULT) -->
+   <div id="lpSectionHome" class="landing-container">
+    <div class="hero-image-box">
+     <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
+    </div>
+
+    <div class="hero-text-box">
+     <h1>Lulus Ujian, Tapi Masih Kaku Saat Bicara &amp; Mensetsu?</h1>
+     <p class="lp-hero-sub">Latih reflek mendengar dan merespons bahasa Jepang bersama AI Sensei—kapan saja, tanpa rasa canggung.</p>
+     <button class="btn-3d btn-mulai" onclick="mulaiOAuthSatuKlik('auto')" style="display:flex; align-items:center; justify-content:center; gap:10px; font-size:15.5px;">
+      <i class="fab fa-google" style="font-size:18px;"></i> Mulai dengan Google
+     </button>
+
+     <div style="display: none;">
+      <input type="radio" name="authMode" id="modeMasuk" value="auto" checked>
+      <input type="radio" name="authMode" id="modeDaftar" value="auto">
+     </div>
+     <div id="loginMsg" class="msg" style="width: 100%; box-sizing: border-box;"></div>
     </div>
    </div>
-  </div>
 
-  <div class="landing-container">
-   <div class="hero-image-box">
-    <img src="https://raw.githubusercontent.com/nihongoeexa-wq/kaiwa/main/LP%20IMG1.png" alt="Ilustrasi Belajar Kaiwa">
-   </div>
+   <!-- [2] TAMPILAN PUBLIK: TENTANG KAMI (RINGKAS & PADAT) -->
+   <div id="lpSectionAbout" class="lp-subpage-box hidden">
+    <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; box-shadow:0 10px 28px rgba(43,59,112,0.06);">
+     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+      <span style="background:#dbeafe; color:#1d4ed8; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px;">TENTANG NEEXA SYSTEM</span>
+      <button type="button" onclick="bukaSubLandingPage('home')" class="btn-back" style="margin:0;"><i class="fas fa-arrow-left"></i> Kembali ke Halaman Masuk</button>
+     </div>
 
-   <div class="hero-text-box">
-    <h1>Cara paling seru dan cerdas untuk berlatih Kaiwa!</h1>
-    <button class="btn-3d btn-mulai" onclick="mulaiOAuthSatuKlik('auto')" style="display:flex; align-items:center; justify-content:center; gap:10px; text-transform:none; font-size:16px;">
-     <i class="fab fa-google" style="font-size:18px;"></i> Mulai dengan Google
-    </button>
+     <h2 style="margin:0 0 12px 0; font-size:22px; font-weight:800; color:var(--text-main); line-height:1.3;">Lulus Sertifikasi Bahasa Jepang, Tapi Masih Kaku Saat Diajak Bicara?</h2>
+     <p style="margin:0 0 12px 0; font-size:13.5px; color:#334155; line-height:1.68;">
+      Banyak pejuang Jepang berhasil lulus ujian tertulis dan mengantongi sertifikat, namun langsung <em>blank</em> saat menghadapi wawancara (<em>mensetsu</em>) atau obrolan langsung. Masalahnya sederhana: ujian sertifikasi menguji hafalan pasif, sedangkan berbicara membutuhkan reflek yang hanya terbentuk jika sering dilatih secara lisan.
+     </p>
+     <p style="margin:0 0 12px 0; font-size:13.5px; color:#334155; line-height:1.68;">
+      Keterbatasan lawan bicara, rasa canggung saat berlatih, dan sempitnya waktu praktik di kelas membuat banyak kandidat berangkat tanpa jam terbang bicara yang cukup.
+     </p>
+     <p style="margin:0; font-size:13.5px; color:#334155; line-height:1.68;">
+      <strong>Neexa System</strong> hadir untuk menutup celah tersebut. Lahir langsung dari pengalaman mengajar di kelas, Neexa menyediakan ruang latihan percakapan (<em>kaiwa</em>) dan simulasi wawancara berbasis AI yang melatih reflek mendengar serta merespons dalam bahasa Jepang—kapan saja, tanpa rasa canggung, dengan standar evaluasi tegas yang mendekati situasi kerja nyata di Jepang.
+     </p>
 
-    <div style="display: none;">
-     <input type="radio" name="authMode" id="modeMasuk" value="auto" checked>
-     <input type="radio" name="authMode" id="modeDaftar" value="auto">
+     <div class="lp-pilar-grid">
+      <div class="lp-pilar-card">
+       <div style="font-size:14px; font-weight:800; color:var(--primary); margin-bottom:5px;">🎙️ Fokus Melatih Reflek Bicara</div>
+       <div style="font-size:12.5px; color:#475569; line-height:1.55;">Membiasakan telinga dan mulut merespons cepat secara alami tanpa bergantung pada teks bantuan.</div>
+      </div>
+      <div class="lp-pilar-card">
+       <div style="font-size:14px; font-weight:800; color:#be123c; margin-bottom:5px;">🎯 Evaluasi Tegas &amp; Objektif</div>
+       <div style="font-size:12.5px; color:#475569; line-height:1.55;">Mengoreksi pelafalan (<em>hatsuon</em>), partikel, dan kelancaran kalimat secara langsung agar kesalahan tidak terbawa saat seleksi.</div>
+      </div>
+      <div class="lp-pilar-card">
+       <div style="font-size:14px; font-weight:800; color:#047857; margin-bottom:5px;">💼 Terhubung ke Peluang Kerja</div>
+       <div style="font-size:12.5px; color:#475569; line-height:1.55;">Menyatukan latihan percakapan, simulasi wawancara, hingga akses Bursa Job bagi kandidat yang terbukti siap kerja.</div>
+      </div>
+     </div>
+
+     <div style="margin-top:20px; padding-top:16px; border-top:1.5px dashed #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <span style="font-size:13px; font-weight:700; color:#475569;">Siap menguji reflek bicara bahasa Jepangmu hari ini?</span>
+      <button type="button" onclick="bukaSubLandingPage('home'); mulaiOAuthSatuKlik('auto');" class="btn" style="width:auto; padding:11px 22px; font-size:13.5px;">
+       <i class="fab fa-google"></i> Mulai dengan Google
+      </button>
+     </div>
     </div>
-    <div id="loginMsg" class="msg" style="width: 100%; box-sizing: border-box;"></div>
    </div>
+
+   <!-- [3] TAMPILAN PUBLIK: TESTIMONI PENGGUNA (READ-ONLY DARI DATABASE) -->
+   <div id="lpSectionTestimoni" class="lp-subpage-box hidden">
+    <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:26px; box-shadow:0 10px 28px rgba(43,59,112,0.06);">
+     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:6px;">
+      <span style="background:#ffe4e6; color:#be123c; font-size:11px; font-weight:800; padding:4px 12px; border-radius:20px;">ULASAN PENGGUNA AKTIF</span>
+      <button type="button" onclick="bukaSubLandingPage('home')" class="btn-back" style="margin:0;"><i class="fas fa-arrow-left"></i> Kembali ke Halaman Masuk</button>
+     </div>
+     <h2 style="margin:0 0 4px 0; font-size:20px; font-weight:800; color:var(--text-main);">Cerita Rekan Pembelajar &amp; Pejuang Kerja Jepang</h2>
+     <p style="margin:0 0 18px 0; font-size:13px; color:#64748b;">Pengalaman nyata pengguna yang telah berlatih percakapan dan simulasi wawancara di Neexa System.</p>
+
+     <div id="wadahTestimoniLanding" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:14px; max-height:52vh; overflow-y:auto; padding-right:4px;">
+      <div style="grid-column:1/-1; text-align:center; padding:30px; color:#94a3b8; font-size:13px;">Memuat testimoni pengguna...</div>
+     </div>
+    </div>
+   </div>
+
   </div>
 
-  <div class="support-footer">
-   <p>Nihongo Electronic Exam Auditorium (NEEXA) System</p>
-   <p>AI-Powered Japanese Conversation Platform</p>
-   <p>© 2026 NEEXA System. Hak Cipta Dilindungi.</p>
-  </div>
+  <!-- Footer Profesional (Tampil Langsung di Zoom 100% + Kontak Resmi) -->
+  <footer class="support-footer">
+   <div class="support-footer-inner">
+    <div>
+     <strong style="color:var(--text-main);">NEEXA System</strong> — Nihongo Electronic Exam Auditorium • © 2026 Hak Cipta Dilindungi.
+    </div>
+    <div class="footer-contact-links">
+     <a href="https://wa.me/qr/2ZOSM4S7LVOUD1" target="_blank" rel="noopener" title="WhatsApp Resmi Neexa System"><i class="fab fa-whatsapp" style="color:#16a34a; font-size:14px;"></i> +62 822-3073-3358</a>
+     <a href="https://www.instagram.com/neexasystem25?hvrq=MXFsMm0xMTl4NHh5bg==" target="_blank" rel="noopener"><i class="fab fa-instagram" style="color:#e11d48; font-size:14px;"></i> @neexasystem25</a>
+     <a href="https://www.tiktok.com/@nihongo.eexa?_r=1&_t=ZS-9Bm1SgFpyEf" target="_blank" rel="noopener"><i class="fab fa-tiktok" style="color:#0f172a; font-size:13px;"></i> @nihongo.eexa</a>
+     <a href="mailto:nihongoeexa@gmail.com"><i class="fas fa-envelope" style="color:var(--primary); font-size:13px;"></i> nihongoeexa@gmail.com</a>
+    </div>
+   </div>
+  </footer>
  </div>
 
  <!-- ================= WADAH APLIKASI (DASHBOARD V3) ================= -->
@@ -3129,29 +3211,211 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MENU 12 & 13: ABOUT US & HUBUNGI KAMI      -->
+    <!-- MENU 12: ABOUT US (DETAIL INTERNAL WEBSITE)-->
     <!-- ========================================== -->
     <div id="tab-about" class="nav-page-section" style="display: none;">
-     <div class="page-aligned-box">
-      <div class="page-hero-banner" style="background: linear-gradient(135deg, #0F3540, #1e5666);">
+     <div class="page-aligned-box" style="max-width: 900px; display: flex; flex-direction: column; gap: 18px;">
+      <div class="page-hero-banner" style="background: linear-gradient(135deg, #0F3540, #1e5666); margin-bottom: 0;">
        <div class="banner-text">
-        <h2>About Us — NEEXA System</h2>
-        <p>Ekosistem pelatihan percakapan AI dan jembatan karier kerja Jepang terintegrasi.</p>
+        <h2>Tentang Neexa System</h2>
+        <p>Ekosistem pelatihan percakapan AI dan jembatan karier kerja Jepang yang lahir dari ruang kelas.</p>
        </div>
        <i class="fas fa-building banner-watermark"></i>
+      </div>
+
+      <!-- Cerita & Latar Belakang -->
+      <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:18px; padding:24px 26px;">
+       <h3 style="margin:0 0 10px 0; font-size:18px; font-weight:800; color:var(--text-main); line-height:1.35;">Lulus Sertifikasi Bahasa Jepang, Tapi Masih Kaku Saat Diajak Bicara?</h3>
+       <p style="margin:0 0 12px 0; font-size:13.5px; color:#334155; line-height:1.7;">
+        Banyak pejuang Jepang berhasil lulus ujian tertulis dan mengantongi sertifikat bahasa, namun langsung <em>blank</em> ketika berhadapan langsung dengan pewawancara (<em>mensetsu</em>) maupun percakapan kerja sehari-hari. Akar masalahnya sederhana: ujian sertifikasi lebih banyak menguji ingatan pasif, sementara komunikasi nyata menuntut <strong>reflek mendengar dan berbicara</strong> yang hanya terbentuk lewat jam terbang praktik lisan.
+       </p>
+       <p style="margin:0 0 12px 0; font-size:13.5px; color:#334155; line-height:1.7;">
+        Keterbatasan lawan bicara bahasa Jepang, rasa sungkan takut salah di depan teman, hingga terbatasnya durasi tatap muka di kelas membuat banyak kandidat berangkat tanpa kesiapan mental dan lisan yang matang.
+       </p>
+       <p style="margin:0; font-size:13.5px; color:#334155; line-height:1.7;">
+        <strong>Nihongo Electronic Exam Auditorium (NEEXA) System</strong> hadir untuk menutup celah tersebut. Dikembangkan langsung dari pengalaman membimbing siswa di kelas, Neexa menghadirkan mitra bicara AI berstandar penguji Jepang yang siap melatih reflek lisan Anda 24 jam—tanpa rasa canggung, terarah sesuai kurikulum buku, dan dievaluasi secara objektif.
+       </p>
+      </div>
+
+      <!-- 3 Pilar Utama -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(245px, 1fr)); gap:14px;">
+       <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:20px;">
+        <div style="width:42px; height:42px; border-radius:12px; background:#eff6ff; color:#1d4ed8; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:12px;"><i class="fas fa-microphone-alt"></i></div>
+        <h4 style="margin:0 0 6px 0; font-size:15px; font-weight:800; color:var(--text-main);">Fokus Melatih Reflek Bicara</h4>
+        <p style="margin:0; font-size:12.5px; color:#475569; line-height:1.6;">Membiasakan telinga menangkap intonasi asli Jepang dan melatih mulut merespons cepat tanpa ketergantungan teks Romaji.</p>
+       </div>
+       <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:20px;">
+        <div style="width:42px; height:42px; border-radius:12px; background:#fff1f2; color:#be123c; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:12px;"><i class="fas fa-clipboard-check"></i></div>
+        <h4 style="margin:0 0 6px 0; font-size:15px; font-weight:800; color:var(--text-main);">Evaluasi Tegas &amp; Objektif</h4>
+        <p style="margin:0; font-size:12.5px; color:#475569; line-height:1.6;">Mengoreksi pelafalan (<em>hatsuon</em>), ketepatan partikel, keutuhan akhiran kalimat, dan kesesuaian konteks agar kesalahan tidak terbawa ke wawancara asli.</p>
+       </div>
+       <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:16px; padding:20px;">
+        <div style="width:42px; height:42px; border-radius:12px; background:#ecfdf5; color:#047857; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:12px;"><i class="fas fa-briefcase"></i></div>
+        <h4 style="margin:0 0 6px 0; font-size:15px; font-weight:800; color:var(--text-main);">Terhubung ke Peluang Kerja</h4>
+        <p style="margin:0; font-size:12.5px; color:#475569; line-height:1.6;">Mengintegrasikan histori skor latihan, papan klasemen HRD, hingga akses lamaran langsung ke lembaga TSK mitra di menu Bursa Job.</p>
+       </div>
+      </div>
+
+      <!-- Detail Ekosistem Internal (Khusus di Dalam Website) -->
+      <div style="background:#f8fafc; border:2px solid #e2e8f0; border-radius:18px; padding:22px 24px;">
+       <h3 style="margin:0 0 12px 0; font-size:15.5px; font-weight:800; color:var(--primary);"><i class="fas fa-layer-group"></i> Tahapan Ekosistem Belajar di Dalam Akun Anda</h3>
+       <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#334155; line-height:1.6;">
+        <div><strong>1. Uji Kemampuan &amp; Peta Progres Adaptif:</strong> Menempatkan titik mulai belajar tepat sesuai penguasaan pola kalimat aktual Anda dan naik otomatis seiring kelulusan materi.</div>
+        <div><strong>2. Percakapan Bertahap (Belajar / 基礎):</strong> Pagar kurikulum ketat per bab agar AI Sensei berbicara selaras dengan kosakata dan tata bahasa yang sudah Anda pelajari.</div>
+        <div><strong>3. Latihan &amp; Simulasi Mensetsu 5 Fase (面接):</strong> Mulai dari pemanasan <em>Jikoshoukai</em> per bagian hingga ujian wawancara penuh bersama Direktur Jepang di 17 bidang industri <em>Tokutei Ginou</em>.</div>
+        <div><strong>4. Survival Kehidupan Jepang &amp; Kaiwa Live:</strong> Simulasi situasi hari pertama mendarat di bandara, mengurus <em>Zairyu Card</em> di balai kota, pembukaan rekening bank, hingga latihan telepon dua arah <em>real-time</em>.</div>
+       </div>
       </div>
      </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- MENU 13: HUBUNGI KAMI                      -->
+    <!-- ========================================== -->
     <div id="tab-kontak" class="nav-page-section" style="display: none;">
-     <div class="page-aligned-box">
-      <div class="page-hero-banner" style="background: linear-gradient(135deg, #1e293b, #334155);">
+     <div class="page-aligned-box" style="max-width: 900px; display: flex; flex-direction: column; gap: 18px;">
+      <div class="page-hero-banner" style="background: linear-gradient(135deg, #1e293b, #334155); margin-bottom: 0;">
        <div class="banner-text">
         <h2>Hubungi Kami</h2>
-        <p>Pusat bantuan teknis pengguna, kerja sama LPK, dan kemitraan rekrutmen TSK Jepang.</p>
+        <p>Pusat laporan kendala teknis, kotak aspirasi pengguna, dan kemitraan resmi NEEXA System.</p>
        </div>
        <i class="fas fa-headset banner-watermark"></i>
       </div>
+
+      <!-- 1. KARTU LAPORKAN MASALAH (MASUK SPREADSHEET + TERHUBUNG WA / EMAIL) -->
+      <div style="background:#ffffff; border:2px solid #fecaca; border-radius:18px; padding:22px 24px; box-shadow:0 4px 10px rgba(239,68,68,0.04);">
+       <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="width:36px; height:36px; border-radius:10px; background:#fef2f2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-size:16px;"><i class="fas fa-tools"></i></span>
+        <h3 style="margin:0; font-size:16.5px; font-weight:800; color:#991b1b;">Mengalami Kendala Teknis Saat Berlatih?</h3>
+       </div>
+       <p style="margin:0 0 14px 0; font-size:13.5px; color:#475569; line-height:1.65;">
+        Jangan biarkan hambatan teknis mengganggu semangat belajar Anda. Apabila Anda mengalami kendala pada mikrofon, respons suara AI, evaluasi rapor, maupun pengisian tiket, silakan laporkan detailnya agar tercatat di sistem kami dan segera ditangani oleh tim teknis.
+       </p>
+       <button type="button" onclick="togglePanelKontak('panelLaporMasalah')" class="btn" style="width:auto; padding:10px 18px; font-size:13px; background:#dc2626;">
+        <i class="fas fa-exclamation-circle"></i> Laporkan Masalah
+       </button>
+
+       <!-- Form Lipat Laporan Masalah -->
+       <div id="panelLaporMasalah" class="hidden" style="margin-top:16px; padding-top:16px; border-top:1.5px dashed #fecaca;">
+        <div style="margin-bottom:10px;">
+         <label class="label-compact">Bagian yang Mengalami Kendala</label>
+         <select id="selectTopikMasalah" class="input-compact">
+          <option value="Mikrofon / Suara AI Tidak Muncul">Mikrofon / Suara AI Tidak Muncul</option>
+          <option value="Top-Up Tiket / Kode Voucher">Top-Up Tiket / Kode Voucher</option>
+          <option value="Evaluasi Rapor / Perhitungan Skor">Evaluasi Rapor / Perhitungan Skor</option>
+          <option value="Panggilan Kaiwa Live Terputus">Panggilan Kaiwa Live Terputus</option>
+          <option value="Kendala Akun / Lainnya">Kendala Akun / Lainnya</option>
+         </select>
+        </div>
+        <div style="margin-bottom:12px;">
+         <label class="label-compact">Kronologi Singkat Kendala</label>
+         <textarea id="inputPesanMasalah" rows="3" class="input-compact" placeholder="Contoh: Saat latihan Minna Bab 6 di HP Android Chrome, suara AI tidak terdengar..." style="resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+         <button type="button" id="btnMasalahWA" onclick="kirimLaporanMasalahUser('WA')" class="btn" style="width:auto; padding:10px 16px; font-size:12.5px; background:#16a34a;">
+          <i class="fab fa-whatsapp"></i> Simpan &amp; Teruskan ke WhatsApp
+         </button>
+         <button type="button" id="btnMasalahEmail" onclick="kirimLaporanMasalahUser('EMAIL')" class="btn" style="width:auto; padding:10px 16px; font-size:12.5px; background:#2563eb;">
+          <i class="fas fa-envelope"></i> Simpan &amp; Teruskan ke Email
+         </button>
+         <button type="button" id="btnMasalahSheet" onclick="kirimLaporanMasalahUser('SISTEM')" class="btn" style="width:auto; padding:10px 16px; font-size:12.5px; background:#475569;">
+          <i class="fas fa-check"></i> Kirim ke Sistem Saja
+         </button>
+        </div>
+        <div id="msgLaporanMasalah" class="msg"></div>
+       </div>
+      </div>
+
+      <!-- 2. KARTU KRITIK, SARAN & KEBUTUHAN PENGGUNA (MASUK SPREADSHEET) -->
+      <div style="background:#ffffff; border:2px solid #bfdbfe; border-radius:18px; padding:22px 24px; box-shadow:0 4px 10px rgba(37,99,235,0.04);">
+       <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="width:36px; height:36px; border-radius:10px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-size:16px;"><i class="fas fa-lightbulb"></i></span>
+        <h3 style="margin:0; font-size:16.5px; font-weight:800; color:#1e3a8a;">Kritik, Saran &amp; Usulan Kebutuhan Belajar Anda</h3>
+       </div>
+       <p style="margin:0 0 14px 0; font-size:13.5px; color:#475569; line-height:1.65;">
+        Sampaikan kritik membangun, saran perbaikan, atau informasikan materi dan fitur yang paling Anda butuhkan agar kami dapat mendukung persiapan Anda secara maksimal. Setiap masukan Anda sangat berharga bagi penyempurnaan Neexa System ke depannya.
+       </p>
+       <button type="button" onclick="togglePanelKontak('panelKritikSaran')" class="btn" style="width:auto; padding:10px 18px; font-size:13px; background:#2563eb;">
+        <i class="fas fa-comment-medical"></i> Berikan Kritik &amp; Saran
+       </button>
+
+       <!-- Form Lipat Kritik & Saran -->
+       <div id="panelKritikSaran" class="hidden" style="margin-top:16px; padding-top:16px; border-top:1.5px dashed #bfdbfe;">
+        <div style="margin-bottom:10px;">
+         <label class="label-compact">Kategori Masukan / Kebutuhan</label>
+         <select id="selectTopikSaran" class="input-compact">
+          <option value="Usulan Materi Buku / Bab Baru">Usulan Materi Buku / Bab Baru</option>
+          <option value="Kebutuhan Bidang Wawancara / Job Order">Kebutuhan Bidang Wawancara / Job Order</option>
+          <option value="Saran Tampilan & Fitur Aplikasi">Saran Tampilan &amp; Fitur Aplikasi</option>
+          <option value="Kritik & Evaluasi Kualitas AI">Kritik &amp; Evaluasi Kualitas AI</option>
+          <option value="Lainnya">Masukan Umum Lainnya</option>
+         </select>
+        </div>
+        <div style="margin-bottom:12px;">
+         <label class="label-compact">Tuliskan Kritik, Saran, atau Kebutuhan Anda</label>
+         <textarea id="inputPesanSaran" rows="3" class="input-compact" placeholder="Tuliskan saran perbaikan atau fitur/materi yang Anda harapkan hadir di Neexa..." style="resize:vertical;"></textarea>
+        </div>
+        <button type="button" id="btnKirimSaranSheet" onclick="kirimKritikSaranUser()" class="btn" style="width:auto; padding:10px 20px; font-size:13px; background:var(--primary);">
+         <i class="fas fa-paper-plane"></i> Kirim Masukan ke Tim Neexa
+        </button>
+        <div id="msgKritikSaran" class="msg"></div>
+       </div>
+      </div>
+
+      <!-- 3. KARTU INFORMASI BISNIS & KEMITRAAN B2B (LPK / SEKOLAH / TSK) -->
+      <div style="background:#ffffff; border:2px solid #a7f3d0; border-radius:18px; padding:22px 24px; box-shadow:0 4px 10px rgba(16,185,129,0.04);">
+       <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="width:36px; height:36px; border-radius:10px; background:#ecfdf5; color:#047857; display:flex; align-items:center; justify-content:center; font-size:16px;"><i class="fas fa-handshake"></i></span>
+        <h3 style="margin:0; font-size:16.5px; font-weight:800; color:#065f46;">Layanan Informasi Bisnis &amp; Kemitraan Institusi (B2B)</h3>
+       </div>
+       <p style="margin:0 0 14px 0; font-size:13.5px; color:#475569; line-height:1.65;">
+        Terbuka bagi LPK, lembaga pendidikan, serta lembaga penyalur/perekrut kerja Jepang (SO &amp; TSK). Integrasikan sistem latihan percakapan AI terukur untuk meningkatkan kelulusan wawancara siswa lembaga Anda, atau jalin kerja sama penayangan lowongan bagi kandidat siap kerja di ekosistem Neexa System.
+       </p>
+       <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" onclick="hubungiBisnisNeexa('WA')" class="btn" style="width:auto; padding:10px 18px; font-size:13px; background:#059669;">
+         <i class="fab fa-whatsapp" style="font-size:15px;"></i> Informasi Bisnis via WhatsApp
+        </button>
+        <button type="button" onclick="hubungiBisnisNeexa('EMAIL')" class="btn" style="width:auto; padding:10px 18px; font-size:13px; background:#0F3540;">
+         <i class="fas fa-envelope"></i> Informasi Bisnis via Email
+        </button>
+       </div>
+      </div>
+
+      <!-- 4. SALURAN KONTAK & MEDIA SOSIAL RESMI NEEXA SYSTEM -->
+      <div style="background:#f8fafc; border:2px solid #e2e8f0; border-radius:18px; padding:20px 24px;">
+       <h4 style="margin:0 0 12px 0; font-size:13.5px; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.4px;">Saluran Resmi &amp; Media Sosial NEEXA System</h4>
+       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+        <a href="https://wa.me/qr/2ZOSM4S7LVOUD1" target="_blank" rel="noopener" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px 14px; text-decoration:none; display:flex; align-items:center; gap:10px;">
+         <i class="fab fa-whatsapp" style="font-size:22px; color:#16a34a;"></i>
+         <div>
+          <div style="font-size:11px; color:#64748b; font-weight:700;">WhatsApp Resmi</div>
+          <div style="font-size:13px; color:var(--text-main); font-weight:800;">+62 822-3073-3358</div>
+         </div>
+        </a>
+        <a href="mailto:nihongoeexa@gmail.com" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px 14px; text-decoration:none; display:flex; align-items:center; gap:10px;">
+         <i class="fas fa-envelope" style="font-size:20px; color:var(--primary);"></i>
+         <div>
+          <div style="font-size:11px; color:#64748b; font-weight:700;">Email Resmi</div>
+          <div style="font-size:13px; color:var(--text-main); font-weight:800;">nihongoeexa@gmail.com</div>
+         </div>
+        </a>
+        <a href="https://www.instagram.com/neexasystem25?hvrq=MXFsMm0xMTl4NHh5bg==" target="_blank" rel="noopener" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px 14px; text-decoration:none; display:flex; align-items:center; gap:10px;">
+         <i class="fab fa-instagram" style="font-size:22px; color:#e11d48;"></i>
+         <div>
+          <div style="font-size:11px; color:#64748b; font-weight:700;">Instagram</div>
+          <div style="font-size:13px; color:var(--text-main); font-weight:800;">@neexasystem25</div>
+         </div>
+        </a>
+        <a href="https://www.tiktok.com/@nihongo.eexa?_r=1&_t=ZS-9Bm1SgFpyEf" target="_blank" rel="noopener" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px 14px; text-decoration:none; display:flex; align-items:center; gap:10px;">
+         <i class="fab fa-tiktok" style="font-size:20px; color:#0f172a;"></i>
+         <div>
+          <div style="font-size:11px; color:#64748b; font-weight:700;">TikTok</div>
+          <div style="font-size:13px; color:var(--text-main); font-weight:800;">@nihongo.eexa</div>
+         </div>
+        </a>
+       </div>
+      </div>
+
      </div>
     </div>
 
@@ -9242,6 +9506,201 @@
   document.getElementById('onboardingModal')?.classList.add('hidden');
   document.getElementById('profilModal')?.classList.add('hidden');
   showView('login');
+ }
+
+ // =========================================================
+ // NAVIGASI SUB-HALAMAN LANDING PAGE & MESIN KONTAK PENGGUNA
+ // =========================================================
+ let testimoniLandingSudahDimuat = false;
+
+ function bukaSubLandingPage(target) {
+  const secHome = document.getElementById('lpSectionHome');
+  const secAbout = document.getElementById('lpSectionAbout');
+  const secTesti = document.getElementById('lpSectionTestimoni');
+  const btnAbout = document.getElementById('btnLpAbout');
+  const btnTesti = document.getElementById('btnLpTesti');
+
+  const sedangAktifSama = (target === 'about' && !secAbout.classList.contains('hidden')) ||
+                          (target === 'testimoni' && !secTesti.classList.contains('hidden'));
+  const modeFinal = sedangAktifSama ? 'home' : target;
+
+  secHome?.classList.toggle('hidden', modeFinal !== 'home');
+  secAbout?.classList.toggle('hidden', modeFinal !== 'about');
+  secTesti?.classList.toggle('hidden', modeFinal !== 'testimoni');
+  btnAbout?.classList.toggle('active', modeFinal === 'about');
+  btnTesti?.classList.toggle('active', modeFinal === 'testimoni');
+
+  if (modeFinal === 'testimoni') {
+   muatTestimoniLandingPublik();
+  }
+ }
+
+ async function muatTestimoniLandingPublik() {
+  const wadah = document.getElementById('wadahTestimoniLanding');
+  if (!wadah || testimoniLandingSudahDimuat) return;
+
+  if (apakahModePreviewLokal()) {
+   testimoniLandingSudahDimuat = true;
+   wadah.innerHTML = [
+    { nama: 'Ra***', waktu: '26 Nov 2026', bintang: 5, ulasan: 'Awalnya grogi bicara bahasa Jepang, setelah rutin latihan per bab di Neexa jadi jauh lebih spontan menjawab tanpa mikir lama!', jobReady: true },
+    { nama: 'Na***', waktu: '27 Nov 2026', bintang: 5, ulasan: 'Koreksi pelafalan dan partikelnya detail sekali, sangat membantu sebelum menghadapi wawancara asli bersama perusahaan Jepang.', jobReady: false }
+   ].map(t => `
+    <div style="background:#f8fafc; border:1.5px solid ${t.jobReady ? '#86efac' : '#e2e8f0'}; border-radius:14px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+     <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+       <span style="color:#f59e0b; font-size:14px;">${'★'.repeat(t.bintang)}</span>
+       <span style="font-size:10.5px; color:#94a3b8; font-weight:700;">${escapeHtml(t.waktu)}</span>
+      </div>
+      <p style="margin:0 0 12px 0; font-size:12.5px; color:#334155; line-height:1.55;">"${escapeHtml(t.ulasan)}"</p>
+     </div>
+     <div style="border-top:1px dashed #cbd5e1; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:12px; font-weight:800; color:var(--primary);">${escapeHtml(t.nama)}</span>
+      ${t.jobReady ? '<span class="badge-tsk-ready">🟢 JOB READY</span>' : ''}
+     </div>
+    </div>`).join('');
+   return;
+  }
+
+  try {
+   const res = await panggilGAS('getTestimoniPublik', {});
+   if (!res.success || !Array.isArray(res.data)) return;
+   testimoniLandingSudahDimuat = true;
+
+   if (res.data.length === 0) {
+    wadah.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:30px; color:#94a3b8; font-size:13px;">Belum ada ulasan publik yang ditampilkan saat ini.</div>';
+    return;
+   }
+
+   wadah.innerHTML = res.data.map(t => {
+    const bintangHtml = '★'.repeat(t.bintang) + '☆'.repeat(5 - t.bintang);
+    return `
+     <div style="background:#f8fafc; border:1.5px solid ${t.jobReady ? '#86efac' : '#e2e8f0'}; border-radius:14px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span style="color:#f59e0b; font-size:14px; letter-spacing:1px;">${bintangHtml}</span>
+        <span style="font-size:10.5px; color:#94a3b8; font-weight:700;">${escapeHtml(t.waktu)}</span>
+       </div>
+       <p style="margin:0 0 12px 0; font-size:12.5px; color:#334155; line-height:1.55;">"${escapeHtml(t.ulasan)}"</p>
+      </div>
+      <div style="border-top:1px dashed #cbd5e1; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+       <span style="font-size:12px; font-weight:800; color:var(--primary);">${escapeHtml(t.nama)}</span>
+       ${t.jobReady ? '<span class="badge-tsk-ready">🟢 JOB READY</span>' : ''}
+      </div>
+     </div>`;
+   }).join('');
+  } catch (err) {
+   wadah.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:25px; color:#94a3b8;">Gagal memuat testimoni. Silakan coba sesaat lagi.</div>';
+  }
+ }
+
+ const NOMOR_WA_NEEXA = '6282230733358';
+ const EMAIL_RESMI_NEEXA = 'nihongoeexa@gmail.com';
+
+ function togglePanelKontak(idPanel) {
+  const el = document.getElementById(idPanel);
+  if (el) el.classList.toggle('hidden');
+ }
+
+ async function kirimKritikSaranUser() {
+  const topik = document.getElementById('selectTopikSaran').value;
+  const pesan = document.getElementById('inputPesanSaran').value.trim();
+  if (pesan.length < 10) {
+   return showMsg('msgKritikSaran', 'error', 'Mohon tuliskan kritik, saran, atau kebutuhan Anda minimal 10 karakter.');
+  }
+
+  const btn = document.getElementById('btnKirimSaranSheet');
+  btn.disabled = true;
+  showMsg('msgKritikSaran', 'loading', '<i class="fas fa-spinner fa-spin"></i> Menyimpan masukan Anda ke sistem...');
+
+  if (apakahModePreviewLokal()) {
+   setTimeout(() => {
+    document.getElementById('inputPesanSaran').value = '';
+    showMsg('msgKritikSaran', 'success', '✅ Terima kasih! Kritik dan saran Anda telah tersimpan (Mode Preview).');
+    btn.disabled = false;
+   }, 400);
+   return;
+  }
+
+  try {
+   const res = await panggilGAS('kirimMasukanKontak', {
+    email: KAIWA_USER.email,
+    nama: KAIWA_USER.namaLengkap || KAIWA_USER.nama,
+    jenis: 'KRITIK_SARAN',
+    topik: topik,
+    pesan: pesan,
+    saluran: 'Sistem Spreadsheet'
+   });
+   if (res.success) {
+    document.getElementById('inputPesanSaran').value = '';
+    showMsg('msgKritikSaran', 'success', '✅ ' + escapeHtml(res.message));
+   } else {
+    showMsg('msgKritikSaran', 'error', escapeHtml(res.message));
+   }
+  } catch (e) {
+   showMsg('msgKritikSaran', 'error', 'Gagal terhubung ke server. Periksa internet Anda.');
+  } finally {
+   btn.disabled = false;
+  }
+ }
+
+ async function kirimLaporanMasalahUser(saluranPilihan) {
+  const topik = document.getElementById('selectTopikMasalah').value;
+  const pesan = document.getElementById('inputPesanMasalah').value.trim();
+  if (pesan.length < 10) {
+   return showMsg('msgLaporanMasalah', 'error', 'Mohon tuliskan detail kendala minimal 10 karakter agar tim teknis mudah memeriksa.');
+  }
+
+  const namaPengirim = KAIWA_USER.namaLengkap || KAIWA_USER.nama || 'Pengguna';
+  const emailPengirim = KAIWA_USER.email || '-';
+
+  // Buka WhatsApp atau Email langsung pada klik jari user agar tidak diblokir pop-up browser HP
+  if (saluranPilihan === 'WA') {
+   const teksWA = `Halo Tim Teknis *NEEXA System*,\nSaya ingin melaporkan kendala:\n\n- Nama: *${namaPengirim}*\n- Email Akun: *${emailPengirim}*\n- Bagian: *${topik}*\n- Detail Kendala:\n${pesan}`;
+   window.open(`https://wa.me/${NOMOR_WA_NEEXA}?text=${encodeURIComponent(teksWA)}`, '_blank');
+  } else if (saluranPilihan === 'EMAIL') {
+   const subjek = `[LAPORAN KENDALA NEEXA] ${topik} - ${namaPengirim}`;
+   const isiMail = `Halo Tim Teknis NEEXA System,\n\nBerikut rincian kendala yang saya alami:\n- Nama: ${namaPengirim}\n- Email Akun: ${emailPengirim}\n- Kategori Kendala: ${topik}\n\nKronologi / Detail:\n${pesan}\n\nTerima kasih.`;
+   window.location.href = `mailto:${EMAIL_RESMI_NEEXA}?subject=${encodeURIComponent(subjek)}&body=${encodeURIComponent(isiMail)}`;
+  }
+
+  showMsg('msgLaporanMasalah', 'loading', '<i class="fas fa-spinner fa-spin"></i> Mencatat laporan kendala ke database...');
+
+  if (apakahModePreviewLokal()) {
+   document.getElementById('inputPesanMasalah').value = '';
+   showMsg('msgLaporanMasalah', 'success', '✅ Laporan kendala telah tercatat (Mode Preview).');
+   return;
+  }
+
+  try {
+   const res = await panggilGAS('kirimMasukanKontak', {
+    email: emailPengirim,
+    nama: namaPengirim,
+    jenis: 'LAPORAN_MASALAH',
+    topik: topik,
+    pesan: pesan,
+    saluran: saluranPilihan === 'WA' ? 'Spreadsheet + WhatsApp' : (saluranPilihan === 'EMAIL' ? 'Spreadsheet + Email' : 'Spreadsheet Saja')
+   });
+   if (res.success) {
+    document.getElementById('inputPesanMasalah').value = '';
+    showMsg('msgLaporanMasalah', 'success', '✅ ' + escapeHtml(res.message));
+   } else {
+    showMsg('msgLaporanMasalah', 'error', escapeHtml(res.message));
+   }
+  } catch (e) {
+   showMsg('msgLaporanMasalah', 'error', 'Gagal menyimpan ke database, namun Anda tetap dapat mengirim via WhatsApp/Email.');
+  }
+ }
+
+ function hubungiBisnisNeexa(jalur) {
+  const namaPengirim = KAIWA_USER.namaLengkap || KAIWA_USER.nama || '';
+  if (jalur === 'WA') {
+   const teksBisnis = `Halo Tim Kemitraan *NEEXA System*,\nPerkenalkan saya ${namaPengirim ? '*' + namaPengirim + '* ' : ''}ingin menanyakan informasi kerja sama bisnis / kemitraan institusi (LPK / Sekolah / TSK) dengan NEEXA System.\n\nMohon informasi lebih lanjut. Terima kasih.`;
+   window.open(`https://wa.me/${NOMOR_WA_NEEXA}?text=${encodeURIComponent(teksBisnis)}`, '_blank');
+  } else {
+   const subjek = `Informasi Kemitraan Bisnis (B2B) - NEEXA System`;
+   const body = `Halo Tim Kemitraan NEEXA System,\n\nSaya tertarik untuk mendiskusikan peluang kerja sama bisnis / kemitraan institusi (LPK / Pendidikan / Penyaluran Kerja TSK).\n\nNama PIC: ${namaPengirim}\nNama Lembaga / Perusahaan: \nNomor Kontak / WhatsApp: \nKebutuhan Kerja Sama: \n\nTerima kasih.`;
+   window.location.href = `mailto:${EMAIL_RESMI_NEEXA}?subject=${encodeURIComponent(subjek)}&body=${encodeURIComponent(body)}`;
+  }
  }
 
  // PULIHKAN SESI & VERIFIKASI OTOMATIS KE DATABASE USERS SAAT REFRESH
